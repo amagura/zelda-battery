@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 SUBDIRS = src
-AM_CFLAGS = -std=c11 -g -gdb -O2 -Wall
+AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 
 clean-local: tidy-local
 
