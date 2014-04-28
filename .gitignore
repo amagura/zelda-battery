@@ -1,23 +1,20 @@
-# Object files
+# object files
 *.o
-*.ko
-*.obj
-*.elf
 
-# Libraries
-*.lib
-*.a
+# binaries
+/src/zelda-battery
+/src/zelda-blink
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# automake stuff
+/autom4te.cache
+config.log
+config.status
+aclocal.m4
+Makefile
+Makefile.in
+.deps
+/configure
+/build-aux
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# my stuff
+/tmp
