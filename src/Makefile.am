@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = scm c py
-
 bin_PROGRAMS = zelda-blink zelda-battery
 zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c
 zelda_battery_CPPFLAGS =

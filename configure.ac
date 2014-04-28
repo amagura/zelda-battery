@@ -5,7 +5,7 @@ AM_INIT_AUTOMAKE([-Wall foreign])
 
 # Check for programs.
 AC_PROG_CC
-AC_PROG_STDC
+AC_PROG_CC_STDC
 AC_PATH_PROG([CSC], [csc], [no])
 AC_PATH_PROG([CHICKEN], [chicken], [no])
 AC_PROG_INSTALL
