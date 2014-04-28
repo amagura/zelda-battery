@@ -9,8 +9,14 @@ AC_PROG_STDC
 AC_PATH_PROG([CSC], [csc], [no])
 AC_PATH_PROG([CHICKEN], [chicken], [no])
 AC_PROG_INSTALL
-AC_PROG_LN_S
 AC_PROG_MAKE_SET
+AC_PROG_GREP
+AC_PROG_SED
+
+AC_CHECK_PROGS([PMSET], [pmset])
+AC_CHECK_PROGS([ACPI], [acpi gacpi])
+AM_CONDITIONAL([ACPI], [test -n [ACPI] && test -z [PMSET]])
+AM_CONDITIONAL([PMSET], [test -n [PMSET] && test -z [ACPI]])
 
 # Check if we're on Mac OS (X)
 AC_MSG_CHECKING([whether os runs Darwin])
