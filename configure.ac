@@ -6,17 +6,17 @@ AM_INIT_AUTOMAKE([-Wall foreign])
 # Check for programs.
 AC_PROG_CC
 AC_PROG_CC_STDC
-AC_PATH_PROG([CSC], [csc], [no])
-AC_PATH_PROG([CHICKEN], [chicken], [no])
+AC_PATH_PROG([CSC], [csc])
+AC_PATH_PROG([CHICKEN], [chicken])
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_PROG_GREP
 AC_PROG_SED
+AC_PROG_AWK
 
-AC_CHECK_PROGS([PMSET], [pmset])
-AC_CHECK_PROGS([ACPI], [acpi gacpi])
-AM_CONDITIONAL([ACPI], [test -n [ACPI] && test -z [PMSET]])
-AM_CONDITIONAL([PMSET], [test -n [PMSET] && test -z [ACPI]])
+AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
+AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
+AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
+AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
 
 # Check if we're on Mac OS (X)
 AC_MSG_CHECKING([whether os runs Darwin])
