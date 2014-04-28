@@ -21,12 +21,38 @@
   along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 ****/
 
-const char*
+const char *
 cppToScheme__host_acpi_util(void)
 {
 #ifndef ZELDA_BATTERY_UTIL
-#define ZELDA_BATTERY_UTIL ""
+#define ZELDA_BATTERY_UTIL "acpi"
 #endif
   return ZELDA_BATTERY_UTIL;
 }
 
+const char *
+cppToScheme__host_acpi_util_args(void)
+{
+#ifndef ZELDA_BATTERY_UTIL_ARGS
+#define ZELDA_BATTERY_UTIL_ARGS ""
+#endif
+  return ZELDA_BATTERY_UTIL_ARGS;
+}
+
+const char *
+cppToScheme__sed(void)
+{
+#ifndef ZELDA_BATTERY_SED
+#define ZELDA_BATTERY_SED "sed"
+#endif
+  return ZELDA_BATTERY_SED;
+}
+
+const char *
+cppToScheme__grep(void)
+{
+#ifndef ZELDA_BATTERY_GREP
+#define ZELDA_BATTERY_GREP "grep"
+#endif
+  return ZELDA_BATTERY_GREP;
+}

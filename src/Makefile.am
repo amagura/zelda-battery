@@ -2,9 +2,9 @@
 
 bin_PROGRAMS = zelda-blink zelda-battery
 zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c
-zelda_battery_CPPFLAGS =
-zelda_blink_SOURCES = zelda-blink.scm
-zelda_blink_CPPFLAGS =
+zelda_battery_CPPFLAGS = -DZELDA_BATTERY_SED=\"$(SED)\" -DZELDA_BATTERY_GREP=\"$(GREP)\"
+zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c
+zelda_blink_CPPFLAGS = -DZELDA_BATTERY_SED=\"$(SED)\" -DZELDA_BATTERY_GREP=\"$(GREP)\"
 AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 
 CSCFLAGS ?= -vnq -O1
@@ -19,23 +19,23 @@ CSCFLAGS += -S
 endif
 
 if DARWIN
-zelda_blink_CPPFLAGS += -DADMINS_FRIEND_DARWIN
-zelda_battery_CPPFLAGS += -DADMINS_FRIEND_DARWIN
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_DARWIN
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_DARWIN
 endif
 
 if LINUX
-zelda_blink_CPPFLAGS += -DADMINS_FRIEND_LINUX
-zelda_battery_CPPFLAGS += -DADMINS_FRIEND_LINUX
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_LINUX
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_LINUX
 endif
 
 if PMSET
-#zelda_blink_CPPFLAGS += -DZELDA_BATT_LVL_UTIL "pmset"
-#zelda_battery_CPPFLAGS += -DZELDA_BATT_LVL_UTIL "pmset"
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"pmset\" -DZELDA_BATTERY_UTIL_ARGS=\"-g ps\"
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"pmset\" -DZELDA_BATTERY_UTIL_ARGS=\"-g ps\"
 endif
 
 if ACPI
-#zelda_blink_CPPFLAGS += -DZELDA_BATT_LVL_UTIL "acpi"
-#zelda_battery_CPPFLAGS += -DZELDA_BATT_LVL_UTIL "acpi"
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\" -DZELDA_BATTERY_UTIL_ARGS=\"\"
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\" -DZELDA_BATTERY_UTIL_ARGS=\"\"
 endif
 
 LINK=$(CSC) $(CSCFLAGS) -o $@ # specify how to link object files
