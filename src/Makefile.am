@@ -29,13 +29,13 @@ zelda_battery_CPPFLAGS += -DZELDA_BATTERY_LINUX
 endif
 
 if PMSET
-zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"pmset\" -DZELDA_BATTERY_UTIL_ARGS=\"-g ps\"
-zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"pmset\" -DZELDA_BATTERY_UTIL_ARGS=\"-g ps\"
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_PMSET
+zelda_battery_CPPFLAGS += -DZELDA_BATTER_PMSET
 endif
 
 if ACPI
-zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\" -DZELDA_BATTERY_UTIL_ARGS=\"\"
-zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\" -DZELDA_BATTERY_UTIL_ARGS=\"\"
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_ACPI
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_ACPI
 endif
 
 LINK=$(CSC) $(CSCFLAGS) -o $@ # specify how to link object files
