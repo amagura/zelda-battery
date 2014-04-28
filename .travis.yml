@@ -1,8 +1,13 @@
 language: c
 compiler:
-  - gcc
   - clang
+  - gcc
+  - gcc-4.4
+  - gcc-4.5
+  - gcc-4.6
+  - gcc-4.7
 install:
+  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 gcc-4.7
   - sudo apt-get install acpi
   - sudo apt-get install chicken-bin
   - sudo apt-get install libchicken6
