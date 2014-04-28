@@ -1,8 +1,10 @@
-language: haskell
-ghc:
-  - 7.6
-  - 7.4
+language: c
+compiler:
+  - gcc
+  - clang
 install:
   - sudo apt-get install acpi
+  - sudo apt-get install chicken-bin
+  - sudo apt-get install libchicken6
 script:
   - autoreconf -fi && ./configure && make
