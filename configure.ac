@@ -26,7 +26,7 @@ AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])
 AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
 AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
-AM_CONDITIONAL([YACPI], [test x"$ac_cv_prog_YACPI" = x"yes"])
+AM_CONDITIONAL([YACPI], [test x"$ac_cv_prog_YACPI" = x"yes" && test x"$ac_cv_prog_ACPI" = x"no"])
 
 # Check if we're on Mac OS (X)
 AC_MSG_CHECKING([whether os runs Darwin])
