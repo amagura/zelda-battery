@@ -33,7 +33,8 @@ extern const char * cppToScheme__awk(void);
 
 (define on-ac-power
   (lambda (util)
-    (cond ((equal=? util "pmset")) ;; TODO finish me NOTE
+    (cond ((equal=? util "pmset")
+           (system "pmset -g | sed '/Power/!d' | grep '*' | grep 'AC'"))
 
           ((equal=? util "acpi")
            (system "acpi -a | grep 'on-line'"))
