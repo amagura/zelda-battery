@@ -19,13 +19,17 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
+(declare (uses helper))
 
-#|
-(define battery-power-level
-  (let ((acpi (
-  (let ((acpi (cond ((equal=? (car (system-information
+#>
+extern const char * cppToScheme__host_acpi_util(void);
+<#
+(define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 
-(let ((acpi (cond ((equal=? (car (system-information)) "Darwin") "pmset
-(if (equal=? (car (system-information)) "Darwin")
-  (
-   |#
+(let ((battery (percent->integer (power-level (x-host-acpi-util)))))
+ ;; print how much power is left out of 100%
+ (map (lambda (char) (display heart))
+      (make-list (/ battery 10)))
+ ;; print how much power has been used out of 100%
+ (map (lambda (char) (display empty-heart))
+      (make-list (- 10 (/ battery 10)))))
