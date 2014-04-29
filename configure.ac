@@ -13,6 +13,14 @@ AC_PROG_MAKE_SET
 AC_PROG_SED
 AC_PROG_AWK
 
+#AC_CACHE_CHECK([for sed that supports -r], [ac_cv_path_SED],
+#  [AC_PATH_PROGS_FEATURE_CHECK([SED], [sed gsed],
+#    [[sedout=`echo 'a bc d' | $ac_path_SED -r 's_.[[:space:]](.+)[[:space:]].*_\1_'`
+#      test "x$sedout" = x0 \
+#      && ac_cv_path_SED=$ac_path_SED ac_path_SED_found=:]],
+#    [AC_MSG_ERROR([could not find sed that supports -r])])])
+#AC_SUBST([SED], [$ac_cv_path_SED])
+
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])
