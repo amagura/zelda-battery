@@ -1,11 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zelda-blink zelda-battery
-zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c
-zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c
+zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c helper.scm
+zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c helper.scm
 AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
-zelda_blink_CPPFLAGS =
-zelda_battery_CPPFLAGS =
+zelda_blink_CPPFLAGS = -DZELDA_BATTERY_AWK=\"$(AWK)\" -DZELDA_BATTERY_SED=\"$(SED)\"
+zelda_battery_CPPFLAGS = -DZELDA_BATTERY_AWK=\"$(AWK)\" -DZELDA_BATTERY_SED=\"$(SED)\"
+
 
 CSCFLAGS ?= -vnq -O1
 CSCFLAGS += $(CHICKEN_FLAGS)
@@ -34,6 +35,10 @@ endif
 if ACPI
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\"
+endif
+if YACPI
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
 endif
 
 LINK=$(CC) $$(csc -cflags) $$(csc -ldflags) $$(csc -libs) -o $@ # specify how to link object files
