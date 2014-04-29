@@ -20,6 +20,8 @@
   You should have received a copy of the GNU General Public License
   along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 ****/
+#include <stdbool.h>
+
 const char *
 cppToScheme__host_acpi_util(void)
 {
@@ -54,4 +56,13 @@ cppToScheme__awk(void)
 #define ZELDA_BATTERY_AWK ""
 #endif
   return ZELDA_BATTERY_AWK;
+}
+
+bool
+cppToScheme__blink_on_ac_pwr(void)
+{
+#ifndef ZELDA_BATTERY_BLINK_EVEN_ON_AC
+#define ZELDA_BATTERY_BLINK_EVEN_ON_AC false
+#endif
+  return ZELDA_BATTERY_BLINK_EVEN_ON_AC;
 }

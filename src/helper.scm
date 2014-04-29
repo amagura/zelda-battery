@@ -31,6 +31,16 @@ extern const char * cppToScheme__awk(void);
   (lambda (perc)
     (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10))))
 
+(define on-ac-power
+  (lambda (util)
+    (cond ((equal=? util "pmset")) ;; TODO finish me NOTE
+
+          ((equal=? util "acpi")
+           (system "acpi -a | grep 'on-line'"))
+
+          ((equal=? util "yacpi")
+           (system "yacpi -pb | grep charging")))))
+  
 (define get-power-level
   (lambda (util)
     (cond ((equal=? util "pmset")
@@ -40,7 +50,7 @@ extern const char * cppToScheme__awk(void);
            (capture "acpi | awk '{print $4}' | sed -r 's_([0-9]+)%.*_\\1_' | tr -d '\\n'"))
 
           ((equal=? util "yacpi")
-           (capture "yacpi 
+           (capture "yacpi | sed -r 's_.*=[[:space:]]([0-9]+)%.*_\\1_' | tr -d '\\n'")))))
 
 (define heart "♥")
 (define empty-heart "♡")

@@ -41,6 +41,10 @@ zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
 endif
 
+if ACBLINK
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_BLINK_EVEN_ON_AC
+endif
+
 LINK=$(CC) $$(csc -cflags) $$(csc -ldflags) $$(csc -libs) -o $@ # specify how to link object files
 
 .scm.o:
