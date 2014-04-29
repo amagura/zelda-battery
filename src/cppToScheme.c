@@ -46,3 +46,12 @@ cppToScheme__grep(void)
 #endif
   return ZELDA_BATTERY_GREP;
 }
+
+const char *
+cppToScheme__awk(void)
+{
+#ifndef ZELDA_BATTERY_AWK
+#define ZELDA_BATTERY_AWK ""
+#endif
+  return ZELDA_BATTERY_AWK;
+}
