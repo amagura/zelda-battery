@@ -3,20 +3,23 @@ compiler:
   - clang
     #  - gcc
   - gcc-4.4
-    #  - gcc-4.5
+  - gcc-4.5
     #  - gcc-4.6
  # - gcc-4.7
 install:
-  - echo 'deb http://cz.archive.ubuntu.com/ubuntu lucid main universe' | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update
-  - sudo apt-get install gcc-4.3 gcc-4.4 # gcc-4.7 # gcc-4.5 gcc-4.6 gcc-4.7
+  - sudo apt-get install gcc-4.5 gcc-4.4 # gcc-4.7 # gcc-4.5 gcc-4.6 gcc-4.7
   - sudo apt-get install acpi
   - sudo apt-get install chicken-bin
   - sudo apt-get install libchicken6
   - sudo chicken-install ansi-escape-sequences shell srfi-1
 script:
-  - autoreconf -fi && ./configure && make
+  - autoreconf -fi
+  - ./configure
+  - make
 after_success:
   - sudo apt-get install yacpi
   - sudo apt-get remove acpi
-  - autoreconf -fi && ./configure && make anew
+  - autoreconf -fi
+  - ./configure
+  - make anew
