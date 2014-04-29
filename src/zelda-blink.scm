@@ -20,15 +20,12 @@
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
 (use shell srfi-1 ansi-escape-sequences)
+(declare (uses helper))
 
 #>
 extern const char * cppToScheme__host_acpi_util(void);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
-
-(define percent->integer
-  (lambda (perc)
-    (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10))))
 
 (cond ((equal=? (x-host-acpi-util) "pmset")
        (define power-level
