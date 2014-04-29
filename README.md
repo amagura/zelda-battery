@@ -15,4 +15,13 @@ __Note__ that `./configure` can take an `--enable-ac-blink` option, which is dis
 Just place `zelda-blink` and `zelda-battery` where ever you want them and add the appropriate stuff to your terminal prompt.
 
 ### Zsh
+```bash
+RPROMPT="%{$(../src/zelda-blink)%}$(../src/zelda-battery)%{[0;0m%}"
 
+## run TRAPALRM every $TMOUT seconds
+TMOUT=60 # refresh the terminal prompt every 60 seconds
+
+TRAPALRM () {
+    zle reset-prompt # refreshs the terminal prompt
+}
+```
