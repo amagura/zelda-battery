@@ -27,6 +27,8 @@ extern const char * cppToScheme__host_acpi_util(void);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 
+(if (<= (percent->integer (get-power-level (x-host-acpi-util))) 30)
+
 (cond ((equal=? (x-host-acpi-util) "pmset")
        (define power-level
          (capture "pmset -g ps | sed -E '/%/!d; s_.*[[:space:]]([0-9]+)%.*_\\1_' | tr -d '\\n'")))

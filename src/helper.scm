@@ -20,16 +20,27 @@
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (declare (unit helper))
 
+#>
+extern const char * cppToScheme__sed(void);
+extern const char * cppToScheme__awk(void);
+<#
+(define xsed (foreign-lambda c-string "cppToScheme__sed"))
+(define xawk (foreign-lambda c-string "cppToScheme__awk"))
+
 (define percent->integer
   (lambda (perc)
     (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10))))
 
-(define power-level
+(define get-power-level
   (lambda (util)
     (cond ((equal=? util "pmset")
            (capture "pmset -g ps | sed -E '/%/!d; s_.*[[:space:]]([0-9]+)%.*_\\1_' | tr -d '\\n'"))
+
           ((equal=? util "acpi")
-           (capture "acpi | awk '{print $4}' | sed -r 's_([0-9]+)%.*_\\1_' | tr -d '\\n'")))))
+           (capture "acpi | awk '{print $4}' | sed -r 's_([0-9]+)%.*_\\1_' | tr -d '\\n'"))
+
+          ((equal=? util "yacpi")
+           (capture "yacpi 
 
 (define heart "♥")
 (define empty-heart "♡")

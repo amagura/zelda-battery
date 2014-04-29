@@ -26,7 +26,7 @@ extern const char * cppToScheme__host_acpi_util(void);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 
-(let ((battery (percent->integer (power-level (x-host-acpi-util)))))
+(let ((battery (percent->integer (get-power-level (x-host-acpi-util)))))
  ;; print how much power is left out of 100%
  (map (lambda (char) (display heart))
       (make-list (/ battery 10)))
