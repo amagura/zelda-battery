@@ -15,8 +15,10 @@ AC_PROG_AWK
 
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
+AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])
 AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
 AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
+AM_CONDITIONAL([YACPI], [test x"$ac_cv_prog_YACPI" = x"yes"])
 
 # Check if we're on Mac OS (X)
 AC_MSG_CHECKING([whether os runs Darwin])
@@ -42,6 +44,16 @@ AC_ARG_ENABLE([profiling],
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-profiling]) ;;
              esac],[profiling=false])
 AM_CONDITIONAL([PROFILING], [test x$profiling = xtrue])
+
+# Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
+AC_ARG_ENABLE([acblink],
+              [  --enable-ac-blink      Blink on low battery, _even_ when on AC power]
+              [case "${enableval}" in
+               yes) acblink=true;;
+               no) acblink=false;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-ac-blink]) ;;
+             esac],[acblink=false])
+AM_CONDITIONAL([AC_BLINK], [test x$acblink = xtrue])
 
 # Check for debug
 AC_ARG_ENABLE([debug],
