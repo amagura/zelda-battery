@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([Zelda Battery], [0.0.3a], [sickhadas.nix@gmail.com])
+AC_INIT([Zelda Battery], [0.0.4a], [sickhadas.nix@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign])
 
@@ -61,7 +61,7 @@ AC_ARG_ENABLE([acblink],
                no) acblink=false;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-ac-blink]) ;;
              esac],[acblink=false])
-AM_CONDITIONAL([AC_BLINK], [test x$acblink = xtrue])
+AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
 
 # Check for debug
 AC_ARG_ENABLE([debug],
