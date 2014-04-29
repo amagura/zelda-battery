@@ -19,7 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
-(use shell srfi-1 ansi-escape-sequences)
+(use ansi-escape-sequences)
 (declare (uses helper))
 
 #>
