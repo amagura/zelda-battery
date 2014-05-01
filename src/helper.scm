@@ -42,10 +42,13 @@
            (not-false? (string-contains (first (regex#grep (regex#regexp "\\*")
                                                (regex#grep (regex#regexp "Power") (string-split (capture "pmset -g") (->string #\newline))))))))
           ((string=? util "acpi")
-           (system "acpi -a | grep 'on-line'"))
+           (not-false? (regex#grep "on-line" (string-split (capture "acpi -a")))))
 
           ((string=? util "yacpi")
-           (system "yacpi -pb | grep charging")))))
+           (not-false? (regex#grep "charging" (string-split (capture "yacpi -pb")))))
+          
+          ((string=? util "acpiconf")
+           ()))))
 
 ;; if the outcome of `get-power-level` is not an integer, (which might indicate an error,
 ;; which error may or may not be a problem: desktops don't have batteries so trying to get the 
@@ -63,13 +66,16 @@
 (define get-power-level
   (lambda (util)
     (cond ((string=? util "pmset")
-           (regex#string-substitute (regex#regexp "%.*") "" (first (regex#grep (regex#regexp "%") (string-split (capture "pmset -g ps"))))))
+           (regex#string-substitute (regex#regexp "%.*") ""
+                                    (first (regex#grep "%" (string-split (capture "pmset -g ps"))))))
 
           ((string=? util "acpi")
-           (capture "acpi | awk '{print $4}' | sed -r 's_([0-9]+)%.*_\\1_' | tr -d '\\n'"))
-
+           (regex#string-substitute (regex#regexp "%.*") ""
+                                    (let ((power (string-split (capture "acpi"))))
+                                     (list-ref power (- (length power) 1)))))
           ((string=? util "yacpi")
-           (capture "yacpi | sed -r 's_.*=[[:space:]]([0-9]+)%.*_\\1_' | tr -d '\\n'"))
+           (regex#string-subsitute (regex#regexp "%.*") ""
+                                   (first (regex#grep "%" (string-split (capture "yacpi -pb"))))))
 
           ((string=? util "acpiconf"))))) ; not fully supported (as in not supported at all) yet.  I need to install *BSD on my laptop before I can test this and add support.
 
