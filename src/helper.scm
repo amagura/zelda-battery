@@ -18,7 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(use shell) ; use the `shell` egg
+(use shell regex) ; use the `shell` egg
 (declare (unit helper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
 
 ;; if the outcome of `procedure` does not === (absolutely and completely equal) #f (false), then return #t (true)
