@@ -8,11 +8,18 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 dnl Chicken Scheme
-AC_PATH_PROG([CSC], [csc], [no])
-AC_PATH_PROG([CHICKEN], [chicken], [no])
+AC_ARG_VAR([CSC], [driver program for the CHICKEN Scheme compiler])
+AC_ARG_VAR([CHICKEN], [CHICKEN Scheme-to-C compiler])
 
-AM_CONDITIONAL([NO_CHICKEN], [test x"$ac_cv_path_CSC" = x"no" && test x"$ac_cv_path_CHICKEN" = x"no"])
-AM_COND_IF([NO_CHICKEN], [AC_MSG_
+AM_CONDITIONAL([NO_CHECK_FOR_CSC], [test ! x"$CSC" = x""])
+AM_CONDITIONAL([NO_CHECK_FOR_CHICKEN], [test ! x"$CHICKEN" = x""])
+AM_COND_IF([NO_CHECK_FOR_CSC], [AC_CHECK_PROG([CSC], [csc], [no])], [AC_PATH_PROG([CSC], [csc], [no])])
+AM_COND_IF([NO_CHECK_FOR_CHICKEN], [AC_CHECK_PROG([CHICKEN], [chicken], [no])], [AC_PATH_PROG([CHICKEN], [chicken], [no])])
+#AC_CHECK_PROG([CSC], [csc], [no])
+#AC_CHECK_PROG([CHICKEN], [chicken], [no])
+
+#AC_PATH_PROG([CSC], [csc], [no])
+#AC_PATH_PROG([CHICKEN], [chicken], [no])
 
 # Check for programs
 AC_PROG_INSTALL
@@ -61,6 +68,6 @@ AC_ARG_ENABLE([debug],
 AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
-AC_SUBST([CHICKEN_FLAGS], [""])
-AC_SUBST([CSCFLAGS], [""])
+AC_SUBST([CHICKEN_FLAGS], ["CHICKEN_OPTIONS"])
+AC_SUBST([CSCFLAGS], ["$CSC_OPTIONS"])
 AC_OUTPUT
