@@ -48,7 +48,7 @@
            (not-false? (regex#grep "charging" (string-split (capture "yacpi -pb")))))
           
           ((string=? util "acpiconf")
-           ()))))
+           '()))))
 
 ;; if the outcome of `get-power-level` is not an integer, (which might indicate an error,
 ;; which error may or may not be a problem: desktops don't have batteries so trying to get the 
