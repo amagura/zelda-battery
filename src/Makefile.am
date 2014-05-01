@@ -4,9 +4,6 @@ bin_PROGRAMS = zelda-blink zelda-battery
 zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c helper.scm
 zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c helper.scm
 AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
-zelda_blink_CPPFLAGS = -DZELDA_BATTERY_AWK=\"$(AWK)\" -DZELDA_BATTERY_SED=\"$(SED)\"
-zelda_battery_CPPFLAGS = -DZELDA_BATTERY_AWK=\"$(AWK)\" -DZELDA_BATTERY_SED=\"$(SED)\"
-
 
 CSCFLAGS ?= -vnq -O1
 CSCFLAGS += $(CHICKEN_FLAGS)
@@ -19,23 +16,16 @@ if DEBUG
 CSCFLAGS += -S
 endif
 
-if DARWIN
-zelda_blink_CPPFLAGS += -DZELDA_BATTERY_DARWIN
-zelda_battery_CPPFLAGS += -DZELDA_BATTERY_DARWIN
-endif
-if LINUX
-zelda_blink_CPPFLAGS += -DZELDA_BATTERY_LINUX
-zelda_battery_CPPFLAGS += -DZELDA_BATTERY_LINUX
-endif
-
 if PMSET
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"pmset\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"pmset\"
 endif
+
 if ACPI
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpi\"
 endif
+
 if YACPI
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"

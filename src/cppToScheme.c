@@ -31,33 +31,6 @@ cppToScheme__host_acpi_util(void)
   return ZELDA_BATTERY_UTIL;
 }
 
-const char *
-cppToScheme__sed(void)
-{
-#ifndef ZELDA_BATTERY_SED
-#define ZELDA_BATTERY_SED ""
-#endif
-  return ZELDA_BATTERY_SED;
-}
-
-const char *
-cppToScheme__grep(void)
-{
-#ifndef ZELDA_BATTERY_GREP
-#define ZELDA_BATTERY_GREP ""
-#endif
-  return ZELDA_BATTERY_GREP;
-}
-
-const char *
-cppToScheme__awk(void)
-{
-#ifndef ZELDA_BATTERY_AWK
-#define ZELDA_BATTERY_AWK ""
-#endif
-  return ZELDA_BATTERY_AWK;
-}
-
 bool
 cppToScheme__blink_on_ac_pwr(void)
 {

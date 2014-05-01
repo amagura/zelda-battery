@@ -21,12 +21,9 @@
 (use shell)
 (declare (unit helper))
 
-#>
-extern const char * cppToScheme__sed(void);
-extern const char * cppToScheme__awk(void);
-<#
-(define xsed (foreign-lambda c-string "cppToScheme__sed"))
-(define xawk (foreign-lambda c-string "cppToScheme__awk"))
+(define not-false?
+  (lambda (procedure)
+    (and #t (and procedure #t))))
 
 (define percent->integer
   (lambda (perc)
@@ -35,8 +32,8 @@ extern const char * cppToScheme__awk(void);
 (define on-ac-power
   (lambda (util)
     (cond ((equal=? util "pmset")
-           (system "pmset -g | sed '/Power/!d' | grep '*' | grep 'AC'"))
-
+           (not-false? (string-contains (first (regex#grep (regex#regexp "\\*")
+                                               (regex#grep (regex#regexp "Power") (string-split (capture "pmset -g") (->string #\newline))))))))
           ((equal=? util "acpi")
            (system "acpi -a | grep 'on-line'"))
 
@@ -46,7 +43,7 @@ extern const char * cppToScheme__awk(void);
 (define get-power-level
   (lambda (util)
     (cond ((equal=? util "pmset")
-           (capture "pmset -g ps | sed -E '/%/!d; s_.*[[:space:]]([0-9]+)%.*_\\1_' | tr -d '\\n'"))
+           (regex#string-substitute (regex#regexp "%.*") "" (first (regex#grep (regex#regexp "%") (string-split (capture "pmset -g ps"))))))
 
           ((equal=? util "acpi")
            (capture "acpi | awk '{print $4}' | sed -r 's_([0-9]+)%.*_\\1_' | tr -d '\\n'"))
@@ -54,5 +51,5 @@ extern const char * cppToScheme__awk(void);
           ((equal=? util "yacpi")
            (capture "yacpi | sed -r 's_.*=[[:space:]]([0-9]+)%.*_\\1_' | tr -d '\\n'")))))
 
-(define heart "♥")
-(define empty-heart "♡")
+(define heart "\u2665")
+(define empty-heart "\u2661")

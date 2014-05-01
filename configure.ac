@@ -8,40 +8,22 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 dnl Chicken Scheme
-AC_PATH_PROG([CSC], [csc])
-AC_PATH_PROG([CHICKEN], [chicken])
-dnl Haskell
-AC_PATH_PROG([GHC], [ghc])
+AC_PATH_PROG([CSC], [csc], [no])
+AC_PATH_PROG([CHICKEN], [chicken], [no])
+
+AM_CONDITIONAL([NO_CHICKEN], [test x"$ac_cv_path_CSC" = x"no" && test x"$ac_cv_path_CHICKEN" = x"no"])
+AM_COND_IF([NO_CHICKEN], [AC_MSG_
 
 # Check for programs
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_PROG_SED
-AC_PROG_AWK
+
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])
 AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
 AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
 AM_CONDITIONAL([YACPI], [test x"$ac_cv_prog_YACPI" = x"yes" && test x"$ac_cv_prog_ACPI" = x"no"])
-
-#AC_CACHE_CHECK([for sed that supports -r], [ac_cv_path_SED],
-#  [AC_PATH_PROGS_FEATURE_CHECK([SED], [sed gsed],
-#    [[sedout=`echo 'a bc d' | $ac_path_SED -r 's_.[[:space:]](.+)[[:space:]].*_\1_'`
-#      test "x$sedout" = x0 \
-#      && ac_cv_path_SED=$ac_path_SED ac_path_SED_found=:]],
-#    [AC_MSG_ERROR([could not find sed that supports -r])])])
-#AC_SUBST([SED], [$ac_cv_path_SED])
-
-# Check if we're on Mac OS (X)
-AC_MSG_CHECKING([whether os runs Darwin])
-AM_CONDITIONAL([DARWIN], [test x`uname` = xDarwin])
-AM_COND_IF([DARWIN], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
-
-# Check if we're on Linux
-AC_MSG_CHECKING([whether os runs Linux])
-AM_CONDITIONAL([LINUX], [test x`uname` = xLinux])
-AM_COND_IF([LINUX], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check whether this is an automated build
 AC_MSG_CHECKING([whether build is automated])
