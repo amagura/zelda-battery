@@ -74,7 +74,7 @@
                                     (let ((power (string-split (capture "acpi"))))
                                      (list-ref power (- (length power) 1)))))
           ((string=? util "yacpi")
-           (regex#string-subsitute (regex#regexp "%.*") ""
+           (regex#string-substitute (regex#regexp "%.*") ""
                                    (first (regex#grep "%" (string-split (capture "yacpi -pb"))))))
 
           ((string=? util "acpiconf"))))) ; not fully supported (as in not supported at all) yet.  I need to install *BSD on my laptop before I can test this and add support.
