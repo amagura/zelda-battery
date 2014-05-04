@@ -33,6 +33,16 @@ zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"yacpi\"
 endif
 
+if APM
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"apm\"
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"apm\"
+endif
+
+if ACPICONF
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpiconf\"
+zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpiconf\"
+endif
+
 if ACBLINK
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_BLINK_EVEN_ON_AC
 endif
@@ -53,8 +63,8 @@ expand-local:
 	  done
 
 tidy-local:
-	@$(RM) *.o
-	$(RM) $(bin_PROGRAMS:=.c)
+	$(RM) *.o || true
+	$(RM) $(bin_PROGRAMS:=.c) || true
 
 anew: clean all
 ready: clean all tidy-local
