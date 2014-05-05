@@ -35,6 +35,26 @@ PS1='\[\033[0;31m\]>\[\033[0;0m\]\w\[\033[0;31m\]>>\[\033[0;0m\] \[$(src/zelda-b
 ```
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
 
+## Dependencies
+* C compiler
+* Chicken Scheme
+
+### Chicken Eggs
+Installable via `sudo chicken-install`
+* ansi-escape-sequences
+* shell
+* srfi-1
+* regex
+
+### OS specific
+
+#### Linux
+  * `acpi` or `yacpi`
+#### Mac OS X
+  * `pmset`
+#### *BSD
+  * `apm` or `acpiconf` (`apm` is preferred, since Zelda Battery has no way of knowing which `-i <nth>` your battery lives at)
+
 ## Notes
 
 ### Zsh
