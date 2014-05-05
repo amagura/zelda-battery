@@ -28,9 +28,13 @@ AC_PROG_MAKE_SET
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])
+AC_CHECK_PROG([APM], [apm], [yes], [no]) # *BSD support
+AC_CHECK_PROG([ACPICONF], [acpiconf], [yes], [no])
 AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
 AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
 AM_CONDITIONAL([YACPI], [test x"$ac_cv_prog_YACPI" = x"yes" && test x"$ac_cv_prog_ACPI" = x"no"])
+AM_CONDITIONAL([APM], [test x"$ac_cv_prog_APM" = x"yes"])
+AM_CONDITIONAL([ACPICONF], [test x"$ac_cv_prog_ACPICONF" = x"yes" && test x"$ac_cv_prog_APM" = x"no"])
 
 # Check whether this is an automated build
 AC_MSG_CHECKING([whether build is automated])

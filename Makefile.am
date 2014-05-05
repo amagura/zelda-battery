@@ -6,7 +6,7 @@ AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 clean-local: tidy-local
 
 tidy-local:
-	@$(RM) *.o
+	@$(RM) *.o || true
 
 anew: clean all
 ready: clean all tidy-local
