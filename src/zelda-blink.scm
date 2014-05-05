@@ -24,7 +24,6 @@
 
 #>
 #include <stdbool.h>
-
 extern const char * cppToScheme__host_acpi_util(void);
 extern bool cppToScheme__blink_on_ac_pwr(void);
 <#
