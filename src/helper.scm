@@ -79,7 +79,7 @@
 
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
-                                   (car (regex#grep "%" (string-split (capture "yacpi -pb"))))))
+                                   (car (regex#grep "%" (string-split (capture "yacpi -pb")))))) ; think of `car` as `first`.  I'd use `first` but FreeBSD 10.x doesn't seem to have `first`.
 
           ((string=? util "acpiconf"))))) ; not fully supported (as in not supported at all) yet.  I need to install *BSD on my laptop before I can test this and add support.
 
