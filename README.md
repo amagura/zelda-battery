@@ -40,7 +40,8 @@ PS1='\[\033[0;31m\]>\[\033[0;0m\]\w\[\033[0;31m\]>>\[\033[0;0m\] \[$(src/zelda-b
 * Chicken Scheme
 * `acpi`/`yacpi` (Linux)
 * `pmset` (Mac OS X)
-* `apm`/`acpiconf` (*BSD) (<code>apm</code> is preferred, since Zelda Battery has no way of knowing which <code>-i &lt;nth&gt;</code> your battery lives at)
+* `apm`/`acpiconf` (*BSD) (`apm` is preferred, since Zelda Battery has no way of knowing which `-i <nth>` your battery lives at)
+
 ### Chicken Eggs
 Installable via `sudo chicken-install`
 * ansi-escape-sequences
