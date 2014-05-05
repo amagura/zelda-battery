@@ -34,3 +34,11 @@ PS1='\[\033[0;31m\]>\[\033[0;0m\]\w\[\033[0;31m\]>>\[\033[0;0m\] \[$(src/zelda-b
 \h\$ '
 ```
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
+
+## Notes
+
+### Zsh
+As long as you use the `TMOUT` and `TRAPALRM`/`zle reset-prompt` stuff, your Zsh prompt should refresh itself every 60 seconds.
+
+### Bash
+AFAIK there is _no_ way to periodically refresh a bash prompt without either running `clear`/`Ctrl-L` or pressing enter, which causes the prompt to be redrawn.
