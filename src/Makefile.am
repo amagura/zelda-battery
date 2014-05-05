@@ -63,7 +63,7 @@ expand-local:
 	  done
 
 tidy-local:
-	$(RM) *.o || true
+	@$(RM) *.o || true
 	$(RM) $(bin_PROGRAMS:=.c) || true
 	$(RM) helper.c || true
 
