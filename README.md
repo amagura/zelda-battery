@@ -29,6 +29,6 @@ TRAPALRM () {
 
 ### Bash
 ```bash
-PS1='\u@\h \[\033[0;31m\]>\[\033[0;0m\]\w\[\033[0;31m\]>>\[\033[0;0m\] \[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\]
-\$ '
+PS1='\[\033[0;31m\]>\[\033[0;0m\]\w\[\033[0;31m\]>>\[\033[0;0m\] \[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\]
+\h\$ '
 ```
