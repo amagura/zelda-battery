@@ -49,11 +49,14 @@ Installable via `sudo chicken-install`
 ### OS specific
 
 #### Linux
-  * `acpi` or `yacpi`
+<ul><li><code>acpi</code> or <code>yacpi</code>
+</li></ul>
 #### Mac OS X
-  * `pmset`
+<ul><li><code>pmset</code>
+</li></ul>
 #### *BSD
-  * `apm` or `acpiconf` (`apm` is preferred, since Zelda Battery has no way of knowing which `-i <nth>` your battery lives at)
+<ul><li><code>apm</code> or <code>acpiconf</code> (<code>apm</code> is preferred, since Zelda Battery has no way of knowing which <code>-i <nth></code> your battery lives at)
+</li></ul>
 
 ## Notes
 
