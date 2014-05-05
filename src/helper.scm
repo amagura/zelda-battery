@@ -70,9 +70,10 @@
                                     (first (regex#grep "%" (string-split (capture "pmset -g ps"))))))
 
           ((string=? util "acpi")
+           (regex#string-substitute (regex#regexp "%.*")
+                                    (first (regex#grep "%" (string-split (capture "acpi"))))))
            (regex#string-substitute (regex#regexp "%.*") ""
-                                    (let ((power (string-split (capture "acpi"))))
-                                     (list-ref power (- (length power) 1)))))
+
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
                                    (first (regex#grep "%" (string-split (capture "yacpi -pb"))))))
