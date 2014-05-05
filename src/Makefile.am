@@ -55,6 +55,7 @@ expand-local:
 tidy-local:
 	@$(RM) *.o
 	$(RM) $(bin_PROGRAMS:=.c)
+	$(RM) helper.c
 
 anew: clean all
 ready: clean all tidy-local
