@@ -32,7 +32,10 @@
 ;; 48 -> 40, 102 -> 100, 155 -> 150, 01 -> 0, etc
 (define percent->integer
   (lambda (perc)
-    (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10))))
+    (if (or (equal=? perc +inf.0)
+            (equal=? perc -inf.0))
+      perc
+      (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10)))))
 
 ;;; is the current machine running off AC Power (don't see why this wouldn't work on machines that do not have a battery, as in a desktop)
 (define on-ac-power
@@ -41,6 +44,7 @@
     (cond ((string=? util "pmset")
            (not-false? (string-contains (first (regex#grep (regex#regexp "\\*")
                                                (regex#grep (regex#regexp "Power") (string-split (capture "pmset -g") (->string #\newline))))))))
+
           ((string=? util "acpi")
            (not-false? (regex#grep "on-line" (string-split (capture "acpi -a")))))
 
@@ -59,7 +63,7 @@
 (define assume-power
   (lambda (util)
     (let ((power-level (get-power-level util)))
-     (cond ((number? power-level) power-level)
+     (cond ((number? (string->number power-level)) power-level)
            ((eq? power-level (get-power-level "")) -inf.0) ; no utility present or an unsupported utility was somehow (should be impossible unless it got hard-coded into cppToScheme.c) used.
            (else +inf.0))))) ; infinity is used here to communicate that the zelda-blink needs to use a special color sequence to indicate that the current system is _special_, lol, and that Zelda Battery has no means of determining the current power level or even if there is a power level.
   

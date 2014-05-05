@@ -28,9 +28,17 @@ extern const char * cppToScheme__host_acpi_util(void);
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 
 (let ((battery (percent->integer (assume-power (x-host-acpi-util)))))
- ;; print how much power is left out of 100%
- (map (lambda (char) (display heart))
-      (make-list (/ battery 10)))
- ;; print how much power has been used out of 100%
- (map (lambda (char) (display empty-heart))
-      (make-list (- 10 (/ battery 10)))))
+ (cond ((= battery +inf.0)
+        (map (lambda (char) (display heart) (display empty-heart)) ; 0101010101 (means that your machine is probably a desktop or a virtual machine)
+             (make-list 5)))
+       ((= battery -inf.0)
+        (map (lambda (char) (display empty-heart)) ; 000000001 (means no supported utilities are present)
+             (make-list 9))
+        (display heart))
+       (else        
+         ;; print how much power is left out of 100%
+         (map (lambda (char) (display heart))
+              (make-list (/ battery 10)))
+         ;; print how much power has been used out of 100%
+         (map (lambda (char) (display empty-heart))
+              (make-list (- 10 (/ battery 10)))))))
