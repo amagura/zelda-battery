@@ -10,6 +10,7 @@ AC_PROG_CC_STDC
 dnl Chicken Scheme
 AC_ARG_VAR([CSC], [driver program for the CHICKEN Scheme compiler])
 AC_ARG_VAR([CHICKEN], [CHICKEN Scheme-to-C compiler])
+AC_ARG_VAR([DESTDIR], [root directory used with `make install', e.g. `DESTDIR=build ./configure' -> DESTDIR will be `src/build'])
 
 AM_CONDITIONAL([NO_CHECK_FOR_CSC], [test ! x"$CSC" = x""])
 AM_CONDITIONAL([NO_CHECK_FOR_CHICKEN], [test ! x"$CHICKEN" = x""])
@@ -74,4 +75,5 @@ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_SUBST([CHICKEN_FLAGS], ["$CHICKEN_OPTIONS"])
 AC_SUBST([CSCFLAGS], ["$CSC_OPTIONS"])
+AC_SUBST([DESTDIR], ["$DESTDIR"])
 AC_OUTPUT
