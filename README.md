@@ -55,7 +55,7 @@ Installable via `sudo chicken-install`
 <ul><li><code>pmset</code>
 </li></ul>
 #### *BSD
-<ul><li><code>apm</code> or <code>acpiconf</code> (<code>apm</code> is preferred, since Zelda Battery has no way of knowing which <code>-i <nth></code> your battery lives at)
+<ul><li><code>apm</code> or <code>acpiconf</code> (<code>apm</code> is preferred, since Zelda Battery has no way of knowing which <code>-i &lt;nth&gt;</code> your battery lives at)
 </li></ul>
 
 ## Notes
