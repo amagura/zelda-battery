@@ -42,7 +42,7 @@
   (lambda (util)
     ;; check 
     (cond ((string=? util "pmset")
-           (not-false? (string-contains (first (regex#grep (regex#regexp "\\*")
+           (not-false? (string-contains (car (regex#grep (regex#regexp "\\*")
                                                (regex#grep (regex#regexp "Power") (string-split (capture "pmset -g") (->string #\newline))))))))
 
           ((string=? util "acpi")
@@ -71,15 +71,15 @@
   (lambda (util)
     (cond ((string=? util "pmset")
            (regex#string-substitute (regex#regexp "%.*") ""
-                                    (first (regex#grep "%" (string-split (capture "pmset -g ps"))))))
+                                    (car (regex#grep "%" (string-split (capture "pmset -g ps"))))))
 
           ((string=? util "acpi")
            (regex#string-substitute (regex#regexp "%.*")
-                                    (first (regex#grep "%" (string-split (capture "acpi"))))))
+                                    (car (regex#grep "%" (string-split (capture "acpi"))))))
 
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
-                                   (first (regex#grep "%" (string-split (capture "yacpi -pb"))))))
+                                   (car (regex#grep "%" (string-split (capture "yacpi -pb"))))))
 
           ((string=? util "acpiconf"))))) ; not fully supported (as in not supported at all) yet.  I need to install *BSD on my laptop before I can test this and add support.
 
