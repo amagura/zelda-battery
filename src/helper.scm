@@ -72,7 +72,6 @@
           ((string=? util "acpi")
            (regex#string-substitute (regex#regexp "%.*")
                                     (first (regex#grep "%" (string-split (capture "acpi"))))))
-           (regex#string-substitute (regex#regexp "%.*") ""
 
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
