@@ -30,7 +30,7 @@ extern bool cppToScheme__blink_on_ac_pwr(void);
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 (define x-blink-on-ac-pwr (foreign-lambda bool "cppToScheme__blink_on_ac_pwr"))
 
-(if (<= (percent->integer (get-power-level (x-host-acpi-util))) 30)
+(if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
   (display (car (string-split (ansi-escape-sequences#set-text
                                 (if (on-ac-power (x-host-acpi-util))
                                   (if (x-blink-on-ac-pwr)
