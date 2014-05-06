@@ -18,13 +18,13 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(use shell regex) ; use the `shell` egg
+(use shell regex list-utils) ; use the `shell` egg
 (declare (unit helper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
 
 ;; if the outcome of `procedure` does not === (absolutely and completely equal) #f (false), then return #t (true)
 (define not-false?
-  (lambda (procedure)
-    (and #t (and procedure #t))))
+  (lambda (proc #!optional bool)
+   (or (and bool proc #t) (and proc))))
 
 ;; if you have a percentage: 53%, this will convert it to 50.
 ;; if you have 45%, it will convert it to 40%.
@@ -42,21 +42,29 @@
   (lambda (util)
     ;; check 
     (cond ((string=? util "pmset")
-           (not-false? (string-contains (car (regex#grep "\\*"
-                                               (regex#grep "Power" (string-split (capture "pmset -g") (->string #\newline))))))))
+           (not-false? (string-contains "AC" (car (regex#grep "\\*"
+                                               (regex#grep "Power" (string-split (capture "pmset -g") (->string #\newline)))))) #t))
 
           ((string=? util "acpi")
-           (not-false? (regex#grep "on-line" (string-split (capture "acpi -a")))))
+           (not-false? (regex#grep "on-line" (string-split (capture "acpi -a"))) #t))
 
           ((string=? util "yacpi")
            (not-false? (regex#grep "charging" (string-split (capture "yacpi -pb")))))
 
           ((string=? util "apm")
-           (not-false? (string-contains (car (regex#grep "on-line"
-                                              (regex#grep "AC" (string-split (capture "apm") (->string #\newline))))))))
+           (not-null?
+            (regex#grep "on-line"
+             (regex#grep "AC" (string-split (capture ,util) (->string #\newline))))))
+
           ((string=? util "acpiconf")
-           (not-false? (string-contains (car (regex#grep "charging"
-                                              (regex#grep "State:" (string-split (capture "acpiconf" (->string #\newline))))))))))))
+           (not-null?
+            (regex#grep "charging"
+             (regex#grep "State:"
+              (car (filter (lambda (x) (not-null? x))
+               (loop for idex from 10 downto 0 collect
+                                   (string-split (capture ,(string-append util " -i " (number->string idex) " 2> /dev/null")) (->string #\newline)))))))))
+
+          (else #f))))
 
 ;; if the outcome of `get-power-level` is not an integer, (which might indicate an error,
 ;; which error may or may not be a problem: desktops don't have batteries so trying to get the 
@@ -94,7 +102,10 @@
           ((string=? util "acpiconf")
            (regex#string-substitute (regex#regexp "%.*") ""
             (car (or
-                  (not-null? (regex#grep "%" (string-split (capture "acpi -i"))))
+                  (not-null? (regex#grep "%" (loop for idex from 10 downto 0 collect
+                                              (car (or
+                                                    (not-null? (regex#grep "%" (string-split (capture ,(string-append "acpiconf -i " (number->string idex) " 2> /dev/null")))))
+                                                    '(""))))))
                   '("%")))))
           (else ""))))
 

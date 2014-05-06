@@ -31,10 +31,10 @@ extern bool cppToScheme__blink_on_ac_pwr(void);
 (define x-blink-on-ac-pwr (foreign-lambda bool "cppToScheme__blink_on_ac_pwr"))
 
 (if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
-  (display (car (string-split (ansi-escape-sequences#set-text
-                                (if (on-ac-power (x-host-acpi-util))
-                                  (if (x-blink-on-ac-pwr)
-                                    '(blink fg-red)
-                                    '(fd-red))
-                                  '(blink fd-red)) " "))))
-  (display (car (string-split (ansi-escape-sequences#set-text '(fg-red) " ")))))
+ (display (car (string-split (ansi-escape-sequences#set-text
+                              (if (on-ac-power (x-host-acpi-util))
+                               (if (x-blink-on-ac-pwr)
+                                '(blink fg-red)
+                                '(fg-red))
+                               '(blink fg-red)) " "))))
+ (display (car (string-split (ansi-escape-sequences#set-text '(fg-red) " ")))))
