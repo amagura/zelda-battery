@@ -42,17 +42,21 @@
   (lambda (util)
     ;; check 
     (cond ((string=? util "pmset")
-           (not-false? (string-contains (car (regex#grep (regex#regexp "\\*")
-                                               (regex#grep (regex#regexp "Power") (string-split (capture "pmset -g") (->string #\newline))))))))
+           (not-false? (string-contains (car (regex#grep "\\*"
+                                               (regex#grep "Power" (string-split (capture "pmset -g") (->string #\newline))))))))
 
           ((string=? util "acpi")
            (not-false? (regex#grep "on-line" (string-split (capture "acpi -a")))))
 
           ((string=? util "yacpi")
            (not-false? (regex#grep "charging" (string-split (capture "yacpi -pb")))))
-          
+
+          ((string=? util "apm")
+           (not-false? (string-contains (car (regex#grep "on-line"
+                                              (regex#grep "AC" (string-split (capture "apm") (->string #\newline))))))))
           ((string=? util "acpiconf")
-           '()))))
+           (not-false? (string-contains (car (regex#grep "charging"
+                                              (regex#grep "State:" (string-split (capture "acpiconf" (->string #\newline))))))))))))
 
 ;; if the outcome of `get-power-level` is not an integer, (which might indicate an error,
 ;; which error may or may not be a problem: desktops don't have batteries so trying to get the 
