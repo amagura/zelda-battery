@@ -31,11 +31,11 @@ cppToScheme__host_acpi_util(void)
   return ZELDA_BATTERY_UTIL;
 }
 
-bool
+int
 cppToScheme__blink_on_ac_pwr(void)
 {
 #ifndef ZELDA_BATTERY_BLINK_EVEN_ON_AC
-#define ZELDA_BATTERY_BLINK_EVEN_ON_AC false
+#define ZELDA_BATTERY_BLINK_EVEN_ON_AC 0
 #endif
   return ZELDA_BATTERY_BLINK_EVEN_ON_AC;
 }

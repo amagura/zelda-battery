@@ -23,12 +23,11 @@
 (declare (uses helper))
 
 #>
-#include <stdbool.h>
 extern const char * cppToScheme__host_acpi_util(void);
-extern bool cppToScheme__blink_on_ac_pwr(void);
+extern int cppToScheme__blink_on_ac_pwr(void);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
-(define x-blink-on-ac-pwr (foreign-lambda bool "cppToScheme__blink_on_ac_pwr"))
+(define x-blink-on-ac-pwr (foreign-lambda int "cppToScheme__blink_on_ac_pwr"))
 
 (if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
  (display (car (string-split (ansi-escape-sequences#set-text

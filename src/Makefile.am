@@ -7,7 +7,8 @@ AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
-CSCFLAGS ?= -vnq -O1
+CSCFLAGS ?= -O3 -S -optimize-leaf-routines
+CSCFLAGS += -O3 -S -optimize-leaf-routines
 CSCFLAGS += $(CHICKEN_FLAGS)
 
 if PROFILING
@@ -47,12 +48,27 @@ if ACBLINK
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_BLINK_EVEN_ON_AC
 endif
 
-LINK=$(CC) $$(csc -cflags) $$(csc -ldflags) $$(csc -libs) -o $@ # specify how to link object files
+LINK=$(CSC) $(CSCFLAGS) $(CPPFLAGS) -o $@ # specify how to link object files
 
 .scm.o:
 	$(CSC) $(CSCFLAGS) -c $< -o $@
+	@echo
 
 clean-local: tidy-local
+
+all-local:
+	@echo
+
+profile-local:
+	$(CSC) $(CSCFLAGS) $(CPPFLAGS) -accumulate-profile -profile-name PROFILE-BLINK.001 -S $(zelda_blink_SOURCES)
+	$(CSC) $(CSCFLAGS) $(CPPFLAGS) -accumulate-profile -profile-name PROFILE-BATTERY.002 -S $(zelda_battery_SOURCES)
+	for i in $$(bash -c 'echo {0..1000}'); do\
+	  for prog in $(bin_PROGRAMS); do\
+	  ./$$prog > /dev/null; \
+	  done; \
+	  done
+	chicken-profile PROFILE-BLINK.001
+	chicken-profile PROFILE-BATTERY.002
 
 expand-local:
 	for files in $(zelda_battery_SOURCES); do \
