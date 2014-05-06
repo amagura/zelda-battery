@@ -71,17 +71,28 @@
   (lambda (util)
     (cond ((string=? util "pmset")
            (regex#string-substitute (regex#regexp "%.*") ""
-                                    (car (regex#grep "%" (string-split (capture "pmset -g ps"))))))
+            (car (or
+                  (not-null? (regex#grep "%" (string-split (capture "pmset -g ps"))))
+                  '("%")))))
 
           ((string=? util "acpi")
            (regex#string-substitute (regex#regexp "%.*")
-                                    (car (regex#grep "%" (string-split (capture "acpi"))))))
+            (car (or
+                  (not-null? (regex#grep "%" (string-split (capture "acpi"))))
+                  '("%")))))
 
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
-                                   (car (regex#grep "%" (string-split (capture "yacpi -pb")))))) ; think of `car` as `first`.  I'd use `first` but FreeBSD 10.x doesn't seem to have `first`.
+            (car (or
+                  (not-null? (regex#grep "%" (string-split (capture "yacpi -pb"))))
+                  '("%")))))
 
-          ((string=? util "acpiconf"))))) ; not fully supported (as in not supported at all) yet.  I need to install *BSD on my laptop before I can test this and add support.
+          ((string=? util "acpiconf")
+           (regex#string-substitute (regex#regexp "%.*") ""
+            (car (or
+                  (not-null? (regex#grep "%" (string-split (capture "acpi -i"))))
+                  '("%")))))
+          (else ""))))
 
 (define heart "\u2665")
 (define empty-heart "\u2661")
