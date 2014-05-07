@@ -7,12 +7,11 @@ AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
-CSCFLAGS ?= -O3 -S -optimize-leaf-routines
-CSCFLAGS += -O3 -S -optimize-leaf-routines
-CSCFLAGS += $(CHICKEN_FLAGS)
+CSCFLAGS ?= -optimize-leaf-routines
+CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2 -C -march=native -C -mtune=native
 
 if PROFILING
-CSCFLAGS += -accumulate-profile -profile-name runtime-profile.out
+CSCFLAGS += -accumulate-profile -profile-name PROFILE.out
 endif
 
 if DEBUG
@@ -48,16 +47,14 @@ if ACBLINK
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_BLINK_EVEN_ON_AC
 endif
 
-LINK=$(CSC) $(CSCFLAGS) $(CPPFLAGS) -o $@ # specify how to link object files
+LINK=$(CSC) $(CSCFLAGS) -o $@ # specify how to link object files
 
 .scm.o:
 	$(CSC) $(CSCFLAGS) -c $< -o $@
-	@echo
 
 clean-local: tidy-local
 
 all-local:
-	@echo
 
 profile-local:
 	$(CSC) $(CSCFLAGS) $(CPPFLAGS) -accumulate-profile -profile-name PROFILE-BLINK.001 -S $(zelda_blink_SOURCES)

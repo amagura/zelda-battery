@@ -18,7 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(use shell regex list-utils) ; use the `shell` egg
+(use shell posix regex list-utils) ; use the `shell` egg
 (declare (unit helper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
 
 ;; if the outcome of `procedure` does not === (absolutely and completely equal) #f (false), then return #t (true)
@@ -32,39 +32,42 @@
 ;; 48 -> 40, 102 -> 100, 155 -> 150, 01 -> 0, etc
 (define percent->integer
   (lambda (perc)
-    (if (or (equal=? perc +inf.0)
-            (equal=? perc -inf.0))
+    (if (or (equal=? perc +inf.0) (equal=? perc -inf.0))
       perc
       (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10)))))
+
+(define twice-grep
+  (lambda (first-pattern second-pattern text #!optional expand-patterns)
+    (regex#grep (if expand-patterns (regex#regexp first-pattern) first-pattern)
+                (regex#grep (if expand-patterns (regex#regexp second-pattern) second-pattern)))))
+
+(define call-with-input-split
+  (lambda (cmdline #!optional split-on mode)
+    (if split-on
+      (string-split (call-with-input-pipe cmdline (or mode read-all)) split-on)
+      (string-split (call-with-input-pipe cmdline (or mode read-all))))))
 
 ;;; is the current machine running off AC Power (don't see why this wouldn't work on machines that do not have a battery, as in a desktop)
 (define on-ac-power
   (lambda (util)
     ;; check 
-    (cond ((string=? util "pmset")
-           (not-false? (string-contains "AC" (car (regex#grep "\\*"
-                                               (regex#grep "Power" (string-split (capture "pmset -g") (->string #\newline)))))) #t))
+    (cond ((string=? util "pmset") ;; Mac OS X
+           (not-false? (string-contains "AC" (car (twice-grep "\\*" "Power" (call-with-input-split (string-append util " -g") (->string #\newline))))) #t))
+          ((string=? util "acpi") ;; Linux
+           (not-false? (regex#grep "on-line" (call-with-input-split (string-append util " -a"))) #t))
+          ((string=? util "yacpi") ;; Linux
+           (not-false? (regex#grep "charging" (call-with-input-split (string-append util " -pb"))) #t))
+          ((string=? util "apm") ;; *BSD
+           (not-false? (not-null? (twice-grep "on-line" "AC" (call-with-input-split util (->string #\newline)))) #t))
+          ;((string=? util "acpiconf") ;; *BSD
+           ;(not-null? (twice-grep "charging" "State:" (car (filter (map
+            ;(regex#grep "charging"
+             ;(regex#grep "State:"
+              ;(car (filter (lambda (x) (not-null? x))
+               ;(loop for idex from 10 downto 0 collect
+                                   ;(string-split (capture ,(string-append util " -i " (number->string idex) " 2> /dev/null")) (->string #\newline)))))))))
 
-          ((string=? util "acpi")
-           (not-false? (regex#grep "on-line" (string-split (capture "acpi -a"))) #t))
-
-          ((string=? util "yacpi")
-           (not-false? (regex#grep "charging" (string-split (capture "yacpi -pb")))))
-
-          ((string=? util "apm")
-           (not-null?
-            (regex#grep "on-line"
-             (regex#grep "AC" (string-split (capture ,util) (->string #\newline))))))
-
-          ((string=? util "acpiconf")
-           (not-null?
-            (regex#grep "charging"
-             (regex#grep "State:"
-              (car (filter (lambda (x) (not-null? x))
-               (loop for idex from 10 downto 0 collect
-                                   (string-split (capture ,(string-append util " -i " (number->string idex) " 2> /dev/null")) (->string #\newline)))))))))
-
-          (else #f))))
+          (else #f)))) ;; Unsupported
 
 ;; if the outcome of `get-power-level` is not an integer, (which might indicate an error,
 ;; which error may or may not be a problem: desktops don't have batteries so trying to get the 
@@ -99,14 +102,14 @@
                   (not-null? (regex#grep "%" (string-split (capture "yacpi -pb"))))
                   '("%")))))
 
-          ((string=? util "acpiconf")
-           (regex#string-substitute (regex#regexp "%.*") ""
-            (car (or
-                  (not-null? (regex#grep "%" (loop for idex from 10 downto 0 collect
-                                              (car (or
-                                                    (not-null? (regex#grep "%" (string-split (capture ,(string-append "acpiconf -i " (number->string idex) " 2> /dev/null")))))
-                                                    '(""))))))
-                  '("%")))))
+          ;((string=? util "acpiconf")
+           ;(regex#string-substitute (regex#regexp "%.*") ""
+            ;(car (or
+                  ;(not-null? (regex#grep "%" (loop for idex from 10 downto 0 collect
+                                              ;(car (or
+                                                    ;(not-null? (regex#grep "%" (string-split (capture ,(string-append "acpiconf -i " (number->string idex) " 2> /dev/null")))))
+                                                    ;'(""))))))
+                  ;'("%")))))
           (else ""))))
 
 (define heart "\u2665")
