@@ -11,6 +11,7 @@ dnl Chicken Scheme
 AC_ARG_VAR([CSC], [driver program for the CHICKEN Scheme compiler])
 AC_ARG_VAR([CHICKEN], [CHICKEN Scheme-to-C compiler])
 AC_ARG_VAR([DESTDIR], [root directory used with `make install', e.g. `DESTDIR=build ./configure' -> DESTDIR will be `src/build'])
+AC_ARG_VAR([POWER_UTIL], [utility with which to take battery/power readings])
 
 AM_CONDITIONAL([NO_CHECK_FOR_CSC], [test ! x"$CSC" = x""])
 AM_CONDITIONAL([NO_CHECK_FOR_CHICKEN], [test ! x"$CHICKEN" = x""])
