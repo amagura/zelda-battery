@@ -53,6 +53,16 @@ AC_ARG_ENABLE([profiling],
              esac],[profiling=false])
 AM_CONDITIONAL([PROFILING], [test x$profiling = xtrue])
 
+# Enable or disable blinking altogether
+AC_ARG_ENABLE([blinking],
+              [  --enable-blinking      includes support for battery indicator blinking]
+              [case "${enableval}" in
+               yes) blinking=true ;;
+               no) blinking=false ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-blinking]) ;;
+             esac],[blinking=true])
+AM_CONDITIONAL([BLINKING], [test x$blinking = xtrue])
+
 # Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
 AC_ARG_ENABLE([acblink],
               [  --enable-ac-blink      blink on low battery, even when on AC power]

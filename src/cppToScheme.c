@@ -37,3 +37,12 @@ cppToScheme__blink_on_ac_pwr(void)
 #endif
   return ZELDA_BATTERY_BLINK_EVEN_ON_AC;
 }
+
+int
+cppToScheme__no_blink(void)
+{
+#ifndef ZELDA_BATTERY_NO_BLINK
+#define ZELDA_BATTERY_NO_BLINK 0
+#endif
+  return ZELDA_BATTERY_NO_BLINK;
+}

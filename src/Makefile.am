@@ -47,6 +47,10 @@ if ACBLINK
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_BLINK_EVEN_ON_AC
 endif
 
+if !BLINKING
+zelda_blink_CPPFLAGS += -DZELDA_BATTERY_NO_BLINK
+endif
+
 LINK=$(CSC) $(CSCFLAGS) -o $@ # specify how to link object files
 
 .scm.o:
