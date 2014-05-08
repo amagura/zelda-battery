@@ -12,7 +12,7 @@ install:
   - sudo apt-get install acpi
   - sudo apt-get install chicken-bin
   - sudo apt-get install libchicken6
-  - sudo chicken-install ansi-escape-sequences shell srfi-1 regex
+  - sudo chicken-install ansi-escape-sequences shell srfi-1 regex list-utils posix
 script:
   - autoreconf -fi
   - ./configure
