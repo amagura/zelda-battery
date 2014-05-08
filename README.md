@@ -30,8 +30,7 @@ TRAPALRM () {
 
 ### Bash
 ```bash
-PS1='\[\033[0;31m\]>\[\033[0;0m\]\w\[\033[0;31m\]>>\[\033[0;0m\] \[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\]
-\h\$ '
+PS1='\[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\] [\h \W]\$ '
 ```
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
 
@@ -48,6 +47,8 @@ Installable via `sudo chicken-install`
 * shell
 * srfi-1
 * regex
+* list-utils
+* posix <sup>(will eventually replace \`shell')</sup>
 
 ## Notes
 
