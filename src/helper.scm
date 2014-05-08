@@ -51,12 +51,11 @@
   (lambda (index)
     (or (when (not-null? (call-with-input-split "acpiconf -i " (string-append index " 2> /dev/null"))) index)
         (acpiconf-which-device-is-battery? (if (>= index 11) (- idex 1) (if (>= 0 index) (+ index 1) index))))))
-      
+
 
 ;;; is the current machine running off AC Power (don't see why this wouldn't work on machines that do not have a battery, as in a desktop)
 (define on-ac-power?
   (lambda (util)
-    ;; check 
     (cond ((string=? util "pmset") ;; Mac OS X
            (not-false? (string-contains "AC" (car (twice-grep "\\*" "Power" (call-with-input-split (string-append util " -g") (->string #\newline))))) #t))
           ((string=? util "acpi") ;; Linux
@@ -76,8 +75,8 @@
           (else #f)))) ;; Unsupported
 
 ;; if the outcome of `get-power-level` is not an integer, (which might indicate an error,
-;; which error may or may not be a problem: desktops don't have batteries so trying to get the 
-;; battery level is kinda... impossible, and virtual machine emulations such as QEMU and 
+;; which error may or may not be a problem: desktops don't have batteries so trying to get the
+;; battery level is kinda... impossible, and virtual machine emulations such as QEMU and
 ;; VirtualBox don't always emulate power supply hardware...
 ;; so if the outcome of `get-power-level` is abnormal, assume that we're running on a piece
 ;; of hardware that either does not include a battery or does not provide any form of power supply hardware whatsoever
@@ -87,7 +86,7 @@
      (cond ((number? (string->number power-level)) power-level)
            ((eq? power-level (get-power-level "")) -inf.0) ; no utility present or an unsupported utility was somehow (should be impossible unless it got hard-coded into cppToScheme.c) used.
            (else +inf.0))))) ; infinity is used here to communicate that the zelda-blink needs to use a special color sequence to indicate that the current system is _special_, lol, and that Zelda Battery has no means of determining the current power level or even if there is a power level.
-  
+
 (define get-power-level
   (lambda (util)
     (cond ((string=? util "pmset")
