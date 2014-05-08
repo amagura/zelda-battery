@@ -7,26 +7,21 @@ AM_INIT_AUTOMAKE([-Wall foreign])
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
-dnl Chicken Scheme
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+# Declare some precious variables
 AC_ARG_VAR([CSC], [driver program for the CHICKEN Scheme compiler])
 AC_ARG_VAR([CHICKEN], [CHICKEN Scheme-to-C compiler])
-AC_ARG_VAR([DESTDIR], [root directory used with `make install', e.g. `DESTDIR=build ./configure' -> DESTDIR will be `src/build'])
 AC_ARG_VAR([POWER_UTIL], [utility with which to take battery/power readings])
 
+# Check to see if we need to look for `csc' and/or `chicken'.
 AM_CONDITIONAL([NO_CHECK_FOR_CSC], [test ! x"$CSC" = x""])
 AM_CONDITIONAL([NO_CHECK_FOR_CHICKEN], [test ! x"$CHICKEN" = x""])
 AM_COND_IF([NO_CHECK_FOR_CSC], [AC_CHECK_PROG([CSC], [csc], [no])], [AC_PATH_PROG([CSC], [csc], [no])])
 AM_COND_IF([NO_CHECK_FOR_CHICKEN], [AC_CHECK_PROG([CHICKEN], [chicken], [no])], [AC_PATH_PROG([CHICKEN], [chicken], [no])])
-#AC_CHECK_PROG([CSC], [csc], [no])
-#AC_CHECK_PROG([CHICKEN], [chicken], [no])
-
-#AC_PATH_PROG([CSC], [csc], [no])
-#AC_PATH_PROG([CHICKEN], [chicken], [no])
 
 # Check for programs
-AC_PROG_INSTALL
-AC_PROG_MAKE_SET
-
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])
@@ -86,8 +81,8 @@ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_SUBST([CHICKEN_FLAGS], ["$CHICKEN_OPTIONS"])
 AC_SUBST([CSCFLAGS], ["$CSC_OPTIONS"])
-AC_MSG_CHECKING([for destdir])
-AM_CONDITIONAL([NO_DESTDIR], [test ! x"$DESTDIR" = x""])
-AM_COND_IF([NO_DESTDIR], [AC_SUBST([DESTDIR], ["$DESTDIR"])], [])
-AM_COND_IF([NO_DESTDIR], [AC_MSG_RESULT([$DESTDIR])], [AC_MSG_RESULT([no])])
+#AC_MSG_CHECKING([for destdir])
+#AM_CONDITIONAL([NO_DESTDIR], [test ! x"$DESTDIR" = x""])
+#AM_COND_IF([NO_DESTDIR], [AC_SUBST([DESTDIR], ["$DESTDIR"])], [])
+#AM_COND_IF([NO_DESTDIR], [AC_MSG_RESULT([$DESTDIR])], [AC_MSG_RESULT([no])])
 AC_OUTPUT
