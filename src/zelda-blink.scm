@@ -31,7 +31,7 @@ extern int cppToScheme__blink_on_ac_pwr(void);
 
 (if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
  (display (car (string-split (ansi-escape-sequences#set-text
-                              (if (on-ac-power (x-host-acpi-util))
+                              (if (on-ac-power? (x-host-acpi-util))
                                (if (x-blink-on-ac-pwr)
                                 '(blink fg-red)
                                 '(fg-red))
