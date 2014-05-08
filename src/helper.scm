@@ -87,26 +87,23 @@
            ((eq? power-level (get-power-level "")) -inf.0) ; no utility present or an unsupported utility was somehow (should be impossible unless it got hard-coded into cppToScheme.c) used.
            (else +inf.0))))) ; infinity is used here to communicate that the zelda-blink needs to use a special color sequence to indicate that the current system is _special_, lol, and that Zelda Battery has no means of determining the current power level or even if there is a power level.
 
+(define car-seat ; a `car' that is safe enough to use where `car' would otherwise be unsafe to use by itself.
+  (lambda (lst #!optional return-on-fail)
+    (if (not-null? lst)
+      (car lst)
+      (if return-on-fail return-on-fail '(())))))
+      
 (define get-power-level
   (lambda (util)
     (cond ((string=? util "pmset")
            (regex#string-substitute (regex#regexp "%.*") ""
-            (car (or
-                  (not-null? (regex#grep "%" (string-split (capture "pmset -g ps"))))
-                  '("%")))))
-
+                                    (car-seat (regex#grep "%" (call-with-input-split (string-append util " -g ps"))) '("%"))))
           ((string=? util "acpi")
-           (regex#string-substitute (regex#regexp "%.*")
-            (car (or
-                  (not-null? (regex#grep "%" (string-split (capture "acpi"))))
-                  '("%")))))
-
+           (regex#string-substitute (regex#regexp "%.*") ""
+                                    (car-seat (regex#grep "%" (call-with-input-split util)) '("%"))))
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
-            (car (or
-                  (not-null? (regex#grep "%" (string-split (capture "yacpi -pb"))))
-                  '("%")))))
-
+                                    (car-seat (regex#grep "%" (call-with-input-split (string-append util " -pb"))) '("%"))))
           ;((string=? util "acpiconf")
            ;(regex#string-substitute (regex#regexp "%.*") ""
             ;(car (or
