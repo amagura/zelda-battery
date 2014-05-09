@@ -26,6 +26,13 @@
     (append return-lst
             (flatten lst))))
 
+(define expand-pattern-lists
+  (lambda (expand #!rest ...)
+    (if expand
+        (list (map (lambda (x) (regex#regexp x))
+              (if (list? ...) ... '(...))))
+        (if (list? ...) ... '(...)))))
+
 (define expand-patterns
   (lambda (expand #!rest ...)
     (flatten-and-append '() (if expand
