@@ -18,7 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(use shell posix regex list-utils) ; use the `shell` egg
+(use shell posix list-utils) ; use the `shell` egg
 (declare (unit helper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
 
 ;; if the outcome of `procedure` does not === (absolutely and completely equal) #f (false), then return #t (true)
@@ -35,11 +35,6 @@
     (if (or (equal=? perc +inf.0) (equal=? perc -inf.0))
       perc
       (inexact->exact (* (truncate (* (/ (string->number perc) 100) 10)) 10)))))
-
-(define twice-grep
-  (lambda (first-pattern second-pattern text #!optional expand-patterns)
-    (regex#grep (if expand-patterns (regex#regexp first-pattern) first-pattern)
-                (regex#grep (if expand-patterns (regex#regexp second-pattern) second-pattern)))))
 
 (define call-with-input-split
   (lambda (cmdline #!optional split-on mode)

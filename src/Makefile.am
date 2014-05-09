@@ -1,14 +1,14 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zelda-blink zelda-battery
-zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c helper.scm
-zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c helper.scm
+zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c main-helper.scm regex-helper.scm
+zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c main-helper.scm regex-helper.scm
 AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
 CSCFLAGS ?= -optimize-leaf-routines
-CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2 -C -march=native -C -mtune=native
+CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2 -C -march=native -C -mtune=native -C -Wall
 
 if PROFILING
 CSCFLAGS += -accumulate-profile -profile-name PROFILE.out
