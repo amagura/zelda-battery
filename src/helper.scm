@@ -19,8 +19,8 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (use shell posix list-utils) ; use the `shell` egg
-(declare (unit main-helper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
-(declare (uses regex-helper))
+(declare (unit zbhelper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
+(declare (uses zbregex))
 
 ;; if the outcome of `procedure` does not === (absolutely and completely equal) #f (false), then return #t (true)
 (define not-false?
