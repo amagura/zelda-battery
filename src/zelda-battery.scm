@@ -20,7 +20,7 @@
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
 (use srfi-1)
-(declare (uses main-helper))
+(declare (uses helper))
 
 #>
 extern const char * cppToScheme__host_acpi_util(void);

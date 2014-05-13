@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zelda-blink zelda-battery
-zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c main-helper.scm regex-helper.scm
-zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c main-helper.scm regex-helper.scm
+zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c helper.scm regex.scm
+zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c helper.scm regex.scm
 AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
