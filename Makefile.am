@@ -7,6 +7,7 @@ clean-local: tidy-local
 
 tidy-local:
 	@$(RM) *.o || true
+	$(RM) PROFILE-* || true
 
 anew: clean all
 ready: clean all tidy-local
