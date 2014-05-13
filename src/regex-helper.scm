@@ -26,7 +26,7 @@
     (append return-lst
             (flatten lst))))
 
-(define expand-pattern-lists
+(define expand-pattern-lists-maybe ;`maybe' in the sense that non-boolean input is processed depending upon a conditionally, which is defined locally as an argument to be passed to this function.
   (lambda (expand #!rest ...)
     (if expand
         (list (map (lambda (x) (regex#regexp x))
@@ -35,10 +35,10 @@
 
 (define expand-patterns
   (lambda (expand #!rest ...)
-    (flatten-and-append '() (if expand
+    (flatten-and-append '() (expand-pattern-lists-maybe (if expand
                                 (list (map (lambda (x) (regex#regexp x))
                                            (if (list? ...) ... '(...))))
-                                (if (list? ...) ... '(...))))))
+                                (if (list? ...) ... '(...)))))))
 
 (define twice-grep
   (lambda (second-pattern first-pattern text #!optional use-regexp)
