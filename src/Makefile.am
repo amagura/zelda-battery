@@ -84,7 +84,7 @@ expand-local:
 tidy-local:
 	@$(RM) *.o || true
 	$(RM) $(bin_PROGRAMS:=.c) || true
-	for file in $(zelda_battery_LIBS) $(zelda_blink_LIBS); do \
+	for file in $(zelda_battery_LIBS:.scm=.c) $(zelda_blink_LIBS:.scm=.c); do \
 	  $(RM) "$$file" || true; \
 	  done
 	$(RM) PROFILE-* || true
