@@ -16,5 +16,8 @@ Makefile.in
 /configure
 /build-aux
 
-# my stuff
+# misc
 /tmp
+PROFILE-*
+nohup.out
+test.*
