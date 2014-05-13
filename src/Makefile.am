@@ -83,6 +83,7 @@ tidy-local:
 	@$(RM) *.o || true
 	$(RM) $(bin_PROGRAMS:=.c) || true
 	$(RM) helper.c || true
+	$(RM) PROFILE-* || true
 
 anew: clean all
 ready: clean all tidy-local
