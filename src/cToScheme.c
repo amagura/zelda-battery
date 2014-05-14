@@ -23,7 +23,7 @@
 #include <stdio.h>
 
 int
-cToScheme__printf(const char * restrict format, const char *text)
+cToScheme__printf(const char * format, const char *text)
 {
   int result = 0;
   result = printf(format, text);
