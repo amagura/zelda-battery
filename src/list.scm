@@ -25,4 +25,4 @@
   (lambda (lst #!optional return-on-fail)
     (if (not-null? lst)
         (car lst)
-        (if (return-on-fail return-on-fail '(()))))))
+        (if return-on-fail return-on-fail '(())))))
