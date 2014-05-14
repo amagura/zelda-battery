@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([Zelda Battery], [0.0.5a], [sickhadas.nix@gmail.com])
+AC_INIT([Zelda Battery], [0.0.6a], [sickhadas.nix@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign])
 
