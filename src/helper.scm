@@ -18,9 +18,9 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(use shell posix list-utils) ; use the `shell` egg
+(use shell posix) ; use the `shell` egg
 (declare (unit zbhelper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
-(declare (uses zbregex))
+(declare (uses zblist zbregex))
 
 ;; if the outcome of `procedure` does not === (absolutely and completely equal) #f (false), then return #t (true)
 (define not-false?
@@ -83,12 +83,6 @@
            ((eq? power-level (get-power-level "")) -inf.0) ; no utility present or an unsupported utility was somehow (should be impossible unless it got hard-coded into cppToScheme.c) used.
            (else +inf.0))))) ; infinity is used here to communicate that the zelda-blink needs to use a special color sequence to indicate that the current system is _special_, lol, and that Zelda Battery has no means of determining the current power level or even if there is a power level.
 
-(define car-seat ; a `car' that is safe enough to use where `car' would otherwise be unsafe to use by itself.
-  (lambda (lst #!optional return-on-fail)
-    (if (not-null? lst)
-      (car lst)
-      (if return-on-fail return-on-fail '(())))))
-      
 (define get-power-level
   (lambda (util)
     (cond ((string=? util "pmset")
