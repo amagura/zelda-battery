@@ -23,14 +23,9 @@
 #include <stdio.h>
 
 int
-cToScheme__printf(const char * restrict format, int restc, char **restv)
+cToScheme__printf(const char * restrict format, const char *text)
 {
   int result = 0;
-  char *buf = NULL;
-  for (int pos = 0; pos < restc; ++pos) {
-    char *fmt = ( ++(pos) < restc ? "%s " : "%s" );
-    asprintf(&buf, fmt, restv[pos]);
-  }
-  result = printf("%s", buf);
+  result = printf(format, text);
   return result;
 }
