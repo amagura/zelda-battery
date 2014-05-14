@@ -33,5 +33,5 @@ extern int cToScheme__printf(const char * restrict, const char *);
 (if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
     (if (on-ac-power? (x-host-acpi-util))
         (if (x-blink-on-ac-pwr)
-            (xprintf "%s" "\e[5;31m")))
-    (xprintf "%s" "\e[0;31m"))
+            (xprintf "%s" "\033[5;31m")))
+    (xprintf "%s" "\033[0;31m"))
