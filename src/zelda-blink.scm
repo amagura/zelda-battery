@@ -19,18 +19,22 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
-(use ansi-escape-sequences)
-(declare (uses helper))
+(declare (uses zbhelper))
 
 #>
 extern const char * cppToScheme__host_acpi_util(void);
 extern int cppToScheme__blink_on_ac_pwr(void);
+extern int cToScheme__printf(const char * restrict, const char *);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 (define x-blink-on-ac-pwr (foreign-lambda int "cppToScheme__blink_on_ac_pwr"))
+(define xprintf (foreign-lambda int "printf" c-string c-string))
 
-(if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
- (display (car (string-split (ansi-escape-sequences#set-text
+(let ((ret (xprintf "%s" "hello")))
+ (display " ") (display ret))
+(newline)
+#;(if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
+  (display (car (string-split (ansi-escape-sequences#set-text
                               (if (on-ac-power? (x-host-acpi-util))
                                (if (x-blink-on-ac-pwr)
                                 '(blink fg-red)

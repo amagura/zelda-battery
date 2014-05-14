@@ -10,7 +10,7 @@ zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
 CSCFLAGS ?= -optimize-leaf-routines
-CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2 -C -march=native -C -mtune=native -C -Wall
+CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2 -C -march=native -C -mtune=native
 
 if PROFILING
 CSCFLAGS += -accumulate-profile -profile-name PROFILE.out
