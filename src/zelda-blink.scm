@@ -24,7 +24,7 @@
 #>
 extern const char * cppToScheme__host_acpi_util(void);
 extern int cppToScheme__blink_on_ac_pwr(void);
-extern int cToScheme__printf(const char * restrict, const char *);
+extern int cToScheme__printf(const char * restrict format, const char *text);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
 (define x-blink-on-ac-pwr (foreign-lambda int "cppToScheme__blink_on_ac_pwr"))
