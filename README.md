@@ -43,7 +43,6 @@ PS1='\[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\] [\h \W]\$ '
 
 ### Chicken Eggs
 Installable via `sudo chicken-install`
-* ansi-escape-sequences
 * shell
 * srfi-1
 * regex
