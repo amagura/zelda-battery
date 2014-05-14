@@ -3,6 +3,12 @@ zelda-battery [![Build Status](https://travis-ci.org/dopm/zelda-battery.svg?bran
 
 A Legend of Zelda like health-bar battery meter for the command-line
 
+## Supported Platforms
+
+* Mac OS X (mostly harmless: works generally, but may contain a bug or two)
+* Linux (testing: should work, but there are definitely some bugs)
+* FreeBSD (unstable: may or may not work)
+
 
 ## Building
 1. `autoreconf -fi`
