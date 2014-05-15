@@ -43,12 +43,6 @@
       (string-split (call-with-input-pipe cmdline (or mode read-all)) split-on)
       (string-split (call-with-input-pipe cmdline (or mode read-all))))))
 
-(define acpiconf-which-device-is-battery?
-  (lambda (index)
-    (or (when (not-null? (call-with-input-split "acpiconf -i " (string-append index " 2> /dev/null"))) index)
-        (acpiconf-which-device-is-battery? (if (>= index 11) (- idex 1) (if (>= 0 index) (+ index 1) index))))))
-
-
 ;;; is the current machine running off AC Power (don't see why this wouldn't work on machines that do not have a battery, as in a desktop)
 (define on-ac-power?
   (lambda (util)
