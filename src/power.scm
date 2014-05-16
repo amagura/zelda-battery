@@ -18,6 +18,8 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
+(declare (unit zbpower))
+(declare (uses zbio))
 
 ;;; is the current machine running off AC Power (don't see why this wouldn't work on machines that do not have a battery, as in a desktop)
 (define on-ac-power?
