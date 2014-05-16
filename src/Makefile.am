@@ -5,12 +5,22 @@ zelda_battery_LIBS = helper.scm regex.scm list.scm
 zelda_blink_LIBS = helper.scm regex.scm list.scm
 zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c $(zelda_battery_LIBS)
 zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c $(zelda_blink_LIBS)
-AM_CFLAGS = -Wall -g -ggdb -O2 -march=native -mtune=native
+AM_CFLAGS = -Wall -g -ggdb -O2
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
 CSCFLAGS ?= -optimize-leaf-routines
-CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2 -C -march=native -C -mtune=native
+CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2
+
+if NATIVE
+AM_CFLAGS += -march=native -mtune=native
+CSCFLAGS += -C -march=native -C -mtune=native
+endif
+
+if GENERIC
+AM_CFLAGS += -march=generic -mtune=generic
+CSCFLAGS += -C -march=generic -C -mtune=generic
+endif
 
 if PROFILING
 CSCFLAGS += -accumulate-profile -profile-name PROFILE.out
