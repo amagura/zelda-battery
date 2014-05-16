@@ -81,11 +81,11 @@ AM_CONDITIONAL([BLINKING], [test x$blinking = xtrue])
 
 # Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
 AC_ARG_ENABLE([acblink],
-              [  --enable-ac-blink      blink on low battery, even when on AC power]
+              [  --enable-acblink      blink on low battery, even when on AC power]
               [case "${enableval}" in
                yes) acblink=true;;
                no) acblink=false;;
-               *) AC_MSG_ERROR([bad value ${enableval} for --enable-ac-blink]) ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
              esac],[acblink=false])
 AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
 
