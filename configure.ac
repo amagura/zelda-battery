@@ -41,25 +41,23 @@ AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
-              [  --enable-native        sets `--march=native` and `--mtune=native`]
+              [  --enable-native        sets '-march=native' and '-mtune=native']
               [case "${enableval}" in
-               yes) native=true;;
-               no) native=false;;
+               yes) native=true ;;
+               no) native=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-native]) ;;
              esac],[native=false])
-AM_CONDITIONAL([NATIVE], [test x$native = xtrue])
-AM_COND_IF([NATIVE], [AC_SUBST([GENERIC], []), [])
+AM_CONDITIONAL([NATIVE], [test x`echo $native` = xtrue])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
 AC_ARG_ENABLE([generic],
-              [  --enable-generic       sets `--march=generic` and `--mtune=generic`]
+              [  --enable-generic       sets '-march=generic' and '-mtune=generic']
               [case "${enableval}" in
-               yes) native=true;;
-               no) native=false;;
+               yes) native=true ;;
+               no) native=false ;;
                *) AC_MSG_ERROR([bad valie ${enableval} for --enable-generic]) ;;
              esac],[generic=false])
-AM_CONDITIONAL([GENERIC], [test x$generic = xtrue])
-AM_COND_IF([GENERIC], [AC_SUBST([NATIVE], []), [])
+AM_CONDITIONAL([GENERIC], [test x`echo $generic` = xtrue])
 
 # Check for profiling
 AC_ARG_ENABLE([profiling],
