@@ -34,5 +34,6 @@ extern int cToScheme__printf(const char * format, const char *text);
     (if (on-ac-power? (x-host-acpi-util))
         (if (x-blink-on-ac-pwr)
             (xprintf "%s" "\033[5;31m")
-            (xprintf "%s" "\033[0;31m")))
+            (xprintf "%s" "\033[0;31m"))
+        (xprintf "%s" "\033[5;31m"))
     (xprintf "%s" "\033[0;31m"))
