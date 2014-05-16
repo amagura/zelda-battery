@@ -26,3 +26,8 @@
     (if (not-null? lst)
         (car lst)
         (if return-on-fail return-on-fail '(())))))
+
+(define flatten-and-append
+  (lambda (return-lst lst)
+    (append return-lst
+            (flatten lst))))

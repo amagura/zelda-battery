@@ -21,26 +21,20 @@
 (use regex)
 (declare (unit zbregex))
 
-(define flatten-and-append
-  (lambda (return-lst lst)
-    (append return-lst
-            (flatten lst))))
-
-(define expand-pattern-lists-maybe ;`maybe' in the sense that non-boolean input is processed depending upon a conditionally, which is defined locally as an argument to be passed to this function.
-  (lambda (expand #!rest ...)
+(define expand-pattern
+  (lambda (expand pattern)
     (if expand
-        (list (map (lambda (x) (regex#regexp x))
-              (if (list? ...) ... '(...))))
-        (if (list? ...) ... '(...)))))
-
-(define expand-patterns
-  (lambda (expand #!rest ...)
-    (flatten-and-append '() (expand-pattern-lists-maybe (if expand
-                                (list (map (lambda (x) (regex#regexp x))
-                                           (if (list? ...) ... '(...))))
-                                (if (list? ...) ... '(...)))))))
+        (regex#regexp pattern)
+        (if (list? pattern)
+            (car pattern)
+            pattern))))
 
 (define twice-grep
   (lambda (second-pattern first-pattern text #!optional use-regexp)
-    (regex#grep (expand-patterns use-regexp second-pattern)
-                (regex#grep (expand-patterns use-regexp first-pattern) text))))
+    (regex#grep (expand-pattern use-regexp second-pattern)
+                (regex#grep (expand-pattern use-regexp first-pattern) text))))
+
+(define triple-grep
+  (lambda (third-pattern second-pattern first-pattern #!optional use-regexp)
+    (regex#grep (expand-pattern use-regexp third-pattern)
+                (twice-grep second-pattern first-pattern use-regexp))))
