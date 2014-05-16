@@ -20,4 +20,4 @@ Makefile.in
 /tmp
 PROFILE-*
 nohup.out
-test.*
+test.sh
