@@ -47,7 +47,7 @@ AC_ARG_ENABLE([native],
                no) native=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-native]) ;;
              esac],[native=false])
-AM_CONDITIONAL([NATIVE], [test x`echo $native` = xtrue])
+AM_CONDITIONAL([NATIVE], [test x$native = xtrue])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
 AC_ARG_ENABLE([generic],
@@ -57,7 +57,7 @@ AC_ARG_ENABLE([generic],
                no) generic=false ;;
                *) AC_MSG_ERROR([bad valie ${enableval} for --enable-generic]) ;;
              esac],[generic=false])
-AM_CONDITIONAL([GENERIC], [test x`echo $generic` = xtrue])
+AM_CONDITIONAL([GENERIC], [test x$generic = xtrue])
 
 # Check for profiling
 AC_ARG_ENABLE([profiling],
@@ -111,8 +111,8 @@ AM_CONDITIONAL([HEARTBEAT], [test x$heartbeat = xtrue])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_SUBST([CHICKEN_FLAGS], ["$CHICKEN_OPTIONS"])
 AC_SUBST([CSCFLAGS], ["$CSC_OPTIONS"])
-AC_SUBST([NATIVE], ["$NATIVE"])
-AC_SUBST([GENERIC], ["$GENERIC"])
+#AC_SUBST([NATIVE], ["$NATIVE"])
+#AC_SUBST([GENERIC], ["$GENERIC"])
 #AC_MSG_CHECKING([for destdir])
 #AM_CONDITIONAL([NO_DESTDIR], [test ! x"$DESTDIR" = x""])
 #AM_COND_IF([NO_DESTDIR], [AC_SUBST([DESTDIR], ["$DESTDIR"])], [])

@@ -1,15 +1,16 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zelda-blink zelda-battery
-zelda_battery_LIBS = helper.scm regex.scm list.scm
-zelda_blink_LIBS = helper.scm regex.scm list.scm
+zelda_battery_LIBS = helper.scm regex.scm list.scm cast.scm io.scm power.scm test.scm
+zelda_blink_LIBS = helper.scm regex.scm list.scm cast.scm io.scm power.scm test.scm
 zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c $(zelda_battery_LIBS)
 zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c $(zelda_blink_LIBS)
+
 AM_CFLAGS = -Wall -g -ggdb -O2
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
-CSCFLAGS ?= -optimize-leaf-routines
+CSCFLAGS = $$CSC_OPTIONS -optimize-leaf-routines
 
 if NATIVE
 AM_CFLAGS += -march=native -mtune=native
@@ -99,10 +100,8 @@ tidy-local:
 	  $(RM) "$$file" || true; \
 	  done
 	$(RM) PROFILE-* || true
-echo:
-	echo $$CSC_OPTIONS
-	echo $$CHICKEN_OPTIONS
-	echo $$CPPFLAGS
 
 anew: clean all
 ready: clean all tidy-local
+null: clean all clean
+void: null
