@@ -18,8 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(declare (unit zbhelper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
-(declare (uses zblist zbregex zbpower zbio zbcast))
+(declare (unit zb-unicode))
 
 (define heart "\u2665")
 (define empty-heart "\u2661")

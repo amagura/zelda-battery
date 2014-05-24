@@ -23,6 +23,7 @@ AM_COND_IF([NO_CHECK_FOR_CSC], [AC_CHECK_PROG([CSC], [csc], [no])], [AC_PATH_PRO
 AM_COND_IF([NO_CHECK_FOR_CHICKEN], [AC_CHECK_PROG([CHICKEN], [chicken], [no])], [AC_PATH_PROG([CHICKEN], [chicken], [no])])
 
 # Check for programs
+AC_CHECK_PROG([PRINTF], [printf gprintf], [yes], [no]) dnl Needed by `make trial'
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([YACPI], [yacpi], [yes], [no])

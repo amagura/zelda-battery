@@ -19,7 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
-(declare (uses zbhelper))
+(declare (uses zb-power zb-regex zb-cast zb-test))
 
 #>
 extern const char * cppToScheme__host_acpi_util(void);

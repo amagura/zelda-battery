@@ -19,7 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (use regex)
-(declare (unit zbregex))
+(declare (unit zb-regex))
 
 (define expand-pattern
   (lambda (expand pattern)

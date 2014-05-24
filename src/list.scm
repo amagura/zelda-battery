@@ -19,7 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (use list-utils)
-(declare (unit zblist))
+(declare (unit zb-list))
 
 (define car-seat ;a `car', safe enough to use in places where vanilla `car' isn't.
   (lambda (lst #!optional return-on-fail)

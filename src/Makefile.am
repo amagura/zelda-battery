@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zelda-blink zelda-battery
-zelda_battery_LIBS = helper.scm regex.scm list.scm cast.scm io.scm power.scm test.scm
-zelda_blink_LIBS = helper.scm regex.scm list.scm cast.scm io.scm power.scm test.scm
+zelda_battery_LIBS = regex.scm list.scm cast.scm io.scm power.scm test.scm unicode.scm
+zelda_blink_LIBS = regex.scm list.scm cast.scm io.scm power.scm test.scm
 zelda_battery_SOURCES = zelda-battery.scm cppToScheme.c $(zelda_battery_LIBS)
 zelda_blink_SOURCES = zelda-blink.scm cppToScheme.c $(zelda_blink_LIBS)
 
@@ -119,3 +119,10 @@ anew: clean all
 ready: clean all tidy-local
 null: clean all clean
 void: null
+trial: ready
+	for file in $(bin_PROGRAMS); do \
+	  echo; \
+	  echo "==> $$file <=="; \
+	  ./"$$file"; \
+	  printf "\e[0;0m"; \
+	  done

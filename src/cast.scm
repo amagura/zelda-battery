@@ -18,7 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(declare (unit zbcast))
+(declare (unit zb-cast))
 
 ;; if you have a percentage: 53%, this will convert it to 50.
 ;; if you have 45%, it will convert it to 40%.

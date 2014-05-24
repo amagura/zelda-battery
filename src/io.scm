@@ -18,7 +18,9 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(declare (unit zbio))
+(use posix)
+(declare (unit zb-io))
+(declare (uses zb-list))
 
 (define call-with-input-split
   (lambda (cmdline #!optional split-on mode)
