@@ -10,7 +10,6 @@ zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
 CSCFLAGS ?= -optimize-leaf-routines
-CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2
 
 if NATIVE
 AM_CFLAGS += -march=native -mtune=native
@@ -21,6 +20,8 @@ if GENERIC
 AM_CFLAGS += -march=generic -mtune=generic
 CSCFLAGS += -C -march=generic -C -mtune=generic
 endif
+
+CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2
 
 if PROFILING
 CSCFLAGS += -accumulate-profile -profile-name PROFILE.out
@@ -98,6 +99,10 @@ tidy-local:
 	  $(RM) "$$file" || true; \
 	  done
 	$(RM) PROFILE-* || true
+echo:
+	echo $$CSC_OPTIONS
+	echo $$CHICKEN_OPTIONS
+	echo $$CPPFLAGS
 
 anew: clean all
 ready: clean all tidy-local
