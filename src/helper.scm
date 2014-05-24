@@ -20,9 +20,7 @@
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (use shell posix) ; use the `shell` egg
 (declare (unit zbhelper)) ; makes it so that other chicken scheme files can use the stuff defined in this file.
-(declare (uses zblist zbregex zbpower zbio))
-
-
+(declare (uses zblist zbregex zbpower zbio zbcast))
 
 (define heart "\u2665")
 (define empty-heart "\u2661")
