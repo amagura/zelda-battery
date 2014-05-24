@@ -61,10 +61,10 @@ zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"apm\"
 zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"apm\"
 endif
 
-if ACPICONF
-zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpiconf\"
-zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpiconf\"
-endif
+#if ACPICONF
+#zelda_blink_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpiconf\"
+#zelda_battery_CPPFLAGS += -DZELDA_BATTERY_UTIL=\"acpiconf\"
+#endif
 
 if ACBLINK
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_BLINK_EVEN_ON_AC
@@ -127,4 +127,4 @@ trial: ready
 	  echo "==> $$file <=="; \
 	  ./"$$file"; \
 	  done
-	@printf "\e[0;0m"
+	@printf "\033[0;0m"

@@ -20,7 +20,7 @@
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (use posix)
 (declare (unit zb-io))
-(declare (uses zb-list))
+(declare (uses zb-list zb-regex))
 
 (define call-with-input-split
   (lambda (cmdline #!optional split-on mode)
@@ -52,12 +52,7 @@
           ((string=? util "yacpi")
            (regex#string-substitute (regex#regexp "%.*") ""
                                     (car-seat (regex#grep "%" (call-with-input-split (string-append util " -pb"))) '("%"))))
-          ;((string=? util "acpiconf")
-           ;(regex#string-substitute (regex#regexp "%.*") ""
-            ;(car (or
-                  ;(not-null? (regex#grep "%" (loop for idex from 10 downto 0 collect
-                                              ;(car (or
-                                                    ;(not-null? (regex#grep "%" (string-split (capture ,(string-append "acpiconf -i " (number->string idex) " 2> /dev/null")))))
-                                                    ;'(""))))))
-                  ;'("%")))))
+          ((string=? util "apm")
+           (regex#string-substitute (regex#regexp "%.*") ""
+                                    (car-seat (double-split-grep "%" "^Remaining.*%" (call-with-input-split util (->string #\newline))))))
           (else ""))))

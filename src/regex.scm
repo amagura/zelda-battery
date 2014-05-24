@@ -20,6 +20,7 @@
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 (use regex)
 (declare (unit zb-regex))
+(declare (uses zb-list))
 
 (define expand-pattern
   (lambda (expand pattern)
@@ -29,12 +30,23 @@
             (car pattern)
             pattern))))
 
-(define twice-grep
+(define split-grep
+  (lambda (pattern text #!optional use-regexp split-on)
+    (if split-on
+      (string-split (car-seat (regex#grep (expand-pattern use-regexp pattern) text) split-on))
+      (string-split (car-seat (regex#grep (expand-pattern use-regexp pattern) text))))))
+
+(define double-split-grep
+  (lambda (second-pattern first-pattern text #!optional use-regexp split-on)
+    (regex#grep (expand-pattern use-regexp second-pattern)
+                (split-grep first-pattern text use-regexp split-on))))
+
+(define double-grep
   (lambda (second-pattern first-pattern text #!optional use-regexp)
     (regex#grep (expand-pattern use-regexp second-pattern)
                 (regex#grep (expand-pattern use-regexp first-pattern) text))))
 
 (define triple-grep
-  (lambda (third-pattern second-pattern first-pattern #!optional use-regexp)
+  (lambda (third-pattern second-pattern first-pattern text #!optional use-regexp)
     (regex#grep (expand-pattern use-regexp third-pattern)
-                (twice-grep second-pattern first-pattern use-regexp))))
+                (double-grep second-pattern first-pattern text use-regexp))))

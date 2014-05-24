@@ -18,6 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
+(use list-utils)
 (declare (unit zb-power))
 (declare (uses zb-io))
 
@@ -31,14 +32,5 @@
           ((string=? util "yacpi") ;; Linux
            (not-false? (regex#grep "charging" (call-with-input-split (string-append util " -pb"))) #t))
           ((string=? util "apm") ;; *BSD
-           (not-false? (not-null? (regex#grep "on-line"
-                                              (car-seat (regex#grep (call-with-input-split util (->string #\newline)))))) #t))
-          ;((string=? util "acpiconf") ;; *BSD
-           ;(not-null? (twice-grep "charging" "State:" (car (filter (map
-            ;(regex#grep "charging"
-             ;(regex#grep "State:"
-              ;(car (filter (lambda (x) (not-null? x))
-               ;(loop for idex from 10 downto 0 collect
-                                   ;(string-split (capture ,(string-append util " -i " (number->string idex) " 2> /dev/null")) (->string #\newline)))))))))
-
+           (not-false? (not-null? (double-grep "on-line" "AC" (call-with-input-split util (->string #\newline)))) #t))
           (else #f)))) ;; Unsupported
