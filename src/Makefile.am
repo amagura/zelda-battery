@@ -124,5 +124,5 @@ trial: ready
 	  echo; \
 	  echo "==> $$file <=="; \
 	  ./"$$file"; \
-	  printf "\e[0;0m"; \
 	  done
+	@printf "\e[0;0m"
