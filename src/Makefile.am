@@ -10,19 +10,26 @@ AM_CFLAGS = -Wall -g -ggdb -O2
 zelda_blink_CPPFLAGS =
 zelda_battery_CPPFLAGS =
 
-CSCFLAGS = $$CSC_OPTIONS -optimize-leaf-routines
+CSCFLAGS = $$CSC_OPTIONS -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2
+
+ECHO_VARIABLES = $$enable_generic $$enable_GENERIC $$enable_native $$enable_NATIVE $$CPUTYPE
 
 if NATIVE
+ECHO_VARIABLES += $(NATIVE)
 AM_CFLAGS += -march=native -mtune=native
 CSCFLAGS += -C -march=native -C -mtune=native
 endif
 
 if GENERIC
-AM_CFLAGS += -march=generic -mtune=generic
-CSCFLAGS += -C -march=generic -C -mtune=generic
+ECHO_VARIABLES += $(GENERIC)
+if CPU_KNOWN
+AM_CFLAGS += -mtune=generic-$(CPUTYPE)
+CSCFLAGS += -C -mtune=generic-$(CPUTYPE)
+else
+AM_CFLAGS += -mtune=generic
+CSCFLAGS += -C -mtune=generic
 endif
-
-CSCFLAGS += -optimize-leaf-routines $(CHICKEN_FLAGS) -C -O2
+endif
 
 if PROFILING
 CSCFLAGS += -accumulate-profile -profile-name PROFILE.out
@@ -65,9 +72,13 @@ if !BLINKING
 zelda_blink_CPPFLAGS += -DZELDA_BATTERY_NO_BLINK
 endif
 
+# End of Variables
+
 LINK=$(CSC) $(CSCFLAGS) -o $@ # specify how to link object files
 
 .scm.o:
+	echo $(CSCFLAGS)
+	echo $$CSC_OPTIONS
 	$(CSC) $(CSCFLAGS) -c $< -o $@
 
 clean-local: tidy-local
@@ -100,6 +111,11 @@ tidy-local:
 	  $(RM) "$$file" || true; \
 	  done
 	$(RM) PROFILE-* || true
+
+echo-local:
+	for each in $(ECHO_VARIABLES); do \
+	  echo $$each; \
+	  done
 
 anew: clean all
 ready: clean all tidy-local

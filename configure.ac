@@ -14,6 +14,7 @@ AC_PROG_MAKE_SET
 AC_ARG_VAR([CSC], [driver program for the CHICKEN Scheme compiler])
 AC_ARG_VAR([CHICKEN], [CHICKEN Scheme-to-C compiler])
 AC_ARG_VAR([POWER_UTIL], [utility with which to take battery/power readings])
+AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])
 
 # Check to see if we need to look for `csc' and/or `chicken'.
 AM_CONDITIONAL([NO_CHECK_FOR_CSC], [test ! x"$CSC" = x""])
@@ -41,27 +42,27 @@ AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
-              [  --enable-native        sets '-march=native' and '-mtune=native' for processor-model-specific compilation]
+              AS_HELP_STRING([--enable-native], [enable processor-model specific compilation]),
               [case "${enableval}" in
                yes) native=true ;;
                no) native=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-native]) ;;
              esac],[native=false])
-AM_CONDITIONAL([NATIVE], [test x$native = xtrue])
+AM_CONDITIONAL([NATIVE], [test "x$native" = xtrue])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
 AC_ARG_ENABLE([generic],
-              [  --enable-generic       sets '-march=generic' and '-mtune=generic' for processor-family-specific compilation]
+              AS_HELP_STRING([--enable-generic], [enable processor-family specific compilation]),
               [case "${enableval}" in
                yes) generic=true ;;
                no) generic=false ;;
-               *) AC_MSG_ERROR([bad valie ${enableval} for --enable-generic]) ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-generic]) ;;
              esac],[generic=false])
-AM_CONDITIONAL([GENERIC], [test x$generic = xtrue])
+AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
 
 # Check for profiling
 AC_ARG_ENABLE([profiling],
-              [  --enable-profiling     compiled executable will emit profiling information]
+              [  --enable-profiling     compiled executable will emit profiling information],
               [case "${enableval}" in
                yes) profiling=true ;;
                no) profiling=false ;;
@@ -71,7 +72,7 @@ AM_CONDITIONAL([PROFILING], [test x$profiling = xtrue])
 
 # Enable or disable blinking altogether
 AC_ARG_ENABLE([blinking],
-              [  --enable-blinking      includes support for battery indicator blinking (default)]
+              [  --enable-blinking      includes support for battery indicator blinking (default)],
               [case "${enableval}" in
                yes) blinking=true ;;
                no) blinking=false ;;
@@ -81,7 +82,7 @@ AM_CONDITIONAL([BLINKING], [test x$blinking = xtrue])
 
 # Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
 AC_ARG_ENABLE([acblink],
-              [  --enable-acblink      blink on low battery, even when on AC power]
+              [  --enable-acblink       blink on low battery, even when on AC power],
               [case "${enableval}" in
                yes) acblink=true ;;
                no) acblink=false ;;
@@ -100,19 +101,23 @@ AC_ARG_ENABLE([debug],
 AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 
 AC_ARG_ENABLE([heartbeat],
-              [  --enable-heartbeat     right-most heart changes from bold to regular font repeatedly]
+              [  --enable-heartbeat     right-most heart changes from bold to regular font repeatedly],
               [case "${enableval}" in
                yes) heartbeat=true ;;
                no) heartbeat=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-heartbeat]) ;;
              esac],[heartbeat=false])
-AM_CONDITIONAL([HEARTBEAT], [test x$heartbeat = xtrue])
+AM_CONDITIONAL([HEARTBEAT], [test "x$heartbeat" = xtrue])
+
+AS_IF([test ! "x$CPUTYPE" = x], ,
+      [CPUTYPE=`uname -m`])
+
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUTYPE" = x && test ! "x$CPUTYPE" = xunknown])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_SUBST([CHICKEN_FLAGS], ["$CHICKEN_OPTIONS"])
 AC_SUBST([CSCFLAGS], ["$CSC_OPTIONS"])
-#AC_SUBST([NATIVE], ["$NATIVE"])
-#AC_SUBST([GENERIC], ["$GENERIC"])
+AC_SUBST([CPUTYPE], ["$CPUTYPE"])
 #AC_MSG_CHECKING([for destdir])
 #AM_CONDITIONAL([NO_DESTDIR], [test ! x"$DESTDIR" = x""])
 #AM_COND_IF([NO_DESTDIR], [AC_SUBST([DESTDIR], ["$DESTDIR"])], [])
