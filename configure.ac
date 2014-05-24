@@ -71,7 +71,7 @@ AM_CONDITIONAL([PROFILING], [test x$profiling = xtrue])
 
 # Enable or disable blinking altogether
 AC_ARG_ENABLE([blinking],
-              [  --enable-blinking      includes support for battery indicator blinking]
+              [  --enable-blinking      includes support for battery indicator blinking (default)]
               [case "${enableval}" in
                yes) blinking=true ;;
                no) blinking=false ;;
