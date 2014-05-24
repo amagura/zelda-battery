@@ -16,8 +16,9 @@ script:
   - autoreconf -fi
   - ./configure
   - make
-after_success:
   - sudo apt-get install yacpi
   - sudo apt-get remove acpi
   - ./configure
   - make anew
+after_success:
+  - ./zelda-demo.sh
