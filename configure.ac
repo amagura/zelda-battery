@@ -41,7 +41,7 @@ AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
-              [  --enable-native        sets '-march=native' and '-mtune=native']
+              [  --enable-native        sets '-march=native' and '-mtune=native' for processor-model-specific compilation]
               [case "${enableval}" in
                yes) native=true ;;
                no) native=false ;;
@@ -51,10 +51,10 @@ AM_CONDITIONAL([NATIVE], [test x`echo $native` = xtrue])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
 AC_ARG_ENABLE([generic],
-              [  --enable-generic       sets '-march=generic' and '-mtune=generic']
+              [  --enable-generic       sets '-march=generic' and '-mtune=generic' for processor-family-specific compilation]
               [case "${enableval}" in
-               yes) native=true ;;
-               no) native=false ;;
+               yes) generic=true ;;
+               no) generic=false ;;
                *) AC_MSG_ERROR([bad valie ${enableval} for --enable-generic]) ;;
              esac],[generic=false])
 AM_CONDITIONAL([GENERIC], [test x`echo $generic` = xtrue])
@@ -83,8 +83,8 @@ AM_CONDITIONAL([BLINKING], [test x$blinking = xtrue])
 AC_ARG_ENABLE([acblink],
               [  --enable-acblink      blink on low battery, even when on AC power]
               [case "${enableval}" in
-               yes) acblink=true;;
-               no) acblink=false;;
+               yes) acblink=true ;;
+               no) acblink=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
              esac],[acblink=false])
 AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
@@ -98,6 +98,15 @@ AC_ARG_ENABLE([debug],
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
              esac],[debug=false])
 AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
+
+AC_ARG_ENABLE([heartbeat],
+              [  --enable-heartbeat     right-most heart changes from bold to regular font repeatedly]
+              [case "${enableval}" in
+               yes) heartbeat=true ;;
+               no) heartbeat=false ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-heartbeat]) ;;
+             esac],[heartbeat=false])
+AM_CONDITIONAL([HEARTBEAT], [test x$heartbeat = xtrue])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_SUBST([CHICKEN_FLAGS], ["$CHICKEN_OPTIONS"])
