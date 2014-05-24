@@ -16,9 +16,17 @@ script:
   - autoreconf -fi
   - ./configure
   - make
+  - ./configure --enable-native
+  - make anew
+  - ./configure --enable-generic
+  - make anew
 after_success:
   - sudo apt-get install yacpi
   - sudo apt-get remove acpi
   - autoreconf -fi
   - ./configure
+  - make anew
+  - ./configure --enable-native
+  - make anew
+  - ./configure --enable-generic
   - make anew
