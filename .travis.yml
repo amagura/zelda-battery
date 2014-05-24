@@ -11,7 +11,7 @@ install:
   - sudo apt-get install acpi
   - sudo apt-get install chicken-bin
   - sudo apt-get install libchicken6
-  - sudo chicken-install shell srfi-1 regex list-utils posix
+  - sudo chicken-install srfi-1 regex list-utils posix
 script:
   - autoreconf -fi
   - ./configure
