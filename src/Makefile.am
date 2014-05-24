@@ -77,8 +77,6 @@ endif
 LINK=$(CSC) $(CSCFLAGS) -o $@ # specify how to link object files
 
 .scm.o:
-	echo $(CSCFLAGS)
-	echo $$CSC_OPTIONS
 	$(CSC) $(CSCFLAGS) -c $< -o $@
 
 clean-local: tidy-local
