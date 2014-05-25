@@ -5,9 +5,9 @@ A Legend of Zelda like health-bar battery meter for the command-line
 
 ## Supported Platforms
 
-* Mac OS X (mostly harmless: works generally, but may contain a bug or two)
-* Linux (testing: should work, but there are definitely some bugs)
-* FreeBSD (unstable: may or may not work)
+* Mac OS X
+* Linux
+* FreeBSD (slower than on Mac OS X or Linux)
 
 
 ## Building
