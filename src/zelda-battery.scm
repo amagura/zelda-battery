@@ -19,7 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env csi -qn
-(use srfi-1)
+(require-extension srfi-1)
 (declare (uses zb-power zb-regex zb-cast zb-unicode))
 
 #>

@@ -27,12 +27,12 @@ extern int cppToScheme__blink_on_ac_pwr(void);
 extern int cToScheme__printf(const char * format, const char *text);
 <#
 (define x-host-acpi-util (foreign-lambda c-string "cppToScheme__host_acpi_util"))
-(define x-blink-on-ac-pwr (foreign-lambda int "cppToScheme__blink_on_ac_pwr"))
+(define x-blink-on-ac-pwr? (foreign-lambda int "cppToScheme__blink_on_ac_pwr"))
 (define xprintf (foreign-lambda int "printf" c-string c-string))
 
 (if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
     (if (on-ac-power? (x-host-acpi-util))
-        (if (x-blink-on-ac-pwr)
+        (if (x-blink-on-ac-pwr?)
             (xprintf "%s" "\033[5;31m")
             (xprintf "%s" "\033[0;31m"))
         (xprintf "%s" "\033[5;31m"))
