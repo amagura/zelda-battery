@@ -18,7 +18,7 @@
 
 ; You should have received a copy of the GNU General Public License
 ; along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
-(require-extension posix)
+(require-extension posix utils)
 (declare (unit zb-io))
 (declare (uses zb-list zb-regex))
 
