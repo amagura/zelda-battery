@@ -22,6 +22,7 @@
 (declare (uses zb-power zb-regex zb-cast zb-test))
 
 #>
+#include <stdio.h>
 extern const char * cppToScheme__host_acpi_util(void);
 extern int cppToScheme__blink_on_ac_pwr(void);
 extern int cToScheme__printf(const char * format, const char *text);
@@ -32,7 +33,7 @@ extern int cToScheme__printf(const char * format, const char *text);
 
 (if (<= (percent->integer (assume-power (x-host-acpi-util))) 30)
     (if (on-ac-power? (x-host-acpi-util))
-        (if (x-blink-on-ac-pwr?)
+        (if (= 1 (x-blink-on-ac-pwr?))
             (xprintf "%s" "\033[5;31m")
             (xprintf "%s" "\033[0;31m"))
         (xprintf "%s" "\033[5;31m"))
