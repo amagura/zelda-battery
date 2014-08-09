@@ -36,6 +36,6 @@ gulp.task('build', function() {
   gulp.src('./src/*.jl')
     .pipe(concat('zbat.jl'))
     .pipe(header(head))
-    .pipe(chmod(755))
     .pipe(gulp.dest('./'))
+    .pipe(chmod(755))
 });
