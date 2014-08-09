@@ -12,9 +12,8 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "~3.8.7",
-    "gulp-chmod": "~1.1.0",
     "gulp-concat": "~2.3.4",
     "gulp-header": "~1.0.5",
-    "vinyl": "~0.3.2"
+    "chmod": "~0.2.1"
   }
 }
