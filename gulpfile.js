@@ -1,8 +1,7 @@
 var gulp    = require('gulp')
   , concat  = require('gulp-concat')
   , header  = require('gulp-header')
-  , chmod   = require('gulp-chmod')
-  , vinyl   = require('vinyl')
+  , chmod   = require('chmod')
   ;
 
 var head = [
@@ -28,14 +27,18 @@ var head = [
 .map(function(ln, idx, arr) {
   if (idx !== 0) ln = '# ' + ln;
   return ln;
-}).join('\n') += '\n\n';
+}).join('\n');
+head += '\n\n';
 
-gulp.task('default', [ 'build' ]);
+gulp.task('default', [ 'build', 'link' ]);
 
 gulp.task('build', function() {
   gulp.src('./src/*.jl')
     .pipe(concat('zbat.jl'))
     .pipe(header(head))
     .pipe(gulp.dest('./'))
-    .pipe(chmod(755))
+});
+
+gulp.task('link', function() {
+  chmod(__dirname + '/zbat.jl', 755);
 });
