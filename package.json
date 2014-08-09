@@ -1,0 +1,17 @@
+{
+  "name": "zelda-battery",
+  "version": "0.0.1",
+  "description": "‘A Legend of Zelda’ health-bar like battery meter for the command-line",
+  "main": "zbat.jl",
+  "bin": {
+    "zelda-battery": "./zbat.jl"
+  },
+  "repository": "https://github.com/dopm/zelda-battery",
+  "author": "Alexej Magura",
+  "license": "GPL-3.0+",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "~3.8.7",
+    "gulp-concat": "~2.3.4"
+  }
+}
