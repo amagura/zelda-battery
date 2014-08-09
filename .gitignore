@@ -15,6 +15,9 @@ Makefile.in
 .deps
 /configure
 /build-aux
+/node_modules
+/zbat.jl
+/zelda-battery.jl
 
 # misc
 /tmp
