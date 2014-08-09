@@ -22,13 +22,21 @@ var head = [
   '',
   'You should have received a copy of the GNU General Public License',
   'along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.'
-];
+]
+.map(function(ln, idx, arr) {
+  if (idx !== 0) {
+    ln = '# ' + ln;
+  } else if (idx === arr.length - 1) {
+    ln = ln + '\n';
+  }
+  return ln;
+}).join('\n');
 
 gulp.task('default', [ 'build' ]);
 
 gulp.task('build', function() {
   gulp.src('./src/*.jl')
     .pipe(concat('zbat.jl'))
-    .pipe(header(head.map(function(ln) { return '# ' + ln; }).join('\n')))
+    .pipe(header(head))
     .pipe(gulp.dest('./'))
 });
