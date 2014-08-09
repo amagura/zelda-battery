@@ -2,6 +2,7 @@ var gulp    = require('gulp')
   , concat  = require('gulp-concat')
   , header  = require('gulp-header')
   , chmod   = require('gulp-chmod')
+  , vinyl   = require('vinyl')
   ;
 
 var head = [
@@ -27,8 +28,7 @@ var head = [
 .map(function(ln, idx, arr) {
   if (idx !== 0) ln = '# ' + ln;
   return ln;
-}).join('\n');
-head += '\n\n';
+}).join('\n') += '\n\n';
 
 gulp.task('default', [ 'build' ]);
 
