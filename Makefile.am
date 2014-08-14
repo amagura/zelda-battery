@@ -1,7 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = zbat
-zbat_SOURCES = zbat.py
+bin_PROGRAMS = zba zbl
+zba_SOURCES = zba.py
+zbl_SOURCES = zbl.py
 
 AM_CFLAGS = $$(pkg-config --cflags python2)
 AM_LDFLAGS = $$(pkg-config --libs python2)
@@ -21,9 +22,15 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
-build-local: zbat.c
+all-local: npm-local build-local link-local
 
-link-local: zbat
+npm-local:
+	npm install
+	gulp
+
+build-local: zba.c zbl.c
+
+link-local: zba zbl
 
 .py.c:
 	$(CYTHON) $(CYTHON_FLAGS) $< -o $@
