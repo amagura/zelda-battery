@@ -1,7 +1,6 @@
-#!/usr/bin/env python2
 """
   /- filename -/
-  zbat.py
+  zblib.py
 
   /- copyright -/
   Copyright (c) 2014 Alexej Magura
@@ -48,21 +47,5 @@ def powerLvl():
     return re.search('([0-9]+)%', run('acpi')).group(1)
   #elif sys.platform.startswith('freebsd'):
 
-
 def heart(boo, n):
   return [( to_bytes(u'\u2665'), to_bytes(u'\u2661'))[~boo] ]*n;
-
-def main():
-  perc = perc_tInt(powerLvl())
-  color = "\033[0;31m" if powerLvl() <= 30 else (
-    "\033[5;31m" if _acBlink else "\033[0;31m",
-    "\033[5;31m"
-  )[int(~onAcPower())]
-  print '%s%s%s' % (
-    color,
-    ''.join(heart(1, perc)),
-    ''.join(heart(0, 10 - perc)
-  ));
-
-if __name__ == "__main__":
-  main()
