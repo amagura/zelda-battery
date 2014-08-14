@@ -1,7 +1,16 @@
-from distutils.core import setup
-from Cython.build import cythonize
+from distutils import ccompiler
+from fabricate import *
+from Cython.Build import cythonize
 
-setup(
-  name = 'zelda-battery',
-  ext_modules = cythonize('zbat.py'),
-)
+sources = [ 'zbat' ]
+
+def build():
+  compile()
+  link()
+
+def compile():
+  for src in sources:
+    run('cython2', '-p -t -v -a --embed', src);
+
+print ccompiler.show_compilers()
+main()
