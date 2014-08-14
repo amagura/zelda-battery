@@ -22,17 +22,16 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
-all-local: npm-local build-local link-local
-
-npm-local:
-	npm install
-	gulp
+all-local: zba.pyo zbl.pyo build-local link-local
 
 build-local: zba.c zbl.c
 
 link-local: zba zbl
 
-.py.c:
+.py.pyo:
+	cat $< zbb.py > $@
+
+.pyo.c:
 	$(CYTHON) $(CYTHON_FLAGS) $< -o $@
 
 clean-local: tidy-local
