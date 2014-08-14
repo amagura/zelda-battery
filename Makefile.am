@@ -29,8 +29,8 @@ build-local: zba.c zbl.c
 link-local: zba zbl	
 
 .py.pyo:
-	cat $< zbb.py > $@
 	@echo
+	cat $< zbb.py > $@
 
 .pyo.c:
 	$(CYTHON) $(CYTHON_FLAGS) $< -o $@
