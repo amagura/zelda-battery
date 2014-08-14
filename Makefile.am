@@ -4,10 +4,10 @@ bin_PROGRAMS = zba zbl
 zba_SOURCES = zba.py
 zbl_SOURCES = zbl.py
 
-AM_CFLAGS = $$(pkg-config --cflags python3)
+AM_CFLAGS = $$(pkg-config --cflags python3) -O3
 AM_LDFLAGS = $$(pkg-config --libs python3)
 
-CYTHON_FLAGS = $$CYTHON_FLAGS --embed -3 -p -a
+CYTHON_FLAGS = $$CYTHON_FLAGS --embed -3
 
 
 if NATIVE
