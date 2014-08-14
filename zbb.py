@@ -21,7 +21,7 @@
   along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 """
 from subprocess import getoutput as run;
-from re import search, match;
+from re import search#, match;
 from sys import platform;
 
 _acBlink = False
@@ -29,10 +29,10 @@ _acBlink = False
 def onAcPower():
   if platform.startswith('linux'):
     return run('acpi -a').find('on-line') is not -1
-  elif platform.startswith('freebsd'):
-    return search('AC', match('.*on-line.*', run('apm')).group()) is not None
-  elif platform.startswith('darwin'):
-    return search('Power', match('.*\*.*', match('.*AC.*', run('pmset -g ps')))) is not None
+  #elif platform.startswith('freebsd'):
+    #return search('AC', match('.*on-line.*', run('apm')).group()) is not None
+  #elif platform.startswith('darwin'):
+    #return search('Power', match('.*\*.*', match('.*AC.*', run('pmset -g ps')))) is not None
 
 def perc_tInt(perc):
   perc = float(perc)
