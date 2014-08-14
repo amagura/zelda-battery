@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 from commands import getoutput as run;
+from kitchen.text.converters import to_bytes;
 import re
 import sys
 
@@ -27,7 +28,7 @@ def powerLvl():
 
 
 def heart(boo, n):
-  return [( u'\u2665', u'\u2661' )[~boo]]*n;
+  return [( to_bytes(u'\u2665'), to_bytes(u'\u2661'))[~boo] ]*n;
 
 def main():
   perc = perc_tInt(powerLvl())
@@ -40,3 +41,6 @@ def main():
     ''.join(heart(1, perc)),
     ''.join(heart(0, 10 - perc)
   ));
+
+if __name__ == "__main__":
+  main()
