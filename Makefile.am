@@ -26,10 +26,11 @@ all-local: zba.pyo zbl.pyo build-local link-local
 
 build-local: zba.c zbl.c
 
-link-local: zba zbl
+link-local: zba zbl	
 
 .py.pyo:
 	cat $< zbb.py > $@
+	@echo
 
 .pyo.c:
 	$(CYTHON) $(CYTHON_FLAGS) $< -o $@
@@ -39,6 +40,7 @@ clean-local: tidy-local
 tidy-local:
 	@$(RM) *.o || true
 	$(RM) *.c || true
+	$(RM) *.pyo || true
 
 anew: clean all
 ready: clean all tidy-local
