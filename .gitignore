@@ -3,6 +3,7 @@
 *.c
 *.pyc
 *.pyo
+*.html
 
 # binaries
 /zbat
