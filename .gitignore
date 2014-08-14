@@ -1,9 +1,10 @@
 # object files
 *.o
+*.c
+*.pyc
 
 # binaries
-/src/zelda-battery
-/src/zelda-blink
+/zbat
 
 # automake stuff
 /autom4te.cache
@@ -12,12 +13,9 @@ config.status
 aclocal.m4
 Makefile
 Makefile.in
-.deps
+/.deps
 /configure
 /build-aux
-/node_modules
-/zbat.jl
-/zelda-battery.jl
 
 # misc
 /tmp
