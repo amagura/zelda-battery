@@ -2,6 +2,7 @@
 *.o
 *.c
 *.pyc
+*.pyo
 
 # binaries
 /zbat
