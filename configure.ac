@@ -18,7 +18,8 @@ AM_CONDITIONAL([NO_CHECK_FOR_CYTHON], [test ! x"$CYTHON" = x""])
 AM_COND_IF([NO_CHECK_FOR_CYTHON], [AC_CHECK_PROG([CYTHON], [cython2 cython], [no])], [AC_PATH_PROG([CYTHON], [cython2 cython], [no])])
 
 # Check for programs
-AC_CHECK_PROG([PRINTF], [printf gprintf], [yes], [no]) dnl Needed by `make trial'
+AC_CHECK_PROG([NODE], [node nodejs], [yes], [no])
+AC_CHECK_PROG([NPM], [npm mpn], [yes], [no])
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 AC_CHECK_PROG([APM], [apm], [yes], [no]) # *BSD support
