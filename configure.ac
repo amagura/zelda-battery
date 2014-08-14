@@ -96,6 +96,8 @@ AS_IF([test ! "x$CPUTYPE" = x], ,
 
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUTYPE" = x && test ! "x$CPUTYPE" = xunknown])
 
+PKG_CHECK_MODULES([python2], [python-2.7 <= 2.8.0])
+
 AC_CONFIG_FILES([Makefile])
 AC_SUBST([CYTHON_FLAGS], ["$CYTHON_FLAGS"])
 AC_SUBST([CPUTYPE], ["$CPUTYPE"])
