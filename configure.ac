@@ -15,7 +15,7 @@ AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m'
 
 # Check to see if we need to look for `csc' and/or `chicken'.
 AM_CONDITIONAL([NO_CHECK_FOR_CYTHON], [test ! x"$CYTHON" = x""])
-AM_COND_IF([NO_CHECK_FOR_CYTHON], [AC_CHECK_PROG([CYTHON], [cython2 cython], [no])], [AC_PATH_PROG([CYTHON], [cython2 cython], [no])])
+AM_COND_IF([NO_CHECK_FOR_CYTHON], [AC_CHECK_PROG([CYTHON], [cython cython2], [no])], [AC_PATH_PROG([CYTHON], [cython cython2], [no])])
 
 # Check for programs
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
@@ -95,7 +95,7 @@ AS_IF([test ! "x$CPUTYPE" = x], ,
 
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUTYPE" = x && test ! "x$CPUTYPE" = xunknown])
 
-PKG_CHECK_MODULES([python2], [python-2.7 <= 2.8.0])
+PKG_CHECK_MODULES([python2], [python-3.4 >= 2.7.8])
 
 AC_CONFIG_FILES([Makefile])
 AC_SUBST([CYTHON_FLAGS], ["$CYTHON_FLAGS"])

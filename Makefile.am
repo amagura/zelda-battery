@@ -4,10 +4,10 @@ bin_PROGRAMS = zba zbl
 zba_SOURCES = zba.py
 zbl_SOURCES = zbl.py
 
-AM_CFLAGS = $$(pkg-config --cflags python2)
-AM_LDFLAGS = $$(pkg-config --libs python2)
+AM_CFLAGS = $$(pkg-config --cflags python3)
+AM_LDFLAGS = $$(pkg-config --libs python3)
 
-CYTHON_FLAGS = $$CYTHON_FLAGS --embed -2
+CYTHON_FLAGS = $$CYTHON_FLAGS --embed -3 -p -a
 
 
 if NATIVE
@@ -30,7 +30,7 @@ link-local: zba zbl
 
 .py.pyo:
 	@echo
-	cat $< zbb.py > $@
+	cat zbb.py $< > $@
 
 .pyo.c:
 	$(CYTHON) $(CYTHON_FLAGS) $< -o $@
@@ -41,6 +41,7 @@ tidy-local:
 	@$(RM) *.o || true
 	$(RM) *.c || true
 	$(RM) *.pyo || true
+	$(RM) *.html || true
 
 anew: clean all
 ready: clean all tidy-local

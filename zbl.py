@@ -1,6 +1,6 @@
 """
   /- filename -/
-  zblnk.py
+  zbl.py
 
   /- copyright -/
   Copyright (c) 2014 Alexej Magura
@@ -23,11 +23,10 @@
 
 def main():
   perc = perc_tInt(powerLvl())
-  print "\033[0;31m" if powerLvl() <= 30 else (
+  print("\033[0;31m" if int(powerLvl()) <= 30 else (
     "\033[5;31m" if _acBlink else "\033[0;31m",
     "\033[5;31m"
-  )[int(~onAcPower())]
-
+  )[int(~onAcPower())], end="")
 
 if __name__ == "__main__":
   main()

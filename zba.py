@@ -1,6 +1,6 @@
 """
   /- filename -/
-  zbatt.py
+  zba.py
 
   /- copyright -/
   Copyright (c) 2014 Alexej Magura
@@ -23,10 +23,10 @@
 
 def main():
   perc = perc_tInt(powerLvl())
-  print '%s%s' % (
+  print('%s%s' % (
     ''.join(heart(1, perc)),
     ''.join(heart(0, 10 - perc))
-  );
+  ), end="");
 
 if __name__ == "__main__":
   main()

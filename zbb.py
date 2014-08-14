@@ -20,8 +20,7 @@
   You should have received a copy of the GNU General Public License
   along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 """
-from commands import getoutput as run;
-from kitchen.text.converters import to_bytes;
+from subprocess import getoutput as run;
 import re
 import sys
 
@@ -48,4 +47,4 @@ def powerLvl():
   #elif sys.platform.startswith('freebsd'):
 
 def heart(boo, n):
-  return [( to_bytes(u'\u2665'), to_bytes(u'\u2661'))[~boo] ]*n;
+  return [[ bytes('\u2665', 'utf-8').decode('utf-8', 'ignore'), bytes('\u2661', 'utf-8').decode('utf-8', 'ignore') ][~boo]]*n;
