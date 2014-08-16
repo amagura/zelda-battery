@@ -11,7 +11,7 @@ config.status
 aclocal.m4
 Makefile
 Makefile.in
-/.deps
+.deps
 /configure
 /build-aux
 
