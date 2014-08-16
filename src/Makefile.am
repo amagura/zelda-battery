@@ -27,6 +27,11 @@ endif
 if !BLINK
 zbl_CPPFLAGS += -D_ZB_NOBLINK=1
 endif
+
+all-local: zba zbl
+	mv zba ../
+	mv zbl ../
+
 clean-local: tidy-local
 
 tidy-local:
