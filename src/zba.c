@@ -36,7 +36,7 @@ main(void)
     printf("%s", "\u2665");
 
   /* print the appropriate number of empty hearts */
-  for (int idx = 10; idx > power.charge; --idx)
+  for (int idx = 9; idx > power.charge; --idx)
     printf("%s", "\u2661");
   return EXIT_SUCCESS;
 }
