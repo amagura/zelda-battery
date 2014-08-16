@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([Zelda Battery], [0.1.0], [sickhadas.nix@gmail.com])
+AC_INIT([Zelda Battery], [0.2.0], [sickhadas.nix@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign])
 
@@ -46,15 +46,15 @@ AC_ARG_ENABLE([generic],
              esac],[generic=false])
 AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
 
-## Enable or disable blinking altogether
-#AC_ARG_ENABLE([blinking],
-              #[  --enable-blinking      includes support for battery indicator blinking (default)],
-              #[case "${enableval}" in
-               #yes) blinking=true ;;
-               #no) blinking=false ;;
-               #*) AC_MSG_ERROR([bad value ${enableval} for --enable-blinking]) ;;
-             #esac],[blinking=true])
-#AM_CONDITIONAL([BLINKING], [test x$blinking = xtrue])
+# Enable or disable blinking altogether
+AC_ARG_ENABLE([blink],
+              [  --enable-blinking      includes support for battery indicator blinking (default)],
+              [case "${enableval}" in
+               yes) blink=true ;;
+               no) blink=false ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-blinking]) ;;
+             esac],[blink=true])
+AM_CONDITIONAL([BLINK], [test x$blink = xtrue])
 
 ## Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
 AC_ARG_ENABLE([acblink],
@@ -90,8 +90,6 @@ AS_IF([test ! "x$CPUTYPE" = x], ,
 
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUTYPE" = x && test ! "x$CPUTYPE" = xunknown])
 
-PKG_CHECK_MODULES([python2], [python-3.4 >= 2.7.8])
-
-AC_CONFIG_FILES([Makefile, src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
 AC_SUBST([CPUTYPE], ["$CPUTYPE"])
 AC_OUTPUT
