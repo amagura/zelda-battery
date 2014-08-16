@@ -20,9 +20,10 @@
   You should have received a copy of the GNU General Public License
   along with Zelda Battery.  If not, see <http://www.gnu.org/licenses/>.
 """
-from subprocess import getoutput as run;
+from ctypes import cdll
+from subprocess import getoutput as run
 from re import search#, match;
-from sys import platform;
+from sys import platform
 
 _acBlink = False
 
@@ -38,8 +39,7 @@ def perc_tInt(perc):
   perc = float(perc)
   perc /= 100
   perc *= 10
-  perc = int(perc)
-  return perc
+  return int(perc)
 
 def powerLvl():
   if platform.startswith('linux'):
