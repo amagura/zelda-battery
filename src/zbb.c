@@ -66,7 +66,7 @@ zbb__init(void)
       /* if battery present, then get charge and
          convert it from a percentage into an integer */
       if (binfo->present) {
-        charge = (float)30;//binfo->percentage;
+        charge = (float)binfo->percentage;
         charge /= 100;
         charge *= 10;
 
