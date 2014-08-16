@@ -2,7 +2,8 @@
 *.o
 
 # binaries
-/zbat
+zba
+zbl
 
 # automake stuff
 /autom4te.cache
