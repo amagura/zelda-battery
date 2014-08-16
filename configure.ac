@@ -10,12 +10,7 @@ AC_PROG_CC_STDC
 AC_PROG_INSTALL
 
 # Declare some precious variables
-AC_ARG_VAR([CYTHON], [Python to C compiler])
 AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])
-
-# Check to see if we need to look for `csc' and/or `chicken'.
-AM_CONDITIONAL([NO_CHECK_FOR_CYTHON], [test ! x"$CYTHON" = x""])
-AM_COND_IF([NO_CHECK_FOR_CYTHON], [AC_CHECK_PROG([CYTHON], [cython cython2], [no])], [AC_PATH_PROG([CYTHON], [cython cython2], [no])])
 
 # Check for programs
 AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
@@ -62,14 +57,14 @@ AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
 #AM_CONDITIONAL([BLINKING], [test x$blinking = xtrue])
 
 ## Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
-#AC_ARG_ENABLE([acblink],
-              #[  --enable-acblink       blink on low battery, even when on AC power],
-              #[case "${enableval}" in
-               #yes) acblink=true ;;
-               #no) acblink=false ;;
-               #*) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
-             #esac],[acblink=false])
-#AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
+AC_ARG_ENABLE([acblink],
+              [  --enable-acblink       blink on low battery, even when on AC power],
+              [case "${enableval}" in
+               yes) acblink=true ;;
+               no) acblink=false ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
+             esac],[acblink=false])
+AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
 
 # Check for debug
 #AC_ARG_ENABLE([debug],
