@@ -1,13 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zba zbl
-zba_SOURCES = zba.py
-zbl_SOURCES = zbl.py
+zba_SOURCES = zba.c
+zbl_SOURCES = zbl.c
 
-AM_CFLAGS = $$(pkg-config --cflags python3) -O3
-AM_LDFLAGS = $$(pkg-config --libs python3)
-
-CYTHON_FLAGS = $$CYTHON_FLAGS --embed -3
+AM_CFLAGS = -O2 -Wall
+AM_LDFLAGS = -lm -lacpi
 
 
 if NATIVE
@@ -22,26 +20,27 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
-all-local: zba.pyo zbl.pyo build-local link-local
+if ACBLINK
+zbl_CPPFLAGS += -D_ZB_ACBLINK
+endif
 
-build-local: zba.c zbl.c
+if !BLINKING
+zbl_CPPFLAGS += -D_ZB_NOBLINK
+endif
 
-link-local: zba zbl	
+all-local: zba.co zbl.co
 
-.py.pyo:
+.c.co:
 	@echo
-	cat zbb.py $< > $@
-
-.pyo.c:
-	$(CYTHON) $(CYTHON_FLAGS) $< -o $@
+	cat src/zbb.c src/$< > $@
+	cat $@ > $<
+	$(RM) $@
 
 clean-local: tidy-local
 
 tidy-local:
 	@$(RM) *.o || true
-	$(RM) *.c || true
-	$(RM) *.pyo || true
-	$(RM) *.html || true
+	$(RM) *.co || true
 
 anew: clean all
 ready: clean all tidy-local

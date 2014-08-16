@@ -2,13 +2,10 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <stdbool.h>
-#include <math.h>
-#include <libacpi.h>
+#include <math.h> /* needs -lm */
+#include <libacpi.h> /* needs -lacpi */
 
-struct power_t {
-  int charge;
-  bool on_acpower;
-};
+#include "zbb.h"
 
 struct power_t
 zbb__init(void)
