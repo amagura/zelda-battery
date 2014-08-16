@@ -5,13 +5,13 @@ A Legend of Zelda like health-bar battery meter for the command-line
 
 ## Supported Platforms
 
-* Mac OS X
+* Mac OS X (work in progress)
 * Linux
-* FreeBSD (slower than on Mac OS X or Linux)
+* FreeBSD (work in progress)
 
 
 ## Building
-1. `autoreconf -fi`
+1. `autoreconf -i`
 2. `./configure`
 3. `make`
 
@@ -42,17 +42,7 @@ PS1='\[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\] [\h \W]\$ '
 
 ## Dependencies
 * C compiler
-* Chicken Scheme
-* `acpi`/`yacpi` (Linux)
-* `pmset` (Mac OS X)
-* `apm`/`acpiconf` (*BSD) (`apm` is preferred, since Zelda Battery has no way of knowing which `-i <nth>` your battery lives at)
-
-### Chicken Eggs
-Installable via `sudo chicken-install`
-* srfi-1
-* regex
-* list-utils
-* posix
+* `libacpi` (Linux)
 
 ## Notes
 
