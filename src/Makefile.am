@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zba zbl
-zba_SOURCES = zba.c zbb.h
-zbl_SOURCES = zbl.c zbb.h
+zba_SOURCES = zba.c zbb.c
+zbl_SOURCES = zbl.c zbb.c
 zbl_CPPFLAGS =
 
 AM_CFLAGS = -O2 -Wall
@@ -21,9 +21,19 @@ endif
 endif
 
 if ACBLINK
-zbl_CPPFLAGS += -D_ZB_ACBLINK
+zbl_CPPFLAGS += -D_ZB_ACBLINK=1
 endif
 
 if !BLINK
-zbl_CPPFLAGS += -D_ZB_NOBLINK
+zbl_CPPFLAGS += -D_ZB_NOBLINK=1
 endif
+clean-local: tidy-local
+
+tidy-local:
+	@$(RM) *.o || true
+
+anew: clean all
+ready: clean all tidy-local
+null: clean all clean
+void: null
+

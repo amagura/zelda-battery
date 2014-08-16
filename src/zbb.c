@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
-#include <stdbool.h>
 #include <math.h> /* needs -lm */
 #include <libacpi.h> /* needs -lacpi */
 
@@ -33,7 +32,6 @@ struct power_t
 zbb__init(void)
 {
   struct power_t power;
-  power.on_acpower = false;
   float charge = 0.0;
 
   int acstate, battstate;
@@ -53,7 +51,11 @@ zbb__init(void)
 
   /* set on_acpower to true, if we are, in fact, running on AC */
   if (acstate == SUCCESS && ac->ac_state == P_AC)
-    power.on_acpower = true;
+    power.on_acpower = 1;
+  else if (acstate == SUCCESS && ac->ac_state == P_BATT)
+    power.on_acpower = 0;
+  else
+    power.on_acpower = -1; /* error occured */
 
   if (battstate == SUCCESS) {
     for (int idx = 0; idx < global->batt_count; ++idx) {
@@ -64,7 +66,7 @@ zbb__init(void)
       /* if battery present, then get charge and
          convert it from a percentage into an integer */
       if (binfo->present) {
-        charge = (float)45;//binfo->percentage;
+        charge = (float)30;//binfo->percentage;
         charge /= 100;
         charge *= 10;
 

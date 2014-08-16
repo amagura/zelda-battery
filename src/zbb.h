@@ -51,7 +51,7 @@ BEGIN_C_DECLS
 
 struct power_t {
   int charge;
-  bool on_acpower;
+  int on_acpower;
 };
 struct power_t zbb__init PARAMS((void));
 
