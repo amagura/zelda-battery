@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+SUBDIRS = src
+
 bin_PROGRAMS = zba zbl
 zba_SOURCES = zba.c
 zbl_SOURCES = zbl.c
@@ -32,7 +34,7 @@ all-local: zba.co zbl.co
 
 .c.co:
 	@echo
-	cat src/zbb.c src/$< > $@
+	cat zbb.c $< > $@
 	cat $@ > $<
 	$(RM) $@
 
