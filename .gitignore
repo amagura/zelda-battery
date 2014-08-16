@@ -1,9 +1,5 @@
 # object files
 *.o
-*.c
-*.pyc
-*.pyo
-*.html
 
 # binaries
 /zbat
