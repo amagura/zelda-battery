@@ -18,7 +18,7 @@ A Legend of Zelda like health-bar battery meter for the command-line
 __Note__ that `./configure` can take an `--enable-ac-blink` option, which is disabled by default.  Enabling this will cause Zelda Battery to blink on low battery _even_ when your computer is plugged into an AC power supply.
 
 ## Installing
-Just place `zelda-blink` and `zelda-battery` where ever you want them and add the appropriate stuff to your terminal prompt.
+Just place `zbl` (zelda-blink) and `zba` (zelda-battery) where ever you want them and add the appropriate stuff to your terminal prompt.
 
 ### Zsh
 ```bash
