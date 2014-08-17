@@ -22,7 +22,7 @@ Just place `zelda-blink` and `zelda-battery` where ever you want them and add th
 
 ### Zsh
 ```bash
-RPROMPT="%{$(src/zelda-blink)%}$(src/zelda-battery)%{\033[0;0m%}"
+RPROMPT="%{$(./zbl)%}$(./zba)%{\033[0;0m%}"
 
 ## run TRAPALRM every $TMOUT seconds
 TMOUT=60 # refresh the terminal prompt every 60 seconds
@@ -36,9 +36,15 @@ TRAPALRM () {
 
 ### Bash
 ```bash
-PS1='\[$(src/zelda-blink)\]$(src/zelda-battery)\[\033[0;0m\] [\h \W]\$ '
+PS1='\[$(./zbl)\]$(./zba)\[\033[0;0m\] [\h \W]\$ '
 ```
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
+
+### Mksh (Korn Shell)
+```ksh
+PS1=$'$(./zbl)'$(./zba)$'\033[0;0m'\ ["$(hostname)"\ "$(basename "$(pwd)")"]$(if ((USER_ID)); then print \$; else print \#; fi)\  # trailing space here
+```
+![example showing zelda-battery in a Mksh prompt](/example/mksh.jpg)
 
 ## Dependencies
 * C compiler
