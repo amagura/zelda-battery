@@ -34,7 +34,7 @@ zbb__init(void)
   struct power_t power;
   float charge = 0.0;
 
-  int acstate, battstate;
+  int ac_support, batt_support;
 
   /* global structure is _the_ acpi structure here */
   global_t *global = malloc (sizeof (global_t));
@@ -46,18 +46,18 @@ zbb__init(void)
     exit(24);
 
   /* initialize battery and acstate */
-  battstate = init_acpi_batt(global);
-  acstate = init_acpi_acadapt(global);
+  ac_support = init_acpi_acadapt(global);
+  batt_support = init_acpi_batt(global);
 
   /* set on_acpower to true, if we are, in fact, running on AC */
-  if (acstate == SUCCESS && ac->ac_state == P_AC)
+  if (( ac_support == -1 || ac_support == SUCCESS ) && ac->ac_state == P_AC)
     power.on_acpower = 1;
-  else if (acstate == SUCCESS && ac->ac_state == P_BATT)
+  else if (( ac_support == -1 || ac_support == SUCCESS ) && ac->ac_state == P_BATT)
     power.on_acpower = 0;
   else
-    power.on_acpower = -1; /* error occured */
+    power.on_acpower = -1; /* your system might have power supply/battery related hardware issues, or some other error occured */
 
-  if (battstate == SUCCESS) {
+  if (batt_support == SUCCESS) {
     for (int idx = 0; idx < global->batt_count; ++idx) {
       binfo = &batteries[idx];
       /* read current battery values */
