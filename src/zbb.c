@@ -50,12 +50,12 @@ zbb__init(void)
   batt_support = init_acpi_batt(global);
 
   /* set on_acpower to true, if we are, in fact, running on AC */
-  if (( ac_support == -1 || ac_support == SUCCESS ) && ac->ac_state == P_AC)
+  if (ac_support == SUCCESS && ac->ac_state == P_AC)
     power.on_acpower = 1;
-  else if (( ac_support == -1 || ac_support == SUCCESS ) && ac->ac_state == P_BATT)
+  else if (ac_support == SUCCESS && ac->ac_state == P_BATT)
     power.on_acpower = 0;
   else
-    power.on_acpower = -1; /* your system might have power supply/battery related hardware issues, or some other error occured */
+    power.on_acpower = -1; /* error occured */
 
   if (batt_support == SUCCESS) {
     for (int idx = 0; idx < global->batt_count; ++idx) {
