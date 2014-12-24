@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 str="$(echo $(../zb-text))"
 string="$(echo "$str" | sed -r 's/(.)/\1 /g; s/\s$//')"
 
@@ -10,3 +12,4 @@ done
 
 echo "full: $full"
 echo "empty: $empty"
+echo "total: $((empty + full))"

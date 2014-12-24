@@ -21,11 +21,14 @@ endif
 endif
 
 all-local: zb-color zb-text
-	$(foreach bin,$?, mv $(bin) ../)
+	$(foreach bin,$?, mv $(bin) ../;)
 
 clean-local: tidy-local
 
 asm-local: zb-color.s zb-text.s
+
+check-local:
+	./test.bats
 
 zb-color.s:
 	$(CC) $(CFLAGS) $(AM_CFLAGS) $(zb_color_CPPFLAGS) $(CPPFLAGS) -S $<
