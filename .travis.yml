@@ -8,6 +8,7 @@ install:
   - sudo apt-get update
   - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 clang
   - sudo apt-get install libacpi-dev
+  - clang -v
 script:
   - autoreconf -i
   - ./configure
