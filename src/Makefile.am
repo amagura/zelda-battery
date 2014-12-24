@@ -35,6 +35,7 @@ zb-color.s:
 
 tidy-local:
 	@$(RM) *.o || true
+	$(RM) *.s || true
 
 anew: clean all
 ready: clean all tidy-local
