@@ -1,10 +1,13 @@
 language: c
 compiler:
-  - clang
+  #- clang # version of clang available on travis is clang v3.4 which apparently doesn't support inline functions
   - gcc-4.4
+  - gcc-4.5
+  - gcc-4.6
 install:
   - sudo apt-get update
-  - sudo apt-get install gcc-4.4
+  - sudo apt-get install clang
+  - sudo apt-get install gcc-4.
   - sudo apt-get install libacpi-dev
 script:
   - autoreconf -i
