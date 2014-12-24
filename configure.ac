@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([Zelda Battery], [0.2.0], [sickhadas.nix@gmail.com])
+AC_INIT([Zelda Battery], [1.0], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign])
 
@@ -13,12 +13,12 @@ AC_PROG_INSTALL
 AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])
 
 # Check for programs
-AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
-AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
-AC_CHECK_PROG([APM], [apm], [yes], [no]) # *BSD support
-AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
-AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
-AM_CONDITIONAL([APM], [test x"$ac_cv_prog_APM" = x"yes"])
+#AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
+#AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
+#AC_CHECK_PROG([APM], [apm], [yes], [no]) # *BSD support
+#AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
+#AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
+#AM_CONDITIONAL([APM], [test x"$ac_cv_prog_APM" = x"yes"])
 
 # Check whether this is an automated build
 AC_MSG_CHECKING([whether build is automated])
@@ -47,24 +47,24 @@ AC_ARG_ENABLE([generic],
 AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
 
 # Enable or disable blinking altogether
-AC_ARG_ENABLE([blink],
-              [  --enable-blinking      includes support for battery indicator blinking (default)],
-              [case "${enableval}" in
-               yes) blink=true ;;
-               no) blink=false ;;
-               *) AC_MSG_ERROR([bad value ${enableval} for --enable-blinking]) ;;
-             esac],[blink=true])
-AM_CONDITIONAL([BLINK], [test x$blink = xtrue])
+#AC_ARG_ENABLE([blink],
+#              [  --enable-blinking      includes support for battery indicator blinking (default)],
+#              [case "${enableval}" in
+#               yes) blink=true ;;
+#               no) blink=false ;;
+#               *) AC_MSG_ERROR([bad value ${enableval} for --enable-blinking]) ;;
+#             esac],[blink=true])
+#AM_CONDITIONAL([BLINK], [test x$blink = xtrue])
 
 ## Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
-AC_ARG_ENABLE([acblink],
-              [  --enable-acblink       blink on low battery, even when on AC power],
-              [case "${enableval}" in
-               yes) acblink=true ;;
-               no) acblink=false ;;
-               *) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
-             esac],[acblink=false])
-AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
+#AC_ARG_ENABLE([acblink],
+#              [  --enable-acblink       blink on low battery, even when on AC power],
+#              [case "${enableval}" in
+#               yes) acblink=true ;;
+#               no) acblink=false ;;
+#               *) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
+#             esac],[acblink=false])
+#AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
 
 # Check for debug
 #AC_ARG_ENABLE([debug],

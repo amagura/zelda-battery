@@ -6,7 +6,7 @@ clean-local: tidy-local
 
 tidy-local:
 	@$(RM) *.o || true
-	@$(RM) zba zbl || true
+	@$(RM) zb-text zb-color || true
 
 anew: clean all
 ready: clean all tidy-local
