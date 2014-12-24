@@ -7,8 +7,7 @@ AM_INIT_AUTOMAKE([-Wall foreign])
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
-AC_PROG_INSTALL
-AC_PROG_SED
+AC_C_INLINE
 
 # Declare some precious variables
 AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])

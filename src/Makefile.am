@@ -6,7 +6,6 @@ zb_text_SOURCES = zb.c
 zb_color_CPPFLAGS = -D_ZB_MAKING_ZB_COLOR=1
 
 AM_CFLAGS = -O2 -Wall
-AM_LDFLAGS = -lacpi
 
 if NATIVE
 AM_CFLAGS += -march=native -mtune=native
