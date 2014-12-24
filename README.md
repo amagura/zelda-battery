@@ -1,4 +1,4 @@
-zelda-battery [![Build Status](https://travis-ci.org/sickh/zelda-battery.svg?branch=master)](https://travis-ci.org/sickh/zelda-battery)
+zelda-battery [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/sickh/zelda-battery)
 =============
 
 A Legend of Zelda like health-bar battery meter for the command-line
