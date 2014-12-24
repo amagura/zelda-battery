@@ -96,7 +96,6 @@ inline void
 disp_pwr_info()
 {
   init(); // duplication. ;)
-  int hdx = power.charge;
   
   for (int hdx = 1; hdx <= power.charge; ++hdx) {
     printf("%s", _ZB_FULL_HEART);

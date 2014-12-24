@@ -21,7 +21,7 @@ endif
 endif
 
 all-local: zb-color zb-text
-	$(foreach bin,$?, mv $(bin) ../;)
+	for file in $?; do mv $$file ../; done
 
 clean-local: tidy-local
 
@@ -31,10 +31,10 @@ check-local:
 	./cmp.sh
 
 zb-color.s:
-	$(CC) $(CFLAGS) $(AM_CFLAGS) $(zb_color_CPPFLAGS) $(CPPFLAGS) -S $<
+	$(CC) $(CFLAGS) $(AM_CFLAGS) $(zb_color_CPPFLAGS) $(CPPFLAGS) -S $(zb_color_SOURCES) -o $@
 
-%.s: %.c
-	$(foreach file,$<,$(CC) $(CFLAGS) $(AM_CFLAGS) -S $<)
+zb-text.s:
+	$(CC) $(CFLAGS) $(AM_CFLAGS) $(CPPFLAGS) -S $(zb_text_SOURCES) -o $@
 
 tidy-local:
 	@$(RM) *.o || true
