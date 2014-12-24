@@ -11,4 +11,4 @@ script:
   - ./configure
   - make
 after_success:
-  - ./zelda-demo.sh
+  - make check
