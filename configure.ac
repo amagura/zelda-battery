@@ -8,9 +8,13 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_INSTALL
+AC_PROG_SED
 
 # Declare some precious variables
 AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])
+
+# Check for libs
+AC_CHECK_LIB([acpi], [check_acpi_support],,[exit 1])
 
 # Check for programs
 #AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
