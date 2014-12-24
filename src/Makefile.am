@@ -28,7 +28,7 @@ clean-local: tidy-local
 asm-local: zb-color.s zb-text.s
 
 check-local:
-	./test.bats
+	./cmp.sh
 
 zb-color.s:
 	$(CC) $(CFLAGS) $(AM_CFLAGS) $(zb_color_CPPFLAGS) $(CPPFLAGS) -S $<

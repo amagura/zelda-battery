@@ -97,22 +97,13 @@ disp_pwr_info()
 {
   init(); // duplication. ;)
   int hdx = power.charge;
-
-full:
-  if (hdx > 0) { // if `hdx' => 5; 5 full hearts.  `hdx' => 6; 6 full hearts...
-    --hdx; 
-    /* XXX call it overkill, but doing it this way prevents an extra
-       instruction given that `hdx > 0' is true */
-
+  
+  for (int hdx = 1; hdx <= power.charge; ++hdx) {
     printf("%s", _ZB_FULL_HEART);
-    goto full; // loop
   }
-empty:
-  if (power.charge < 10) { // `power.charge' => 10; 0 empty hearts.
-    // `power.charge' => 9; 1 empty heart.
-    ++power.charge;
+  
+  for (; power.charge < 10; ++power.charge) {
     printf("%s", _ZB_EMPTY_HEART);
-    goto empty; // loop
   }
 }
 #endif
