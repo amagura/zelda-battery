@@ -85,6 +85,8 @@ disp_pwr_info(int blink_threshold, bool blink)
   if (power.charge <= blink_threshold && blink) {
     if (power.source.ac)
       printf("%s", (blink ? "\033[5;31m" : "\033[0;31m"));
+    else
+      printf("%s", "\033[5;31m");
   } else {
     printf("%s", "\033[0;31m");
   }
