@@ -6,10 +6,11 @@
 #include <libacpi.h> /* needs -lacpi */
 
 #if _ZB_MAKING_ZB_COLOR
-#define _ZB_PROGNAME "zb-color"
+#define _ZB_PROGNAME "zbac"
 #else
-#define _ZB_PROGNAME "zb-text"
+#define _ZB_PROGNAME "zbat"
 #endif
+
 
 #define _ZB_ERROR(format, ...) \
   do { \
