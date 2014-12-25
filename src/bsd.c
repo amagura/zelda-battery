@@ -11,4 +11,14 @@
 #define _ZB_PROGNAME "zbat"
 #endif
 
-#define 
+struct pwr_src_t {
+  bool batt;
+  bool ac;
+};
+
+struct power_t {
+  int charge;
+  struct pwr_src_t source;
+} power;
+
+inline
