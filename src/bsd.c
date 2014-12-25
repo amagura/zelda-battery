@@ -11,14 +11,18 @@
 #define _ZB_PROGNAME "zbat"
 #endif
 
-struct pwr_src_t {
-  bool batt;
-  bool ac;
-};
+inline bool
+on_ac_pwr()
+{
+  int size;
+  int ac_line;
+  size = sizeof(int);
+  sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
+  return (bool)ac_line;
+}
 
-struct power_t {
-  int charge;
-  struct pwr_src_t source;
-} power;
-
-inline
+int
+main()
+{
+  printf("%d\n", ac_line);
+}
