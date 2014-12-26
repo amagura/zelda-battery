@@ -67,6 +67,7 @@ BEGIN_C_DECLS
   } while(0)
 
 #define _ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
+#define _ZB_ARGMSG(...) printf("  %s\n", (__VA_ARGS__));
 
 #if HAVE_LIBBSD
 #include <limits.h>

@@ -19,8 +19,12 @@ limitations under the License.
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
-
 #include "header/main.h"
+#if _ZB_MAKING_COLOR
+#include "header/color.h"
+#else
+#include "header/text.h"
+#endif
 
 // I may make the linux and bsd sources (more or less) compatible
 // since `sysctl' is also present in Linux
@@ -108,53 +112,6 @@ init()
 }
 #endif
 
-#if _ZB_MAKING_COLOR
-struct color_disp_options_t {
-  bool blink;
-  bool acblink;
-  long long blink_threshold;
-  /* yet to implement */
-  //char *full_color;
-  //char *empty_color;
-};
-
-#define _ZB_COLOR_RED "\033[0;31m"
-#define _ZB_COLOR_RED_BLINK "\033[5;31m"
-
-// will eventually rewrite as an inline function
-#define _ZB_DISP_PWR_INFO(opts) \
-  do { \
-    if (!(opts).blink) { \
-      printf("%s", _ZB_COLOR_RED); \
-    } else { \
-      if (power.charge <= (opts).blink_threshold) { \
-        if (power.source.ac) { \
-          printf("%s", (opts).acblink ? _ZB_COLOR_RED_BLINK : _ZB_COLOR_RED); \
-        } else { \
-          printf("%s", _ZB_COLOR_RED_BLINK); \
-        } \
-      } else { \
-        printf("%s", _ZB_COLOR_RED); \
-      } \
-    } \
-  } while(0)
-#else
-struct txt_disp_options_t {
-  char *full_heart;
-  char *empty_heart;
-};
-
-#define _ZB_DISP_PWR_INFO(opts) \
-  do { \
-    for (int hdx = 1; hdx <= power.charge; ++hdx) { \
-      printf("%s", (opts).full_heart); \
-    } \
-    for (; power.charge < 10; ++power.charge) { \
-      printf("%s", (opts).empty_heart); \
-    } \
-  } while(0)
-#endif
-
 int
 main(int argc, char **argv)
 {
@@ -183,17 +140,20 @@ main(int argc, char **argv)
 #define PACKAGE_VERSION "-1"
 #endif
 
-  while ((chara = getopt(argc, argv, shopts) != EOF)) {
+  while ((chara = getopt(argc, argv, shopts)) != EOF) {
     if (optopt != 0)
       return EXIT_FAILURE;
 
     switch(chara) {
       case 'h':
-        _ZB_MSG("Usage: %s [OPTION]...", _ZB_PROGNAME);
-        return 0;
+        _ZB_MSG("Usage: %s [OPTION]...\n", _ZB_PROGNAME);
+        _ZB_ARGMSG("-h\t\tprint this message and exit");
+        _ZB_ARGMSG("-v\t\tprint program version and exit");
+        _ZB_DISP_HELP();
+        return EXIT_FAILURE;
       case 'v':
         _ZB_MSG("%s", PACKAGE_VERSION);
-        return 0;
+        return EXIT_FAILURE;
 #if _ZB_MAKING_COLOR
       case 'b':
         _ZB_STRTONUM(color_opts.blink_threshold, (const char *)optarg);
