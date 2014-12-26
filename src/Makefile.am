@@ -8,6 +8,14 @@ zbatc_CPPFLAGS = -D_ZB_MAKING_COLOR=1
 AM_CFLAGS = -O2 -Wall
 AM_CPPFLAGS = $(zbatc_CPPFLAGS)
 
+if LINUX
+AM_CPPFLAGS += -D_ZB_UNIX_LINUX=1
+endif
+
+if BSD
+AM_CPPFLAGS += -D_ZB_UNIX_BSD=1
+endif
+
 if NATIVE
 AM_CFLAGS += -march=native -mtune=native
 endif

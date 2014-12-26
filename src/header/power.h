@@ -46,15 +46,6 @@ BEGIN_C_DECLS
 
 #include <stdbool.h>
 
-struct pwr_src_t {
-  bool batt;
-  bool ac;
-};
-
-struct power_t {
-  int charge;
-  struct pwr_src_t source;
-} power;
 
 void init PARAMS(());
 

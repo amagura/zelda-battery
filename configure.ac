@@ -11,11 +11,15 @@ AC_C_INLINE
 
 # Declare some precious variables
 AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])
-AC_ARG_VAR([PLATFORM], [machine os name (hould be the output of 'uname -o')])
+AC_ARG_VAR([PLATFORM], [machine os name (should be the output of 'uname -o')])
+AS_IF([test ! "x$PLATFORM" = x], ,
+      [PLATFORM=`uname -s`])
 
 # Check for libs
-AC_CHECK_LIB([acpi], [check_acpi_support],,[test x"]PLATFORM[" = x"GNU/Linux" && exit 1])
-AC_CHECK_LIB([c], [sysctlbyname],,[test x"]PLATFORM[" = x"FreeBSD" && exit 1])
+AC_CHECK_LIB([acpi], [check_acpi_support],,[test x"]PLATFORM[" = x"Linux" && exit 1])
+AC_CHECK_LIB([c], [sysctlbyname],,[test x"]PLATFORM[" = x"BSD" && exit 1])
+AM_CONDITIONAL([LINUX], [test x"]PLATFORM[" = x"Linux"])
+AM_CONDITIONAL([BSD], [test x"]PLATFORM[" = x"BSD"])
 
 # Check for programs
 #AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
