@@ -11,7 +11,6 @@ AC_C_INLINE
 
 # Check for TR
 
-# Declare some precious variables
 m4_define([PLATFORM], m4_esyscmd([uname -s]))
 m4_define([CPUTYPE], m4_esyscmd([uname -m]))
 m4_define([_TEST], m4_if("$2", [BSD], 
