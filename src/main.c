@@ -147,8 +147,13 @@ main(int argc, char **argv)
     switch(chara) {
       case 'h':
         _ZB_MSG("Usage: %s [OPTION]...\n", _ZB_PROGNAME);
+#if _ZB_MAKING_COLOR
+        _ZB_ARGMSG("-h\tprint this message and exit");
+        _ZB_ARGMSG("-v\tprint program version and exit");
+#else
         _ZB_ARGMSG("-h\t\tprint this message and exit");
         _ZB_ARGMSG("-v\t\tprint program version and exit");
+#endif
         _ZB_DISP_HELP();
         return EXIT_FAILURE;
       case 'v':
