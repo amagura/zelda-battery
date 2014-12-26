@@ -8,23 +8,27 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_C_INLINE
-AC_PROG_SED
 
 # Check for TR
-AC_CHECK_PROG([TR], [tr], [yes], [no])
 
 # Declare some precious variables
-m4_define([PLATFORM], m4_esyscmd([uname -s | tr '\n' ' ' | sed 's/ $//']))
-m4_define([CPUTYPE], m4_esyscmd([uname -m | tr '\n' ' ' | sed 's/ $//']))
+m4_define([PLATFORM], m4_esyscmd([uname -s]))
+m4_define([CPUTYPE], m4_esyscmd([uname -m]))
 m4_define([_TEST], [test x"$1" = x"$2"])
 m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check for libs
-AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
-AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [BSD]))
-AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
-AM_CONDITIONAL([BSD], _TEST(PLATFORM, [BSD]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
+AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux
+]))
+AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [FreeBSD
+]))
+AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux
+]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
+AM_CONDITIONAL([BSD], _TEST(PLATFORM, [FreeBSD
+]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
+AM_CONDITIONAL([BSD], _TEST(PLATFORM, [OpenBSD
+]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 
 # Check for programs
 #AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
