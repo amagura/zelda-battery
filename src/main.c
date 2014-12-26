@@ -25,6 +25,7 @@ limitations under the License.
 #else
 #include "header/text.h"
 #endif
+#include "header/power.h"
 
 // I may make the linux and bsd sources (more or less) compatible
 // since `sysctl' is also present in Linux
@@ -36,80 +37,6 @@ limitations under the License.
 #elif _ZB_UNIX_LINUX
 #include <malloc.h>
 #include <libacpi.h>
-#endif
-
-struct pwr_src_t {
-  bool batt;
-  bool ac;
-};
-
-struct power_t {
-  int charge;
-  struct pwr_src_t source;
-} power;
-
-
-#if _ZB_UNIX_BSD
-inline void
-init()
-{
-  size_t size;
-  int ac_line;
-  size = sizeof(int);
-  _ZB_DEBUG("%s\n", "getting hw.acpi.acline");
-  sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
-  power.source.ac = (bool)ac_line;
-  power.source.batt = !power.source.ac;
-  _ZB_DEBUG("%s\n", "getting hw.acpi.battery.life");
-  sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
-  power.charge = (int)(ac_line / 10);
-}
-#elif _ZB_UNIX_LINUX
-inline void
-init()
-{
-  power.charge = 10;
-  bool ac_support = false;
-  bool batt_support = false;
-
-  global_t *global = malloc(sizeof(global_t));
-  battery_t *binfo = NULL;
-  adapter_t *ac = &global->adapt;
-
-  // if true, no acpi support
-  if (check_acpi_support() == -1) {
-    _ZB_ERROR("%s\n", "no libacpi: acpi support required");
-    exit(EXIT_FAILURE);
-  }
-  ac_support = init_acpi_acadapt(global);
-  batt_support = init_acpi_batt(global);
-
-  if (ac_support == SUCCESS) {
-    if (ac->ac_state == P_AC) {
-      power.source.ac = true;
-      power.source.batt = !power.source.ac;
-    } else if (ac->ac_state == P_BATT) {
-      power.source.batt = true;
-      power.source.ac = !power.source.batt;
-    }
-  }
-
-  if (batt_support == SUCCESS) {
-    int idx = 0;
-    do {
-      binfo = &batteries[idx];
-      read_acpi_batt(idx); // read current battery information
-
-      if (binfo->present) {
-        // XXX (int) here truncates stuff like `9.5' from `95 / 10' to `9'
-        power.charge = (int)(binfo->percentage / 10);
-      } else {
-        continue;
-      }
-    } while(++idx < global->batt_count);
-  }
-  free(global);
-}
 #endif
 
 int
@@ -128,8 +55,8 @@ main(int argc, char **argv)
   struct txt_disp_options_t txt_opts;
   const char *shopts = "hvf:e:";
 #if _ZB_UNIX_BSD
-  txt_opts.full_heart = "v";
-  txt_opts.empty_heart = "<";
+  txt_opts.full_heart = "+";
+  txt_opts.empty_heart = "-";
 #else
   txt_opts.full_heart = "\u2665";
   txt_opts.empty_heart = "\u2661";
@@ -179,8 +106,8 @@ main(int argc, char **argv)
 #endif
     }
   }
-
-  init();
+  struct power_t power;
+  _ZB_INIT();
 
 #if _ZB_MAKING_COLOR
   _ZB_DISP_PWR_INFO(color_opts);
