@@ -14,7 +14,10 @@ AC_C_INLINE
 # Declare some precious variables
 m4_define([PLATFORM], m4_esyscmd([uname -s]))
 m4_define([CPUTYPE], m4_esyscmd([uname -m]))
-m4_define([_TEST], [test x"$1" = x"$2"])
+m4_define([_TEST], m4_if("$2", [BSD], 
+          m4_if(PLATFORM, [FreeBSD
+], [test x"$1" = x"$1"], [test x"$1" = ""]),
+[test x"$1" = x"$2"]))
 m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
