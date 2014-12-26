@@ -43,14 +43,12 @@ int
 main(int argc, char **argv)
 {
   int chara = 0; // character storage
-
 #if _ZB_MAKING_COLOR
   struct color_disp_options_t color_opts;
   color_opts.acblink = false;
   color_opts.blink = true;
   color_opts.blink_threshold = 3;
-  const char *shopts = "hvanb:";
-
+  const char *shopts = "hvHanb:";
 #else
   struct txt_disp_options_t txt_opts;
   const char *shopts = "hvf:e:";
@@ -95,6 +93,9 @@ main(int argc, char **argv)
         break;
       case 'n':
         color_opts.blink = false;
+        break;
+      case 'H':
+        color_opts.beat = true;
         break;
 #else
       case 'e':

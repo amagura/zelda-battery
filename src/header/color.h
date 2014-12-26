@@ -45,7 +45,7 @@ the end of C declarations. */
 BEGIN_C_DECLS
 
 #include <stdbool.h>
-#include "header/main.h"
+#include "main.h"
 
 struct color_disp_options_t {
   bool blink;

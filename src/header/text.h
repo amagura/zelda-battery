@@ -44,7 +44,7 @@ the end of C declarations. */
 
 BEGIN_C_DECLS
 
-#include "header/main.h"
+#include "main.h"
 
 struct txt_disp_options_t {
   char *full_heart;
