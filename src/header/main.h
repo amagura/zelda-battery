@@ -50,22 +50,20 @@ BEGIN_C_DECLS
 #define _ZB_PROGNAME "zbatt"
 #endif
 
-#define _ZB_ERRMSG(format, ...) fprintf(stderr, (format), (__VA_ARGS__))
-
 #define _ZB_DEBUG(format, ...) \
   do { \
-    _ZB_ERRMSG("%s:dbg: ", _ZB_PROGNAME); \
-    _ZB_ERRMSG("%s", "`"); \
-    _ZB_ERRMSG((format), (__VA_ARGS__)); \
-    _ZB_ERRMSG("`   %s:%d:\n", __FILE__, __LINE__); \
+    fprintf(stderr, "%s:dbg: ", _ZB_PROGNAME); \
+    fprintf(stderr, "%s", "`"); \
+    fprintf(stderr, (format), (__VA_ARGS__)); \
+    fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
   } while(0)
 
 #define _ZB_ERROR(format, ...) \
   do { \
-    _ZB_ERRMSG("%s:err: ", _ZB_PROGNAME); \
-    _ZB_ERRMSG("%s", "`"); \
-    _ZB_ERRMSG((format), (__VA_ARGS__)); \
-    _ZB_ERRMSG("`   %s:%d:\n", __FILE__, __LINE__); \
+    fprintf(stderr, "%s:err: ", _ZB_PROGNAME); \
+    fprintf(stderr, "%s", "`"); \
+    fprintf(stderr, (format), (__VA_ARGS__)); \
+    fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
   } while(0)
 
 #define _ZB_MSG(format, ...) printf((format), (__VA_ARGS__));

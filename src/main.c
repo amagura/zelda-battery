@@ -68,17 +68,17 @@ init()
   bool ac_support = false;
   bool batt_support = false;
 
-  global_t *global_ptr = malloc(sizeof(global_t));
-  battery_t *binfo_ptr = NULL;
-  adapter_t *ac_ptr = &global->adapt;
+  global_t *global = malloc(sizeof(global_t));
+  battery_t *binfo = NULL;
+  adapter_t *ac = &global->adapt;
 
   // if true, no acpi support
   if (check_acpi_support() == -1) {
     _ZB_ERROR("%s\n", "no libacpi: acpi support required");
     exit(EXIT_FAILURE);
   }
-  ac_support = init_acpi_acadapt(global_ptr);
-  batt_support = init_acpi_batt(global_ptr);
+  ac_support = init_acpi_acadapt(global);
+  batt_support = init_acpi_batt(global);
 
   if (ac_support == SUCCESS) {
     if (ac->ac_state == P_AC) {
@@ -93,22 +93,19 @@ init()
   if (batt_support == SUCCESS) {
     int idx = 0;
     do {
-      binfo_ptr = &batteries[idx];
+      binfo = &batteries[idx];
       read_acpi_batt(idx); // read current battery information
 
-      if (binfo_ptr->present) {
+      if (binfo->present) {
         // XXX (int) here truncates stuff like `9.5' from `95 / 10' to `9'
-        power.charge = (int)(binfo_ptr->percentage / 10);
+        power.charge = (int)(binfo->percentage / 10);
       } else {
         continue;
       }
-    } while(++idx < global_ptr->batt_count);
+    } while(++idx < global->batt_count);
   }
-  free(global_ptr);
+  free(global);
 }
-#else
-inline void
-init(){}
 #endif
 
 #if _ZB_MAKING_COLOR

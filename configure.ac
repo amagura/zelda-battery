@@ -1,25 +1,30 @@
 AC_PREREQ([2.65])
 AC_INIT([Zelda Battery], [1.1], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([-Wall foreign])
+AM_INIT_AUTOMAKE([-Wall])
 
 # Check for compilers
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_C_INLINE
+AC_PROG_SED
+
+# Check for TR
+AC_CHECK_PROG([TR], [tr], [yes], [no])
 
 # Declare some precious variables
-AC_ARG_VAR([CPUTYPE], [machine hardware name (should be the output of 'uname -m')])
-AC_ARG_VAR([PLATFORM], [machine os name (should be the output of 'uname -o')])
-AS_IF([test ! "x$PLATFORM" = x], ,
-      [PLATFORM=`uname -s`])
+m4_define([PLATFORM], m4_esyscmd([uname -s | tr '\n' ' ' | sed 's/ $//']))
+m4_define([CPUTYPE], m4_esyscmd([uname -m | tr '\n' ' ' | sed 's/ $//']))
+m4_define([_TEST], [test x"$1" = x"$2"])
+m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
+#m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check for libs
-AC_CHECK_LIB([acpi], [check_acpi_support],,[test x"]PLATFORM[" = x"Linux" && exit 1])
-AC_CHECK_LIB([c], [sysctlbyname],,[test x"]PLATFORM[" = x"BSD" && exit 1])
-AM_CONDITIONAL([LINUX], [test x"]PLATFORM[" = x"Linux"])
-AM_CONDITIONAL([BSD], [test x"]PLATFORM[" = x"BSD"])
+AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
+AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [BSD]))
+AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
+AM_CONDITIONAL([BSD], _TEST(PLATFORM, [BSD]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 
 # Check for programs
 #AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
@@ -42,7 +47,7 @@ AC_ARG_ENABLE([native],
                yes) native=true ;;
                no) native=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-native]) ;;
-             esac],[native=false])
+             esac],[native=true])
 AM_CONDITIONAL([NATIVE], [test "x$native" = xtrue])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
@@ -94,11 +99,7 @@ AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
              #esac],[heartbeat=false])
 #AM_CONDITIONAL([HEARTBEAT], [test "x$heartbeat" = xtrue])
 
-AS_IF([test ! "x$CPUTYPE" = x], ,
-      [CPUTYPE=`uname -m`])
-
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUTYPE" = x && test ! "x$CPUTYPE" = xunknown])
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUTYPE[" = x && test ! "x]CPUTYPE[" = xunknown])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
-AC_SUBST([CPUTYPE], ["$CPUTYPE"])
 AC_OUTPUT
