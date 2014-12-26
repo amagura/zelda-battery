@@ -47,7 +47,17 @@ BEGIN_C_DECLS
 struct txt_disp_options_t {
   char *full_heart;
   char *empty_heart;
-} txt_opts;
+};
+
+#define _ZB_DISP_PWR_INFO(opts) \
+  do { \
+    for (int hdx = 1; hdx <= power.charge; ++hdx) { \
+      printf("%s", (opts).full_heart); \
+    } \
+    for (; power.charge < 10; ++power.charge) { \
+      printf("%s", (opts).empty_heart); \
+    } \
+  } while(0)
 
 END_C_DECLS
 

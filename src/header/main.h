@@ -72,6 +72,7 @@ BEGIN_C_DECLS
 
 #if HAVE_LIBBSD
 #include <limits.h>
+#include <bsd/stdlib.h>
 #define _ZB_STRTONUM(dst_num, const_string) \
   do { \
     if (((dst_num) = strtonum((const_string), INT_MAX, INT_MIN, NULL)) == 0) { \

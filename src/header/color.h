@@ -53,12 +53,27 @@ struct color_disp_options_t {
   // TO BE IMPLEMENTED
   //char *full_color;
   //char *empty_color;
-} color_opts;
+};
 
 #define _ZB_COLOR_RED "\033[0;31m"
 #define _ZB_COLOR_RED_BLINK "\033[5;31m"
 
-void disp_pwr_info PARAMS((struct color_disp_options_t));
+#define _ZB_DISP_PWR_INFO(opts) \
+  do { \
+    if (!(opts).blink) { \
+      printf("%s", _ZB_COLOR_RED); \
+    } else { \
+      if (power.charge <= (opts).blink_threshold) { \
+        if (power.source.ac) { \
+          printf("%s", (opts).acblink ? _ZB_COLOR_RED_BLINK : _ZB_COLOR_RED); \
+        } else { \
+          printf("%s", _ZB_COLOR_RED_BLINK); \
+        } \
+      } else { \
+        printf("%s", _ZB_COLOR_RED); \
+      } \
+    } \
+  } while(0)
 
 END_C_DECLS
 

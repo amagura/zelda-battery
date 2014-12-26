@@ -18,17 +18,9 @@ limitations under the License.
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "header/main.h"
 #include "header/color.h"
-
-struct pwr_src_t {
-  bool batt;
-  bool ac;
-};
-
-struct power_t {
-  int charge;
-  struct pwr_src_t source;
-} power;
+#include "header/power.h"
 
 inline void
 disp_pwr_info(struct color_disp_options_t opts)

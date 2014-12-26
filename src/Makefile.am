@@ -1,8 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatc zbatt
-zbatc_SOURCES = main.c color.c
-zbatc_CPPFLAGS = -D_ZB_MAKING_ZB_COLOR=1
+zbatc_SOURCES = main.c power.c
+zbatt_SOURCES = main.c power.c
+zbatc_CPPFLAGS = -D_ZB_MAKING_COLOR=1
 
 AM_CFLAGS = -O2 -Wall
 AM_CPPFLAGS = $(zbatc_CPPFLAGS)
@@ -19,7 +20,9 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
-all-local: zbatc zbatt
+all-local: all
+
+move-local: $(bin_PROGRAMS)
 	for file in $?; do mv $$file ../; done
 
 clean-local: tidy-local
