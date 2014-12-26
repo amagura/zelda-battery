@@ -1,5 +1,21 @@
+/****
+Copyright 2014 Alexej Magura
+
+This file is a part of Zelda Battery
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+****/
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
 #include "headers/color.h"
@@ -14,30 +30,14 @@ struct power_t {
   struct pwr_src_t source;
 } power;
 
-#if _ZB_UNIX_BSD
-inline void
-init()
-{
-  size_t size;
-  int ac_line;
-  size = sizeof(int);
-  _ZB_DEBUG("%s\n", "getting hw.acpi.acline");
-  sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
-  power.source.ac = (bool)ac_line;
-  power.source.batt = !power.source.ac;
-  _ZB_DEBUG("%s\n", "getting hw.acpi.battery.life");
-  sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
-  power.charge = (int)(ac_line / 10);
-}
-
 inline void
 disp_pwr_info(struct color_disp_options_t opts)
 {
   if (!opts.blink) {
-    printf("%s", );
+    printf("%s", _ZB_COLOR_RED);
   } else {
     if (power.charge <= opts.blink_threshold) {
-      if (power.soure.ac)
+      if (power.source.ac)
         printf("%s", opts.acblink ? _ZB_COLOR_RED_BLINK : _ZB_COLOR_RED);
       else
         printf("%s", _ZB_COLOR_RED_BLINK);
@@ -46,4 +46,3 @@ disp_pwr_info(struct color_disp_options_t opts)
     }
   }
 }
-#endif

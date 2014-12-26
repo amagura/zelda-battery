@@ -44,19 +44,6 @@ the end of C declarations. */
 
 BEGIN_C_DECLS
 
-struct color_disp_options_t {
-  bool blink;
-  bool acblink;
-  // TO BE IMPLEMENTED
-  //char *full_color;
-  //char *empty_color;
-};
-
-struct txt_disp_options_t {
-  char *full_heart;
-  char *empty_heart;
-};
-
 #if _ZB_MAKING_ZB_COLOR
 #define _ZB_PROGNAME "zbatc"
 #else
@@ -72,6 +59,35 @@ struct txt_disp_options_t {
     _ZB_ERRMSG((format), (__VA_ARGS__)); \
     _ZB_ERRMSG("`   %s:%d:\n", __FILE__, __LINE__); \
   } while(0)
+
+#define _ZB_ERROR(format, ...) \
+  do { \
+    _ZB_ERRMSG("%s:err: ", _ZB_PROGNAME); \
+    _ZB_ERRMSG("%s", "`"); \
+    _ZB_ERRMSG((format), (__VA_ARGS__)); \
+    _ZB_ERRMSG("`   %s:%d:\n", __FILE__, __LINE__); \
+  } while(0)
+
+#define _ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
+
+#if HAVE_LIBBSD
+#include <limits.h>
+#define _ZB_STRTONUM(dst_num, const_string) \
+  do { \
+    if (((dst_num) = strtonum((const_string), INT_MAX, INT_MIN, NULL)) == 0) { \
+      perror(NULL); \
+      exit(EXIT_FAILURE); \
+    } \
+  } while(0)
+#else
+#define _ZB_STRTONUM(dst_num, const_string) \
+  do { \
+    if (((dst_num) = strtoll((const_string), NULL, 10)) == 0) { \
+      perror(NULL); \
+      exit(EXIT_FAILURE); \
+    } \
+  } while(0)
+#endif
 
 END_C_DECLS
 

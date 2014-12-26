@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <unistd.h>
 #include <sys/sysctl.h> /* needs -lc */
 
 #if _ZB_MAKING_ZB_COLOR
@@ -29,6 +28,14 @@ charge()
   sysctlbyname("hw.acpi.battery.life", &batt_charge, &size, NULL, false);
   return (int)(batt_charge / 10);
 }
+
+#if _ZB_MAKING_ZB_COLOR
+inline void
+disp_pwr_info(int blink_thershold, bool blink)
+{
+}
+#endif
+
 
 int
 main()
