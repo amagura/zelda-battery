@@ -14,7 +14,9 @@ AC_C_INLINE
 # Declare some precious variables
 m4_define([PLATFORM], m4_esyscmd([uname -s]))
 m4_define([CPUTYPE], m4_esyscmd([uname -m]))
-m4_define([_TEST], [test x"$1" = x"$2"])
+m4_define([_TEST], [case "$1" in
+           "*BSD") case "$2" in "*BSD") true ;; 
+           "Linux") true ;;
 m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
@@ -26,8 +28,6 @@ AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [FreeBSD
 AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux
 ]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 AM_CONDITIONAL([BSD], _TEST(PLATFORM, [FreeBSD
-]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-AM_CONDITIONAL([BSD], _TEST(PLATFORM, [OpenBSD
 ]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 
 # Check for programs
