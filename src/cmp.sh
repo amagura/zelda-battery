@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-str="$(echo $(../zb-text))"
+str="$(echo $(./zbatt))"
 string="$(echo "$str" | sed -r 's/(.)/\1 /g; s/\s$//')"
 
 full=0
