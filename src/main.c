@@ -66,6 +66,7 @@ main(int argc, char **argv)
 #endif
 
   while ((chara = getopt(argc, argv, shopts)) != EOF) {
+    _ZB_DEBUG("optopt %d:", optopt);
     if (optopt != 0)
       return EXIT_FAILURE;
 
