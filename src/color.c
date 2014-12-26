@@ -18,7 +18,7 @@ limitations under the License.
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "headers/color.h"
+#include "header/color.h"
 
 struct pwr_src_t {
   bool batt;
