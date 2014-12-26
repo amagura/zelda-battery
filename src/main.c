@@ -106,6 +106,9 @@ init()
   }
   free(global_ptr);
 }
+#else
+inline void
+init(){}
 #endif
 
 #if _ZB_MAKING_COLOR
@@ -214,6 +217,8 @@ main(int argc, char **argv)
 #endif
     }
   }
+
+  init();
 
 #if _ZB_MAKING_COLOR
   _ZB_DISP_PWR_INFO(color_opts);
