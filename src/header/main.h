@@ -62,6 +62,8 @@ BEGIN_C_DECLS
 #define _ZB_DEBUG(format, ...)
 #endif
 
+#define _ZB_NULL ""
+
 #define _ZB_ERROR(format, ...) \
   do { \
     fprintf(stderr, "%s:err: ", _ZB_PROGNAME); \

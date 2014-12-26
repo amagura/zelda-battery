@@ -46,33 +46,33 @@ BEGIN_C_DECLS
 
 #include <stdbool.h>
 #include "main.h"
+#include "power.h"
 
 struct color_disp_options_t {
   bool blink;
   bool acblink;
   long long blink_threshold;
+  bool beat;
   /* yet to implement */
   //char *full_color;
   //char *empty_color;
 };
 
-#define _ZB_COLOR_RED "\033[0;31m"
-#define _ZB_COLOR_RED_BLINK "\033[5;31m"
+#define _ZB_COLOR_RED "\033[31m"
+#define _ZB_COLOR_BLINK "\033[5m"
 
-// will eventually rewrite as an inline function
+void disp_pwr_info PARAMS((struct color_disp_options_t, struct power_t));
+
 #define _ZB_DISP_PWR_INFO(opts) \
   do { \
-    if (!(opts).blink) { \
-      printf("%s", _ZB_COLOR_RED); \
-    } else { \
+    printf("%s", _ZB_COLOR_RED); \
+    if ((opts).blink) { \
       if (power.charge <= (opts).blink_threshold) { \
         if (power.source.ac) { \
-          printf("%s", (opts).acblink ? _ZB_COLOR_RED_BLINK : _ZB_COLOR_RED); \
+          printf("%s", (opts).acblink ? _ZB_COLOR_BLINK : _ZB_NULL); \
         } else { \
-          printf("%s", _ZB_COLOR_RED_BLINK); \
+          printf("%s", _ZB_COLOR_BLINK); \
         } \
-      } else { \
-        printf("%s", _ZB_COLOR_RED); \
       } \
     } \
   } while(0)
@@ -82,6 +82,7 @@ struct color_disp_options_t {
     _ZB_ARGMSG("-a\tenable blinking even while on A/C power"); \
     _ZB_ARGMSG("-n\tdisable blinking altogether (overrides previous `-a')"); \
     _ZB_ARGMSG("-b\tset the power-level at which blinking should begin (defaults to `3' as in `30')"); \
+    /*/_ZB_ARGMSG("-H\tenable heart-beat (font face changes from normal to bold and back again)");*/ \
   } while(0)
 
 END_C_DECLS
