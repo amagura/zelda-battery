@@ -1,7 +1,7 @@
 /****
 Copyright 2014 Alexej Magura
 
-This file is a part of Zbat
+This file is a part of ZBatt
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

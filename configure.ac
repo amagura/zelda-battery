@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([Zelda Battery], [1.1], [agm2819@gmail.com])
+AC_INIT([ZBatt], [1.1], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign])
 AC_USE_SYSTEM_EXTENSIONS
