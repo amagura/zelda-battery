@@ -7,7 +7,7 @@ A Legend of Zelda like health-bar battery meter for the command-line
 
 * Mac OS X (work in progress)
 * Linux
-* FreeBSD (works, but option parsing causes program to exit non-zero)
+* FreeBSD
 
 
 ## Building
