@@ -62,6 +62,10 @@ BEGIN_C_DECLS
 #define _ZB_DEBUG(format, ...)
 #endif
 
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION ""
+#endif
+
 #define _ZB_NULL ""
 
 #define _ZB_ERROR(format, ...) \
