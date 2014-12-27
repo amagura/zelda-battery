@@ -14,3 +14,4 @@ script:
   - make
 after_success:
   - make check
+  - ./zbatc; ./zbatt -f '+' -e '-'
