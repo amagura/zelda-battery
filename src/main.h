@@ -50,7 +50,7 @@ BEGIN_C_DECLS
 #define _ZB_PROGNAME "zbatt"
 #endif
 
-#if 1
+#if 0
 #define _ZB_DEBUG(format, ...) \
   do { \
     fprintf(stderr, "%s:dbg: ", _ZB_PROGNAME); \

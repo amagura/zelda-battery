@@ -38,7 +38,7 @@ disp_pwr_info(struct txt_disp_options_t opts, struct power_t power)
     printf("%s", opts.full_heart);
   }
   for (; power.charge.truncated < 10; ++power.charge.truncated) {
-    printf("%s", opts.full_heart);
+    printf("%s", opts.empty_heart);
   }
 }
 
@@ -90,6 +90,7 @@ opt_parse(int argc, char **argv)
         break;
     }
   }
+  return txt_opts;
 }
 
 int

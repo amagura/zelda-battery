@@ -17,6 +17,7 @@ limitations under the License.
 ****/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include "main.h"
 #include "power.h"
