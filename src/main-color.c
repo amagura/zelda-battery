@@ -40,7 +40,7 @@ struct color_disp_options_t {
   //char *empty_color;
 };
 
-inline void
+static inline void
 disp_pwr_info(struct color_disp_options_t opts, struct power_t power)
 {
   printf("%s", _ZB_COLOR_RED);
@@ -54,7 +54,7 @@ disp_pwr_info(struct color_disp_options_t opts, struct power_t power)
   }
 }
 
-inline struct color_disp_options_t
+static inline struct color_disp_options_t
 opt_parse(int argc, char **argv)
 {
   int chara = 0;

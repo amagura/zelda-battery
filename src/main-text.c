@@ -31,7 +31,7 @@ struct txt_disp_options_t {
   char *empty_heart;
 };
 
-inline void
+static inline void
 disp_pwr_info(struct txt_disp_options_t opts, struct power_t power)
 {
   for (int idx = 1; idx <= power.charge.truncated; ++idx) {
@@ -42,7 +42,7 @@ disp_pwr_info(struct txt_disp_options_t opts, struct power_t power)
   }
 }
 
-inline struct txt_disp_options_t
+static inline struct txt_disp_options_t
 opt_parse(int argc, char **argv)
 {
   int chara = 0; // character storage for getopt
