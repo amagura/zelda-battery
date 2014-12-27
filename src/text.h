@@ -46,11 +46,6 @@ BEGIN_C_DECLS
 
 #include "main.h"
 
-struct txt_disp_options_t {
-  char *full_heart;
-  char *empty_heart;
-};
-
 #define _ZB_DISP_PWR_INFO(opts) \
   do { \
     for (int hdx = 1; hdx <= power.charge; ++hdx) { \

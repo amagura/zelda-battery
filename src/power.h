@@ -1,7 +1,7 @@
 /****
 Copyright 2014 Alexej Magura
 
-This file is a part of Zelda Battery
+This file is a part of Zbat
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,75 +44,24 @@ the end of C declarations. */
 
 BEGIN_C_DECLS
 
+#include <stdbool.h>
+
 struct pwr_src_t {
   bool batt;
   bool ac;
 };
 
+struct pwr_lvl_t {
+  int truncated;
+  int raw;
+};
+
 struct power_t {
-  int charge;
+  struct pwr_lvl_t charge;
   struct pwr_src_t source;
 };
 
-#if _ZB_UNIX_BSD
-#define _ZB_INIT() \
-  do { \
-    size_t size; \
-    int ac_line; \
-    size = sizeof(int); \
-    _ZB_DEBUG("%s\n", "getting hw.acpi.acline"); \
-    sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false); \
-    power.source.ac = (bool)ac_line; \
-    power.source.batt = !power.source.ac; \
-    _ZB_DEBUG("%s\n", "getting hw.acpi.battery.life"); \
-    sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false); \
-    power.charge = (int)(ac_line / 10); \
-  } while(0)
-#elif _ZB_UNIX_LINUX
-#define _ZB_INIT() \
-  do { \
-    power.charge = 10; \
-    bool ac_support = false; \
-    bool batt_support = false; \
-    \
-    global_t *global = malloc(sizeof(global_t)); \
-    battery_t *binfo = NULL; \
-    adapter_t *ac = &global->adapt; \
-    \
-    if (check_acpi_support() == -1) { /* if no acpi support */ \
-      _ZB_ERROR("%s\n", "no libacpi: acpi support required"); \
-      exit(EXIT_FAILURE); \
-    } \
-    ac_support = init_acpi_acadapt(global); \
-    batt_support = init_acpi_batt(global); \
-    \
-    if (ac_support == SUCCESS) { \
-      if (ac->ac_state == P_AC) { \
-        power.source.ac = true; \
-        power.source.batt = !power.source.ac; \
-      } else if (ac->ac_state == P_BATT) { \
-        power.source.batt = true; \
-        power.source.ac = !power.source.batt; \
-      } \
-    } \
-    \
-    if (batt_support == SUCCESS) { \
-      int idx = 0; \
-      do { \
-        binfo = &batteries[idx]; \
-        read_acpi_batt(idx); /* read current battery information */ \
-        \
-        if (binfo->present) { \
-          /* XXX (int) here truncates stuff like `9.5' from `95 / 10' to `9' */ \
-          power.charge = (int)(binfo->percentage / 10); \
-        } else { \
-          continue; \
-        } \
-      } while(++idx < global->batt_count); \
-    } \
-    free(global); \
-  } while(0)
-#endif
+struct power_t init PARAMS(());
 
 END_C_DECLS
 

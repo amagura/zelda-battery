@@ -18,47 +18,52 @@ limitations under the License.
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "header/main.h"
-#if _ZB_MAKING_COLOR
-#include "header/color.h"
-#else
-#include "header/text.h"
+#include "main.h"
+#include "power.h"
+
+#if _ZB_UNIX_BSD
+#include <getopt.h>
+#elif _ZB_UNIX_LINUX
+#include <unistd.h>
 #endif
-#include "header/power.h"
 
-// I may make the linux and bsd sources (more or less) compatible
-// since `sysctl' is also present in Linux
-// and the `sysctl' code is smaller (code-wise, need to look at asm) than
-// the raw `acpi' lib code
+#define _ZB_COLOR_RED "\033[31m"
+#define _ZB_COLOR_BLINK "\033[5m"
+#define _ZB_COLOR_BOLD "\033[1m"
 
+struct color_disp_options_t {
+  bool blink;
+  bool acblink;
+  long long blink_threshold;
+  //bool beat;
+  //char *full_color;
+  //char *empty_color;
+};
 
+inline void
+disp_pwr_info(struct color_disp_options_t opts, struct power_t power)
+{
+  printf("%s", _ZB_COLOR_RED);
+  if (opts.blink) {
+    if (power.charge.raw <= opts.blink_threshold) {
+      if (power.source.ac)
+        printf("%s", opts.acblink ? _ZB_COLOR_BLINK : "");
+      else
+        printf("%s", _ZB_COLOR_BLINK);
+    }
+  }
+}
 
-#if _ZB_MAKING_COLOR
 inline struct color_disp_options_t
-#else
-inline struct txt_disp_options_t
-#endif
 opt_parse(int argc, char **argv)
 {
-  int chara = 0; // character storage for getopt
+  int chara = 0;
 
-#if _ZB_MAKING_COLOR
   struct color_disp_options_t color_opts;
   color_opts.acblink = false;
   color_opts.blink = true;
   color_opts.blink_threshold = 3;
   const char *shopts = "hvHanb:";
-#else
-  struct txt_disp_options_t txt_opts;
-  const char *shopts = "hvf:e:";
-#if _ZB_UNIX_BSD
-  txt_opts.full_heart = "+";
-  txt_opts.empty_heart = "-";
-#else
-  txt_opts.full_heart = "\u2665";
-  txt_opts.empty_heart = "\u2661";
-#endif
-#endif
 
 #if _ZB_UNIX_BSD
   int *opt_counter = 0;
@@ -81,21 +86,16 @@ opt_parse(int argc, char **argv)
     switch(chara) {
       case 'h':
         _ZB_MSG("Usage: %s [OPTION]...\n", _ZB_PROGNAME);
-#if _ZB_MAKING_COLOR
         _ZB_ARGMSG("-h\tprint this message and exit");
         _ZB_ARGMSG("-v\tprint program version and exit");
-#else
-        _ZB_ARGMSG("-h\t\tprint this message and exit");
-        _ZB_ARGMSG("-v\t\tprint program version and exit");
-#endif
-        _ZB_DISP_HELP();
+        _ZB_ARGMSG("-a\tenable blinking even while on A/C power (overrides previous `-n')");
+        _ZB_ARGMSG("-n\tdisable blinking altogether (overrides prevous `-a')");
+        _ZB_ARGMSG("-b\tset the power-level at which blinking ensues (defaults to `30')");
         exit(EXIT_FAILURE);
-      case 'v':
-        _ZB_MSG("%s", PACKAGE_VERSION);
-        exit(EXIT_FAILURE);
-#if _ZB_MAKING_COLOR
       case 'b':
         _ZB_STRTONUM(color_opts.blink_threshold, (const char *)optarg);
+        if (color_opts.blink_threshold > 99)
+          color_opts.blink_threshold = 100;
         break;
       case 'a':
         color_opts.acblink = true;
@@ -103,30 +103,17 @@ opt_parse(int argc, char **argv)
       case 'n':
         color_opts.blink = false;
         break;
-#else
-      case 'e':
-        txt_opts.empty_heart = optarg;
-        break;
-      case 'f':
-        txt_opts.full_heart = optarg;
-        break;
-#endif
     }
   }
+  return color_opts;
+}
 
 int
 main(int argc, char **argv)
 {
-  int chara = 0; // character storage
-
-
-  struct power_t power;
-  _ZB_INIT();
-
-#if _ZB_MAKING_COLOR
-  _ZB_DISP_PWR_INFO(color_opts);
-#else
-  _ZB_DISP_PWR_INFO(txt_opts);
-#endif
+  struct power_t power = init();
+  struct color_disp_options_t color_opts = opt_parse(argc, argv);
+  disp_pwr_info(color_opts, power);
   return EXIT_SUCCESS;
 }
+
