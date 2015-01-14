@@ -29,6 +29,8 @@ limitations under the License.
 # define PARAMS(protos) ()
 #endif
 
+#include <errno.h>
+
 /** Macros - BEGIN **/
 #if ZB_MAKING_ZB_COLOR
 #define ZB_PROGNAME "zbatc"
@@ -69,7 +71,9 @@ limitations under the License.
 #include <bsd/stdlib.h>
 #define ZB_STRTONUM(dst_num, const_string) \
   do { \
-    if (((dst_num) = strtonum((const_string), INT_MIN, INT_MAX, NULL)) == 0) { \
+    errno = 0; \
+    ((dst_num) = strtonum((const_string), INT_MIN, INT_MAX, NULL)); \
+    if (errno != 0) { \
       perror(NULL); \
       exit(EXIT_FAILURE); \
     } \
@@ -77,16 +81,14 @@ limitations under the License.
 #else
 #define ZB_STRTONUM(dst_num, const_string) \
   do { \
-    if (((dst_num) = strtoll((const_string), NULL, 10)) == 0) { \
-      perror(NULL); \
+    errno = 0; \
+    ((dst_num) = strtol((const_string), NULL, 10)); \
+    if (errno != 0) { \
+      perror(ZB_PROGNAME); \
       exit(EXIT_FAILURE); \
     } \
   } while(0)
 #endif
 /** Macros - END **/
-
-#if ZB_LINUX
-int battnum PARAMS((int *n));
-#endif
 
 #endif /* ZB_MAIN_H_GUARD */

@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatc zbatt
-zbatc_SOURCES = main-color.c power.c
-zbatt_SOURCES = main-text.c power.c
+zbatc_SOURCES = main-color.c power.c main.c
+zbatt_SOURCES = main-text.c power.c main.c
 
 AM_CFLAGS = -O2 -Wall -g -ggdb
 

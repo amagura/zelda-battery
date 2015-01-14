@@ -32,7 +32,7 @@ limitations under the License.
 struct color_disp_options {
   bool blink;
   bool acblink;
-  long long blink_threshold;
+  int blink_threshold;
   char *color;
 };
 

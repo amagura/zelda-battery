@@ -29,7 +29,9 @@ limitations under the License.
 # define PARAMS(protos) ()
 #endif
 
+#ifndef _Bool
 #include <stdbool.h>
+#endif
 
 struct pwr_src {
   bool batt;
