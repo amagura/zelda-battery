@@ -20,13 +20,13 @@ limitations under the License.
 #include "main.h"
 #include "power.h"
 
-#if ZB_UNIX_BSD
+#if ZB_BSD
 #include <getopt.h>
-#elif ZB_UNIX_LINUX
+#elif ZB_LINUX
 #include <unistd.h>
 #endif
 
-struct txt_disp_options_t {
+struct txt_disp_options {
   char *full_heart;
   char *empty_heart;
   bool remaining;
@@ -34,7 +34,7 @@ struct txt_disp_options_t {
 };
 
 static inline void
-disp_pwr_info(struct txt_disp_options_t opts, struct power_t power)
+disp_pwr_info(struct txt_disp_options opts, struct power power)
 {
   if (opts.remaining || !opts.expended) {
     for (int idx = 10; idx <= power.charge.raw; idx += 10)
@@ -46,41 +46,42 @@ disp_pwr_info(struct txt_disp_options_t opts, struct power_t power)
   }
 }
 
-static inline struct txt_disp_options_t
+static inline struct txt_disp_options
 opt_parse(int argc, char **argv)
 {
-  int chara = 0; // character storage for getopt
-  struct txt_disp_options_t txt_opts;
+  int c = 0; // ccter storage for getopt
+  struct txt_disp_options txt_opts;
   txt_opts.remaining = false;
   txt_opts.expended = false;
   const char *shopts = "hvf:e:pm";
 
-#if ZB_UNIX_BSD
+#if ZB_BSD
   txt_opts.full_heart = "+";
   txt_opts.empty_heart = "-";
 #else
   txt_opts.full_heart = "\u2665";
   txt_opts.empty_heart = "\u2661";
 #endif
-#if ZB_UNIX_BSD
+
+#if ZB_BSD
   int *opt_counter = 0;
 
   struct option lopts[] = {
     { 0, 0, 0, 0 }
   };
 
-  while ((chara = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
+  while ((c = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
 #else
-#if !ZB_UNIX_LINUX
+#if !ZB_LINUX
 #include <unistd.h>
 #endif
-  while ((chara = getopt(argc, argv, shopts)) != EOF) {
+  while ((c = getopt(argc, argv, shopts)) != EOF) {
 #endif
     ZB_DEBUG("optopt %d:", optopt);
     if (optopt != 0)
       exit(EXIT_FAILURE);
 
-    switch(chara) {
+    switch(c) {
       case 'h':
         ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
         ZB_ARGMSG("-h\t\tprint this message and exit");
@@ -116,8 +117,8 @@ opt_parse(int argc, char **argv)
 int
 main(int argc, char **argv)
 {
-  struct power_t power = init();
-  struct txt_disp_options_t txt_opts = opt_parse(argc, argv);
+  struct txt_disp_options txt_opts = opt_parse(argc, argv);
+  struct power power = init();
   disp_pwr_info(txt_opts, power);
   return EXIT_SUCCESS;
 }

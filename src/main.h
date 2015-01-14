@@ -29,6 +29,7 @@ limitations under the License.
 # define PARAMS(protos) ()
 #endif
 
+/** Macros - BEGIN **/
 #if ZB_MAKING_ZB_COLOR
 #define ZB_PROGNAME "zbatc"
 #else
@@ -56,9 +57,8 @@ limitations under the License.
 #define ZB_ERROR(format, ...) \
   do { \
     fprintf(stderr, "%s:err: ", ZB_PROGNAME); \
-    fprintf(stderr, "%s", "`"); \
-    fprintf(stderr, (format), (__VA_ARGS__)); \
-    fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
+    fprintf(stderr, (format), __VA_ARGS__); \
+    fprintf(stderr, "in %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
   } while(0)
 
 #define ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
@@ -69,7 +69,7 @@ limitations under the License.
 #include <bsd/stdlib.h>
 #define ZB_STRTONUM(dst_num, const_string) \
   do { \
-    if (((dst_num) = strtonum((const_string), INT_MAX, INT_MIN, NULL)) == 0) { \
+    if (((dst_num) = strtonum((const_string), INT_MIN, INT_MAX, NULL)) == 0) { \
       perror(NULL); \
       exit(EXIT_FAILURE); \
     } \
@@ -82,6 +82,11 @@ limitations under the License.
       exit(EXIT_FAILURE); \
     } \
   } while(0)
+#endif
+/** Macros - END **/
+
+#if ZB_LINUX
+int battnum PARAMS((int *n));
 #endif
 
 #endif /* ZB_MAIN_H_GUARD */

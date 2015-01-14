@@ -31,21 +31,21 @@ limitations under the License.
 
 #include <stdbool.h>
 
-struct pwr_src_t {
+struct pwr_src {
   bool batt;
   bool ac;
 };
 
-struct pwr_lvl_t {
+struct pwr_lvl {
   int truncated;
   int raw;
 };
 
-struct power_t {
-  struct pwr_lvl_t charge;
-  struct pwr_src_t source;
+struct power {
+  struct pwr_lvl charge;
+  struct pwr_src source;
 };
 
-struct power_t init PARAMS(());
+struct power init PARAMS(());
 
 #endif /* ZB_POWER_H_GUARD */

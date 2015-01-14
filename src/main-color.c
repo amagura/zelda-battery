@@ -21,15 +21,15 @@ limitations under the License.
 #include "main.h"
 #include "power.h"
 
-#if ZB_UNIX_BSD
+#if ZB_BSD
 #include <getopt.h>
-#elif ZB_UNIX_LINUX
+#elif ZB_LINUX
 #include <unistd.h>
 #endif
 
 #define ZB_COLOR_BLINK "\033[5m"
 
-struct color_disp_options_t {
+struct color_disp_options {
   bool blink;
   bool acblink;
   long long blink_threshold;
@@ -37,7 +37,7 @@ struct color_disp_options_t {
 };
 
 static inline void
-disp_pwr_info(struct color_disp_options_t opts, struct power_t power)
+disp_pwr_info(struct color_disp_options opts, struct power power)
 {
   printf("\033[%sm", opts.color);
   if (opts.blink) {
@@ -50,37 +50,37 @@ disp_pwr_info(struct color_disp_options_t opts, struct power_t power)
   }
 }
 
-static inline struct color_disp_options_t
+static inline struct color_disp_options
 opt_parse(int argc, char **argv)
 {
-  int chara = 0;
+  int c = 0;
 
-  struct color_disp_options_t color_opts;
+  struct color_disp_options color_opts;
   color_opts.acblink = false;
   color_opts.blink = true;
   color_opts.blink_threshold = 3;
   color_opts.color = "31";
   const char *shopts = "hvHanb:c:";
 
-#if ZB_UNIX_BSD
+#if ZB_BSD
   int *opt_counter = 0;
 
   struct option lopts[] = {
     { 0, 0, 0, 0 }
   };
 
-  while ((chara = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
+  while ((c = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
 #else
-#if !ZB_UNIX_LINUX
+#if !ZB_LINUX
 #include <unistd.h>
 #endif
-  while ((chara = getopt(argc, argv, shopts)) != EOF) {
+  while ((c = getopt(argc, argv, shopts)) != EOF) {
 #endif
     ZB_DEBUG("optopt %d:", optopt);
     if (optopt != 0)
       exit(EXIT_FAILURE);
 
-    switch(chara) {
+    switch(c) {
       case 'h':
         ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
         ZB_ARGMSG("-h\tprint this message and exit");
@@ -115,8 +115,8 @@ opt_parse(int argc, char **argv)
 int
 main(int argc, char **argv)
 {
-  struct power_t power = init();
-  struct color_disp_options_t color_opts = opt_parse(argc, argv);
+  struct color_disp_options color_opts = opt_parse(argc, argv);
+  struct power power = init();
   disp_pwr_info(color_opts, power);
   return EXIT_SUCCESS;
 }

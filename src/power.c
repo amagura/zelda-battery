@@ -22,18 +22,18 @@ limitations under the License.
 #include "main.h"
 #include "power.h"
 
-#if ZB_UNIX_BSD
+#if ZB_BSD
 #include <sys/sysctl.h>
-#elif ZB_UNIX_LINUX
+#elif ZB_LINUX
 #include <malloc.h>
 #include <libacpi.h>
 #endif
 
-struct power_t
+struct power
 init()
 {
-  struct power_t power;
-#if ZB_UNIX_BSD
+  struct power power;
+#if ZB_BSD
   size_t size;
   int ac_line;
   size = sizeof(int);
@@ -47,7 +47,7 @@ init()
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
-#elif ZB_UNIX_LINUX
+#elif ZB_LINUX
   bool ac_support = false;
   bool batt_support = false;
 

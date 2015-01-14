@@ -4,14 +4,14 @@ bin_PROGRAMS = zbatc zbatt
 zbatc_SOURCES = main-color.c power.c
 zbatt_SOURCES = main-text.c power.c
 
-AM_CFLAGS = -O2 -Wall
+AM_CFLAGS = -O2 -Wall -g -ggdb
 
 if LINUX
-AM_CFLAGS += -DZB_UNIX_LINUX=1
+AM_CFLAGS += -DZB_LINUX=1
 endif
 
 if BSD
-AM_CFLAGS += -DZB_UNIX_BSD=1
+AM_CFLAGS += -DZB_BSD=1
 endif
 
 if NATIVE
@@ -34,14 +34,18 @@ move-local: $(bin_PROGRAMS)
 
 clean-local: tidy-local
 
-asm-local: zbatt.s zbatc.s
+asm: zbatt.s zbatc.s
 
 lint:
-	$(foreach f,$(zbatt_SOURCES) $(zbatc_SOURCES),cppcheck --enable=all $(f); echo;)
+	for f in $(zbatt_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
 
 valgrind: $(bin_PROGRAMS)
 	valgrind --leak-check=full ./zbatc -c '0'; echo ---------
 	valgrind --leak-check=full ./zbatt -f '+' -e '-'
+
+expand:
+	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -nostdinc -E $(zbatt_SOURCES)
+	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -nostdinc -E $(zbatc_SOURCES)
 
 check-local:
 	csi -qn test.scm
