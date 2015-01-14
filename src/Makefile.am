@@ -36,7 +36,7 @@ clean-local: tidy-local
 asm-local: zbatt.s zbatc.s
 
 check-local:
-	./cmp.sh
+	csi -qn test.scm
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
