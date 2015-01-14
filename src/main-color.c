@@ -27,23 +27,19 @@ limitations under the License.
 #include <unistd.h>
 #endif
 
-#define _ZB_COLOR_RED "\033[31m"
 #define _ZB_COLOR_BLINK "\033[5m"
-#define _ZB_COLOR_BOLD "\033[1m"
 
 struct color_disp_options_t {
   bool blink;
   bool acblink;
   long long blink_threshold;
-  //bool beat;
-  //char *full_color;
-  //char *empty_color;
+  char *color;
 };
 
 static inline void
 disp_pwr_info(struct color_disp_options_t opts, struct power_t power)
 {
-  printf("%s", _ZB_COLOR_RED);
+  printf("\033[%sm", opts.color);
   if (opts.blink) {
     if (power.charge.raw <= opts.blink_threshold) {
       if (power.source.ac)
@@ -63,7 +59,8 @@ opt_parse(int argc, char **argv)
   color_opts.acblink = false;
   color_opts.blink = true;
   color_opts.blink_threshold = 3;
-  const char *shopts = "hvHanb:";
+  color_opts.color = "31";
+  const char *shopts = "hvHanb:c:";
 
 #if _ZB_UNIX_BSD
   int *opt_counter = 0;
@@ -71,7 +68,7 @@ opt_parse(int argc, char **argv)
   struct option lopts[] = {
     { 0, 0, 0, 0 }
   };
-  
+
   while ((chara = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
 #else
 #if !_ZB_UNIX_LINUX
@@ -91,6 +88,7 @@ opt_parse(int argc, char **argv)
         _ZB_ARGMSG("-a\tenable blinking even while on A/C power (overrides previous `-n')");
         _ZB_ARGMSG("-n\tdisable blinking altogether (overrides prevous `-a')");
         _ZB_ARGMSG("-b\tset the power-level at which blinking ensues (defaults to `30')");
+        _ZB_ARGMSG("-c <arg> \tansi color code to use (defaults to `31')");
         exit(EXIT_FAILURE);
       case 'b':
         _ZB_STRTONUM(color_opts.blink_threshold, (const char *)optarg);
@@ -102,6 +100,9 @@ opt_parse(int argc, char **argv)
         break;
       case 'n':
         color_opts.blink = false;
+        break;
+      case 'c':
+        color_opts.color = optarg;
         break;
     }
   }
