@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([ZBatt], [1.1], [agm2819@gmail.com])
+AC_INIT([ZBatt], [1.2], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign])
 AC_USE_SYSTEM_EXTENSIONS
@@ -16,7 +16,7 @@ m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
 m4_define([CPUTYPE], rm_newline(m4_esyscmd([uname -m])))
-m4_define([_TEST], m4_if("$2", [BSD], 
+m4_define([_TEST], m4_if("$2", [BSD],
           m4_if(PLATFORM, [FreeBSD
 ], [test x"$1" = x"$1"], [test x"$1" = ""]),
 [test x"$1" = x"$2"]))
