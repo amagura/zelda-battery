@@ -17,19 +17,6 @@ limitations under the License.
 ****/
 #ifndef ZB_MAIN_H_GUARD
 #define ZB_MAIN_H_GUARD 1
-/* BEGIN_C_DECLS should be used at the beginning of your declarations,
-so that C++ compilers don't mangle their names.  Use END_C_DECLS at
-the end of C declarations. */
-#undef BEGIN_C_DECLS
-#undef END_C_DECLS
-#ifdef __cplusplus
-# define BEGIN_C_DECLS extern "C" {
-# define END_C_DECLS }
-#else
-# define BEGIN_C_DECLS /* empty */
-# define END_C_DECLS /* empty */
-#endif
-
 /* PARAMS is a macro used to wrap function prototypes, so that
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
@@ -42,47 +29,45 @@ the end of C declarations. */
 # define PARAMS(protos) ()
 #endif
 
-BEGIN_C_DECLS
-
-#if _ZB_MAKING_ZB_COLOR
-#define _ZB_PROGNAME "zbatc"
+#if ZB_MAKING_ZB_COLOR
+#define ZB_PROGNAME "zbatc"
 #else
-#define _ZB_PROGNAME "zbatt"
+#define ZB_PROGNAME "zbatt"
 #endif
 
 #if 0
-#define _ZB_DEBUG(format, ...) \
+#define ZB_DEBUG(format, ...) \
   do { \
-    fprintf(stderr, "%s:dbg: ", _ZB_PROGNAME); \
+    fprintf(stderr, "%s:dbg: ", ZB_PROGNAME); \
     fprintf(stderr, "%s", "`"); \
     fprintf(stderr, (format), (__VA_ARGS__)); \
     fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
   } while(0)
 #else
-#define _ZB_DEBUG(format, ...)
+#define ZB_DEBUG(format, ...)
 #endif
 
 #ifndef PACKAGE_VERSION
 #define PACKAGE_VERSION ""
 #endif
 
-#define _ZB_NULL ""
+#define ZB_NULL ""
 
-#define _ZB_ERROR(format, ...) \
+#define ZB_ERROR(format, ...) \
   do { \
-    fprintf(stderr, "%s:err: ", _ZB_PROGNAME); \
+    fprintf(stderr, "%s:err: ", ZB_PROGNAME); \
     fprintf(stderr, "%s", "`"); \
     fprintf(stderr, (format), (__VA_ARGS__)); \
     fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
   } while(0)
 
-#define _ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
-#define _ZB_ARGMSG(...) printf("  %s\n", (__VA_ARGS__));
+#define ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
+#define ZB_ARGMSG(...) printf("  %s\n", (__VA_ARGS__));
 
 #if HAVE_LIBBSD
 #include <limits.h>
 #include <bsd/stdlib.h>
-#define _ZB_STRTONUM(dst_num, const_string) \
+#define ZB_STRTONUM(dst_num, const_string) \
   do { \
     if (((dst_num) = strtonum((const_string), INT_MAX, INT_MIN, NULL)) == 0) { \
       perror(NULL); \
@@ -90,7 +75,7 @@ BEGIN_C_DECLS
     } \
   } while(0)
 #else
-#define _ZB_STRTONUM(dst_num, const_string) \
+#define ZB_STRTONUM(dst_num, const_string) \
   do { \
     if (((dst_num) = strtoll((const_string), NULL, 10)) == 0) { \
       perror(NULL); \
@@ -98,7 +83,5 @@ BEGIN_C_DECLS
     } \
   } while(0)
 #endif
-
-END_C_DECLS
 
 #endif /* ZB_MAIN_H_GUARD */

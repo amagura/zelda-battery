@@ -20,25 +20,29 @@ limitations under the License.
 #include "main.h"
 #include "power.h"
 
-#if _ZB_UNIX_BSD
+#if ZB_UNIX_BSD
 #include <getopt.h>
-#elif _ZB_UNIX_LINUX
+#elif ZB_UNIX_LINUX
 #include <unistd.h>
 #endif
 
 struct txt_disp_options_t {
   char *full_heart;
   char *empty_heart;
+  bool remaining;
+  bool expended;
 };
 
 static inline void
 disp_pwr_info(struct txt_disp_options_t opts, struct power_t power)
 {
-  for (int idx = 1; idx <= power.charge.truncated; ++idx) {
-    printf("%s", opts.full_heart);
+  if (opts.remaining || !opts.expended) {
+    for (int idx = 10; idx <= power.charge.raw; idx += 10)
+      printf("%s", opts.full_heart);
   }
-  for (; power.charge.truncated < 10; ++power.charge.truncated) {
-    printf("%s", opts.empty_heart);
+  if (opts.expended || !opts.remaining) {
+    for (; power.charge.raw < 100; power.charge.raw += 10)
+      printf("%s", opts.empty_heart);
   }
 }
 
@@ -47,16 +51,18 @@ opt_parse(int argc, char **argv)
 {
   int chara = 0; // character storage for getopt
   struct txt_disp_options_t txt_opts;
-  const char *shopts = "hvf:e:";
+  txt_opts.remaining = false;
+  txt_opts.expended = false;
+  const char *shopts = "hvf:e:pm";
 
-#if _ZB_UNIX_BSD
+#if ZB_UNIX_BSD
   txt_opts.full_heart = "+";
   txt_opts.empty_heart = "-";
 #else
   txt_opts.full_heart = "\u2665";
   txt_opts.empty_heart = "\u2661";
 #endif
-#if _ZB_UNIX_BSD
+#if ZB_UNIX_BSD
   int *opt_counter = 0;
 
   struct option lopts[] = {
@@ -65,28 +71,42 @@ opt_parse(int argc, char **argv)
 
   while ((chara = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
 #else
-#if !_ZB_UNIX_LINUX
+#if !ZB_UNIX_LINUX
 #include <unistd.h>
 #endif
   while ((chara = getopt(argc, argv, shopts)) != EOF) {
 #endif
-    _ZB_DEBUG("optopt %d:", optopt);
+    ZB_DEBUG("optopt %d:", optopt);
     if (optopt != 0)
       exit(EXIT_FAILURE);
 
     switch(chara) {
       case 'h':
-        _ZB_MSG("Usage: %s [OPTION]...\n", _ZB_PROGNAME);
-        _ZB_ARGMSG("-h\t\tprint this message and exit");
-        _ZB_ARGMSG("-v\t\tprint program version and exit");
-        _ZB_ARGMSG("-f <arg> \tthe string representing remaining battery power");
-        _ZB_ARGMSG("-e <arg> \tthe string representing expended battery power");
+        ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
+        ZB_ARGMSG("-h\t\tprint this message and exit");
+        ZB_ARGMSG("-v\t\tprint program version and exit");
+        ZB_ARGMSG("-f <arg> \tthe string representing remaining battery power");
+        ZB_ARGMSG("-e <arg> \tthe string representing expended battery power");
+        ZB_ARGMSG("-p\t\tonly print remaining power");
+        ZB_ARGMSG("-m\t\tonly print expended power");
         exit(EXIT_FAILURE);
       case 'e':
         txt_opts.empty_heart = optarg;
         break;
       case 'f':
         txt_opts.full_heart = optarg;
+        break;
+      case 'p':
+        txt_opts.remaining = true;
+        txt_opts.expended = false;
+        break;
+      case 'm':
+        txt_opts.expended = true;
+        txt_opts.remaining = false;
+        break;
+      case 'v':
+        printf("%s\n", PACKAGE_VERSION);
+        exit(EXIT_SUCCESS);
         break;
     }
   }

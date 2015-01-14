@@ -22,9 +22,9 @@ limitations under the License.
 #include "main.h"
 #include "power.h"
 
-#if _ZB_UNIX_BSD
+#if ZB_UNIX_BSD
 #include <sys/sysctl.h>
-#elif _ZB_UNIX_LINUX
+#elif ZB_UNIX_LINUX
 #include <malloc.h>
 #include <libacpi.h>
 #endif
@@ -33,21 +33,21 @@ struct power_t
 init()
 {
   struct power_t power;
-#if _ZB_UNIX_BSD
+#if ZB_UNIX_BSD
   size_t size;
   int ac_line;
   size = sizeof(int);
   /* determine if we're running on battery or ac power */
-  _ZB_DEBUG("%s\n", "getting hw.acpi.acline"); \
+  ZB_DEBUG("%s\n", "getting hw.acpi.acline"); \
   sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
   power.source.ac = (bool)ac_line;
   power.source.batt = !power.source.ac;
   /* determine how much battery power is left */
-  _ZB_DEBUG("%s\n", "getting hw.acpi.battery.life"); \
+  ZB_DEBUG("%s\n", "getting hw.acpi.battery.life"); \
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
-#elif _ZB_UNIX_LINUX
+#elif ZB_UNIX_LINUX
   bool ac_support = false;
   bool batt_support = false;
 
@@ -56,7 +56,7 @@ init()
   adapter_t *ac = &global->adapt;
 
   if (check_acpi_support() == -1) { /* if no acpi support */
-    _ZB_ERROR("%s\n", "no libacpi: acpi support required");
+    ZB_ERROR("%s\n", "no libacpi: acpi support required");
     exit(EXIT_FAILURE);
   }
   ac_support = init_acpi_acadapt(global);

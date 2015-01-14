@@ -17,19 +17,6 @@ limitations under the License.
 ****/
 #ifndef ZB_POWER_H_GUARD
 #define ZB_POWER_H_GUARD 1
-/* BEGIN_C_DECLS should be used at the beginning of your declarations,
-so that C++ compilers don't mangle their names.  Use END_C_DECLS at
-the end of C declarations. */
-#undef BEGIN_C_DECLS
-#undef END_C_DECLS
-#ifdef __cplusplus
-# define BEGIN_C_DECLS extern "C" {
-# define END_C_DECLS }
-#else
-# define BEGIN_C_DECLS /* empty */
-# define END_C_DECLS /* empty */
-#endif
-
 /* PARAMS is a macro used to wrap function prototypes, so that
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
@@ -41,8 +28,6 @@ the end of C declarations. */
 #else
 # define PARAMS(protos) ()
 #endif
-
-BEGIN_C_DECLS
 
 #include <stdbool.h>
 
@@ -62,7 +47,5 @@ struct power_t {
 };
 
 struct power_t init PARAMS(());
-
-END_C_DECLS
 
 #endif /* ZB_POWER_H_GUARD */

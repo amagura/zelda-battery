@@ -7,11 +7,11 @@ zbatt_SOURCES = main-text.c power.c
 AM_CFLAGS = -O2 -Wall
 
 if LINUX
-AM_CFLAGS += -D_ZB_UNIX_LINUX=1
+AM_CFLAGS += -DZB_UNIX_LINUX=1
 endif
 
 if BSD
-AM_CFLAGS += -D_ZB_UNIX_BSD=1
+AM_CFLAGS += -DZB_UNIX_BSD=1
 endif
 
 if NATIVE
@@ -26,6 +26,7 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
+.PHONY: valgrind lint
 all-local:
 
 move-local: $(bin_PROGRAMS)
@@ -34,6 +35,13 @@ move-local: $(bin_PROGRAMS)
 clean-local: tidy-local
 
 asm-local: zbatt.s zbatc.s
+
+lint:
+	$(foreach f,$(zbatt_SOURCES) $(zbatc_SOURCES),cppcheck --enable=all $(f); echo;)
+
+valgrind: $(bin_PROGRAMS)
+	valgrind --leak-check=full ./zbatc -c '0'; echo ---------
+	valgrind --leak-check=full ./zbatt -f '+' -e '-'
 
 check-local:
 	csi -qn test.scm
