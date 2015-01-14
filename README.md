@@ -7,7 +7,7 @@ A Legend of Zelda like health-bar battery meter for the command-line
 
 * Mac OS X (work in progress)
 * Linux
-* FreeBSD (works, but option parsing causes program to exit non-zero)
+* FreeBSD
 
 
 ## Building
@@ -18,7 +18,7 @@ A Legend of Zelda like health-bar battery meter for the command-line
 __Note__ that `./configure` can take an `--enable-ac-blink` option, which is disabled by default.  Enabling this will cause Zelda Battery to blink on low battery _even_ when your computer is plugged into an AC power supply.
 
 ## Installing
-Just place `zbl` (zelda-blink) and `zba` (zelda-battery) where ever you want them and add the appropriate stuff to your terminal prompt.
+Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want them and add the appropriate stuff to your terminal prompt.
 
 ### Zsh
 ```bash

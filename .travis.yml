@@ -1,6 +1,6 @@
 language: c
 compiler:
-#  - clang
+  - clang
   - gcc-4.4
   - gcc-4.5
   - gcc-4.6
@@ -14,3 +14,4 @@ script:
   - make
 after_success:
   - make check
+  - ./zbatc; ./zbatt -f '+' -e '-'
