@@ -74,7 +74,7 @@ limitations under the License.
     errno = 0; \
     ((dst_num) = strtonum((const_string), INT_MIN, INT_MAX, NULL)); \
     if (errno != 0) { \
-      perror(NULL); \
+      perror(ZB_PROGNAME); \
       exit(EXIT_FAILURE); \
     } \
   } while(0)
