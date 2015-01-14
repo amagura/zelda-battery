@@ -4,7 +4,11 @@ bin_PROGRAMS = zbatc zbatt
 zbatc_SOURCES = main-color.c power.c main.c
 zbatt_SOURCES = main-text.c power.c main.c
 
-AM_CFLAGS = -O2 -Wall -g -ggdb
+AM_CFLAGS = -O2 -Wall
+
+if DEBUG
+AM_CFLAGS += -g -ggdb -DZB_DEBUG=1
+endif
 
 if LINUX
 AM_CFLAGS += -DZB_LINUX=1

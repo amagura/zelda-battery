@@ -32,18 +32,21 @@ limitations under the License.
 struct power
 init()
 {
+#if ZB_DEBUG
+  mtrace();
+#endif
   struct power power;
 #if ZB_BSD
   size_t size;
   int ac_line;
   size = sizeof(int);
   /* determine if we're running on battery or ac power */
-  ZB_DEBUG("%s\n", "getting hw.acpi.acline"); \
+  ZB_DBG("%s\n", "getting hw.acpi.acline"); \
   sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
   power.source.ac = (bool)ac_line;
   power.source.batt = !power.source.ac;
   /* determine how much battery power is left */
-  ZB_DEBUG("%s\n", "getting hw.acpi.battery.life"); \
+  ZB_DBG("%s\n", "getting hw.acpi.battery.life"); \
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
@@ -71,7 +74,6 @@ init()
       power.source.ac = !power.source.batt;
     }
   }
-
   if (batt_support == SUCCESS) {
     int idx = 0;
     do {

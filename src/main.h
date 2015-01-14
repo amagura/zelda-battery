@@ -30,6 +30,9 @@ limitations under the License.
 #endif
 
 #include <errno.h>
+#if ZB_DEBUG
+#include <mcheck.h>
+#endif
 
 /** Macros - BEGIN **/
 #if ZB_MAKING_ZB_COLOR
@@ -39,7 +42,7 @@ limitations under the License.
 #endif
 
 #if 0
-#define ZB_DEBUG(format, ...) \
+#define ZB_DBG(format, ...) \
   do { \
     fprintf(stderr, "%s:dbg: ", ZB_PROGNAME); \
     fprintf(stderr, "%s", "`"); \
@@ -47,7 +50,7 @@ limitations under the License.
     fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
   } while(0)
 #else
-#define ZB_DEBUG(format, ...)
+#define ZB_DBG(format, ...)
 #endif
 
 #ifndef PACKAGE_VERSION

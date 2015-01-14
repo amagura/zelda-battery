@@ -76,7 +76,7 @@ opt_parse(int argc, char **argv)
 #endif
   while ((c = getopt(argc, argv, shopts)) != EOF) {
 #endif
-    ZB_DEBUG("optopt %d:", optopt);
+    ZB_DBG("optopt %d:", optopt);
     if (optopt != 0)
       exit(EXIT_FAILURE);
 

@@ -84,14 +84,14 @@ AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
 #AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
 
 # Check for debug
-#AC_ARG_ENABLE([debug],
-              #[  --enable-debug         turn on debugging],
-              #[case "${enableval}" in
-               #yes) debug=true ;;
-               #no) debug=false ;;
-               #*) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-             #esac],[debug=false])
-#AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
+AC_ARG_ENABLE([debug],
+              [  --enable-debug         turn on debugging],
+              [case "${enableval}" in
+               yes) debug=true ;;
+               no) debug=false ;;
+               *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
+             esac],[debug=false])
+AM_CONDITIONAL([DEBUG], [test "x$debug" = xtrue])
 
 #AC_ARG_ENABLE([heartbeat],
               #[  --enable-heartbeat     right-most heart changes from bold to regular font repeatedly],
