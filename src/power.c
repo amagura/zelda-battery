@@ -24,7 +24,10 @@ limitations under the License.
 
 #if ZB_BSD
 #include <sys/sysctl.h>
-#elif ZB_LINUX
+#endif
+
+#if 0
+/**/#elif ZB_LINUX
 #include <malloc.h>
 #include <libacpi.h>
 #endif
@@ -47,7 +50,8 @@ init()
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
-#elif ZB_LINUX
+#endif
+#if 0
   bool ac_support = false;
   bool batt_support = false;
 
