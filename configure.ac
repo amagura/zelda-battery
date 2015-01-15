@@ -25,7 +25,8 @@ m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check for libs
-AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
+AC_CHECK_FILES([/sys/class/power_supply /proc/acpi/battery],,,)
+# AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
 AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [FreeBSD]))
 AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 AM_CONDITIONAL([BSD], _TEST(PLATFORM, [FreeBSD]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))

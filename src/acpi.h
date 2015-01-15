@@ -27,6 +27,7 @@ the end of C declarations. */
 
 BEGIN_C_DECLS
 
+#if HAVE_sys_class_power_supply
 void
 find_battpath PARAMS((char *path, char *buf, size_t bufsize, int *batnum));
 
@@ -38,6 +39,8 @@ find_acpath PARAMS((char *pth, char *buf, size_t bufsize));
 
 void
 actat PARAMS((char *pth, bool *dst));
+#else
+#endif
 
 END_C_DECLS
 

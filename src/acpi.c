@@ -7,6 +7,8 @@
 #include "main.h"
 #include "acpi.h"
 
+#if HAVE_sys_class_power_supply
+
 void /* memory leak free :) */
 find_battpath(char *path, char *buf, size_t bufsize, int *batnum)
 {
@@ -195,4 +197,6 @@ int main()
   actat(tmp, &cap);
   printf("acline: %d\n", cap);
 }
+#endif
+#else
 #endif
