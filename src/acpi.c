@@ -111,7 +111,7 @@ int main()
 #endif
 
 void
-find_acpth(char *pth, char *buf, size_t bufsize)
+find_acpath(char *pth, char *buf, size_t bufsize)
 {
   glob_t globuf;
   int r = glob(pth, GLOB_MARK, NULL, &globuf);
@@ -148,12 +148,12 @@ end:
 }
 
 #if 0
-/* find_acpth example */
+/* find_acpath example */
 
 int main()
 {
   char tmp[BUFSIZ];
-  find_acpth("/sys/class/power_supply/*/type", tmp, sizeof tmp);
+  find_acpath("/sys/class/power_supply/*/type", tmp, sizeof tmp);
   printf("%s\n", tmp);
   return 0;
 }
@@ -187,7 +187,7 @@ int main()
   char tmp[BUFSIZ];
   bool cap = false;
 
-  find_acpth("/sys/class/power_supply/*/type", tmp, sizeof tmp);
+  find_acpath("/sys/class/power_supply/*/type", tmp, sizeof tmp);
 
   strncat(tmp, "/online", (sizeof tmp - strlen(tmp) - 1));
 
