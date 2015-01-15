@@ -5,6 +5,7 @@
 #include <libgen.h>
 #include <glob.h>
 #include "main.h"
+#include "acpi.h"
 
 void /* memory leak free :) */
 find_battpath(char *path, char *buf, size_t bufsize, int *batnum)
