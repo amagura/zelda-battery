@@ -7,7 +7,7 @@
 #include "main.h"
 #include "acpi.h"
 
-#if HAVE_sys_class_power_supply
+#if ZB_SYS_CLASS
 
 void /* memory leak free :) */
 find_battpath(char *path, char *buf, size_t bufsize, int *batnum)

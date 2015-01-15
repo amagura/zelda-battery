@@ -1,10 +1,14 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatc zbatt
-zbatc_SOURCES = main-color.c power.c main.c
-zbatt_SOURCES = main-text.c power.c main.c
+zbatc_SOURCES = main-color.c power.c main.c acpi.c
+zbatt_SOURCES = main-text.c power.c main.c acpi.c
 
 AM_CFLAGS = -O2 -Wall
+
+if HAVE_sys_class_power_supply
+AM_CFLAGS += -DZB_SYS_CLASS=1
+endif
 
 if DEBUG
 AM_CFLAGS += -g -ggdb -DZB_DEBUG=1

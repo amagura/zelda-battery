@@ -19,6 +19,7 @@ limitations under the License.
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "main.h"
 #include "power.h"
 
@@ -26,10 +27,23 @@ limitations under the License.
 #include <sys/sysctl.h>
 #endif
 
-#if 0
-/**/#elif ZB_LINUX
-#include <malloc.h>
-#include <libacpi.h>
+#if ZB_LINUX
+#include "acpi.h"
+#endif
+
+#if ZB_LINUX
+inline bool
+on_acpwr()
+{
+  char tmp[BUFSIZ];
+  bool cap = false;
+
+  find_acpath("/sys/class/power_supply/*/type", tmp, sizeof tmp);
+
+  strncat(tmp, "/online", (sizeof tmp - strlen(tmp) - 1));
+  actat(tmp, &cap);
+  return cap;
+}
 #endif
 
 struct power
@@ -50,50 +64,17 @@ init()
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
-#endif
-#if 0
-  bool ac_support = false;
-  bool batt_support = false;
-
-#if ZB_DEBUG
-  mtrace();
-#endif
-  global_t *global = malloc(sizeof(global_t));
-  battery_t *binfo = NULL;
-  adapter_t *ac = &global->adapt;
-
-  if (check_acpi_support() == -1) { /* if no acpi support */
-    ZB_ERROR("%s\n", "no libacpi: acpi support required");
-    exit(EXIT_FAILURE);
-  }
-  ac_support = init_acpi_acadapt(global);
-  batt_support = init_acpi_batt(global);
-
-  if (ac_support == SUCCESS) {
-    if (ac->ac_state == P_AC) {
-      power.source.ac = true;
-      power.source.batt = !power.source.ac;
-    } else if (ac->ac_state == P_BATT) {
-      power.source.batt = true;
-      power.source.ac = !power.source.batt;
-    }
-  }
-  if (batt_support == SUCCESS) {
-    int idx = 0;
-    do {
-      binfo = &batteries[idx];
-      read_acpi_batt(idx); /* read current battery information */
-
-      if (binfo->present) {
-        power.charge.raw = binfo->percentage;
-        power.charge.truncated = (int)power.charge.raw / 10;
-      } else {
-        continue;
-      }
-    } while(++idx < global->batt_count);
-  }
-  free(global);
-  muntrace();
+#elif ZB_LINUX
+  bool acline = on_acpwr();
+  power.source.ac = acline;
+  power.source.batt = !power.source.ac;
+  char tmp[BUFSIZ];
+  int cap = 0;
+  find_battpath("/sys/class/power_supply/*/type", tmp, sizeof tmp, NULL);
+  strncat(tmp, "/capacity", (sizeof tmp - strlen(tmp) - 1));
+  bcapcity(tmp, &cap);
+  power.charge.raw = cap;
+  power.charge.truncated = (int)power.charge.raw / 10;
 #endif
   return power;
 }
