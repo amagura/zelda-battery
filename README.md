@@ -40,7 +40,7 @@ Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want th
 ### Zsh
 ![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
 ```bash
-RPROMPT="%{$(./zbatc)%}$(./zbatt)%{\033[0;0m%}"
+PROMPT="%{$(./zbatc)%}$(./zbatt)%{[0;0m%} %m%# "
 
 ## run TRAPALRM every $TMOUT seconds
 TMOUT=60 # refresh the terminal prompt every 60 seconds
@@ -52,22 +52,22 @@ TRAPALRM () {
 
 
 ### Bash
+![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
 ```bash
 PS1='\[$(./zbatc)\]$(./zbatt)\[\033[0;0m\] [\h \W]\$ '
 ```
-![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
 
 ### Mksh (Korn Shell)
+![example showing zelda-battery in a Mksh prompt](/example/mksh.jpg)
 ```bash
 PS1=$'$(./zbatc)'$(./zbatt)$'\033[0;0m'\ ["$(hostname)"]\
 ```
-![example showing zelda-battery in a Mksh prompt](/example/mksh.jpg)
 
 ### Tcsh
+![example showing zbatt in a tcsh prompt](/example/tcsh.jpg)
 ```bash
 set prompt="%{`./zbatc`%}`./zbatt` %{\033[0;0m%}%m "
 ```
-![example showing zbatt in a tcsh prompt](/example/tcsh.jpg)
 
 # Notes
 
