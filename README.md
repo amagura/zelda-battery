@@ -4,7 +4,7 @@ zelda-battery [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?b
 A Legend of Zelda like health-bar battery meter for the command-line
 
 # Why?
-Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line, thought it would be neat, and I _could_.
+Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line, thought it would be neat thing to do, and I _could_.
 
 # Supported Platforms
 
