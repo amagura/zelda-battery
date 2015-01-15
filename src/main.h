@@ -41,7 +41,8 @@ limitations under the License.
 #define ZB_PROGNAME "zbatt"
 #endif
 
-#if 1
+/* XXX change this to one to turn on debugging */
+#if 0
 #define ZB_DBG(format, ...) \
   do { \
     fprintf(stderr, "## (%s)(%s)%d\n", ZB_PROGNAME, __FILE__, __LINE__); \
