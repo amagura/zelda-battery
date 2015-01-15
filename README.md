@@ -3,24 +3,26 @@ zelda-battery [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?b
 
 A Legend of Zelda like health-bar battery meter for the command-line
 
+# Why?
+Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line, thought it would be neat thing to do, and because I _could_.
 
 # Supported Platforms
 
-* Mac OS X (I don't have access to a Mac, so no support yet)
+* Mac OS X (I don't have a Mac, sorry. No support yet)
 * Linux
 * FreeBSD
 
-# Dependencies
+### Dependencies
 * GNU Autotools
 * C Compiler
 * `libacpi` (Linux)
 
-# Building
+### Building
 1. `autoreconf -i`
 2. `./configure`
 3. `make`
 
-# Installing
+### Installing
 Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want them and add the appropriate stuff to your terminal prompt.
 
 
