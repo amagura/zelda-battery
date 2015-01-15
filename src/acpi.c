@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include <libgen.h>
 #include <glob.h>
@@ -70,11 +71,13 @@ bcapcity(char *battpath, int *dst)
   fp = fopen(battpath, "r");
   if (fp == NULL) {
     perror(ZB_PROGNAME);
-    exit(EXIT_FAILURE);
+    *dst = -1;
+    goto end;
   }
   fgets(tmp, sizeof tmp, fp);
   ZB_DBG("capacity: %s\n", tmp);
   ZB_STRTONUM(*dst, tmp);
+end:
   fclose(fp);
   free(tmp);
 }
@@ -153,5 +156,42 @@ int main()
   find_acpth("/sys/class/power_supply/*/type", tmp, sizeof tmp);
   printf("%s\n", tmp);
   return 0;
+}
+#endif
+
+/* no leaks */
+void /* can be used to determine if system is on AC power */
+actat(char *pth, bool *dst)
+{
+  FILE *fp;
+  /* we only need to get a single character */
+  char *tmp = malloc(sizeof(char)*64);
+
+  fp = fopen(pth, "r");
+  if (fp == NULL) {
+    perror(ZB_PROGNAME);
+    *dst = -1;
+    goto end;
+  }
+  fgets(tmp, sizeof tmp, fp);
+  ZB_DBG("capacity: %s\n", tmp);
+  ZB_STRTONUM(*dst, tmp);
+end:
+  fclose(fp);
+  free(tmp);
+}
+
+#if 0
+int main()
+{
+  char tmp[BUFSIZ];
+  bool cap = false;
+
+  find_acpth("/sys/class/power_supply/*/type", tmp, sizeof tmp);
+
+  strncat(tmp, "/online", (sizeof tmp - strlen(tmp) - 1));
+
+  actat(tmp, &cap);
+  printf("acline: %d\n", cap);
 }
 #endif
