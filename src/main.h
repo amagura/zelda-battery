@@ -41,13 +41,13 @@ limitations under the License.
 #define ZB_PROGNAME "zbatt"
 #endif
 
-#if 0
+#if 1
 #define ZB_DBG(format, ...) \
   do { \
-    fprintf(stderr, "%s:dbg: ", ZB_PROGNAME); \
-    fprintf(stderr, "%s", "`"); \
+    fprintf(stderr, "## (%s)(%s)%d\n", ZB_PROGNAME, __FILE__, __LINE__); \
+    fprintf(stderr, "#  `%s'\n", __FUNCTION__); \
     fprintf(stderr, (format), (__VA_ARGS__)); \
-    fprintf(stderr, "`   %s:%d:\n", __FILE__, __LINE__); \
+    fprintf(stderr, "\n"); \
   } while(0)
 #else
 #define ZB_DBG(format, ...)
@@ -63,7 +63,7 @@ limitations under the License.
   do { \
     fprintf(stderr, "%s:err: ", ZB_PROGNAME); \
     fprintf(stderr, (format), __VA_ARGS__); \
-    fprintf(stderr, "in %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
+    fprintf(stderr, "\nin %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
   } while(0)
 
 #define ZB_MSG(format, ...) printf((format), (__VA_ARGS__));

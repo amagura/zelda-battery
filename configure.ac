@@ -8,6 +8,7 @@ AC_USE_SYSTEM_EXTENSIONS
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
+AC_PROG_CPP
 AC_C_INLINE
 
 # Check for TR
@@ -30,6 +31,7 @@ AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux]))#  [test x]PLATFORM[= x"Linux"]
 AM_CONDITIONAL([BSD], _TEST(PLATFORM, [FreeBSD]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 
 # Check for programs
+AC_CHECK_PROG([GPP], [gpp], [gpp], [])
 #AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
 #AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
 #AC_CHECK_PROG([APM], [apm], [yes], [no]) # *BSD support
