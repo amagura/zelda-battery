@@ -20,7 +20,7 @@ Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want th
 
 ## Zsh
 ```bash
-RPROMPT="%{$(./zbatc)%}$(./zbatt)%{[0;0m%}"
+RPROMPT="%{$(./zbatc)%}$(./zbatt)%{\033[0;0m%}"
 
 ## run TRAPALRM every $TMOUT seconds
 TMOUT=60 # refresh the terminal prompt every 60 seconds
@@ -32,26 +32,32 @@ TRAPALRM () {
 ![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
 
 
-### Bash
+## Bash
 ```bash
-PS1='\[$(./zbl)\]$(./zba)\[\033[0;0m\] [\h \W]\$ '
+PS1='\[$(./zbatc)\]$(./zbatt)\[\033[0;0m\] [\h \W]\$ '
 ```
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
 
-### Mksh (Korn Shell)
+## Mksh (Korn Shell)
 ```ksh
-PS1=$'$(./zbl)'$(./zba)$'\033[0;0m'\ ["$(hostname)"\ "$(basename "$(pwd)")"]$(if ((USER_ID)); then print \$; else print \#; fi)\  # trailing space here
+PS1=$'$(./zbatc)'$(./zbatt)$'\033[0;0m'\ ["$(hostname)"]\
 ```
 ![example showing zelda-battery in a Mksh prompt](/example/mksh.jpg)
 
-## Dependencies
+## Tcsh
+```csh
+set prompt="%{`./zbatc`%}`./zbatt` %{\033[0;0m%}%m "
+```
+![example showing zbatt in a tcsh prompt](/example/tcsh.jpg)
+
+# Dependencies
 * C compiler
 * `libacpi` (Linux)
 
-## Notes
+# Notes
 
-### Zsh
+## Zsh
 As long as you use the `TMOUT` and `TRAPALRM`/`zle reset-prompt` stuff, your Zsh prompt should refresh itself every 60 seconds.
 
-### Bash
+## Bash
 AFAIK there is _no_ way to periodically refresh a bash prompt without either running `clear`/`Ctrl-L` or pressing enter, which causes the prompt to be redrawn.
