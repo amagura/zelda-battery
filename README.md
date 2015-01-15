@@ -8,7 +8,7 @@ Because I wanted to be able to keep a constant tab on my laptop's power-level wi
 
 # Supported Platforms
 
-* Mac OS X (I don't have access to a Mac, so no support yet)
+* Mac OS X (I don't have a Mac, sorry. No support yet)
 * Linux
 * FreeBSD
 
