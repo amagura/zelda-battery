@@ -32,9 +32,6 @@ limitations under the License.
 struct power
 init()
 {
-#if ZB_DEBUG
-  mtrace();
-#endif
   struct power power;
 #if ZB_BSD
   size_t size;
@@ -54,6 +51,9 @@ init()
   bool ac_support = false;
   bool batt_support = false;
 
+#if ZB_DEBUG
+  mtrace();
+#endif
   global_t *global = malloc(sizeof(global_t));
   battery_t *binfo = NULL;
   adapter_t *ac = &global->adapt;
@@ -89,6 +89,7 @@ init()
     } while(++idx < global->batt_count);
   }
   free(global);
+  muntrace();
 #endif
   return power;
 }

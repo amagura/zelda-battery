@@ -47,6 +47,9 @@ valgrind: $(bin_PROGRAMS)
 	valgrind --leak-check=full ./zbatc -c '0'; echo ---------
 	valgrind --leak-check=full ./zbatt -f '+' -e '-'
 
+mtrace: $(bin_PROGRAMS)
+	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done
+
 expand:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -nostdinc -E $(zbatt_SOURCES)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -nostdinc -E $(zbatc_SOURCES)
@@ -55,6 +58,9 @@ check-local:
 	csi -qn test.scm
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
+
+test-local:
+	$(CC) $(AM_CFLAGS) -L~/code/libacpi/hg $(AM_CPPFLAGS) $(AM_LDFLAGS) -lacpi -o zbatt $(zbatt_SOURCES)
 
 tidy-local:
 	@$(RM) *.o || true
