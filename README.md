@@ -29,15 +29,16 @@ Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want th
 
 ## Styles
 ### Git
+![example of the git style](/example/git.jpg)
 ```bash
 ./zbatc -c 32; ./zbatt -p -f +; ./zbatc -c 31; ./zbatt -m -e -
 ```
-![example of the git style](/example/git.jpg)
 
 
 ## Shells
 
 ### Zsh
+![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
 ```bash
 RPROMPT="%{$(./zbatc)%}$(./zbatt)%{\033[0;0m%}"
 
@@ -48,7 +49,6 @@ TRAPALRM () {
     zle reset-prompt # refreshs the terminal prompt
 }
 ```
-![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
 
 
 ### Bash
