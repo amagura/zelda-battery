@@ -12,17 +12,17 @@ Because I wanted to be able to keep a constant tab on my laptop's power-level wi
 * Linux
 * FreeBSD
 
-# Dependencies
+### Dependencies
 * GNU Autotools
 * C Compiler
 * `libacpi` (Linux)
 
-# Building
+### Building
 1. `autoreconf -i`
 2. `./configure`
 3. `make`
 
-# Installing
+### Installing
 Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want them and add the appropriate stuff to your terminal prompt.
 
 
