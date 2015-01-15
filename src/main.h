@@ -50,8 +50,10 @@ limitations under the License.
     fprintf(stderr, (format), (__VA_ARGS__)); \
     fprintf(stderr, "\n"); \
   } while(0)
+#define ZB_ONDBG(...) (__VA_ARGS__)
 #else
 #define ZB_DBG(format, ...)
+#define ZB_ONDBG(...)
 #endif
 
 #ifndef PACKAGE_VERSION

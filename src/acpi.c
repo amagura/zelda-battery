@@ -7,7 +7,45 @@
 #include "main.h"
 #include "acpi.h"
 
+#define ZB_SYS_CLASS 1
 #if ZB_SYS_CLASS
+#define ZB_ACPI_ROOT "/sys/class/power_supply/"
+#define ZB_ACPI_GLOB "/sys/class/power_supply/*/type"
+
+/* int[2] *
+ *  `-> 0 = (bool) acline
+ *  `-> 1 = (ptr to arr) capacity, capacity
+ */
+int **pwrinf(int *batlim)
+{
+  *int[2] ret;
+  glob_t globuf;
+  glob(ZB_ACPI_GLOB, GLOB_MARK, NULL, &globuf);
+  if (batlim == NULL) {
+    batlim = malloc(sizeof(int));
+    *batlim = globuf.gl_pathc;
+  } else if (*batlim > globuf.gl_pathc)
+    *batlim = globuf.gl_pathc;
+  /* the files we'll be reading only consist of
+   * a single line of little text */
+  char *tmp = malloc(sizeof(char)*1024);
+
+  for (int idx = 0; idx < *batlim; ++idx) {
+    fp = fopen(globuf.gl_pathv[idx], "r");
+
+    if (fp == NULL) {
+      // FIXME should we error?
+      ZB_ONDBG(perror(ZB_PROGNAME));
+      fclose(fp);
+      continue;
+    }
+    fgets(tmp, sizeof tmp, fp);
+
+    if (strncmp(tmp, "Batt", 3) == 0) {
+      fclose(fp);
+      dirname(global.gl_pathv[idx])
+
+  }
 
 void /* memory leak free :) */
 find_battpath(char *path, char *buf, size_t bufsize, int *batnum)
