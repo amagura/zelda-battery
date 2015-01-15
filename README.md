@@ -3,26 +3,24 @@ zelda-battery [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?b
 
 A Legend of Zelda like health-bar battery meter for the command-line
 
-## Supported Platforms
+# Supported Platforms
 
-* Mac OS X (work in progress)
+* Mac OS X (I don't have access to a Mac, so no support yet)
 * Linux
 * FreeBSD
 
 
-## Building
+# Building
 1. `autoreconf -i`
 2. `./configure`
 3. `make`
 
-__Note__ that `./configure` can take an `--enable-ac-blink` option, which is disabled by default.  Enabling this will cause Zelda Battery to blink on low battery _even_ when your computer is plugged into an AC power supply.
-
-## Installing
+# Installing
 Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want them and add the appropriate stuff to your terminal prompt.
 
-### Zsh
+## Zsh
 ```bash
-RPROMPT="%{$(./zbl)%}$(./zba)%{\033[0;0m%}"
+RPROMPT="%{$(./zbatc)%}$(./zbatt)%{[0;0m%}"
 
 ## run TRAPALRM every $TMOUT seconds
 TMOUT=60 # refresh the terminal prompt every 60 seconds
