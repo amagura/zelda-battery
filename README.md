@@ -3,12 +3,17 @@ zelda-battery [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?b
 
 A Legend of Zelda like health-bar battery meter for the command-line
 
+
 # Supported Platforms
 
 * Mac OS X (I don't have access to a Mac, so no support yet)
 * Linux
 * FreeBSD
 
+# Dependencies
+* GNU Autotools
+* C Compiler
+* `libacpi` (Linux)
 
 # Building
 1. `autoreconf -i`
@@ -18,7 +23,21 @@ A Legend of Zelda like health-bar battery meter for the command-line
 # Installing
 Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want them and add the appropriate stuff to your terminal prompt.
 
-## Zsh
+
+
+# Examples
+
+## Styles
+### Git
+```bash
+./zbatc -c 32; ./zbatt -p -f +; ./zbatc -c 31; ./zbatt -m -e -
+```
+![example of the git style](/example/git.jpg)
+
+
+## Shells
+
+### Zsh
 ```bash
 RPROMPT="%{$(./zbatc)%}$(./zbatt)%{\033[0;0m%}"
 
@@ -32,27 +51,23 @@ TRAPALRM () {
 ![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
 
 
-## Bash
+### Bash
 ```bash
 PS1='\[$(./zbatc)\]$(./zbatt)\[\033[0;0m\] [\h \W]\$ '
 ```
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
 
-## Mksh (Korn Shell)
-```ksh
+### Mksh (Korn Shell)
+```bash
 PS1=$'$(./zbatc)'$(./zbatt)$'\033[0;0m'\ ["$(hostname)"]\
 ```
 ![example showing zelda-battery in a Mksh prompt](/example/mksh.jpg)
 
-## Tcsh
-```csh
+### Tcsh
+```bash
 set prompt="%{`./zbatc`%}`./zbatt` %{\033[0;0m%}%m "
 ```
 ![example showing zbatt in a tcsh prompt](/example/tcsh.jpg)
-
-# Dependencies
-* C compiler
-* `libacpi` (Linux)
 
 # Notes
 

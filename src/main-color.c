@@ -83,12 +83,12 @@ opt_parse(int argc, char **argv)
     switch(c) {
       case 'h':
         ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
-        ZB_ARGMSG("-h\tprint this message and exit");
-        ZB_ARGMSG("-v\tprint program version and exit");
-        ZB_ARGMSG("-a\tenable blinking even while on A/C power (overrides previous `-n')");
-        ZB_ARGMSG("-n\tdisable blinking altogether (overrides prevous `-a')");
-        ZB_ARGMSG("-b\tset the power-level at which blinking ensues (defaults to `30')");
-        ZB_ARGMSG("-c <arg> \tansi color code to use (defaults to `31')");
+        ZB_ARGMSG("-h\t\tprint this message and exit");
+        ZB_ARGMSG("-v\t\tprint program version and exit");
+        ZB_ARGMSG("-a\t\tenable blinking even while on A/C power (overrides previous `-n')");
+        ZB_ARGMSG("-n\t\tdisable blinking altogether (overrides prevous `-a')");
+        ZB_ARGMSG("-b\t\tset the power-level at which blinking ensues (defaults to `30')");
+        ZB_ARGMSG("-c <arg>\tansi color code to use (defaults to `31')");
         exit(EXIT_FAILURE);
       case 'b':
         ZB_STRTONUM(color_opts.blink_threshold, (const char *)optarg);
