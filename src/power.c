@@ -27,7 +27,7 @@ limitations under the License.
 #include <sys/sysctl.h>
 #endif
 
-#if !ZB_LINUX
+#if ZB_LINUX
 #include "acpi.h"
 #endif
 
@@ -69,17 +69,9 @@ init()
    */
   power.charge.raw = info.cap[limit]; /* FIXME, I'm not future-proofed */
   free(info.cap);
-
-  bool acline = on_acpwr();
-  power.source.ac = acline;
-  power.source.batt = !power.source.ac;
-  char tmp[BUFSIZ];
-  int cap = 0;
-  find_battpath("/sys/class/power_supply/*/type", tmp, sizeof tmp, NULL);
-  strncat(tmp, "/capacity", (sizeof tmp - strlen(tmp) - 1));
-  bcapcity(tmp, &cap);
-  power.charge.raw = cap;
   power.charge.truncated = (int)power.charge.raw / 10;
+  power.source.ac = info.acline;
+  power.source.batt = !power.source.ac;
 #endif
   return power;
 }

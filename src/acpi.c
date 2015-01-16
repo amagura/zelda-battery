@@ -9,10 +9,6 @@
 #include "main.h"
 #include "acpi.h"
 
-#ifndef ZB_SYS_CLASS
-#define ZB_SYS_CLASS 1
-#endif
-
 #if ZB_SYS_CLASS
 #define ZB_ACPI_ROOT "/sys/class/power_supply"
 #define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
