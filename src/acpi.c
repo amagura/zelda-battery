@@ -1,3 +1,4 @@
+#if !ZB_BSD
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -7,16 +8,6 @@
 #include <limits.h>
 #include "main.h"
 #include "acpi.h"
-
-struct pwr_sup {
-  bool acline;
-  int *cap;
-  /* if it became necessary to know which
-   * capacity went with which battery,
-   * getting each battery's model/serial number
-   * should be an easy enough task to implement
-   */
-};
 
 #ifndef ZB_SYS_CLASS
 #define ZB_SYS_CLASS 1
@@ -217,4 +208,5 @@ int main()
 #define ZB_ACPI_BATCAP_PATH
 #define ZB_ACPI_BATTYPE
 #define ZB_ACPI_ACTYPE
+#endif
 #endif

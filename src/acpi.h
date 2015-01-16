@@ -1,3 +1,4 @@
+#if !ZB_BSD
 #ifndef ZB_ACPI_H_GUARD
 #define ZB_ACPI_H_GUARD 1
 /* BEGIN_C_DECLS should be used at the beginning of your declarations,
@@ -27,18 +28,23 @@ the end of C declarations. */
 
 BEGIN_C_DECLS
 
-void
-find_battpath PARAMS((char *path, char *buf, size_t bufsize, int *batnum));
+#ifndef _Bool
+#include <stdbool.h>
+#endif
 
-void
-bcapcity PARAMS((char *battpath, int *dst));
+struct pwr_sup {
+  bool acline;
+  int *cap;
+  /* if it became necessary to know which
+   * capacity went with which battery,
+   * getting each battery's model/serial number
+   * should be an easy enough task to implement
+   */
+};
 
-void
-find_acpath PARAMS((char *pth, char *buf, size_t bufsize));
-
-void
-actat PARAMS((char *pth, bool *dst));
+int pwr_inf PARAMS((struct pwr_sup info, int btlimit));
 
 END_C_DECLS
 
 #endif /* ZBATT_ACPI_H_GUARD */
+#endif
