@@ -35,6 +35,7 @@ limitations under the License.
 #endif
 
 /** Macros - BEGIN **/
+#define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
 #if ZB_MAKING_ZB_COLOR
 #define ZB_PROGNAME "zbatc"
 #else
@@ -42,12 +43,12 @@ limitations under the License.
 #endif
 
 /* XXX change this to one to turn on debugging */
-#if 0
+#if 1
 #define ZB_DBG(format, ...) \
   do { \
     fprintf(stderr, "## (%s)(%s)%d\n", ZB_PROGNAME, __FILE__, __LINE__); \
     fprintf(stderr, "#  `%s'\n", __FUNCTION__); \
-    fprintf(stderr, (format), (__VA_ARGS__)); \
+    fprintf(stderr, (format), ##__VA_ARGS__);	\
     fprintf(stderr, "\n"); \
   } while(0)
 #define ZB_ONDBG(...) (__VA_ARGS__)
