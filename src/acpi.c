@@ -190,6 +190,7 @@ int pwr_inf(struct pwr_sup info, int btlimit)
   return 0;
 }
 
+#if 0
 int main()
 {
   struct pwr_sup info;
@@ -200,6 +201,7 @@ int main()
   pwr_inf(info, limit);
   free(info.cap);
 }
+#endif
 
 #else
 #define ZB_ACPI_ROOT "/proc/acpi/"
