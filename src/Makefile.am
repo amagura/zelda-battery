@@ -76,3 +76,7 @@ anew: clean all
 ready: clean all tidy-local
 null: clean all clean
 void: null
+
+drone:
+	cd /sys/class/power_supply; \
+	ls -R
