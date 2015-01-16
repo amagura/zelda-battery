@@ -44,7 +44,7 @@ limitations under the License.
 
 /* XXX change this to one to turn on debugging */
 #ifndef ZB_DEBUG
-#define ZB_DEBUG 1
+#define ZB_DEBUG 0
 #endif
 
 #if ZB_DEBUG

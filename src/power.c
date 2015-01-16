@@ -59,7 +59,7 @@ init()
   info.cap = NULL;
   info.cap = malloc(sizeof(info.cap)*limit);
   info.acline = false;
-  pwr_inf(info, limit);
+  pwr_inf(&info, limit);
   /* I admit that currently, with the below code
    * and the current implementation
    * (everything outside of the `acpi.c' file, which
@@ -67,8 +67,10 @@ init()
    * more than one battery), reading the current capacity
    * from more than one battery is unsupported.
    */
-  power.charge.raw = info.cap[limit]; /* FIXME, I'm not future-proofed */
+  ZB_DBG("info.cap[%d]: %d\n", (limit - 1), info.cap[limit - 1]);
+  power.charge.raw = info.cap[--limit]; /* FIXME, I'm not future-proofed */
   free(info.cap);
+  ZB_DBG("info.acline: %d\n", info.acline);
   power.charge.truncated = (int)power.charge.raw / 10;
   power.source.ac = info.acline;
   power.source.batt = !power.source.ac;

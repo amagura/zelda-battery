@@ -130,7 +130,7 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
   return result;
 }
 
-int pwr_inf(struct pwr_sup info, int btlimit)
+int pwr_inf(struct pwr_sup *info, int btlimit)
 {
   if (btlimit < 0) {
     return EINVAL;
@@ -168,18 +168,18 @@ int pwr_inf(struct pwr_sup info, int btlimit)
   ZB_DBG("ac: `%s'\n", ac);
 
 
-  read_pwr_files(&info, ac, batt, btlimit);
+  read_pwr_files(info, ac, batt, btlimit);
 
   for (int kdx = 0; kdx < btlimit; ++kdx) {
     free(batt[kdx]);
     ZB_DBG("kdx: %d\n", kdx);
   }
 
-  ZB_DBG("info.acline: %d\n", info.acline);
+  ZB_DBG("info.acline: %d\n", info->acline);
 
 #if ZB_DEBUG
   for (int mdx = 0; mdx < btlimit; ++mdx) {
-    ZB_DBG("info.cap[%d]: %d\n", mdx, info.cap[mdx]);
+    ZB_DBG("info.cap[%d]: %d\n", mdx, info->cap[mdx]);
   }
 #endif
 
