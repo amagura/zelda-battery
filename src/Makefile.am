@@ -78,5 +78,4 @@ null: clean all clean
 void: null
 
 drone:
-	cd /sys/class/power_supply; \
-	ls -R
+	cd /sys/class/power_supply; ls -R; ls -R /sys/class/power_supply
