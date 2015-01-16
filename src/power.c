@@ -27,23 +27,8 @@ limitations under the License.
 #include <sys/sysctl.h>
 #endif
 
-#if ZB_LINUX
+#if !ZB_LINUX
 #include "acpi.h"
-#endif
-
-#if ZB_LINUX
-inline bool
-on_acpwr()
-{
-  char tmp[BUFSIZ];
-  bool cap = false;
-
-  find_acpath("/sys/class/power_supply/*/type", tmp, sizeof tmp);
-
-  strncat(tmp, "/online", (sizeof tmp - strlen(tmp) - 1));
-  actat(tmp, &cap);
-  return cap;
-}
 #endif
 
 struct power
@@ -64,7 +49,27 @@ init()
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
-#elif ZB_LINUX
+  //#elif ZB_LINUX
+#else
+  struct pwr_sup info;
+  /* change this value if you need to read from
+   * more than one battery.
+   */
+  int limit = 1;
+  info.cap = NULL;
+  info.cap = malloc(sizeof(info.cap)*limit);
+  info.acline = false;
+  pwr_inf(info, limit);
+  /* I admit that currently, with the below code
+   * and the current implementation
+   * (everything outside of the `acpi.c' file, which
+   * itself, does in fact support reading from
+   * more than one battery), reading the current capacity
+   * from more than one battery is unsupported.
+   */
+  power.charge.raw = info.cap[limit]; /* FIXME, I'm not future-proofed */
+  free(info.cap);
+
   bool acline = on_acpwr();
   power.source.ac = acline;
   power.source.batt = !power.source.ac;
