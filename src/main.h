@@ -43,7 +43,11 @@ limitations under the License.
 #endif
 
 /* XXX change this to one to turn on debugging */
-#if 1
+#ifndef ZB_DEBUG
+#define ZB_DEBUG 1
+#endif
+
+#if ZB_DEBUG
 #define ZB_DBG(format, ...) \
   do { \
     fprintf(stderr, "## (%s)(%s)%d\n", ZB_PROGNAME, __FILE__, __LINE__); \
