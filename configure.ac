@@ -41,12 +41,6 @@ AM_CONDITIONAL([BSD], _TEST(PLATFORM, [FreeBSD]))# [test x]PLATFORM[= x"BSD"]) #
 #AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
 #AM_CONDITIONAL([APM], [test x"$ac_cv_prog_APM" = x"yes"])
 
-# Check whether this is an automated build
-AC_MSG_CHECKING([whether build is automated])
-AM_CONDITIONAL([TRAVIS], [test x`echo $TRAVIS` = xtrue])
-AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
-FATAL_TEST(TRAVIS, [yes])
-
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
               AS_HELP_STRING([--enable-native], [enable processor-model specific compilation]),
