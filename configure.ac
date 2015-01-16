@@ -100,7 +100,7 @@ AM_CONDITIONAL([DEBUG], [test "x$debug" = xtrue])
              #esac],[heartbeat=false])
 #AM_CONDITIONAL([HEARTBEAT], [test "x$heartbeat" = xtrue])
 
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUTYPE[" = x && test ! "x]CPUTYPE[" = xunknown])
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x"]CPUTYPE[" = x" && test ! "x"]CPUTYPE[" = xunknown"])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
