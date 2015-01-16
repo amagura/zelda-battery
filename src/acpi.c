@@ -24,7 +24,7 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int limit
   char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
 
   for (int jdx = 0; jdx < limit; ++jdx) {
-    jdx > 0 && memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
+    jdx && memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
     fp = fopen(batt[jdx], "r");
 
     if (fp == (NULL)) {
@@ -87,7 +87,7 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
    * type as `globuf.gl_pathc'; plus, `int', IIRC, is
    * the standard convention for _generic_ loop counter types. */
   for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
-    idx > 0 && memset(path, '\0', ZB_ACPI_PATH_SIZE);
+    idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
     fp = fopen(globuf.gl_pathv[idx], "r");
 
     if (fp == (NULL)) {
