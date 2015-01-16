@@ -23,7 +23,9 @@ AM_CFLAGS += -DZB_BSD=1
 endif
 
 if NATIVE
+if !GENERIC
 AM_CFLAGS += -march=native -mtune=native
+endif
 endif
 
 if GENERIC
