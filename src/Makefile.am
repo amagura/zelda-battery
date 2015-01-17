@@ -44,8 +44,6 @@ move-local: $(bin_PROGRAMS)
 
 clean-local: tidy-local
 
-asm: zbatt.s zbatc.s
-
 lint:
 	for f in $(zbatt_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
 
@@ -62,6 +60,12 @@ expand:
 
 check-local:
 	csi -qn test.scm
+
+asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
+	for f in $(zbatt_SOURCES); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
+	for f in $(zbatc_SOURCES); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
+
+
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 

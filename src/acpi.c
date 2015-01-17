@@ -33,7 +33,7 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int limit
       result = errno;
       goto cleanup;
     }
-    fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+    int err = fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
     /* get battery percentage levels */
     ZB_DBG("batt cap: %s\n", tmp);
