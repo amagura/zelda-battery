@@ -73,8 +73,9 @@ test-local:
 	$(CC) $(AM_CFLAGS) -L~/code/libacpi/hg $(AM_CPPFLAGS) $(AM_LDFLAGS) -lacpi -o zbatt $(zbatt_SOURCES)
 
 tidy-local:
-	@$(RM) *.o || true
+	$(RM) *.o || true
 	$(RM) *.s || true
+	$(RM) *.od || true
 
 anew: clean all
 ready: clean all tidy-local
