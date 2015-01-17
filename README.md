@@ -9,7 +9,7 @@ Before you _even_ comment on the code or practices used by this project, keep on
 If you see something weird like `goto` statements instead of for-loops remember where this application is being used.  It is for use in shell prompts, where it needs to be _lightning_ fast: because I don't want my Shell prompt to take any noticable amount of time to load, and because (admittedly) it was fun to find ways of making ZBatt unnecesssarily faster.
 
 # Why?
-Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line, thought it would be neat thing to do, and because I _could_.
+Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line or running a command, thought it would be neat thing to do, and because I _could_.
 
 # Supported Platforms
 
