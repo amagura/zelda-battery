@@ -40,7 +40,7 @@ endif
 all-local:
 
 move-local: $(bin_PROGRAMS)
-	for file in $?; do mv "$$file" ../; done
+	for file in $?; do mv "$$file" ../../; done
 
 clean-local: tidy-local
 
