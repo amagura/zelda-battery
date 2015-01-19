@@ -12,15 +12,24 @@ If you see something weird like `goto` statements instead of for-loops remember 
 Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line or running a command, thought it would be neat thing to do, and because I _could_.
 
 # Supported Platforms
+## Linux
+Kernels >= 2.6.24 are supported, support for older kernels is on the way.
 
-* Mac OS X (I don't have a Mac, sorry. No support yet)
-* Linux
+## *BSD
 * FreeBSD
+* DragonFlyBSD (coming soon)
+* OpenBSD (coming soon)
 
-### Dependencies
+# Unsupported Platforms
+## Mac OS X
+I don't own a Mac.  However, if I gain access to one, unless I can port ZBatt without using bullcrap like Swift, then I'm not going to port it.
+
+## Solaris
+If you're using Solaris, I'm sorry.  Not happening.  Ever.  I have better things to do.
+
+### Dependencies (v2.0+)
 * GNU Autotools
-* C Compiler
-* `libacpi` (Linux)
+* C99 compliant C compiler
 
 ### Building
 1. `autoreconf -i`
@@ -29,8 +38,6 @@ Because I wanted to be able to keep a constant tab on my laptop's power-level wi
 
 ### Installing
 Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want them and add the appropriate stuff to your terminal prompt.
-
-
 
 # Examples
 
