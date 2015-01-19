@@ -22,24 +22,29 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int limit
   int result = 0;
   FILE *fp;
   char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+  /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
+  int jdx = 0;
+  /* LOOP START */
+ loop_start:
+  jdx && memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
+  fp = fopen(batt[jdx], "r");
 
-  for (int jdx = 0; jdx < limit; ++jdx) {
-    jdx && memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
-    fp = fopen(batt[jdx], "r");
-
-    if (fp == (NULL)) {
-      fclose(fp);
-      free(batt[jdx]);
-      result = errno;
-      goto cleanup;
-    }
-    int err = fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
-
-    /* get battery percentage levels */
-    ZB_DBG("batt cap: %s\n", tmp);
-    ZB_STRTONUM(info->cap[jdx], tmp);
+  if (fp == (NULL)) {
     fclose(fp);
+    free(batt[jdx]);
+    result = errno;
+    goto cleanup;
   }
+  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+
+  /* get battery percentage levels */
+  ZB_DBG("batt cap: %s\n", tmp);
+  ZB_STRTONUM(info->cap[jdx], tmp);
+  fclose(fp);
+  /* LOOP END */
+  if (++jdx < limit)
+    goto loop_start;
+
   fp = fopen(ac, "r");
 
   if (fp == (NULL)) {
