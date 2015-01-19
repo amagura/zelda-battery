@@ -1,10 +1,15 @@
-zelda-battery [![Build Status](https://drone.io/github.com/amagura/zelda-battery/status.png)](https://drone.io/github.com/amagura/zelda-battery/latest)
+ZBatt [![Build Status](https://drone.io/github.com/amagura/zelda-battery/status.png)](https://drone.io/github.com/amagura/zelda-battery/latest)
 =============
 
-A Legend of Zelda like health-bar battery meter for the command-line
+A Legend of Zelda like health-bar battery meter for Shell prompts.
+
+# Disclaimer
+Before you _even_ comment on the code or practices used by this project, keep on _very_ important thing in mind: I wrote this for _me_ to use, but I was nice and made it easy for other people to use in _neat_ ways.
+
+If you see something weird like `goto` statements instead of for-loops remember where this application is being used.  It is for use in shell prompts, where it needs to be _lightning_ fast: I don't want my Shell prompt to take any longer to load than it does for me to wonder if it's taking too long to load, and because it was, admittedly, fun to find ways of making ZBatt unnecesssarily faster.
 
 # Why?
-Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line, thought it would be neat thing to do, and because I _could_.
+Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line or running a command, thought it would be neat thing to do, and because I _could_.
 
 # Supported Platforms
 
