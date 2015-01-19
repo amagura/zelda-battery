@@ -25,8 +25,9 @@ m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check for libs
-AC_CHECK_FILES([/sys/class/power_supply /proc/acpi/ac_adapter],,,)
-AM_CONDITIONAL([HAVE_sys_class_power_supply], [test x"$ac_cv_file__sys_class_power_supply" = x"yes"])
+AC_CHECK_FILES([/sys/class/power_supply],,,)
+AC_CHECK_FILES([/proc/acpi/ac_adapter],,,)
+AM_CONDITIONAL([HAVE__proc_acpi_ac_adapter], [test x"$ac_cv_file__proc_acpi_ac_adapter" = x"yes"])
 # AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
 AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [FreeBSD]))
 AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))

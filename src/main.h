@@ -47,6 +47,12 @@ limitations under the License.
 #define ZB_DEBUG 0
 #endif
 
+#if defined HAVE__SYS_CLASS_POWER_SUPPLY
+#define ZB_SYS_CLASS HAVE__SYS_CLASS_POWER_SUPPLY
+#elif defined HAVE__PROC_ACPI_AC_ADAPTER
+#define ZB_PROC_ACPI HAVE__PROC_ACPI_AC_ADAPTER
+#endif
+
 #if ZB_DEBUG
 #define ZB_DBG(format, ...) \
   do { \
