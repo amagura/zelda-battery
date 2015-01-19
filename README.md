@@ -13,7 +13,7 @@ Because I wanted to be able to keep a constant tab on my laptop's power-level wi
 
 # Supported Platforms
 ## Linux
-Kernels >= 2.6.24 are supported, support for older kernels is on the way.
+Kernels >= 2.6.24 are supported; support for older kernels is on the way.
 
 ## *BSD
 * FreeBSD
