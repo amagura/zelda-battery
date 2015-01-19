@@ -12,6 +12,9 @@ endif
 
 if LINUX
 AM_CFLAGS += -DZB_LINUX=1
+if SYS_CLASS
+AM_CFLAGS += -DZB_SYS_CLASS=1
+endif
 endif
 
 if BSD
@@ -51,8 +54,8 @@ mtrace: $(bin_PROGRAMS)
 	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done
 
 expand:
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -nostdinc -E $(zbatt_SOURCES)
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -nostdinc -E $(zbatc_SOURCES)
+	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatt_SOURCES)
+	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatc_SOURCES)
 
 check-local:
 	csi -qn test.scm

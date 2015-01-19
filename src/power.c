@@ -15,7 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -49,8 +48,7 @@ init()
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
-  //#elif ZB_LINUX
-#else
+#elif ZB_LINUX
   struct pwr_sup info;
   /* change this value if you need to read from
    * more than one battery.

@@ -23,16 +23,16 @@ m4_define([_TEST], m4_if("$2", [BSD],
 ], [test x"$1" = x"$1"], [test x"$1" = ""]),
 [test x"$1" = x"$2"]))
 m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
-m4_define([CMP], [m4_ifelse(m4_eval(([$1] == [$2])), 1, 0, m4_ifelse(m4_eval(([$1] > [$2])), 1, 1, -1))])
-m4_define([FATAL_LT], [test 0"$1" -lt 0"$2" && exit 1])
-m4_define([FATAL_GE], [test 0"$1" -ge 0"$2" && exit 1])
-m4_define([KERNEL], rm_newline(m4_patsubst(m4_esyscmd([uname -r]), [[^.0-9].*], [])))
+m4_define([CMP], [m4_if(m4_eval(([$1] == [$2])), 1, 0, m4_if(m4_eval(([$1] > [$2])), 1, 1, -1))])
+m4_define([LINUX_FATAL_LT], [m4_if([PLATFORM], [LINUX], test 0"$1" -lt 0"$2" && exit 1,)])
+m4_define([LINUX_FATAL_GE], [m4_if([PLATFORM], [LINUX], test 0"$1" -ge 0"$2" && exit 1,)])
+m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*], [])))
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check for libs
-AC_CHECK_FILES([/sys/class/power_supply/],,[FATAL_GTE(rm_dots(KERNEL), [2.6.24])])
-AC_CHECK_FILES([/proc/acpi/ac_adapter],,[FATAL_CMP(CMP(KERNEL, [2.6.24]), 1, 0)])
-AM_CONDITIONAL([HAVE__proc_acpi_ac_adapter], [test x"$ac_cv_file__proc_acpi_ac_adapter" = x"yes"])
+AC_CHECK_FILES([/sys/class/power_supply],,LINUX_FATAL_GE(rm_dots(KERNEL), [2.6.24]))
+AC_CHECK_FILES([/proc/acpi/ac_adapter],,LINUX_FATAL_LT(rm_dots(KERNEL), [2.6.24]))
+#AM_CONDITIONAL([HAVE__proc_acpi_ac_adapter], [test x"$ac_cv_file__proc_acpi_ac_adapter" = x"yes"])
 # AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
 AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [FreeBSD]))
 AM_CONDITIONAL([LINUX], _TEST(PLATFORM, [Linux]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
