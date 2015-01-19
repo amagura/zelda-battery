@@ -62,9 +62,8 @@ check-local:
 	csi -qn test.scm
 
 asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
-	for f in $(zbatt_SOURCES); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
-	for f in $(zbatc_SOURCES); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
-
+	for f in $(zbatt_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
+	for f in $(zbatc_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
 
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<

@@ -23,6 +23,8 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int limit
   FILE *fp;
   char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
   /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
+  if (limit <= 0)
+    goto cleanup;
   int jdx = 0;
   /* LOOP START */
  loop_start:
@@ -91,43 +93,49 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
    * +30,000 batteries; so no need to use the same
    * type as `globuf.gl_pathc'; plus, `int', IIRC, is
    * the standard convention for _generic_ loop counter types. */
-  for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
-    idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
-    fp = fopen(globuf.gl_pathv[idx], "r");
+  if ((int)globuf.gl_pathc <= 0)
+    goto cleanup;
+  int idx = 0;
+ loop_start:
+  /*  for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) { */
+  idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
+  fp = fopen(globuf.gl_pathv[idx], "r");
 
-    if (fp == (NULL)) {
-      fclose(fp);
-      result = errno;
-      goto cleanup;
-    }
-    fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
-
-    /* find batteries */
-    if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
-      fclose(fp);
-      //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-      //bzero(path, strlen(path));
-      strcpy(path, dirname(globuf.gl_pathv[idx]));
-      strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
-      ZB_DBG("path: %s\n", path);
-      memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
-      //strcpy(batt[limit], path);
-      /* else, find AC adapter */
-    } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-      fclose(fp);
-      //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-      //bzero(path, strlen(path));
-      strcpy(path, dirname(globuf.gl_pathv[idx]));
-      //strcat(path, "/online");
-      strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
-      //bzero(path, strlen(path));
-      ZB_DBG("path: %s\n", path);
-      memcpy(ac, path, ZB_ACPI_PATH_SIZE);
-      //strcpy(ac, path);
-    } else {
-      fclose(fp);
-    }
+  if (fp == (NULL)) {
+    fclose(fp);
+    result = errno;
+    goto cleanup;
   }
+  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+
+  /* find batteries */
+  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
+    fclose(fp);
+    //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
+    //bzero(path, strlen(path));
+    strcpy(path, dirname(globuf.gl_pathv[idx]));
+    strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
+    ZB_DBG("path: %s\n", path);
+    memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
+    //strcpy(batt[limit], path);
+    /* else, find AC adapter */
+  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
+    fclose(fp);
+    //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
+    //bzero(path, strlen(path));
+    strcpy(path, dirname(globuf.gl_pathv[idx]));
+    //strcat(path, "/online");
+    strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
+    //bzero(path, strlen(path));
+    ZB_DBG("path: %s\n", path);
+    memcpy(ac, path, ZB_ACPI_PATH_SIZE);
+    //strcpy(ac, path);
+  } else {
+    fclose(fp);
+  }
+
+  if (++idx < (int)globuf.gl_pathc)
+    goto loop_start;
 
  cleanup:
 
@@ -140,10 +148,8 @@ int pwr_inf(struct pwr_sup *info, int btlimit)
   if (btlimit < 0) {
     return EINVAL;
   }
-  /* int cap[] */
-  /* char *tmp */
+  int err = 0;
   glob_t globuf;
-  //FILE *fp;
 
   glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
 
@@ -166,15 +172,20 @@ int pwr_inf(struct pwr_sup *info, int btlimit)
     ZB_DBG("hdx: %d\n", hdx);
   }
 
-  get_pwr_files(globuf, ac, batt, btlimit);
+  err = get_pwr_files(globuf, ac, batt, btlimit);
   globfree(&globuf);
+
+  if (err != 0)
+    goto cleanup;
+
 
   ZB_DBG("batts: `%s'\n", batt[0]);
   ZB_DBG("ac: `%s'\n", ac);
 
 
-  read_pwr_files(info, ac, batt, btlimit);
+  err = read_pwr_files(info, ac, batt, btlimit);
 
+ cleanup:
   for (int kdx = 0; kdx < btlimit; ++kdx) {
     free(batt[kdx]);
     ZB_DBG("kdx: %d\n", kdx);
@@ -188,7 +199,7 @@ int pwr_inf(struct pwr_sup *info, int btlimit)
   }
 #endif
 
-  return 0;
+  return err;
 }
 
 #if 0
