@@ -25,11 +25,12 @@ Kernels >= 2.6.24 are supported; support for older kernels is on the way.
 I don't own a Mac.  However, if I gain access to one, unless I can port ZBatt without using bullcrap like Swift, then I'm not going to port it.
 
 ## Solaris
-If you're using Solaris, I'm sorry.  Not happening.  Ever.  I have better things to do.
+If you're using Solaris, I'm sorry; it's not gonna happen, ever.  I have better things to do.
 
 ### Dependencies (v2.0+)
 * GNU Autotools
 * C99 compliant C compiler
+* UN*X :wink:
 
 ### Building
 1. `autoreconf -i`
