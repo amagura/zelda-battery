@@ -153,6 +153,8 @@ int pwr_inf(struct pwr_sup *info, int btlimit)
 
   glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
 
+  ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
+
   if (btlimit > (int)globuf.gl_pathc) {
     /* way more than ever needed,
      * since this will also find A/C power supplies

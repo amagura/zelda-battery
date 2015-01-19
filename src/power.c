@@ -56,10 +56,15 @@ init()
    * more than one battery.
    */
   int limit = 1;
+  int err = 0;
   info.cap = NULL;
   info.cap = malloc(sizeof(info.cap)*limit);
   info.acline = false;
-  pwr_inf(&info, limit);
+  if ((err = pwr_info(&info, limit)) != 0) {
+    ZB_DBG("err: %d\n", err);
+    ZB_ONDBG(perror(ZB_PROGNAME));
+    exit(EXIT_FAILURE);
+  }
   /* I admit that currently, with the below code
    * and the current implementation
    * (everything outside of the `acpi.c' file, which
@@ -69,6 +74,8 @@ init()
    */
   ZB_DBG("info.cap[%d]: %d\n", (limit - 1), info.cap[limit - 1]);
   power.charge.raw = info.cap[--limit]; /* FIXME, I'm not future-proofed */
+  /* FIXME, I can't handle   ^^^^^^^^^
+   more than one battery */
   free(info.cap);
   ZB_DBG("info.acline: %d\n", info.acline);
   power.charge.truncated = (int)power.charge.raw / 10;
