@@ -42,7 +42,7 @@ struct pwr_sup {
    */
 };
 
-int pwr_inf PARAMS((struct pwr_sup *info, int btlimit));
+int pwr_info PARAMS((struct pwr_sup *info, int btlimit));
 
 END_C_DECLS
 

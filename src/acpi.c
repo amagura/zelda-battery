@@ -143,7 +143,7 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
   return result;
 }
 
-int pwr_inf(struct pwr_sup *info, int btlimit)
+int pwr_info(struct pwr_sup *info, int btlimit)
 {
   if (btlimit < 0) {
     return EINVAL;

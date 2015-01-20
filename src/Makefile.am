@@ -12,9 +12,6 @@ endif
 
 if LINUX
 AM_CFLAGS += -DZB_LINUX=1
-if SYS_CLASS
-AM_CFLAGS += -DZB_SYS_CLASS=1
-endif
 endif
 
 if BSD

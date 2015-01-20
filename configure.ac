@@ -30,8 +30,10 @@ m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*],
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check for libs
-AC_CHECK_FILES([/sys/class/power_supply],,LINUX_FATAL_GE(rm_dots(KERNEL), [2.6.24]))
-AC_CHECK_FILES([/proc/acpi/ac_adapter],,LINUX_FATAL_LT(rm_dots(KERNEL), [2.6.24]))
+AC_CHECK_FILES([/sys/class/power_supply],,
+LINUX_FATAL_GE(rm_dots(KERNEL), [2.6.24])
+AC_CHECK_FILES([/proc/acpi/ac_adapter],, LINUX_FATAL_LT(rm_dots(KERNEL), [2.6.24])))
+# AC_HECK_FILES
 #AM_CONDITIONAL([HAVE__proc_acpi_ac_adapter], [test x"$ac_cv_file__proc_acpi_ac_adapter" = x"yes"])
 # AC_CHECK_LIB([acpi], [check_acpi_support],,FATAL_TEST(PLATFORM, [Linux]))
 AC_CHECK_LIB([c], [sysctlbyname],,FATAL_TEST(PLATFORM, [FreeBSD]))
