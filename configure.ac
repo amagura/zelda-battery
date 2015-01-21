@@ -19,18 +19,17 @@ m4_define([rm_dots], [translit($1, [.])])
 m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
 m4_define([CPUTYPE], rm_newline(m4_esyscmd([uname -m])))
 m4_define([IS_LINUX], [m4_if($1, [Linux], TRUE_TEST($1), FALSE_TEST($1))])
-m4_define([TRUE_TEST], [test x"$1" = test x"$1"])
-m4_define([FALSE_TEST], [test x"$1" = test x"NOT $1"])
+m4_define([TRUE_TEST], [test x"$1" = x"$1"])
+m4_define([FALSE_TEST], [test x"false" = x"not $1"])
 m4_define([IF_BSD], [m4_map_args([m4_if],
 [$1, [NetBSD],[$2],[$3]],
 [$1, [FreeBSD],[$2],[$3]],
 [$1, [OpenBSD],[$2],[$3]],
 [$1, [DragonFly],[$2],[$3]])])
-m4_define([IS_BSD], [m4_map_args([m4_if],
-[$1, [NetBSD],[TRUE_TEST([IS_NETBSD])],[FALSE_TEST([IS_NETBSD])]],
-[$1, [OpenBSD],[TRUE_TEST([IS_OPENBSD])],[FALSE_TEST([IS_OPENBSD])]],
-[$1, [DragonFly],[TRUE_TEST([IS_DRAGONFLY_BSD])],[FALSE_TEST([IS_DRAGONFLY_BSD])]],
-[$1, [FreeBSD],[TRUE_TEST([IS_FREEBSD])], [FALSE_TEST([IS_FREEBSD])]])])
+m4_define([IS_BSD], [m4_if($1, [NetBSD],TRUE_TEST([NetBSD]),FALSE_TEST([NetBSD]),
+$1, [OpenBSD],TRUE_TEST([OpenBSD]),FALSE_TEST([OpenBSD]),
+$1, [DragonFly],TRUE_TEST([DragonFly_BSD]),FALSE_TEST([DragonFly_BSD]),
+$1, [FreeBSD],TRUE_TEST([FreeBSD]), FALSE_TEST([FreeBSD]))])
 m4_define([FATAL_TEST], [test x"$1" = x"$2" && exit 1])
 m4_define([CMP], [m4_if(m4_eval(([$1] == [$2])), 1, 0, m4_if(m4_eval(([$1] > [$2])), 1, 1, -1))])
 m4_define([LINUX_FATAL_LT], [m4_if([PLATFORM], [LINUX], test 0"$1" -lt 0"$2" && exit 1,)])
@@ -40,12 +39,11 @@ m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*],
 
 # Check for libs
 m4_if([PLATFORM], [Linux],
-AC_CHECK_FILES([/sys/class/power_supply],,LINUX_FATAL_GE(rm_dots(KERNEL), [2.6.24])
+AC_CHECK_FILES([/sys/class/power_supply],,LINUX_FATAL_GE(rm_dots(KERNEL), [2.6.24]),
 AC_CHECK_FILES([/proc/acpi/ac_adapter],, LINUX_FATAL_LT(rm_dots(KERNEL), [2.6.24]))))
 IF_BSD([PLATFORM], [AC_CHECK_LIB([c], [sysctlbyname],,[test x"BSD but no sysctlbyname" = x"fail"])],)
-
 AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
-AM_CONDITIONAL([BSD], IS_BSD([FreeBSD]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
+AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 
 # Check for programs
 #AC_CHECK_PROG([GPP], [gpp], [gpp], [])
