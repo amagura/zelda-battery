@@ -42,7 +42,7 @@ m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*],
 # Check for libs
 IF_LINUX([PLATFORM],AC_CHECK_FILES([/sys/class/power_supply],,LINUX_FATAL_GE(rm_dots(KERNEL), [2.6.24]),
 AC_CHECK_FILES([/proc/acpi/ac_adapter],,LINUX_FATAL_LT(rm_dots(KERNEL), [2.6.24]))),)
-IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,[test x"OS is BSD but does not have `sysctlbyname'" = x"fail"]))
+IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,[test x"OS is BSD but does not have `sysctlbyname'" = x"fail"]),)
 AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 
