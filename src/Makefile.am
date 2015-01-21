@@ -32,6 +32,8 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
+zbatc_CFLAGS = $(AM_CFLAGS) -DZB_COLOR
+
 .PHONY: valgrind lint
 all-local:
 

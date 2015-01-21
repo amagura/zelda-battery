@@ -61,6 +61,11 @@ init()
   if ((err = pwr_info(&info, limit)) != 0) {
     ZB_DBG("err: %d\n", err);
     ZB_ONDBG(perror(ZB_PROGNAME));
+	switch (err) {
+		case -1:
+			fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
+			break;
+	}
     exit(EXIT_FAILURE);
   }
   /* I admit that currently, with the below code

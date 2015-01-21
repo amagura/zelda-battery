@@ -36,7 +36,7 @@ limitations under the License.
 
 /** Macros - BEGIN **/
 #define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
-#if ZB_MAKING_ZB_COLOR
+#if ZB_COLOR
 #define ZB_PROGNAME "zbatc"
 #else
 #define ZB_PROGNAME "zbatt"

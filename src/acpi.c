@@ -155,6 +155,9 @@ int pwr_info(struct pwr_sup *info, int btlimit)
 
   ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
+	if (globuf.gl_pathc == 0)
+		return -1;
+
   if (btlimit > (int)globuf.gl_pathc) {
     /* way more than ever needed,
      * since this will also find A/C power supplies
