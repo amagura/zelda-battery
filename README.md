@@ -16,8 +16,9 @@ Because I wanted to be able to keep a constant tab on my laptop's power-level wi
 Kernels >= 2.6.24 are supported; support for older kernels is on the way.
 
 ## *BSD
+Most BSDs should be supported: as long as you have `sysctlbyname`, you should be fine.  BSD systems known to work: 
+* DragonFly BSD
 * FreeBSD
-* DragonFlyBSD (coming soon)
 
 # Unsupported Platforms
 ## Mac OS X
