@@ -18,7 +18,6 @@ Kernels >= 2.6.24 are supported; support for older kernels is on the way.
 ## *BSD
 * FreeBSD
 * DragonFlyBSD (coming soon)
-* OpenBSD (coming soon)
 
 # Unsupported Platforms
 ## Mac OS X
@@ -30,7 +29,6 @@ If you're using Solaris, I'm sorry; it's not gonna happen, ever.  I have better 
 ### Dependencies (v2.0+)
 * GNU Autotools
 * C99 compliant C compiler
-* UN*X :wink:
 
 ### Building
 1. `autoreconf -i`
