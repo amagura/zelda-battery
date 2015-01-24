@@ -6,8 +6,6 @@ A Legend of Zelda like health-bar battery meter for Shell prompts.
 # Disclaimer
 Before you _even_ comment on the code or practices used by this project, keep one _very_ important thing in mind: I wrote this for _me_; not you.
 
-If you see something weird like `goto` statements instead of for-loops remember where this application is being used.  It is for use in shell prompts, where it needs to be _lightning_ fast: I don't want my Shell prompt to take any longer to load than it does for me to wonder if it's taking too long to load, and because it was, admittedly, fun to find ways of making ZBatt unnecesssarily faster.
-
 # Why?
 Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line or running a command, thought it would be neat thing to do, and because I _could_.
 
@@ -19,13 +17,6 @@ Kernels >= 2.6.24 are supported; support for older kernels is on the way.
 Most BSDs should be supported: as long as you have `sysctlbyname`, you should be fine.  BSD systems known to work: 
 * DragonFly BSD
 * FreeBSD
-
-# Unsupported Platforms
-## Mac OS X
-I don't own a Mac.  However, if I gain access to one, unless I can port ZBatt without using bullcrap like Swift, then I'm not going to port it.
-
-## Solaris
-If you're using Solaris, I'm sorry; it's not gonna happen, ever.  I have better things to do.
 
 ### Dependencies (v2.0+)
 * GNU Autotools
