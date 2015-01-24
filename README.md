@@ -3,9 +3,6 @@ ZBatt [![Build Status](https://drone.io/github.com/amagura/zelda-battery/status.
 
 A Legend of Zelda like health-bar battery meter for Shell prompts.
 
-# Disclaimer
-Before you _even_ comment on the code or practices used by this project, keep one _very_ important thing in mind: I wrote this for _me_.
-
 # Why?
 Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line or running a command, thought it would be neat thing to do, and because I _could_.
 
