@@ -30,8 +30,11 @@ limitations under the License.
 #include "acpi.h"
 #endif
 
-struct power
-init()
+#if ZB_LINUX
+struct power init(int limit)
+#else
+struct power init()
+#endif
 {
   struct power power;
 #if ZB_BSD
@@ -48,24 +51,26 @@ init()
   sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
   power.charge.raw = ac_line;
   power.charge.truncated = (int)power.charge.raw / 10;
+
+  //
 #elif ZB_LINUX
+  //
+
   struct pwr_sup info;
   /* change this value if you need to read from
    * more than one battery.
    */
-  int limit = 1;
   int err = 0;
-  info.cap = NULL;
   info.cap = malloc(sizeof(info.cap)*limit);
   info.acline = false;
   if ((err = pwr_info(&info, limit)) != 0) {
     ZB_DBG("err: %d\n", err);
     ZB_ONDBG(perror(ZB_PROGNAME));
-	switch (err) {
-		case -1:
-			fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
-			break;
-	}
+    switch (err) {
+    case -1:
+      fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
+      break;
+    }
     exit(EXIT_FAILURE);
   }
   /* I admit that currently, with the below code

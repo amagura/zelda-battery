@@ -102,4 +102,6 @@ limitations under the License.
 #endif
 /** Macros - END **/
 
+char *concat PARAMS((const char *str, ...));
+
 #endif /* ZB_MAIN_H_GUARD */

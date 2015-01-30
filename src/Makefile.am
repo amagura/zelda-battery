@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatc zbatt
-zbatc_SOURCES = main-color.c power.c main.c acpi.c
-zbatt_SOURCES = main-text.c power.c main.c acpi.c
+zbatc_SOURCES = main-color.c power.c main.c acpi.c main.h acpi.h power.h
+zbatt_SOURCES = main-text.c power.c main.c acpi.c main.h acpi.h power.h
 
 AM_CFLAGS = -O2 -Wall
 
@@ -46,8 +46,8 @@ lint:
 	for f in $(zbatt_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
 
 valgrind: $(bin_PROGRAMS)
-	valgrind --leak-check=full ./zbatc -c '0'; echo ---------
-	valgrind --leak-check=full ./zbatt -f '+' -e '-'
+	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatc -c '0'; echo ---------
+	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatt -f '+' -e '-'
 
 mtrace: $(bin_PROGRAMS)
 	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done

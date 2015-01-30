@@ -118,7 +118,11 @@ int
 main(int argc, char **argv)
 {
   struct txt_disp_options txt_opts = opt_parse(argc, argv);
+#if ZB_LINUX
+  struct power power = init(1);
+#else
   struct power power = init();
+#endif
   disp_pwr_info(txt_opts, power);
   return EXIT_SUCCESS;
 }
