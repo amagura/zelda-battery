@@ -29,6 +29,11 @@ limitations under the License.
 # define PARAMS(protos) ()
 #endif
 
+/* XXX change this to one to turn on debugging */
+#ifndef ZB_DEBUG
+#define ZB_DEBUG 1
+#endif
+
 #include <errno.h>
 #if ZB_DEBUG
 #include <mcheck.h>
@@ -40,11 +45,6 @@ limitations under the License.
 #define ZB_PROGNAME "zbatc"
 #else
 #define ZB_PROGNAME "zbatt"
-#endif
-
-/* XXX change this to one to turn on debugging */
-#ifndef ZB_DEBUG
-#define ZB_DEBUG 0
 #endif
 
 #if ZB_DEBUG
@@ -103,5 +103,13 @@ limitations under the License.
 /** Macros - END **/
 
 char *concat PARAMS((const char *str, ...));
+
+enum pwrsuply {
+     ZB_PWR_OK = 0,
+     ZB_PWR_NWANTBAT = -1,
+     ZB_PWR_UNRDABL = -2,
+     ZB_PWR_MISSING = -3,
+     ZB_PWR_VIRTMACH = -4
+};
 
 #endif /* ZB_MAIN_H_GUARD */

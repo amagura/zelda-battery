@@ -36,59 +36,60 @@ struct power init(int limit)
 struct power init()
 #endif
 {
-  struct power power;
+     struct power power;
 #if ZB_BSD
-  size_t size;
-  int ac_line;
-  size = sizeof(int);
-  /* determine if we're running on battery or ac power */
-  ZB_DBG("%s\n", "getting hw.acpi.acline"); \
-  sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
-  power.source.ac = (bool)ac_line;
-  power.source.batt = !power.source.ac;
-  /* determine how much battery power is left */
-  ZB_DBG("%s\n", "getting hw.acpi.battery.life"); \
-  sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
-  power.charge.raw = ac_line;
-  power.charge.truncated = (int)power.charge.raw / 10;
+     size_t size;
+     int ac_line;
+     size = sizeof(int);
+     /* determine if we're running on battery or ac power */
+     ZB_DBG("%s\n", "getting hw.acpi.acline");			\
+     sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
+     power.source.ac = (bool)ac_line;
+     power.source.batt = !power.source.ac;
+     /* determine how much battery power is left */
+     ZB_DBG("%s\n", "getting hw.acpi.battery.life");			\
+     sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
+     power.charge.raw = ac_line;
+     power.charge.truncated = (int)power.charge.raw / 10;
 
-  //
+     //
 #elif ZB_LINUX
-  //
+     //
 
-  struct pwr_sup info;
-  /* change this value if you need to read from
-   * more than one battery.
-   */
-  int err = 0;
-  info.cap = malloc(sizeof(info.cap)*limit);
-  info.acline = false;
-  if ((err = pwr_info(&info, limit)) != 0) {
-    ZB_DBG("err: %d\n", err);
-    ZB_ONDBG(perror(ZB_PROGNAME));
-    switch (err) {
-    case -1:
-      fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
-      break;
-    }
-    exit(EXIT_FAILURE);
-  }
-  /* I admit that currently, with the below code
-   * and the current implementation
-   * (everything outside of the `acpi.c' file, which
-   * itself, does in fact support reading from
-   * more than one battery), reading the current capacity
-   * from more than one battery is unsupported.
-   */
-  ZB_DBG("info.cap[%d]: %d\n", (limit - 1), info.cap[limit - 1]);
-  power.charge.raw = info.cap[--limit]; /* FIXME, I'm not future-proofed */
-  /* FIXME, I can't handle   ^^^^^^^^^
-   more than one battery */
-  free(info.cap);
-  ZB_DBG("info.acline: %d\n", info.acline);
-  power.charge.truncated = (int)power.charge.raw / 10;
-  power.source.ac = info.acline;
-  power.source.batt = !power.source.ac;
+     struct pwr_sup info;
+     /* change this value if you need to read from
+      * more than one battery.
+      */
+     int err = 0;
+     info.cap = malloc(sizeof(info.cap)*limit);
+     info.acline = false;
+     if ((err = pwr_info(&info, limit)) != 0) {
+	  ZB_DBG("err: %d\n", err);
+	  ZB_ONDBG(perror(ZB_PROGNAME));
+	  switch (err) {
+	  case -1:
+	       // printf("vmnstdmach");
+	       fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
+	       break;
+	  }
+	  exit(EXIT_FAILURE);
+     }
+     /* I admit that currently, with the below code
+      * and the current implementation
+      * (everything outside of the `acpi.c' file, which
+      * itself, does in fact support reading from
+      * more than one battery), reading the current capacity
+      * from more than one battery is unsupported.
+      */
+     ZB_DBG("info.cap[%d]: %d\n", (limit - 1), info.cap[limit - 1]);
+     power.charge.raw = info.cap[--limit]; /* FIXME, I'm not future-proofed */
+     /* FIXME, I can't handle   ^^^^^^^^^
+	more than one battery */
+     free(info.cap);
+     ZB_DBG("info.acline: %d\n", info.acline);
+     power.charge.truncated = (int)power.charge.raw / 10;
+     power.source.ac = info.acline;
+     power.source.batt = !power.source.ac;
 #endif
-  return power;
+     return power;
 }

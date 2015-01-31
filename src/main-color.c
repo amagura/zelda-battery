@@ -116,8 +116,11 @@ int
 main(int argc, char **argv)
 {
   struct color_disp_options color_opts = opt_parse(argc, argv);
+#if ZB_LINUX
+  struct power power = init(1);
+#else
   struct power power = init();
+#endif
   disp_pwr_info(color_opts, power);
   return EXIT_SUCCESS;
 }
-

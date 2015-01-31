@@ -20,6 +20,11 @@ limitations under the License.
 #include <string.h>
 #include "main.h"
 
+#ifndef __GNUC__
+#ifndef __attribute__
+#define __attribute__(x)
+#endif
+#endif
 
 /* Alloca crap */
 #ifdef STDC_HEADERS
@@ -58,25 +63,27 @@ inline void *mempcpy(void *dest, const void *src, size_t len)
 /* TODO, make sure that we are allowed to use the following function.
  * It is __slightly__ modified, but it is pretty much the same function
  * used as an example in the Glibc manual. */
-char *concat(const char *str, ...)
+char *concat(const char *s1, ...) __attribute__ ((__sentinel__));
+
+char *concat(const char *s1, ...)
 {
      va_list ap;
-     size_t allocated = 100;
+     size_t allocated = 8;
      char *result = (char *) malloc (allocated);
 
      if (result != NULL) {
 	  char *newp;
-	  char *wp;
+	  char *tmp;
 	  const char *s;
 
-	  va_start (ap, str);
+	  va_start (ap, s1);
 
-	  wp = result;
-	  for (s = str; s != NULL; s = va_arg (ap, const char *)) {
+	  tmp = result;
+	  for (s = s1; s != NULL; s = va_arg (ap, const char *)) {
 	       size_t len = strlen (s);
 
 	       /* Resize the allocated memory if necessary. */
-	       if (wp + len + 1 > result + allocated) {
+	       if (tmp + len + 1 > result + allocated) {
 		    allocated = (allocated + len) * 2;
 		    newp = (char *) realloc (result, allocated);
 		    if (newp == NULL) {
@@ -84,17 +91,17 @@ char *concat(const char *str, ...)
 			 va_end (ap);
 			 return NULL;
 		    }
-		    wp = newp + (wp - result);
+		    tmp = newp + (tmp - result);
 		    result = newp;
 	       }
-	       wp = mempcpy (wp, s, len);
+	       tmp = mempcpy (tmp, s, len);
 	  }
 
 	  /* Terminate the result string. */
-	  *wp++ = '\0';
+	  *tmp++ = '\0';
 
 	  /* Resize memory to optimal size. */
-	  newp = realloc (result, wp - result);
+	  newp = realloc (result, tmp - result);
 	  if (newp != NULL)
 	       result = newp;
 
