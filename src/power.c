@@ -22,22 +22,44 @@ limitations under the License.
 #include "main.h"
 #include "power.h"
 
-#if ZB_BSD
-#include <sys/sysctl.h>
+#if ZB_LINUX
+# include "acpi.h"
+#elif ZB_BSD
+# include <sys/sysctl.h>
 #endif
 
-#if ZB_LINUX
-#include "acpi.h"
-#endif
-
-#if ZB_LINUX
-struct power init(int limit)
-#else
-struct power init()
-#endif
+int init(struct power *pwr)
 {
-     struct power power;
-#if ZB_BSD
+     int retval = 0;
+#if ZB_LINUX
+     int limit = pwr->charge.nof;
+     struct pwr_sup info;
+     info.cap = malloc(sizeof(*info.cap) * limit);
+     info.acline = false;
+
+     if ((retval = pwr_info(&info, limit)) != 0) {
+	  ZB_DBG("err: %d\n", retval);
+	  ZB_ONDBG(perror(ZB_PROGNAME));
+	  switch (retval) {
+	  case -1:
+	       // printf("vmnstdmach");
+	       fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
+	       break;
+	  }
+	  exit(EXIT_FAILURE);
+     }
+
+     for (int idx = 0; idx < limit; ++idx) {
+	  ZB_DBG("info.cap[%d]: %d\n", idx, info.cap[idx]);
+	  pwr->charge.raw[idx] = info.cap[idx];
+	  pwr->charge.tr[idx] = (int)pwr->charge.raw[idx] / 10;
+     }
+     free(info.cap);
+     ZB_DBG("info.acline: %d\n", info.acline);
+     pwr->source.ac = info.acline;
+     pwr->source.batt = !info.acline;
+
+#elif ZB_BSD
      size_t size;
      int ac_line;
      size = sizeof(int);
@@ -53,43 +75,7 @@ struct power init()
      power.charge.truncated = (int)power.charge.raw / 10;
 
      //
-#elif ZB_LINUX
-     //
 
-     struct pwr_sup info;
-     /* change this value if you need to read from
-      * more than one battery.
-      */
-     int err = 0;
-     info.cap = malloc(sizeof(info.cap)*limit);
-     info.acline = false;
-     if ((err = pwr_info(&info, limit)) != 0) {
-	  ZB_DBG("err: %d\n", err);
-	  ZB_ONDBG(perror(ZB_PROGNAME));
-	  switch (err) {
-	  case -1:
-	       // printf("vmnstdmach");
-	       fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
-	       break;
-	  }
-	  exit(EXIT_FAILURE);
-     }
-     /* I admit that currently, with the below code
-      * and the current implementation
-      * (everything outside of the `acpi.c' file, which
-      * itself, does in fact support reading from
-      * more than one battery), reading the current capacity
-      * from more than one battery is unsupported.
-      */
-     ZB_DBG("info.cap[%d]: %d\n", (limit - 1), info.cap[limit - 1]);
-     power.charge.raw = info.cap[--limit]; /* FIXME, I'm not future-proofed */
-     /* FIXME, I can't handle   ^^^^^^^^^
-	more than one battery */
-     free(info.cap);
-     ZB_DBG("info.acline: %d\n", info.acline);
-     power.charge.truncated = (int)power.charge.raw / 10;
-     power.source.ac = info.acline;
-     power.source.batt = !power.source.ac;
 #endif
-     return power;
+     return retval;
 }

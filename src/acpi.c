@@ -17,200 +17,195 @@
 #define ZB_ACPI_ACTYPE "Mains"
 #define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
 
-inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int limit)
+inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed int btlimit)
 {
-  int result = 0;
-  FILE *fp;
-  char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
-  /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
-  if (limit <= 0)
-    goto cleanup;
-  int jdx = 0;
-  /* LOOP START */
- loop_start:
-  jdx && memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
-  fp = fopen(batt[jdx], "r");
+     int result = 0;
+     FILE *fp;
+     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+     /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
+     if (btlimit == 0)
+	  goto ac_adapter;
 
-  if (fp == (NULL)) {
-    fclose(fp);
-    free(batt[jdx]);
-    result = errno;
-    goto cleanup;
-  }
-  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+     /* btlimit is passed to read_pwr_files as a negative number, so that we process the battery files in order */
+     for (int jdx = 0; jdx < (btlimit * -1); ++jdx) {
+	  if (jdx > btlimit)
+	       memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
+	  if ((fp = fopen(batt[jdx], "r")) == NULL) {
+	       /* a battery has been removed since the last call to find_pwr_files */
+	       result = errno;
+	       goto cleanup;
+	  }
+	  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
-  /* get battery percentage levels */
-  ZB_DBG("batt cap: %s\n", tmp);
-  ZB_STRTONUM(info->cap[jdx], tmp);
-  fclose(fp);
-  /* LOOP END */
-  if (++jdx < limit)
-    goto loop_start;
+	  /* get battery percentage levels */
+	  ZB_DBG("batt cap: %s\n", tmp);
+	  ZB_STRTONUM(info->cap[jdx], tmp);
+	  fclose(fp);
+     }
 
-  fp = fopen(ac, "r");
+ac_adapter:
+     if ((fp = fopen(ac, "r")) == NULL) {
+	  /* the A/C adapter was removed...
+	   *  (is this even possible while the machine's running?) */
+	  result = errno;
+	  goto cleanup;
+     }
+     fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
-  if (fp == (NULL)) {
-    fclose(fp);
-    result = errno;
-    goto cleanup;
-  }
-  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+     /* get AC adapter state */
+     ZB_DBG("acline: %s\n", tmp);
+     int *kdxtmp = malloc(sizeof(*kdxtmp));
+     ZB_STRTONUM(*kdxtmp, tmp);
+     info->acline = (bool)*kdxtmp;
+     free(kdxtmp);
+     fclose(fp);
 
-  /* get AC adapter state */
-  ZB_DBG("acline: %s\n", tmp);
-  int *kdxtmp = malloc(sizeof(*kdxtmp));
-  ZB_STRTONUM(*kdxtmp, tmp);
-  info->acline = (bool)*kdxtmp;
-  free(kdxtmp);
-  fclose(fp);
+cleanup:
+     free(tmp);
 
- cleanup:
-  free(tmp);
-
-  return result;
+     return result;
 }
 
 inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
 {
-  int result = 0;
-  FILE *fp;
-  char path[ZB_ACPI_PATH_SIZE];
-  /* the files we'll be reading only consist of
-   * a single line of little text,
-   * often no more than a word; but
-   * definitely no more than 3
-   * to 5 words (i.e. a sentence). */
-  char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+     int result = 0;
+     FILE *fp;
+     char path[ZB_ACPI_PATH_SIZE];
+     /* the files we'll be reading only consist of
+      * a single line of little text,
+      * often no more than a word; but
+      * definitely no more than 3
+      * to 5 words (i.e. a sentence). */
+     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
 
-  /*   Note the use of `globuf.gl_pathc` instead of `batlim`:
-   * `batlim' is only used to limit the _number of batteries_;
-   * what about A/C power supplies?
-   *
-   *   Note the use of `(int)' in the `for' loop:
-   * IIRC, int has an upper range limit somewhere
-   * in the 30 thousands: I very much doubt that
-   * you're running a machine that has
-   * +30,000 batteries; so no need to use the same
-   * type as `globuf.gl_pathc'; plus, `int', IIRC, is
-   * the standard convention for _generic_ loop counter types. */
-  if ((int)globuf.gl_pathc <= 0)
-    goto cleanup;
-  int idx = 0;
- loop_start:
-  /*  for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) { */
-  idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
-  fp = fopen(globuf.gl_pathv[idx], "r");
+     /*   Note the use of `globuf.gl_pathc` instead of `batlim`:
+      * `batlim' is only used to limit the _number of batteries_;
+      * what about A/C power supplies?
+      *
+      *   Note the use of `(int)' in the `for' loop:
+      * IIRC, int has an upper range limit somewhere
+      * in the 30 thousands: I very much doubt that
+      * you're running a machine that has
+      * +30,000 batteries; so no need to use the same
+      * type as `globuf.gl_pathc'; plus, `int', IIRC, is
+      * the standard convention for _generic_ loop counter types. */
+     if ((int)globuf.gl_pathc <= 0)
+	  goto cleanup;
+     int idx = 0;
+loop_start:
+     /*  for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) { */
+     idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
+     fp = fopen(globuf.gl_pathv[idx], "r");
 
-  if (fp == (NULL)) {
-    fclose(fp);
-    result = errno;
-    goto cleanup;
-  }
-  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+     if (fp == (NULL)) {
+	  fclose(fp);
+	  result = errno;
+	  goto cleanup;
+     }
+     fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
-  /* find batteries */
-  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
-    fclose(fp);
-    //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
+     /* find batteries */
+     if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
+	  fclose(fp);
+	  //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
+	  //bzero(path, strlen(path));
+	  strcpy(path, dirname(globuf.gl_pathv[idx]));
+	  strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
+	  ZB_DBG("path: %s\n", path);
+	  memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
+	  //strcpy(batt[limit], path);
+	  /* else, find AC adapter */
+     } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
+	  fclose(fp);
+	  //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
     //bzero(path, strlen(path));
-    strcpy(path, dirname(globuf.gl_pathv[idx]));
-    strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
-    ZB_DBG("path: %s\n", path);
-    memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
-    //strcpy(batt[limit], path);
-    /* else, find AC adapter */
-  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-    fclose(fp);
-    //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-    //bzero(path, strlen(path));
-    strcpy(path, dirname(globuf.gl_pathv[idx]));
-    //strcat(path, "/online");
-    strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
-    //bzero(path, strlen(path));
-    ZB_DBG("path: %s\n", path);
-    memcpy(ac, path, ZB_ACPI_PATH_SIZE);
-    //strcpy(ac, path);
-  } else {
-    fclose(fp);
-  }
+	  strcpy(path, dirname(globuf.gl_pathv[idx]));
+	  //strcat(path, "/online");
+	  strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
+	  //bzero(path, strlen(path));
+	  ZB_DBG("path: %s\n", path);
+	  memcpy(ac, path, ZB_ACPI_PATH_SIZE);
+	  //strcpy(ac, path);
+     } else {
+	  fclose(fp);
+     }
 
-  if (++idx < (int)globuf.gl_pathc)
-    goto loop_start;
+     if (++idx < (int)globuf.gl_pathc)
+	  goto loop_start;
 
- cleanup:
+cleanup:
 
-  free(tmp);
-  return result;
+     free(tmp);
+     return result;
 }
 
 int pwr_info(struct pwr_sup *info, int btlimit)
 {
-  if (btlimit < 0) {
-    return EINVAL;
-  }
-  int err = 0;
-  glob_t globuf;
+     if (btlimit < 0) {
+	  return EINVAL;
+     }
+     int err = 0;
+     glob_t globuf;
 
-  glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
+     glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
 
-  ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
+     ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
-	if (globuf.gl_pathc == 0)
-		return -1;
+     if (globuf.gl_pathc == 0)
+	  return -1;
 
-  if (btlimit > (int)globuf.gl_pathc) {
-    /* way more than ever needed,
-     * since this will also find A/C power supplies
-     * in addition to batteries. */
-    btlimit = (int)globuf.gl_pathc;
-  }
+     if (btlimit > (int)globuf.gl_pathc) {
+	  /* way more than ever needed,
+	   * since this will also find A/C power supplies
+	   * in addition to batteries. */
+	  btlimit = (int)globuf.gl_pathc;
+     }
 
-  ZB_DBG("btlimit: %d\n", btlimit);
-  ZB_DBG("ZB_ACPI_PATH_SIZE: %lu\n", ZB_ACPI_PATH_SIZE);
-
-
-  char ac[ZB_ACPI_PATH_SIZE+1];
-  char *batt[(ZB_ACPI_PATH_SIZE+1)*btlimit];
-
-  for (int hdx = 0; hdx < btlimit; ++hdx) {
-    batt[hdx] = malloc(ZB_ACPI_PATH_SIZE+1);
-    ZB_DBG("hdx: %d\n", hdx);
-  }
-
-  err = get_pwr_files(globuf, ac, batt, btlimit);
-  globfree(&globuf);
-
-  if (err != 0)
-    goto cleanup;
+     ZB_DBG("btlimit: %d\n", btlimit);
+     ZB_DBG("ZB_ACPI_PATH_SIZE: %lu\n", ZB_ACPI_PATH_SIZE);
 
 
-  ZB_DBG("batts: `%s'\n", batt[0]);
-  ZB_DBG("ac: `%s'\n", ac);
+     char ac[ZB_ACPI_PATH_SIZE+1];
+     char *batt[(ZB_ACPI_PATH_SIZE+1)*btlimit];
+
+     for (int hdx = 0; hdx < btlimit; ++hdx) {
+	  batt[hdx] = malloc(ZB_ACPI_PATH_SIZE+1);
+	  ZB_DBG("hdx: %d\n", hdx);
+     }
+
+     err = get_pwr_files(globuf, ac, batt, btlimit);
+     globfree(&globuf);
+
+     if (err != 0)
+	  goto cleanup;
+
+     ZB_DBG("batts: `%s'\n", batt[0]);
+     ZB_DBG("ac: `%s'\n", ac);
 
 
-  err = read_pwr_files(info, ac, batt, btlimit);
+     err = read_pwr_files(info, ac, batt, btlimit);
 
- cleanup:
-  for (int kdx = 0; kdx < btlimit; ++kdx) {
-    free(batt[kdx]);
-    ZB_DBG("kdx: %d\n", kdx);
-  }
+cleanup:
+     for (int kdx = 0; kdx < btlimit; ++kdx) {
+	  free(batt[kdx]);
+	  ZB_DBG("kdx: %d\n", kdx);
+     }
 
-  ZB_DBG("info.acline: %d\n", info->acline);
+     ZB_DBG("info.acline: %d\n", info->acline);
 
 #if ZB_DEBUG
-  for (int mdx = 0; mdx < btlimit; ++mdx) {
-    ZB_DBG("info.cap[%d]: %d\n", mdx, info->cap[mdx]);
-  }
+     for (int mdx = 0; mdx < btlimit; ++mdx) {
+	  ZB_DBG("info.cap[%d]: %d\n", mdx, info->cap[mdx]);
+     }
 #endif
 
-  return err;
+     return err;
 }
 
 #if 0
 int main()
 {
-  struct pwr_sup info;
+     struct pwr_sup info;
   int limit = 1;
   info.cap = NULL;
   info.cap = malloc(sizeof(info.cap)*limit);

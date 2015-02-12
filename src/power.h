@@ -29,25 +29,23 @@ limitations under the License.
 # define PARAMS(protos) ()
 #endif
 
+#include "main.h"
+
 #ifndef _Bool
-#include <stdbool.h>
+# include <stdbool.h>
 #endif
 
-struct pwr_src {
-  bool batt;
-  bool ac;
-};
-
 struct pwr_lvl {
-  int truncated;
-  int raw;
+     int *tr;
+     int *raw;
+     int nof;
 };
 
 struct power {
-  struct pwr_lvl charge;
-  struct pwr_src source;
+     struct pwr_lvl charge;
+     bool acline;
 };
 
-struct power init PARAMS(());
+int init PARAMS((struct power *pwr));
 
 #endif /* ZB_POWER_H_GUARD */

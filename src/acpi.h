@@ -1,4 +1,4 @@
-#if !ZB_BSD
+#if defined(__linux__)
 #ifndef ZB_ACPI_H_GUARD
 #define ZB_ACPI_H_GUARD 1
 /* BEGIN_C_DECLS should be used at the beginning of your declarations,
@@ -33,13 +33,13 @@ BEGIN_C_DECLS
 #endif
 
 struct pwr_sup {
-  bool acline;
-  int *cap;
-  /* if it became necessary to know which
-   * capacity went with which battery,
-   * getting each battery's model/serial number
-   * should be an easy enough task to implement
-   */
+     bool acline;
+     int *cap;
+     /* if it became necessary to know which
+      * capacity went with which battery,
+      * getting each battery's model/serial number
+      * should be an easy enough task to implement
+      */
 };
 
 int pwr_info PARAMS((struct pwr_sup *info, int btlimit));

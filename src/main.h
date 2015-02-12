@@ -1,7 +1,7 @@
 /****
 Copyright 2014 Alexej Magura
 
-This file is a part of Zelda Battery
+This file is a part of ZBatt
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,80 +29,143 @@ limitations under the License.
 # define PARAMS(protos) ()
 #endif
 
-/* XXX change this to one to turn on debugging */
-#ifndef ZB_DEBUG
-#define ZB_DEBUG 1
-#endif
-
 #include <errno.h>
-#if ZB_DEBUG
-#include <mcheck.h>
+
+/** ^^ Macros ^^ **/
+#ifndef ZB_DEBUG
+# define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
 #endif
 
-/** Macros - BEGIN **/
+#if ZB_DEBUG
+# include <mcheck.h>
+# define ZB_DBG(format, ...)						\
+     do {								\
+	  fprintf(stderr, "## (%s)(%s)%d\n",				\
+		  ZB_PROGNAME, __FILE__, __LINE__);			\
+	  fprintf(stderr, "#  `%s'\n", __FUNCTION__);			\
+	  fprintf(stderr, (format), ##__VA_ARGS__);			\
+	  fprintf(stderr, "\n");					\
+     } while(0)
+# define ZB_ONDBG(...) (__VA_ARGS__)
+#else
+# define ZB_DBG(format, ...)
+# define ZB_ONDBG(...)
+#endif
+
 #define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
-#if ZB_COLOR
-#define ZB_PROGNAME "zbatc"
-#else
-#define ZB_PROGNAME "zbatt"
-#endif
-
-#if ZB_DEBUG
-#define ZB_DBG(format, ...) \
-  do { \
-    fprintf(stderr, "## (%s)(%s)%d\n", ZB_PROGNAME, __FILE__, __LINE__); \
-    fprintf(stderr, "#  `%s'\n", __FUNCTION__); \
-    fprintf(stderr, (format), ##__VA_ARGS__);	\
-    fprintf(stderr, "\n"); \
-  } while(0)
-#define ZB_ONDBG(...) (__VA_ARGS__)
-#else
-#define ZB_DBG(format, ...)
-#define ZB_ONDBG(...)
-#endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION ""
+# define PACKAGE_VERSION ""
 #endif
 
-#define ZB_NULL ""
-
-#define ZB_ERROR(format, ...) \
-  do { \
-    fprintf(stderr, "%s:err: ", ZB_PROGNAME); \
-    fprintf(stderr, (format), __VA_ARGS__); \
-    fprintf(stderr, "\nin %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
-  } while(0)
+#define ZB_ERROR(format, ...)			\
+     do {					\
+	  fprintf(stderr, "%s:err: ", ZB_PROGNAME);	\
+	  fprintf(stderr, (format), __VA_ARGS__);			\
+	  fprintf(stderr, "\nin %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
+     } while(0)
 
 #define ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
 #define ZB_ARGMSG(...) printf("  %s\n", (__VA_ARGS__));
 
 #if HAVE_LIBBSD
-#include <limits.h>
-#include <bsd/stdlib.h>
-#define ZB_STRTONUM(dst_num, const_string) \
-  do { \
-    errno = 0; \
-    ((dst_num) = strtonum((const_string), INT_MIN, INT_MAX, NULL)); \
-    if (errno != 0) { \
-      perror(ZB_PROGNAME); \
-      exit(EXIT_FAILURE); \
-    } \
-  } while(0)
+# include <limits.h>
+# include <bsd/stdlib.h>
+# define ZB_STRTONUM(dst_num, const_string)				\
+     do {								\
+	  errno = 0;							\
+	  ((dst_num) = strtonum((const_string),				\
+				INT_MIN,				\
+				INT_MAX,				\
+				NULL));					\
+	  if (errno != 0) {						\
+	       perror(ZB_PROGNAME);					\
+	       exit(EXIT_FAILURE);					\
+	  }								\
+     } while(0)
 #else
-#define ZB_STRTONUM(dst_num, const_string) \
-  do { \
-    errno = 0; \
-    ((dst_num) = strtol((const_string), NULL, 10)); \
-    if (errno != 0) { \
-      perror(ZB_PROGNAME); \
-      exit(EXIT_FAILURE); \
-    } \
-  } while(0)
+#define ZB_STRTONUM(dst_num, const_string)			\
+     do {							\
+	  errno = 0;						\
+	  ((dst_num) = strtol((const_string), NULL, 10));	\
+	  if (errno != 0) {					\
+	       perror(ZB_PROGNAME);				\
+	       exit(EXIT_FAILURE);				\
+	  }							\
+     } while(0)
 #endif
-/** Macros - END **/
 
-char *concat PARAMS((const char *str, ...));
+/* Alloca crap */
+#ifdef STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#ifdef HAVE_ALLOCA_H
+# include <alloca.h>
+#elif !defined alloca
+# ifdef __GNUC__
+#  define alloca __builtin_alloca
+# elif defined _AIX
+#  define alloca __alloca
+# elif defined _MSC_VER
+#  include <malloc.h>
+#  define alloca _alloca
+# elif !defined HAVE_ALLOCA
+#  ifdef  __cplusplus
+extern "C"
+#  endif
+void *alloca (size_t);
+# endif
+#endif
+
+/*** ^^ Compiler Compat macros ^^ ***/
+#if !__clang__
+# ifndef __has_attribute
+#  define __has_attribute(x) 0
+# endif
+#endif
+
+#if !__GNUC__
+# ifndef __attribute__
+#  define __attribute__(x)
+# endif
+#endif
+
+#if __GNUC__
+# define ZB_SENTINEL __sentinel__
+#elif defined(__sentinel__)
+# define ZB_SENTINEL __sentinel__
+#elif defined(sentinel)
+# define ZB_SENTINEL sentinel
+#else
+# if __has_attribute(__sentinel__)
+#  define ZB_SENTINEL __sentinel__
+# elif __has_attribute(sentinel)
+#  define ZB_SENTINEL sentinel
+# endif
+#endif
+/*** $$ Compiler Compat macros $$ ***/
+
+/* OS Idenfitication macros */
+#define ZB_LINUX (defined(__linux__) || defined(__gnu_linux__))
+#define ZB_BSD (defined(__FreeBSD__)					\
+		|| defined(__NetBSD__)					\
+		|| defined(__OpenBSD__)					\
+		|| defined(__DragonFly__))
+#define ZB_UNIX (defined(__unix__) && !(ZB_BSD) && !(ZB_LINUX))
+/** $$ Macros $$ **/
+
+#if ZB_SENTINEL
+char *concat PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
+#else
+char *concat PARAMS((const char *s1, ...));
+#endif
+
+int stoi PARAMS((int *dst, const char *src));
 
 enum pwrsuply {
      ZB_PWR_OK = 0,

@@ -13,7 +13,6 @@ AC_C_INLINE
 AC_FUNC_ALLOCA
 
 # M4 Macros
-
 m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([rm_dots], [translit($1, [.])])
@@ -39,17 +38,9 @@ m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
 # Check for libs
 IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported])))
 
-AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
-AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
+#AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
+#AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,AC_MSG_ERROR([*BSD systems without `sysctlbyname' are unsupported])),)
-# Check for programs
-#AC_CHECK_PROG([GPP], [gpp], [gpp], [])
-#AC_CHECK_PROG([PMSET], [pmset], [yes], [no])
-#AC_CHECK_PROG([ACPI], [acpi], [yes], [no])
-#AC_CHECK_PROG([APM], [apm], [yes], [no]) # *BSD support
-#AM_CONDITIONAL([PMSET], [test x"$ac_cv_prog_PMSET" = x"yes"])
-#AM_CONDITIONAL([ACPI], [test x"$ac_cv_prog_ACPI" = x"yes"])
-#AM_CONDITIONAL([APM], [test x"$ac_cv_prog_APM" = x"yes"])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
@@ -71,26 +62,6 @@ AC_ARG_ENABLE([generic],
              esac],[generic=false])
 AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
 
-# Enable or disable blinking altogether
-#AC_ARG_ENABLE([blink],
-#              [  --enable-blinking      includes support for battery indicator blinking (default)],
-#              [case "${enableval}" in
-#               yes) blink=true ;;
-#               no) blink=false ;;
-#               *) AC_MSG_ERROR([bad value ${enableval} for --enable-blinking]) ;;
-#             esac],[blink=true])
-#AM_CONDITIONAL([BLINK], [test x$blink = xtrue])
-
-## Enable blinking, even when on AC (Alternating Current; not AutoConf) Power
-#AC_ARG_ENABLE([acblink],
-#              [  --enable-acblink       blink on low battery, even when on AC power],
-#              [case "${enableval}" in
-#               yes) acblink=true ;;
-#               no) acblink=false ;;
-#               *) AC_MSG_ERROR([bad value ${enableval} for --enable-acblink]) ;;
-#             esac],[acblink=false])
-#AM_CONDITIONAL([ACBLINK], [test x$acblink = xtrue])
-
 # Check for debug
 AC_ARG_ENABLE([debug],
               [  --enable-debug         turn on debugging],
@@ -100,16 +71,6 @@ AC_ARG_ENABLE([debug],
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
              esac],[debug=false])
 AM_CONDITIONAL([DEBUG], [test "x$debug" = xtrue])
-
-#AC_ARG_ENABLE([heartbeat],
-              #[  --enable-heartbeat     right-most heart changes from bold to regular font repeatedly],
-              #[case "${enableval}" in
-               #yes) heartbeat=true ;;
-               #no) heartbeat=false ;;
-               #*) AC_MSG_ERROR([bad value ${enableval} for --enable-heartbeat]) ;;
-             #esac],[heartbeat=false])
-#AM_CONDITIONAL([HEARTBEAT], [test "x$heartbeat" = xtrue])
-
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUTYPE[" = "x" && test ! "x]CPUTYPE[" = "xunknown"])
 
 AC_CONFIG_FILES([Makefile src/Makefile])

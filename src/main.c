@@ -20,39 +20,6 @@ limitations under the License.
 #include <string.h>
 #include "main.h"
 
-#ifndef __GNUC__
-#ifndef __attribute__
-#define __attribute__(x)
-#endif
-#endif
-
-/* Alloca crap */
-#ifdef STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#ifdef HAVE_ALLOCA_H
-# include <alloca.h>
-#elif !defined alloca
-# ifdef __GNUC__
-#  define alloca __builtin_alloca
-# elif defined _AIX
-#  define alloca __alloca
-# elif defined _MSC_VER
-#  include <malloc.h>
-#  define alloca _alloca
-# elif !defined HAVE_ALLOCA
-#  ifdef  __cplusplus
-extern "C"
-#  endif
-void *alloca (size_t);
-# endif
-#endif
-
 #ifndef mempcpy
 inline void *mempcpy(void *dest, const void *src, size_t len)
 {
@@ -60,10 +27,14 @@ inline void *mempcpy(void *dest, const void *src, size_t len)
 }
 #endif
 
-/* TODO, make sure that we are allowed to use the following function.
- * It is __slightly__ modified, but it is pretty much the same function
- * used as an example in the Glibc manual. */
-char *concat(const char *s1, ...) __attribute__ ((__sentinel__));
+int stoi(int *dst, const char *src)
+{
+     errno = 0;
+#if HAVE_LIBBSD
+     *dst = strtonum(src, INT_MIN, INT_MAX, NULL);
+#endif
+     return 0;
+}
 
 char *concat(const char *s1, ...)
 {

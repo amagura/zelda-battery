@@ -10,14 +10,6 @@ if DEBUG
 AM_CFLAGS += -g -ggdb -DZB_DEBUG=1
 endif
 
-if LINUX
-AM_CFLAGS += -DZB_LINUX=1
-endif
-
-if BSD
-AM_CFLAGS += -DZB_BSD=1
-endif
-
 if NATIVE
 if !GENERIC
 AM_CFLAGS += -march=native -mtune=native
