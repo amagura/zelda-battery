@@ -32,7 +32,9 @@ int init(struct power *pwr)
 {
      int retval = 0;
 #if ZB_LINUX
-     int limit = pwr->charge.nof;
+     int limit;
+     if ((limit = pwr->charge.nof) < 0)
+	  limit = 1;
      struct pwr_sup info;
      info.cap = malloc(sizeof(*info.cap) * limit);
      info.acline = false;

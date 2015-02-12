@@ -54,12 +54,13 @@ int main(int argc, char **argv)
 {
      int c = 0;
      struct power pwr;
+     pwr.charge.nof = -1;
      struct pp_disp_opts opts;
      opts.acblink = false;
      opts.blink = true;
      opts.blink_thold = 3; // 30%
      opts.color = "31";
-     const char *sopts = "hvHanb:c:";
+     const char *sopts = "hvHanb:c:N:";
 #if ZB_BSD
      int *optc = 0;
 
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
 	       ZB_ARGMSG("-v\t\tprint program version and exit");
 	       ZB_ARGMSG("-a\t\tenable blinking even while on A/C power (overrides previous `-n')");
 	       ZB_ARGMSG("-n\t\tdisable blinking altogether (overrides prevous `-a')");
-	       ZB_ARGMSG("-N\t\tdesired battery offset (offsets the first battery found)");
+	       ZB_ARGMSG("-N\t\toffset of desired battery (e.g. `0' -> no battery, `1' -> first battery)");
 	       ZB_ARGMSG("-b\t\tset the power-level at which blinking ensues (defaults to `30')");
 	       ZB_ARGMSG("-c <arg>\tansi color code to use (defaults to `31')");
 	       exit(EXIT_FAILURE);
