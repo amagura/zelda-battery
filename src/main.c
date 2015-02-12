@@ -27,6 +27,7 @@ inline void *mempcpy(void *dest, const void *src, size_t len)
 }
 #endif
 
+#if 0
 int stoi(int *dst, const char *src)
 {
      errno = 0;
@@ -35,6 +36,7 @@ int stoi(int *dst, const char *src)
 #endif
      return 0;
 }
+#endif
 
 char *concat(const char *s1, ...)
 {

@@ -56,9 +56,7 @@ int init(struct power *pwr)
      }
      free(info.cap);
      ZB_DBG("info.acline: %d\n", info.acline);
-     pwr->source.ac = info.acline;
-     pwr->source.batt = !info.acline;
-
+     pwr->acline = info.acline;
 #elif ZB_BSD
      size_t size;
      int ac_line;
@@ -66,16 +64,12 @@ int init(struct power *pwr)
      /* determine if we're running on battery or ac power */
      ZB_DBG("%s\n", "getting hw.acpi.acline");			\
      sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
-     power.source.ac = (bool)ac_line;
-     power.source.batt = !power.source.ac;
+     pwr->acline = (bool)ac_line;
      /* determine how much battery power is left */
      ZB_DBG("%s\n", "getting hw.acpi.battery.life");			\
      sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
-     power.charge.raw = ac_line;
-     power.charge.truncated = (int)power.charge.raw / 10;
-
-     //
-
+     *pwr->charge.raw = ac_line;
+     *pwr->charge.tr = (int)(*pwr->charge.raw) / 10;
 #endif
      return retval;
 }
