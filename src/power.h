@@ -36,8 +36,8 @@ limitations under the License.
 #endif
 
 struct pwr_lvl {
-     int *tr;
-     int *raw;
+     int tr;
+     int raw;
      int nof;
 };
 

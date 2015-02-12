@@ -36,6 +36,16 @@ limitations under the License.
 # define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
 #endif
 
+/*** ^^ Externally Defined macros ^^ ***/
+#ifndef ZB_PROGNAME
+# define ZB_PROGNAME "ZBatt"
+#endif
+
+#ifndef PACKAGE_VERSION
+# define PACKAGE_VERSION ""
+#endif
+/*** $$ Externally Defined macros $$ ***/
+
 #if ZB_DEBUG
 # include <mcheck.h>
 # define ZB_DBG(format, ...)						\
@@ -47,20 +57,18 @@ limitations under the License.
 	  fprintf(stderr, "\n");					\
      } while(0)
 # define ZB_ONDBG(...) (__VA_ARGS__)
+# define ZB_XONDBG(ZB_X) ZB_X
 #else
 # define ZB_DBG(format, ...)
 # define ZB_ONDBG(...)
+# define ZB_XONDBG(ZB_X)
 #endif
 
 #define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
 
-#ifndef PACKAGE_VERSION
-# define PACKAGE_VERSION ""
-#endif
-
-#define ZB_ERROR(format, ...)			\
-     do {					\
-	  fprintf(stderr, "%s:err: ", ZB_PROGNAME);	\
+#define ZB_ERROR(format, ...)						\
+     do {								\
+	  fprintf(stderr, "%s:err: ", ZB_PROGNAME);			\
 	  fprintf(stderr, (format), __VA_ARGS__);			\
 	  fprintf(stderr, "\nin %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
      } while(0)
@@ -71,6 +79,7 @@ limitations under the License.
 #if HAVE_LIBBSD
 # include <limits.h>
 # include <bsd/stdlib.h>
+// FIXME, the following macros shouldn't call `exit' or `perror'.
 # define ZB_STRTONUM(dst_num, const_string)				\
      do {								\
 	  errno = 0;							\

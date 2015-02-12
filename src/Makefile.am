@@ -24,7 +24,8 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
-zbatc_CFLAGS = $(AM_CFLAGS) -DZB_COLOR
+zbatc_CFLAGS = $(AM_CFLAGS) -DZB_PROGNAME=\"zbatc\"
+zbatt_CFLAGS = $(AM_CFLAGS) -DZB_PROGNAME=\"zbatt\"
 
 .PHONY: valgrind lint
 all-local:

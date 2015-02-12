@@ -18,6 +18,7 @@ limitations under the License.
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <errno.h>
 #include "main.h"
 #include "power.h"
 
@@ -27,100 +28,96 @@ limitations under the License.
 #include <unistd.h>
 #endif
 
-#define ZB_COLOR_BLINK "\033[5m"
-
-struct color_disp_options {
-  bool blink;
-  bool acblink;
-  int blink_threshold;
-  char *color;
+struct pp_disp_opts {
+     bool blink;
+     bool acblink;
+     int blink_thold;
+     char *color;
 };
 
-static inline void
-disp_pwr_info(struct color_disp_options opts, struct power power)
+enum colors {
+     BLNK = '5'
+};
+
+inline void disp_pwr_info(struct pp_disp_opts opts, struct power pwr)
 {
-  printf("\033[%sm", opts.color);
-  if (opts.blink) {
-    if (power.charge.raw <= opts.blink_threshold) {
-      if (power.source.ac)
-        printf("%s", opts.acblink ? ZB_COLOR_BLINK : "");
-      else
-        printf("%s", ZB_COLOR_BLINK);
-    }
-  }
+     printf("\033[%sm", opts.color);
+     if (!opts.blink || (pwr.charge.raw) > opts.blink_thold)
+	  return;
+     if (pwr.acline)
+	  printf("%s", opts.acblink ? (char *)BLNK : "");
+     else
+	  printf("%s", (char *)BLNK);
 }
 
-static inline struct color_disp_options
-opt_parse(int argc, char **argv)
+int main(int argc, char **argv)
 {
-  int c = 0;
-
-  struct color_disp_options color_opts;
-  color_opts.acblink = false;
-  color_opts.blink = true;
-  color_opts.blink_threshold = 3;
-  color_opts.color = "31";
-  const char *shopts = "hvHanb:c:";
-
+     int c = 0;
+     struct power pwr;
+     struct pp_disp_opts opts;
+     opts.acblink = false;
+     opts.blink = true;
+     opts.blink_thold = 3; // 30%
+     opts.color = "31";
+     const char *sopts = "hvHanb:c:";
 #if ZB_BSD
-  int *opt_counter = 0;
+     int *optc = 0;
 
-  struct option lopts[] = {
-    { 0, 0, 0, 0 }
-  };
+     struct option lopts[] = {
+	  { 0, 0, 0, 0 }
+     };
 
-  while ((c = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
+# define ZB_LOOP_ARGS getopt_long(argc, argv, sopts, lopts, optc)
 #else
-#if !ZB_LINUX
-#include <unistd.h>
+# if !ZB_LINUX
+#  include <unistd.h>
+# endif
+# define ZB_LOOP_ARGS getopt(argc, argv, sopts)
 #endif
-  while ((c = getopt(argc, argv, shopts)) != EOF) {
-#endif
-    ZB_DBG("optopt %d:", optopt);
-    if (optopt != 0)
-      exit(EXIT_FAILURE);
+     while ((c = ZB_LOOP_ARGS) != EOF) {
+	  ZB_DBG("optopt %d:", optopt);
+	  if (optopt != 0)
+	       exit(EXIT_FAILURE);
 
-    switch(c) {
-      case 'h':
-        ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
-        ZB_ARGMSG("-h\t\tprint this message and exit");
-        ZB_ARGMSG("-v\t\tprint program version and exit");
-        ZB_ARGMSG("-a\t\tenable blinking even while on A/C power (overrides previous `-n')");
-        ZB_ARGMSG("-n\t\tdisable blinking altogether (overrides prevous `-a')");
-        ZB_ARGMSG("-b\t\tset the power-level at which blinking ensues (defaults to `30')");
-        ZB_ARGMSG("-c <arg>\tansi color code to use (defaults to `31')");
-        exit(EXIT_FAILURE);
-      case 'b':
-        ZB_STRTONUM(color_opts.blink_threshold, (const char *)optarg);
-        if (color_opts.blink_threshold > 99)
-          color_opts.blink_threshold = 100;
-        break;
-      case 'a':
-        color_opts.acblink = true;
-        break;
-      case 'n':
-        color_opts.blink = false;
-        break;
-      case 'c':
-        color_opts.color = optarg;
-        break;
-      case 'v':
-        printf("%s\n", PACKAGE_VERSION);
-        break;
-    }
-  }
-  return color_opts;
-}
+	  switch(c) {
+	  case 'h':
+	       ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
+	       ZB_ARGMSG("-h\t\tprint this message and exit");
+	       ZB_ARGMSG("-v\t\tprint program version and exit");
+	       ZB_ARGMSG("-a\t\tenable blinking even while on A/C power (overrides previous `-n')");
+	       ZB_ARGMSG("-n\t\tdisable blinking altogether (overrides prevous `-a')");
+	       ZB_ARGMSG("-N\t\tdesired battery offset (offsets the first battery found)");
+	       ZB_ARGMSG("-b\t\tset the power-level at which blinking ensues (defaults to `30')");
+	       ZB_ARGMSG("-c <arg>\tansi color code to use (defaults to `31')");
+	       exit(EXIT_FAILURE);
+	  case 'b':
+	       ZB_STRTONUM(opts.blink_thold, (const char *)optarg);
+	       if (opts.blink_thold > 99)
+		    opts.blink_thold = 100;
+	       break;
+	  case 'a':
+	       opts.acblink = true;
+	       break;
+	  case 'n':
+	       opts.blink = false;
+	       break;
+	  case 'N':
+	       ZB_STRTONUM(pwr.charge.nof, (const char *)optarg);
+	       if (pwr.charge.nof < 0)
+		    pwr.charge.nof *= -1;
+	       break;
+	  case 'c':
+	       opts.color = optarg;
+	       break;
+	  case 'v':
+	       printf("%s\n", PACKAGE_VERSION);
+	       break;
+	  }
+     }
 
-int
-main(int argc, char **argv)
-{
-  struct color_disp_options color_opts = opt_parse(argc, argv);
-#if ZB_LINUX
-  struct power power = init(1);
-#else
-  struct power power = init();
-#endif
-  disp_pwr_info(color_opts, power);
-  return EXIT_SUCCESS;
+     int err;
+     err = init(&pwr);
+     ZB_XONDBG(perror(ZB_PROGNAME));
+     disp_pwr_info(opts, pwr);
+     return EXIT_SUCCESS;
 }

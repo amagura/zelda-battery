@@ -48,12 +48,12 @@ int init(struct power *pwr)
 	  }
 	  exit(EXIT_FAILURE);
      }
-
-     for (int idx = 0; idx < limit; ++idx) {
+     pwr->charge.raw = info.cap[limit];
+     pwr->charge.tr = (int)pwr->charge.raw / 10;
+#if ZB_DEBUG
+     for (int idx = 0; idx < limit; ++idx)
 	  ZB_DBG("info.cap[%d]: %d\n", idx, info.cap[idx]);
-	  pwr->charge.raw[idx] = info.cap[idx];
-	  pwr->charge.tr[idx] = (int)pwr->charge.raw[idx] / 10;
-     }
+#endif
      free(info.cap);
      ZB_DBG("info.acline: %d\n", info.acline);
      pwr->acline = info.acline;
@@ -68,8 +68,8 @@ int init(struct power *pwr)
      /* determine how much battery power is left */
      ZB_DBG("%s\n", "getting hw.acpi.battery.life");			\
      sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
-     *pwr->charge.raw = ac_line;
-     *pwr->charge.tr = (int)(*pwr->charge.raw) / 10;
+     pwr->charge.raw = ac_line;
+     pwr->charge.tr = (int)pwr->charge.raw / 10;
 #endif
      return retval;
 }
