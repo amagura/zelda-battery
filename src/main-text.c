@@ -49,6 +49,7 @@ int main(int argc, char **argv)
 {
      int c = 0;
      struct txt_disp_opts txt;
+     struct power pwr;
      txt.remaining = false;
      txt.expended = false;
      const char *sopts = "hvf:e:pmN:";

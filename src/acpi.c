@@ -29,7 +29,7 @@ limitations under the License.
 # if HAVE__SYS_CLASS_POWER_SUPPLY
 #  define ZB_ACPI_ROOT "/sys/class/power_supply"
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
-#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT))/* the `""` here adds 1 to the overall length */
+#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT)) /* the `""` here adds 1 to the overall length */
 #  define ZB_ACPI_BATTYPE "Battery"
 #  define ZB_ACPI_ACTYPE "Mains"
 #  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
@@ -217,15 +217,14 @@ cleanup:
 int main()
 {
      struct pwr_sup info;
-  int limit = 1;
-  info.cap = NULL;
-  info.cap = malloc(sizeof(info.cap)*limit);
-  info.acline = false;
-  pwr_inf(info, limit);
-  free(info.cap);
+     int limit = 1;
+     info.cap = NULL;
+     info.cap = malloc(sizeof(info.cap)*limit);
+     info.acline = false;
+     pwr_inf(&info, limit);
+     free(info.cap);
 }
 #  endif
-
 # else
 #  define ZB_ACPI_ROOT "/proc/acpi/"
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT // FIXME glob not known

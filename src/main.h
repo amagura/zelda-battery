@@ -172,18 +172,6 @@ void *alloca (size_t);
 # else
 #  define ZB_IF_BSD(x)
 # endif
-
-# if ZB_LINUX
-#  define ZB_IF_LINUX(x) (x)
-# else
-#  define ZB_IF_LINUX(x)
-# endif
-
-# if ZB_UNIX
-#  define ZB_IF_UNIX(x) (x)
-# else
-#  define ZB_IF_UNIX(x)
-# endif
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL
