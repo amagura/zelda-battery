@@ -1,8 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatc zbatt
-zbatc_SOURCES = main-color.c power.c main.c acpi.c main.h acpi.h power.h
-zbatt_SOURCES = main-text.c power.c main.c acpi.c main.h acpi.h power.h
+zbatc_SOURCES = main-color.c power.c main.c acpi.c
+zbatt_SOURCES = main-text.c power.c main.c acpi.c
+
+noinst_HEADERS = main.h acpi.h power.h
 
 AM_CFLAGS = -O2 -Wall
 

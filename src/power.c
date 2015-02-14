@@ -52,10 +52,10 @@ int init(struct power *pwr)
      }
      pwr->charge.raw = info.cap[limit];
      pwr->charge.tr = (int)pwr->charge.raw / 10;
-#if ZB_DEBUG
+# if ZB_DEBUG
      for (int idx = 0; idx < limit; ++idx)
 	  ZB_DBG("info.cap[%d]: %d\n", idx, info.cap[idx]);
-#endif
+# endif
      free(info.cap);
      ZB_DBG("info.acline: %d\n", info.acline);
      pwr->acline = info.acline;
