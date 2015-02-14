@@ -1,5 +1,5 @@
 /****
-Copyright 2014 Alexej Magura
+Copyright 2014-2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -15,6 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
+#include "compat.h"
 #if ZB_LINUX
 # include <stdlib.h>
 # include <stdio.h>
@@ -152,6 +153,7 @@ cleanup:
 
 int pwr_info(struct pwr_sup *info, int btlimit)
 {
+     ZB_DBG("%s: %d\n", "ZB_LINUX", ZB_LINUX);
      if (btlimit < 0) {
 	  return EINVAL;
      }

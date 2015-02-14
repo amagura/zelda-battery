@@ -16,24 +16,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ****/
 #ifndef ZB_POWER_H_GUARD
-#define ZB_POWER_H_GUARD 1
+# define ZB_POWER_H_GUARD 1
 /* PARAMS is a macro used to wrap function prototypes, so that
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
-#undef PARAMS
-#if defined (__STDC__) || defined (_AIX) \
+# undef PARAMS
+# if defined (__STDC__) || defined (_AIX) \
        || (defined (__mips) && defined (_SYSTYPE_SVR4)) \
        || defined(WIN32) || defined(__cplusplus)
-# define PARAMS(protos) protos
-#else
-# define PARAMS(protos) ()
-#endif
+#  define PARAMS(protos) protos
+# else
+#  define PARAMS(protos) ()
+# endif
 
-#include "main.h"
+# include "main.h"
 
-#ifndef _Bool
-# include <stdbool.h>
-#endif
+# ifndef _Bool
+#  include <stdbool.h>
+# endif
+
+# if !defined(ZB_ACPI_H_GUARD)
+#  include "acpi.h"
+# endif
 
 struct pwr_lvl {
      int tr;

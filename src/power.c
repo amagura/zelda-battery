@@ -1,5 +1,5 @@
 /****
-Copyright 2014 Alexej Magura
+Copyright 2014-2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -21,12 +21,14 @@ limitations under the License.
 #include <string.h>
 #include "main.h"
 #include "power.h"
+#include "compat.h"
 
 #if ZB_LINUX
 # include "acpi.h"
 #elif ZB_BSD
 # include <sys/sysctl.h>
 #endif
+
 
 int init(struct power *pwr)
 {

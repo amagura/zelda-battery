@@ -1,5 +1,5 @@
 /****
-Copyright 2014 Alexej Magura
+Copyright 2014-2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -102,75 +102,6 @@ limitations under the License.
 	       exit(EXIT_FAILURE);				\
 	  }							\
      } while(0)
-# endif
-
-/* Alloca crap */
-# ifdef STDC_HEADERS
-#  include <stdlib.h>
-#  include <stddef.h>
-# else
-#  ifdef HAVE_STDLIB_H
-#   include <stdlib.h>
-#  endif
-# endif
-# ifdef HAVE_ALLOCA_H
-#  include <alloca.h>
-# elif !defined alloca
-#  ifdef __GNUC__
-#   define alloca __builtin_alloca
-#  elif defined _AIX
-#   define alloca __alloca
-#  elif defined _MSC_VER
-#   include <malloc.h>
-#   define alloca _alloca
-#  elif !defined HAVE_ALLOCA
-#   ifdef  __cplusplus
-extern "C"
-#   endif
-void *alloca (size_t);
-#  endif
-# endif
-
-/*** ^^ Compiler Compat macros ^^ ***/
-# if !__clang__
-#  ifndef __has_attribute
-#   define __has_attribute(x) 0
-#  endif
-# endif
-
-# if !__GNUC__
-#  ifndef __attribute__
-#   define __attribute__(x)
-#  endif
-# endif
-
-# if __GNUC__
-#  define ZB_SENTINEL __sentinel__
-# elif defined(__sentinel__)
-#  define ZB_SENTINEL __sentinel__
-# elif defined(sentinel)
-#  define ZB_SENTINEL sentinel
-# else
-#  if __has_attribute(__sentinel__)
-#   define ZB_SENTINEL __sentinel__
-#  elif __has_attribute(sentinel)
-#   define ZB_SENTINEL sentinel
-#  endif
-# endif
-/*** $$ Compiler Compat macros $$ ***/
-
-/* OS Idenfitication macros */
-# define ZB_LINUX (defined(__linux__) || defined(__gnu_linux__))
-# define ZB_BSD (defined(__FreeBSD__)					\
-		|| defined(__NetBSD__)					\
-		|| defined(__OpenBSD__)					\
-		|| defined(__DragonFly__))
-# define ZB_UNIX (defined(__unix__) && !(ZB_BSD) && !(ZB_LINUX))
-
-# if ZB_BSD
-#  define ZB_IF_BSD(x) (x)
-# else
-#  define ZB_IF_BSD(x)
 # endif
 /** $$ Macros $$ **/
 

@@ -1,5 +1,5 @@
 /****
-Copyright 2014 Alexej Magura
+Copyright 2014-2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -21,6 +21,7 @@ limitations under the License.
 #include <errno.h>
 #include "main.h"
 #include "power.h"
+#include "compat.h"
 
 #if ZB_BSD
 #include <getopt.h>

@@ -15,7 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#if ZB_LINUX
+#if !ZB_BSD
 # ifndef ZB_ACPI_H_GUARD
 #  define ZB_ACPI_H_GUARD 1
 /* PARAMS is a macro used to wrap function prototypes, so that

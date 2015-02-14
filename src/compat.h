@@ -30,19 +30,6 @@ limitations under the License.
 # endif
 
 /** ^^ Macros ^^ **/
-# ifndef ZB_DEBUG
-#  define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
-# endif
-
-/*** ^^ Externally Defined macros ^^ ***/
-# ifndef ZB_PROGNAME
-#  define ZB_PROGNAME "ZBatt"
-# endif
-
-# ifndef PACKAGE_VERSION
-#  define PACKAGE_VERSION ""
-# endif
-/*** $$ Externally Defined macros $$ ***/
 
 /* Alloca crap */
 # ifdef STDC_HEADERS
