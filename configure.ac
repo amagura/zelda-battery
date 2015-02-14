@@ -17,7 +17,7 @@ m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([rm_dots], [translit($1, [.])])
 m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
-m4_define([CPUTYPE], rm_newline(m4_esyscmd([uname -m])))
+m4_define([CPUARCH], rm_newline(m4_esyscmd([uname -m])))
 m4_define([IS_LINUX], [m4_if($1, [Linux], TRUE_TEST($1), FALSE_TEST($1))])
 m4_define([TRUE_TEST], [test x"$1" = x"$1"])
 m4_define([FALSE_TEST], [test x"$1" = x"not $2"])
@@ -50,7 +50,7 @@ AC_ARG_ENABLE([native],
                no) native=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-native]) ;;
              esac],[native=true])
-AM_CONDITIONAL([NATIVE], [test "x$native" = xtrue])
+AM_CONDITIONAL([NATIVE], [test "x$native" = "xtrue"])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
 AC_ARG_ENABLE([generic],
@@ -60,7 +60,7 @@ AC_ARG_ENABLE([generic],
                no) generic=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-generic]) ;;
              esac],[generic=false])
-AM_CONDITIONAL([GENERIC], [test "x$generic" = xtrue])
+AM_CONDITIONAL([GENERIC], [test "x$generic" = "xtrue"])
 
 # Check for debug
 AC_ARG_ENABLE([debug],
@@ -71,7 +71,9 @@ AC_ARG_ENABLE([debug],
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
              esac],[debug=false])
 AM_CONDITIONAL([DEBUG], [test "x$debug" = xtrue])
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUTYPE[" = "x" && test ! "x]CPUTYPE[" = "xunknown"])
+# generic?
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPU_ARCH[" = "x" && test ! "x]CPU_ARCH[" = "xunknown"])
+AC_SUBST(CPUTYPE, CPUARCH)
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
