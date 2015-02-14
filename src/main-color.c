@@ -55,11 +55,11 @@ int main(int argc, char **argv)
      int c = 0;
      struct power pwr;
      pwr.charge.nof = -1;
-     struct pp_disp_opts opts;
-     opts.acblink = false;
-     opts.blink = true;
-     opts.blink_thold = 3; // 30%
-     opts.color = "31";
+     struct pp_disp_opts pp;
+     pp.acblink = false;
+     pp.blink = true;
+     pp.blink_thold = 3; // 30%
+     pp.color = "31";
      const char *sopts = "hvHanb:c:N:";
 #if ZB_BSD
      int *optc = 0;
@@ -92,15 +92,15 @@ int main(int argc, char **argv)
 	       ZB_ARGMSG("-c <arg>\tansi color code to use (defaults to `31')");
 	       exit(EXIT_FAILURE);
 	  case 'b':
-	       ZB_STRTONUM(opts.blink_thold, (const char *)optarg);
-	       if (opts.blink_thold > 99)
-		    opts.blink_thold = 100;
+	       ZB_STRTONUM(pp.blink_thold, (const char *)optarg);
+	       if (pp.blink_thold > 99)
+		    pp.blink_thold = 100;
 	       break;
 	  case 'a':
-	       opts.acblink = true;
+	       pp.acblink = true;
 	       break;
 	  case 'n':
-	       opts.blink = false;
+	       pp.blink = false;
 	       break;
 	  case 'N':
 	       ZB_STRTONUM(pwr.charge.nof, (const char *)optarg);
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 		    pwr.charge.nof *= -1;
 	       break;
 	  case 'c':
-	       opts.color = optarg;
+	       pp.color = optarg;
 	       break;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);
@@ -119,6 +119,6 @@ int main(int argc, char **argv)
      int err;
      err = init(&pwr);
      ZB_XONDBG(perror(ZB_PROGNAME));
-     disp_pwr_info(opts, pwr);
+     disp_pwr_info(pp, pwr);
      return EXIT_SUCCESS;
 }

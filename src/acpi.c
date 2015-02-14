@@ -1,21 +1,38 @@
-#if !ZB_BSD
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-#include <libgen.h>
-#include <glob.h>
-#include <limits.h>
-#include "main.h"
-#include "acpi.h"
+/****
+Copyright 2014 Alexej Magura
 
-#if HAVE__SYS_CLASS_POWER_SUPPLY
-#define ZB_ACPI_ROOT "/sys/class/power_supply"
-#define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
-#define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT))/* the `""` here adds 1 to the overall length */
-#define ZB_ACPI_BATTYPE "Battery"
-#define ZB_ACPI_ACTYPE "Mains"
-#define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
+This file is a part of ZBatt
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+****/
+#if ZB_LINUX
+# include <stdlib.h>
+# include <stdio.h>
+# include <stdbool.h>
+# include <string.h>
+# include <libgen.h>
+# include <glob.h>
+# include <limits.h>
+# include "main.h"
+# include "acpi.h"
+
+# if HAVE__SYS_CLASS_POWER_SUPPLY
+#  define ZB_ACPI_ROOT "/sys/class/power_supply"
+#  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
+#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT))/* the `""` here adds 1 to the overall length */
+#  define ZB_ACPI_BATTYPE "Battery"
+#  define ZB_ACPI_ACTYPE "Mains"
+#  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
 
 inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed int btlimit)
 {
@@ -46,7 +63,8 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed in
 ac_adapter:
      if ((fp = fopen(ac, "r")) == NULL) {
 	  /* the A/C adapter was removed...
-	   *  (is this even possible while the machine's running?) */
+	   * (is this even possible while the machine's running?
+	   * Maybe in Multics?) */
 	  result = errno;
 	  goto cleanup;
      }
@@ -91,47 +109,40 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
       * the standard convention for _generic_ loop counter types. */
      if ((int)globuf.gl_pathc <= 0)
 	  goto cleanup;
-     int idx = 0;
-loop_start:
-     /*  for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) { */
-     idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
-     fp = fopen(globuf.gl_pathv[idx], "r");
+     for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
+	  idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
+	  fp = fopen(globuf.gl_pathv[idx], "r");
 
-     if (fp == (NULL)) {
+	  if (fp == (NULL)) {
+	       fclose(fp);
+	       result = errno;
+	       goto cleanup;
+	  }
+	  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 	  fclose(fp);
-	  result = errno;
-	  goto cleanup;
+
+	  /* find batteries */
+	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
+	       //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
+	       //bzero(path, strlen(path));
+	       strcpy(path, dirname(globuf.gl_pathv[idx]));
+	       strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
+	       ZB_DBG("path: %s\n", path);
+	       memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
+	       //strcpy(batt[limit], path);
+	       /* else, find AC adapter */
+	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
+	       //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
+	       //bzero(path, strlen(path));
+	       strcpy(path, dirname(globuf.gl_pathv[idx]));
+	       //strcat(path, "/online");
+	       strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
+	       //bzero(path, strlen(path));
+	       ZB_DBG("path: %s\n", path);
+	       memcpy(ac, path, ZB_ACPI_PATH_SIZE);
+	       //strcpy(ac, path);
+	  }
      }
-     fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
-
-     /* find batteries */
-     if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
-	  fclose(fp);
-	  //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-	  //bzero(path, strlen(path));
-	  strcpy(path, dirname(globuf.gl_pathv[idx]));
-	  strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
-	  ZB_DBG("path: %s\n", path);
-	  memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
-	  //strcpy(batt[limit], path);
-	  /* else, find AC adapter */
-     } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-	  fclose(fp);
-	  //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-    //bzero(path, strlen(path));
-	  strcpy(path, dirname(globuf.gl_pathv[idx]));
-	  //strcat(path, "/online");
-	  strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
-	  //bzero(path, strlen(path));
-	  ZB_DBG("path: %s\n", path);
-	  memcpy(ac, path, ZB_ACPI_PATH_SIZE);
-	  //strcpy(ac, path);
-     } else {
-	  fclose(fp);
-     }
-
-     if (++idx < (int)globuf.gl_pathc)
-	  goto loop_start;
 
 cleanup:
 
@@ -152,7 +163,7 @@ int pwr_info(struct pwr_sup *info, int btlimit)
      ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
      if (globuf.gl_pathc == 0)
-	  return -1;
+	  return ZB_PWR_MISSING;
 
      if (btlimit > (int)globuf.gl_pathc) {
 	  /* way more than ever needed,
@@ -193,16 +204,16 @@ cleanup:
 
      ZB_DBG("info.acline: %d\n", info->acline);
 
-#if ZB_DEBUG
+#  if ZB_DEBUG
      for (int mdx = 0; mdx < btlimit; ++mdx) {
 	  ZB_DBG("info.cap[%d]: %d\n", mdx, info->cap[mdx]);
      }
-#endif
+#  endif
 
      return err;
 }
 
-#if 0
+#  if 0
 int main()
 {
      struct pwr_sup info;
@@ -213,14 +224,14 @@ int main()
   pwr_inf(info, limit);
   free(info.cap);
 }
-#endif
+#  endif
 
-#else
-#define ZB_ACPI_ROOT "/proc/acpi/"
-#define ZB_ACPI_GLOB "/proc/acpi/"
-#define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB "")) /* the `""` here adds 1 to the overall length */
-#define ZB_ACPI_BATCAP_PATH
-#define ZB_ACPI_BATTYPE
-#define ZB_ACPI_ACTYPE
-#endif
+# else
+#  define ZB_ACPI_ROOT "/proc/acpi/"
+#  define ZB_ACPI_GLOB ZB_ACPI_ROOT // FIXME glob not known
+#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT)) /* the `""` here adds 1 to the overall length */
+#  define ZB_ACPI_BATCAP_PATH
+#  define ZB_ACPI_BATTYPE
+#  define ZB_ACPI_ACTYPE
+# endif
 #endif

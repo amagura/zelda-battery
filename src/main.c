@@ -18,6 +18,7 @@ limitations under the License.
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <limits.h>
 #include "main.h"
 
 #ifndef mempcpy
