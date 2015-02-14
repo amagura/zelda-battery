@@ -21,7 +21,7 @@ limitations under the License.
 #include <limits.h>
 #include "main.h"
 
-#ifndef mempcpy
+#if !defined(mempcpy)
 inline void *mempcpy(void *dest, const void *src, size_t len)
 {
      return memcpy (dest, src, len) + len;
