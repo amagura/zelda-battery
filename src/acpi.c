@@ -35,6 +35,7 @@ limitations under the License.
 #  define ZB_ACPI_ACTYPE "Mains"
 #  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
 
+
 inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed int btlimit)
 {
      int result = 0;

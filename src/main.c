@@ -20,6 +20,7 @@ limitations under the License.
 #include <string.h>
 #include <limits.h>
 #include "main.h"
+#include "compat.h"
 
 #if !defined(_GNU_SOURCE)
 inline void *mempcpy(void *dest, const void *src, size_t len)
