@@ -12,6 +12,8 @@ AC_PROG_CPP
 AC_C_INLINE
 AC_FUNC_ALLOCA
 
+# let Automake know if we are using clang
+
 # M4 Macros
 m4_define([rm_newline], [translit($1, [
 ])])
@@ -72,7 +74,11 @@ AC_ARG_ENABLE([debug],
              esac],[debug=false])
 AM_CONDITIONAL([DEBUG], [test "x$debug" = xtrue])
 # generic?
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPU_ARCH[" = "x" && test ! "x]CPU_ARCH[" = "xunknown"])
+m4_define([CLANG], [test "x`($CC -E -w -P -nostdinc - <<EOF
+__clang__
+EOF
+)`" = "x1"])
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" = "xunknown" && ]CLANG)
 AC_SUBST(CPUTYPE, CPUARCH)
 
 AC_CONFIG_FILES([Makefile src/Makefile])
