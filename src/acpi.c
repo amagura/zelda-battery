@@ -34,7 +34,8 @@ limitations under the License.
 #  define ZB_ACPI_BATTYPE "Battery"
 #  define ZB_ACPI_ACTYPE "Mains"
 #  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
-#  define ZB_ACPI_BATCAP "/capacity"
+#  define ZB_ACPI_BATCAP_PATH "/capacity"
+#  define ZB_ACPI_ACSTAT_PATH "/online"
 
 
 inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed int btlimit)
@@ -91,7 +92,11 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
 {
      int result = 0;
      FILE *fp;
+#  if ZB_USE_KCAT
+     char *path = malloc(ZB_ACPI_PATH_SIZE);
+#  else
      char path[ZB_ACPI_PATH_SIZE];
+#  endif
      /* the files we'll be reading only consist of
       * a single line of little text,
       * often no more than a word; but
@@ -113,7 +118,11 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
      if ((int)globuf.gl_pathc <= 0)
 	  goto cleanup;
      for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
+#  if !ZB_USE_KCAT /* Disables the following so as to
+		    * prevent memory corruption when we `malloc'.
+		    */
 	  idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
+#  endif
 	  fp = fopen(globuf.gl_pathv[idx], "r");
 
 	  if (fp == (NULL)) {
@@ -126,17 +135,30 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
 
 	  /* find batteries */
 	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
-//	       path = kcat(dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP);
+#  if ZB_USE_KCAT
+	       path = neko(dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, NULL);
+#  else
 	       strcpy(path, dirname(globuf.gl_pathv[idx]));
 	       strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
+#  endif
 	       ZB_DBG("path: %s\n", path);
 	       memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
+#  if ZB_USE_KCAT
+	       free(path);
+#  endif
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
+#  if ZB_USE_KCAT
+	       path = neko(dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, NULL);
+#  else
 	       strcpy(path, dirname(globuf.gl_pathv[idx]));
 	       strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
+#  endif
 	       ZB_DBG("path: %s\n", path);
 	       memcpy(ac, path, ZB_ACPI_PATH_SIZE);
+#  if ZB_USE_KCAT
+	       free(path);
+#  endif
 	  }
      }
 

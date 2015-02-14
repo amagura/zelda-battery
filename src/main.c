@@ -40,14 +40,15 @@ int stoi(int *dst, const char *src)
 }
 #endif
 
-char *kcat(const char *s1, ...)
+/* FIXME, has problems */
+char *neko(const char *s1, ...)
 {
      va_list vav; // variable arg vector
-     size_t base_alloc = 8;
-     char *dst = (char *)malloc(base_alloc);
+     size_t allocd = 8;
+     char *dst = (char *)malloc(allocd);
 
      if (dst) {
-	  char *tp, *tmp;
+	  char *newp, *tmp;
 	  const char *s;
 
 	  va_start(vav, s1);
@@ -57,16 +58,15 @@ char *kcat(const char *s1, ...)
 	       size_t len = strlen(s);
 
 	       /* Does more memory need to be alloc'd? */
-	       if ((tmp + len + 1) > (dst + base_alloc)) {
-		    base_alloc = (base_alloc + len) * 2;
-		    if ((tp = (char *)realloc(dst, base_alloc)) == NULL) {
+	       if (tmp + len + 1 > dst + allocd) {
+		    allocd = (allocd + len) * 2;
+		    if ((newp = (char *)realloc(dst, allocd)) == NULL) {
 			 free(dst);
-			 va_end(vav);
 			 return NULL;
 
 		    }
-		    tmp = tp + (tmp - dst);
-		    dst = tp;
+		    tmp = newp + (tmp - dst);
+		    dst = newp;
 	       }
 	       tmp = mempcpy(tmp, s, len);
 	  }
@@ -75,8 +75,8 @@ char *kcat(const char *s1, ...)
 	  *tmp++ = '\0'; // terminates the string accordingly.
 
 	  /* optimizes amount of memory used */
-	  if ((tp = realloc(dst, tmp - dst)) != NULL)
-	       dst = tp;
+	  if ((newp = realloc(dst, tmp - dst)) != NULL)
+	       dst = newp;
 
 	  va_end(vav);
      }

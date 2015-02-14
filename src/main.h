@@ -36,6 +36,10 @@ limitations under the License.
 #  define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
 # endif
 
+# ifndef ZB_USE_KCAT
+#  define ZB_USE_KCAT 1
+# endif
+
 /*** ^^ Externally Defined macros ^^ ***/
 # ifndef ZB_PROGNAME
 #  define ZB_PROGNAME "ZBatt"
@@ -106,9 +110,9 @@ limitations under the License.
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL
-char *kcat PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
+char *neko PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
 # else
-char *kcat PARAMS((const char *s1, ...));
+char *neko PARAMS((const char *s1, ...));
 # endif
 
 enum pwrsuply {

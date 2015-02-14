@@ -41,8 +41,8 @@ lint:
 	for f in $(zbatt_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
 
 valgrind: $(bin_PROGRAMS)
-	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatt -f '+' -e '-'; echo ---------
 	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatc -c '0';
+	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatt -f '+' -e '-'; echo ---------
 
 mtrace: $(bin_PROGRAMS)
 	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done
