@@ -78,7 +78,11 @@ m4_define([CLANG], [test "x`($CC -E -w -P -nostdinc - <<EOF
 __clang__
 EOF
 )`" = "x1"])
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" = "xunknown" && ]CLANG)
+m4_define([TINYC], [test ! "x`($CC -E -w -P -nostdinc - <<EOF
+__TINYC__
+EOF
+)`" = "x__TINYC__"])
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" = "xunknown" && (]CLANG[ || ]TINYC[)])
 AC_SUBST(CPUTYPE, CPUARCH)
 
 AC_CONFIG_FILES([Makefile src/Makefile])

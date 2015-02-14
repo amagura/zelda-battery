@@ -91,6 +91,12 @@ void *alloca (size_t);
 #   define ZB_SENTINEL sentinel
 #  endif
 # endif
+
+# if __TINYC__
+#  ifndef __gnu_linux__
+#   define __gnu_linux__ 0
+#  endif
+# endif
 /*** $$ Compiler Compat macros $$ ***/
 
 /* OS Idenfitication macros */

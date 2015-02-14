@@ -106,9 +106,9 @@ limitations under the License.
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL
-char *concat PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
+char *kcat PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
 # else
-char *concat PARAMS((const char *s1, ...));
+char *kcat PARAMS((const char *s1, ...));
 # endif
 
 enum pwrsuply {

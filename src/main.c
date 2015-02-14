@@ -40,47 +40,45 @@ int stoi(int *dst, const char *src)
 }
 #endif
 
-char *concat(const char *s1, ...)
+char *kcat(const char *s1, ...)
 {
-     va_list ap;
-     size_t allocated = 8;
-     char *result = (char *) malloc (allocated);
+     va_list vav; // variable arg vector
+     size_t base_alloc = 8;
+     char *dst = (char *)malloc(base_alloc);
 
-     if (result != NULL) {
-	  char *newp;
-	  char *tmp;
+     if (dst) {
+	  char *tp, *tmp;
 	  const char *s;
 
-	  va_start (ap, s1);
+	  va_start(vav, s1);
+	  tmp = dst;
 
-	  tmp = result;
-	  for (s = s1; s != NULL; s = va_arg (ap, const char *)) {
-	       size_t len = strlen (s);
+	  for (s = s1; s != NULL; s = va_arg(vav, const char *)) {
+	       size_t len = strlen(s);
 
-	       /* Resize the allocated memory if necessary. */
-	       if (tmp + len + 1 > result + allocated) {
-		    allocated = (allocated + len) * 2;
-		    newp = (char *) realloc (result, allocated);
-		    if (newp == NULL) {
-			 free (result);
-			 va_end (ap);
+	       /* Does more memory need to be alloc'd? */
+	       if ((tmp + len + 1) > (dst + base_alloc)) {
+		    base_alloc = (base_alloc + len) * 2;
+		    if ((tp = (char *)realloc(dst, base_alloc)) == NULL) {
+			 free(dst);
+			 va_end(vav);
 			 return NULL;
+
 		    }
-		    tmp = newp + (tmp - result);
-		    result = newp;
+		    tmp = tp + (tmp - dst);
+		    dst = tp;
 	       }
-	       tmp = mempcpy (tmp, s, len);
+	       tmp = mempcpy(tmp, s, len);
 	  }
 
-	  /* Terminate the result string. */
-	  *tmp++ = '\0';
+	  /* XXX, `++' gets handled first; not the dereference op */
+	  *tmp++ = '\0'; // terminates the string accordingly.
 
-	  /* Resize memory to optimal size. */
-	  newp = realloc (result, tmp - result);
-	  if (newp != NULL)
-	       result = newp;
+	  /* optimizes amount of memory used */
+	  if ((tp = realloc(dst, tmp - dst)) != NULL)
+	       dst = tp;
 
-	  va_end (ap);
+	  va_end(vav);
      }
-     return result;
+     return dst;
 }

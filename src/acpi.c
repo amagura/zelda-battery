@@ -34,6 +34,7 @@ limitations under the License.
 #  define ZB_ACPI_BATTYPE "Battery"
 #  define ZB_ACPI_ACTYPE "Mains"
 #  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
+#  define ZB_ACPI_BATCAP "/capacity"
 
 
 inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed int btlimit)
@@ -125,24 +126,17 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
 
 	  /* find batteries */
 	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
-	       //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-	       //bzero(path, strlen(path));
+//	       path = kcat(dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP);
 	       strcpy(path, dirname(globuf.gl_pathv[idx]));
 	       strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
 	       ZB_DBG("path: %s\n", path);
 	       memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
-	       //strcpy(batt[limit], path);
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-	       //memcpy(path, dirname(globuf.gl_pathv[idx]), ZB_ACPI_PATH_SIZE);
-	       //bzero(path, strlen(path));
 	       strcpy(path, dirname(globuf.gl_pathv[idx]));
-	       //strcat(path, "/online");
 	       strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
-	       //bzero(path, strlen(path));
 	       ZB_DBG("path: %s\n", path);
 	       memcpy(ac, path, ZB_ACPI_PATH_SIZE);
-	       //strcpy(ac, path);
 	  }
      }
 
