@@ -21,7 +21,7 @@ limitations under the License.
 #include <limits.h>
 #include "main.h"
 
-#if !defined(mempcpy)
+#if !defined(_GNU_SOURCE)
 inline void *mempcpy(void *dest, const void *src, size_t len)
 {
      return memcpy (dest, src, len) + len;
