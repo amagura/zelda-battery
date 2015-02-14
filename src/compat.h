@@ -15,8 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#ifndef ZB_COMMON_H_GUARD
-# define ZB_COMMON_H_GUARD 1
+#ifndef ZB_COMPAT_H_GUARD
+# define ZB_COMPAT_H_GUARD 1
 /* PARAMS is a macro used to wrap function prototypes, so that
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
@@ -101,4 +101,4 @@ void *alloca (size_t);
 		 || (ZB_UNIX))
 /** $$ Macros $$ **/
 
-#endif /* ZB_COMMON_H_GUARD */
+#endif /* ZB_COMPAT_H_GUARD */
