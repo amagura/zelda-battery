@@ -70,9 +70,6 @@ int main(int argc, char **argv)
 
 # define ZB_LOOP_ARGS getopt_long(argc, argv, sopts, lopts, optc)
 #else
-# if !ZB_LINUX
-#  include <unistd.h>
-# endif
 # define ZB_LOOP_ARGS getopt(argc, argv, sopts)
 #endif
      while ((c = ZB_LOOP_ARGS) != EOF) {

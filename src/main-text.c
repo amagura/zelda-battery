@@ -45,41 +45,6 @@ inline void disp_pwr_info(struct txt_disp_opts opts, struct power pwr)
   }
 }
 
-static inline struct txt_disp_options
-opt_parse(int argc, char **argv)
-{
-  int c = 0; // ccter storage for getopt
-  struct txt_disp_options txt_opts;
-  txt_opts.remaining = false;
-  txt_opts.expended = false;
-  const char *shopts = "hvf:e:pm";
-
-#if ZB_BSD
-  txt_opts.full_heart = "+";
-  txt_opts.empty_heart = "-";
-#else
-  txt_opts.full_heart = "\u2665";
-  txt_opts.empty_heart = "\u2661";
-#endif
-
-#if ZB_BSD
-  int *opt_counter = 0;
-
-  struct option lopts[] = {
-    { 0, 0, 0, 0 }
-  };
-
-  while ((c = getopt_long(argc, argv, shopts, lopts, opt_counter)) != EOF) {
-#else
-#if !ZB_LINUX
-#include <unistd.h>
-#endif
-  while ((c = getopt(argc, argv, shopts)) != EOF) {
-#endif
-
-  return txt_opts;
-}
-
 int main(int argc, char **argv)
 {
      int c = 0;
@@ -89,22 +54,16 @@ int main(int argc, char **argv)
      const char *sopts = "hvf:e:pmN:";
 
 #if ZB_BSD
-# include <unistd.h>
      int *optc = 0;
      struct option lopts[] = {
 	  { 0, 0, 0, 0 }
      };
 # define ZB_LOOP_ARGS getopt_long(argc, argv, sopts, lopts, optc)
 #else
-# if !ZB_LINUX
-#  include <unistd.h>
-# endif
 # define ZB_LOOP_ARGS getopt(argc, argv, sopts)
-# define ZB_CLI_FHART "\u2665"
-# define ZB_CLI_EHART "\u2661"
 #endif
-     txt.full_heart = ZB_CLI_FHART;
-     txt.empty_heart = ZB_CLI_EHART;
+     txt.full_heart = "\u2665";
+     txt.empty_heart = "\u2661";
      while ((c = ZB_LOOP_ARGS) != EOF) {
 	  ZB_DBG("optopt %d:", optopt);
 
@@ -148,12 +107,9 @@ int main(int argc, char **argv)
 	  }
      }
 
-  struct txt_disp_options txt_opts = opt_parse(argc, argv);
-#if ZB_LINUX
-  struct power power = init(1);
-#else
-  struct power power = init();
-#endif
-  disp_pwr_info(txt_opts, power);
-  return EXIT_SUCCESS;
+     int err;
+     err = init(&pwr);
+     ZB_XONDBG(perror(ZB_PROGNAME));
+     disp_pwr_info(txt, pwr);
+     return EXIT_SUCCESS;
 }

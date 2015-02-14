@@ -199,5 +199,4 @@ enum pwrsuply {
      ZB_PWR_MISSING = -3,
      ZB_PWR_VIRTMACH = -4
 };
-
 #endif /* ZB_MAIN_H_GUARD */
