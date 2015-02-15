@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	  "an"		\
 	  "N:t:"	\
 	  "c:C:"	\
-	  "b:";
+	  "b:B:";
 
      struct option lopts[] = {
 	  {"help", no_argument, 0, 'h'},
@@ -81,6 +81,7 @@ int main(int argc, char **argv)
 	  {"base-color", required_argument, 0, 'c'},
 	  {"base-blink-color", required_argument, 0, 'C'},
 	  {"blink-face-color", required_argument, 0, 'b'},
+	  {"radix", required_argument, 0, 'B'},
 	  { 0, 0, 0, 0 }
      };
 
@@ -97,6 +98,9 @@ int main(int argc, char **argv)
 		      "\t\t");
 	       zb_arg("-n, --no-blink",
 		      "disable blinking altogether\n\t\t\t\t  (overrides a previous -a option)",
+		      "\t\t");
+	       zb_arg("-B, --radix=BASE",
+		      "base to use when calculating\n\t\t\t\t  remaining/expended power (defaults\n\t\t\t\t   to base 10)",
 		      "\t\t");
 	       zb_arg("-N, --nth-battery=OFFSET",
 		      "offset of desired battery\n\t\t\t\t  (e.g.\n\t\t\t\t    0 -> no battery,\n\t\t\t\t    1 -> first battery)",
@@ -133,6 +137,10 @@ int main(int argc, char **argv)
 	  case 'c':
 	       pp.color = optarg;
 	       break;
+	  case 'B':
+	       /* FIXME, add support for setting the calculation radix. */
+	       ZB_ERROR("%s\n", "FIXME: add support for setting the calculation radix.");
+	       goto fail;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);
 	       goto win;

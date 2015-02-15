@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	  "hv"		 \
 	  "f:e:"	 \
 	  "rx"		 \
-	  "N:";
+	  "N:B:";
 
      struct option lopts[] = {
 	  {"help", no_argument, 0, 'h'},
@@ -69,6 +69,7 @@ int main(int argc, char **argv)
 	  {"remaining", required_argument, 0, 'r'},
 	  {"expended", required_argument, 0, 'x'},
 	  {"nth-battery", required_argument, 0, 'N'},
+	  {"radix", required_argument, 0, 'B'},
 	  { 0, 0, 0, 0 }
      };
 
@@ -87,14 +88,17 @@ int main(int argc, char **argv)
 	       zb_arg("-e, --empty=STRING",
 		      "representation of expended battery\n\t\t\t\t  power",
 		      "\t\t");
+	       zb_arg("-B, --radix=BASE",
+		      "base to use when calculating\n\t\t\t\t  remaining/expended power (defaults\n\t\t\t\t   to base 10)",
+		      "\t\t");
 	       zb_arg("-r, --remaining",
-		      "limit output to remaining power only\n\t\t\t\t  (overrides previous `-x')",
+		      "limit output to remaining power only\n\t\t\t\t  (overrides a previous -x option)",
 		      "\t\t");
 	       zb_arg("-x, --expended",
-		      "display expended power only\n\t\t\t\t  (overrides previous `-r')",
+		      "display expended power only\n\t\t\t\t  (overrides a previous -r option)",
 		      "\t\t");
 	       zb_arg("-N, --nth-battery=OFFSET",
-		      "offset of desired battery\n\t\t\t\t  (e.g. \n\t\t\t\t    `0' -> no battery,\n\t\t\t\t    `1' -> first battery)",
+		      "offset of desired battery\n\t\t\t\t  (e.g. \n\t\t\t\t    0 -> no battery,\n\t\t\t\t    1 -> first battery)",
 		      "\t");
 	       goto win;
 	  case 'e':
@@ -116,6 +120,10 @@ int main(int argc, char **argv)
 	       if (pwr.charge.nof < 0)
 		    pwr.charge.nof *= -1;
 	       break;
+	  case 'B':
+	       /* FIXME, add support for setting the calculation radix. */
+	       ZB_ERROR("%s\n", "FIXME: add support for setting the calculation radix.");
+	       goto fail;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);
 	       goto win;
