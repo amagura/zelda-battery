@@ -22,12 +22,14 @@ limitations under the License.
 #include "main.h"
 #include "compat.h"
 
-#if !defined(_GNU_SOURCE) || !defined(mempcpy)
+/* XXX, Tired of stupid computers and compilers complaining about me
+ * redefining `mempcpy': I'll redefine it if I freaking want
+ * to, you bunch of brain-dead zombie slaves!! */
+#undef mempcpy
 inline void *mempcpy(void *dest, const void *src, size_t len)
 {
      return memcpy (dest, src, len) + len;
 }
-#endif
 
 #if 0
 int stoi(int *dst, const char *src)
