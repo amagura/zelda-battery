@@ -30,6 +30,7 @@ limitations under the License.
 # endif
 
 # include <errno.h>
+# include "compat.h"
 
 /** ^^ Macros ^^ **/
 # ifndef ZB_DEBUG
@@ -51,7 +52,9 @@ limitations under the License.
 /*** $$ Externally Defined macros $$ ***/
 
 # if ZB_DEBUG
-#  include <mcheck.h>
+#  if ZB_LINUX
+#   include <mcheck.h>
+#  endif
 #  define ZB_DBG(format, ...)						\
      do {								\
 	  fprintf(stderr, "## (%s)(%s)%d\n",				\

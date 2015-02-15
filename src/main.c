@@ -22,7 +22,7 @@ limitations under the License.
 #include "main.h"
 #include "compat.h"
 
-#if !defined(_GNU_SOURCE)
+#if !defined(_GNU_SOURCE) || !defined(mempcpy)
 inline void *mempcpy(void *dest, const void *src, size_t len)
 {
      return memcpy (dest, src, len) + len;
