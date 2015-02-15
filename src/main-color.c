@@ -93,25 +93,25 @@ int main(int argc, char **argv)
 	  case 'h':
 	       zb_help("Usage: %s [OPTION]...\n", "\t\t\t");
 	       zb_arg("-a, --ac-blink",
-		      "enable blinking even while on A/C power (overrides previous `-n')",
+		      "enable blinking even while on A/C power\n\t\t\t\t  (overrides a previous -n option)",
 		      "\t\t");
 	       zb_arg("-n, --no-blink",
-		      "disable blinking altogether (overrides prevous `-a')",
+		      "disable blinking altogether\n\t\t\t\t  (overrides a previous -a option)",
 		      "\t\t");
 	       zb_arg("-N, --nth-battery=OFFSET",
-		      "offset of desired battery (e.g. `0' -> no battery, `1' -> first battery)",
+		      "offset of desired battery\n\t\t\t\t  (e.g.\n\t\t\t\t    0 -> no battery,\n\t\t\t\t    1 -> first battery)",
 		      "\t");
 	       zb_arg("-t, --blink-threshold=LVL",
-		      "set the power-level at which blinking ensues (defaults to `30')",
+		      "set the power-level at which\n\t\t\t\t  blinking ensues (defaults to 30)",
 		      "\t");
 	       zb_arg("-c, --base-color=CCODE",
-		      "ansi color code to use as base-color (defaults to `31')",
+		      "ansi color code to use as \n\t\t\t\t  base-color (defaults to 31)",
 		      "\t");
 	       zb_arg("-C, --base-blink-color=CCODE",
-		      "ansi color code to use as base-color on blink (defaults to `31')",
+		      "ansi color code to use as \n\t\t\t\t  base-color on blink (defaults to 31)",
 		      "\t");
 	       zb_arg("-b, --blink-face-color=CCODE",
-		      "ansi color code to use for face-color on blink (defaults to `5' + `base': `5;31')",
+		      "ansi color code to use for \n\t\t\t\t  face-color on blink (defaults to \n\t\t\t\t   (5 + base) or 5;31)",
 		      "\t");
 	       goto win;
 	  case 'b':

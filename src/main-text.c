@@ -82,20 +82,20 @@ int main(int argc, char **argv)
 	  case 'h':
 	       zb_help("Usage: %s [OPTION]...\n", "\t\t\t");
 	       zb_arg("-f, --full=STRING",
-		      "representation of remaining battery power",
-		      "\t");
+		      "representation of remaining battery\n\t\t\t\t  power",
+		      "\t\t");
 	       zb_arg("-e, --empty=STRING",
-		      "representation of expended battery power",
-		      "\t");
+		      "representation of expended battery\n\t\t\t\t  power",
+		      "\t\t");
 	       zb_arg("-r, --remaining",
-		      "limit output to remaining power only",
+		      "limit output to remaining power only\n\t\t\t\t  (overrides previous `-x')",
 		      "\t\t");
 	       zb_arg("-x, --expended",
-		      "display expended power only",
+		      "display expended power only\n\t\t\t\t  (overrides previous `-r')",
 		      "\t\t");
 	       zb_arg("-N, --nth-battery=OFFSET",
-		      "offset of desired battery (e.g. `0' -> no battery, `1' -> first battery)",
-		      "\t\t");
+		      "offset of desired battery\n\t\t\t\t  (e.g. \n\t\t\t\t    `0' -> no battery,\n\t\t\t\t    `1' -> first battery)",
+		      "\t");
 	       goto win;
 	  case 'e':
 	       txt.empty_heart = optarg;
