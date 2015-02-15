@@ -19,86 +19,111 @@ limitations under the License.
 #include <stdlib.h>
 #include <stdbool.h>
 #include <errno.h>
+#include <getopt.h>
 #include "main.h"
 #include "power.h"
 #include "compat.h"
 
-#if ZB_BSD
-#include <getopt.h>
-#elif ZB_LINUX
-#include <unistd.h>
-#endif
+struct onoff {
+     bool mc; /* master control */
+     bool ac; /* A/C control */
+     int thold; /* threshold */
+};
+
+struct colors {
+     char *code;
+     struct onoff ctl;
+};
 
 struct pp_disp_opts {
-     bool blink;
-     bool acblink;
-     int blink_thold;
      char *color;
+     struct colors blink;
 };
 
-enum colors {
-     BLNK = '5'
-};
-
-inline void disp_pwr_info(struct pp_disp_opts opts, struct power pwr)
+inline void disp_pwr_info(struct pp_disp_opts pp, struct power pwr)
 {
-     printf("\033[%sm", opts.color);
-     if (!opts.blink || (pwr.charge.raw) > opts.blink_thold)
+     printf("\033[%sm", pp.color);
+     if (!pp.blink.ctl.mc || (pwr.charge.raw) > pp.blink.ctl.thold)
 	  return;
      if (pwr.acline)
-	  printf("%s", opts.acblink ? (char *)BLNK : "");
+	  printf("%s", pp.blink.ctl.ac ? (char *)pp.blink.code : "");
      else
-	  printf("%s", (char *)BLNK);
+	  printf("%s", (char *)pp.blink.code);
 }
 
 int main(int argc, char **argv)
 {
      int c = 0;
+     int *optc = 0;
+
      struct power pwr;
      pwr.charge.nof = -1;
      struct pp_disp_opts pp;
-     pp.acblink = false;
-     pp.blink = true;
-     pp.blink_thold = 3; // 30%
+     pp.blink.ctl.ac = false;
+     pp.blink.ctl.mc = true;
+     pp.blink.ctl.thold = 3; // 30%
      pp.color = "31";
-     const char *sopts = "hvHanb:c:N:";
-#if ZB_BSD
-     int *optc = 0;
+
+     char *sopts =	\
+	  "hv"		\
+	  "an"		\
+	  "N:t:"	\
+	  "c:C:"	\
+	  "b:";
 
      struct option lopts[] = {
+	  {"help", no_argument, 0, 'h'},
+	  {"version", no_argument, 0, 'v'},
+	  {"ac-blink", no_argument, 0, 'a'},
+	  {"no-blink", no_argument, 0, 'n'},
+	  {"nth-battery", required_argument, 0, 'N'},
+	  {"blink-threshold", required_argument, 0, 't'},
+	  {"base-color", required_argument, 0, 'c'},
+	  {"base-blink-color", required_argument, 0, 'C'},
+	  {"blink-face-color", required_argument, 0, 'b'},
 	  { 0, 0, 0, 0 }
      };
 
-# define ZB_LOOP_ARGS getopt_long(argc, argv, sopts, lopts, optc)
-#else
-# define ZB_LOOP_ARGS getopt(argc, argv, sopts)
-#endif
-     while ((c = ZB_LOOP_ARGS) != EOF) {
+     while ((c = getopt_long(argc, argv, sopts, lopts, optc)) != EOF) {
 	  ZB_DBG("optopt %d:", optopt);
 	  if (optopt != 0)
-	       exit(EXIT_FAILURE);
+	       goto fail;
 
 	  switch(c) {
 	  case 'h':
-	       ZB_MSG("Usage: %s [OPTION]...\n", ZB_PROGNAME);
-	       ZB_ARGMSG("-h\t\tprint this message and exit");
-	       ZB_ARGMSG("-v\t\tprint program version and exit");
-	       ZB_ARGMSG("-a\t\tenable blinking even while on A/C power (overrides previous `-n')");
-	       ZB_ARGMSG("-n\t\tdisable blinking altogether (overrides prevous `-a')");
-	       ZB_ARGMSG("-N\t\toffset of desired battery (e.g. `0' -> no battery, `1' -> first battery)");
-	       ZB_ARGMSG("-b\t\tset the power-level at which blinking ensues (defaults to `30')");
-	       ZB_ARGMSG("-c <arg>\tansi color code to use (defaults to `31')");
-	       exit(EXIT_FAILURE);
+	       zb_help("Usage: %s [OPTION]...\n", "\t\t\t");
+	       zb_arg("-a, --ac-blink",
+		      "enable blinking even while on A/C power (overrides previous `-n')",
+		      "\t\t");
+	       zb_arg("-n, --no-blink",
+		      "disable blinking altogether (overrides prevous `-a')",
+		      "\t\t");
+	       zb_arg("-N, --nth-battery=OFFSET",
+		      "offset of desired battery (e.g. `0' -> no battery, `1' -> first battery)",
+		      "\t");
+	       zb_arg("-t, --blink-threshold=LVL",
+		      "set the power-level at which blinking ensues (defaults to `30')",
+		      "\t");
+	       zb_arg("-c, --base-color=CCODE",
+		      "ansi color code to use as base-color (defaults to `31')",
+		      "\t");
+	       zb_arg("-C, --base-blink-color=CCODE",
+		      "ansi color code to use as base-color on blink (defaults to `31')",
+		      "\t");
+	       zb_arg("-b, --blink-face-color=CCODE",
+		      "ansi color code to use for face-color on blink (defaults to `5' + `base': `5;31')",
+		      "\t");
+	       goto win;
 	  case 'b':
-	       ZB_STRTONUM(pp.blink_thold, (const char *)optarg);
-	       if (pp.blink_thold > 99)
-		    pp.blink_thold = 100;
+	       ZB_STRTONUM(pp.blink.ctl.thold, (const char *)optarg);
+	       if (pp.blink.ctl.thold > 99)
+		    pp.blink.ctl.thold = 100;
 	       break;
 	  case 'a':
-	       pp.acblink = true;
+	       pp.blink.ctl.ac = true;
 	       break;
 	  case 'n':
-	       pp.blink = false;
+	       pp.blink.ctl.mc = false;
 	       break;
 	  case 'N':
 	       ZB_STRTONUM(pwr.charge.nof, (const char *)optarg);
@@ -110,13 +135,17 @@ int main(int argc, char **argv)
 	       break;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);
-	       break;
+	       goto win;
 	  }
      }
 
      int err;
      err = init(&pwr);
+     ZB_DBG("err: `%d`\n", err);
      ZB_XONDBG(perror(ZB_PROGNAME));
      disp_pwr_info(pp, pwr);
+win:
      return EXIT_SUCCESS;
+fail:
+     return EXIT_FAILURE;
 }

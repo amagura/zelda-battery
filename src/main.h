@@ -77,8 +77,21 @@ limitations under the License.
 	  fprintf(stderr, "\nin %s:{%d}:%s()\n", __FILE__, __LINE__, __FUNCTION__); \
      } while(0)
 
-# define ZB_MSG(format, ...) printf((format), (__VA_ARGS__));
-# define ZB_ARGMSG(...) printf("  %s\n", (__VA_ARGS__));
+# define zb_usage(format) printf((format), (ZB_PROGNAME));
+# define zb_arg(opt, desc, tabs)			\
+     do {						\
+	  printf("  %s%s%s\n", (opt),(tabs),(desc));	\
+     } while(0)
+# define zb_help(usage, tabs)				\
+     do {						\
+	  zb_usage((usage));				\
+	  zb_arg("-h, --help",				\
+		 "print this message and exit",		\
+		 (tabs));				\
+	  zb_arg("-v, --version",			\
+		 "print program version and exit",	\
+		 (tabs));				\
+     } while(0)
 
 # if HAVE_LIBBSD
 #  include <limits.h>

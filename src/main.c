@@ -40,10 +40,9 @@ int stoi(int *dst, const char *src)
 }
 #endif
 
-/* FIXME, has problems */
 char *neko(const char *s1, ...)
 {
-     va_list vav; // variable arg vector
+     va_list vargv; // variable arg vector
      size_t allocd = 8;
      char *dst = (char *)malloc(allocd);
 
@@ -51,10 +50,10 @@ char *neko(const char *s1, ...)
 	  char *newp, *tmp;
 	  const char *s;
 
-	  va_start(vav, s1);
+	  va_start(vargv, s1);
 	  tmp = dst;
 
-	  for (s = s1; s != NULL; s = va_arg(vav, const char *)) {
+	  for (s = s1; s != NULL; s = va_arg(vargv, const char *)) {
 	       size_t len = strlen(s);
 
 	       /* Does more memory need to be alloc'd? */
@@ -78,7 +77,7 @@ char *neko(const char *s1, ...)
 	  if ((newp = realloc(dst, tmp - dst)) != NULL)
 	       dst = newp;
 
-	  va_end(vav);
+	  va_end(vargv);
      }
      return dst;
 }
