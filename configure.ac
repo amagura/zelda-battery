@@ -35,10 +35,19 @@ m4_define([CMP], [m4_if(m4_eval(([$1] == [$2])), 1, 0, m4_if(m4_eval(([$1] > [$2
 m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*], [])))
 m4_define([IF_NEWER_LINUX], [IF_LINUX([PLATFORM], [pushdef([result],CMP([$1], rm_dots([2.6.24])))
 m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
+
+AC_ARG_WITH([gtk2],
+	AS_HELP_STRING([--without-gtk2], [disable building the gui]),
+	[],
+	[with_gtk2=yes])
+#m4_define([GTK2_CFLAGS], rm_newline(m4_esyscmd([pkg-config --cflags gtk+-2.0])))
+#m4_define([GTK2_LIBS], rm_newline(m4_esyscmd([pkg-config --libs gtk+-2.0])))
+
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check if we have GTK+2
-PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])
+AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
+AM_COND_IF([GTK2],[PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])])
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
@@ -53,7 +62,7 @@ IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,AC_MSG_ERROR([*BSD systems 
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
-              AS_HELP_STRING([--enable-native], [enable processor-model specific compilation]),
+              AS_HELP_STRING([--enable-native], [enable processor-model specific compilation (default: enabled)]),
               [case "${enableval}" in
                yes) native=true ;;
                no) native=false ;;
@@ -63,7 +72,7 @@ AM_CONDITIONAL([NATIVE], [test "x$native" = "xtrue"])
 
 # Check if peeps want to try to compile to generic (compiler may or may not support it)
 AC_ARG_ENABLE([generic],
-              AS_HELP_STRING([--enable-generic], [enable processor-family specific compilation]),
+              AS_HELP_STRING([--enable-generic], [enable processor-family specific compilation (default: disabled)]),
               [case "${enableval}" in
                yes) generic=true ;;
                no) generic=false ;;
@@ -73,7 +82,7 @@ AM_CONDITIONAL([GENERIC], [test "x$generic" = "xtrue"])
 
 # Check for debug
 AC_ARG_ENABLE([debug],
-              [  --enable-debug         turn on debugging],
+              [  --enable-debug         turn on debugging (default: disabled)],
               [case "${enableval}" in
                yes) debug=true ;;
                no) debug=false ;;
