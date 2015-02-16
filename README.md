@@ -1,5 +1,4 @@
 ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/amagura/zelda-battery)
-<!--[![Build Status](https://drone.io/github.com/amagura/zelda-battery/status.png)](https://drone.io/github.com/amagura/zelda-battery/latest)-->
 =============
 
 A Legend of Zelda like health-bar battery meter for Shell prompts.
