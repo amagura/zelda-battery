@@ -100,15 +100,27 @@ void *alloca (size_t);
 /*** $$ Compiler Compat macros $$ ***/
 
 /* OS Idenfitication macros */
+# ifndef ZB_VM_BSD
+#  define ZB_VM_BSD 0
+# endif
+# ifndef ZB_VM_LINUX
+#  define ZB_VM_LINUX 0
+# endif
+# ifndef ZB_VM_UNIX
+#  define ZB_VM_UNIX 0
+# endif
 # define ZB_BSD ((__FreeBSD__)			\
 		 || (__NetBSD__)		\
 		 || (__OpenBSD__)		\
-		 || (__DragonFly__))
+		 || (__DragonFly__)		\
+		 || (ZB_VM_BSD))
 # define ZB_LINUX ((__linux__)			\
-		   || (__gnu_linux__))
-# define ZB_UNIX ((__unix__)			\
-		  && !(ZB_BSD)			\
-		  && !(ZB_LINUX))
+		   || (__gnu_linux__)		\
+		   || (ZB_VM_LINUX))
+# define ZB_UNIX (((__unix__)			\
+		   || (ZB_VM_UNIX))		\
+		  && !((ZB_BSD)			\
+		       || (ZB_LINUX)))
 # define ZB_NIX ((ZB_BSD)			\
 		 || (ZB_LINUX)			\
 		 || (ZB_UNIX))
