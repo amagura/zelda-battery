@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-startdir="$(realpath "$(dirname "$0")")"
-
-cd "$startdir"/..
-autoreconf -i
-./configure "$@"
