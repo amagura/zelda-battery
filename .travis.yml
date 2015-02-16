@@ -10,7 +10,7 @@ install:
   - sudo apt-get install chicken-bin
 script:
   - autoreconf -i
-  - ./configure TRAVIS=1
+  - ./configure
   - make
 after_success:
   - make check
