@@ -51,8 +51,8 @@ expand:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatt_SOURCES)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatc_SOURCES)
 
-check-local:
-	csi -qn test.scm
+check-local: $(bin_PROGRAMS)
+	./test.sh
 
 asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	for f in $(zbatt_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
@@ -61,13 +61,11 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
-test-local:
-	$(CC) $(AM_CFLAGS) -L~/code/libacpi/hg $(AM_CPPFLAGS) $(AM_LDFLAGS) -lacpi -o zbatt $(zbatt_SOURCES)
-
 tidy-local:
 	$(RM) *.o || true
 	$(RM) *.s || true
 	$(RM) *.od || true
+	$(RM) test || true
 
 anew: clean all
 ready: clean all tidy-local
