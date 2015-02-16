@@ -83,8 +83,8 @@ int main(int argc, char **argv)
 	  {"blink-threshold", required_argument, 0, 't'},
 	  {"ac-blink", optional_argument, 0, 'a'},
 	  {"no-blink", no_argument, 0, 'n'},
-	  {"blink-color", required_argument, 0, 'k'},
-	  {"normal-color", required_argument, 0, 'K'},
+	  {"blink-color", required_argument, 0, 'K'},
+	  {"normal-color", required_argument, 0, 'k'},
 	  {"battery", required_argument, 0, 'c'},
 	  {"radix", required_argument, 0, 'B'},
 	  { 0, 0, 0, 0 }
@@ -159,8 +159,11 @@ int main(int argc, char **argv)
 	       if (pwr.charge.nof < 0)
 		    pwr.charge.nof *= -1;
 	       break;
-	  case 'c':
+	  case 'k':
 	       pp.norm.ccode = optarg;
+	       break;
+	  case 'K':
+	       pp.blnk.ccode = optarg;
 	       break;
 	  case 'B':
 	       /* FIXME, add support for setting the calculation radix. */
