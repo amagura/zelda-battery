@@ -13,7 +13,7 @@ AM_LDFLAGS =
 if GTK2
 AM_CFLAGS += @GTK_CFLAGS@
 AM_LDFLAGS += @GTK_LIBS@
-bin_PROGRAMGS += gzbatt
+bin_PROGRAMS += gzbatt
 endif
 
 if DEBUG

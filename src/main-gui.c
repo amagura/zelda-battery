@@ -16,33 +16,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ****/
 #include <gtk/gtk.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "main.h"
 #include "compat.h"
-#include "acpi.h"
+#include "power.h"
 #include "imgs.h"
 
-GdkPixbuf *new_pixbuf(const gchar *f)
+GdkPixbuf *mkicon(struct power pwr)
 {
-     GdkPixbuf *pbuf;
-     GError *err = NULL;
-     pbuf = gdk_pixbuf_new_from_file(f, &err);
-     if (pbuf == NULL) {
-	  fprintf(stderr, "%s\n", err->message);
-	  g_error_free(err);
-     }
-     return pbuf;
+     GdkPixbuf *pixbuf = NULL;
+/*     switch ((int)(pwr.charge.raw / 25)) {
+       case '4':*/
+	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_16x16_inline, FALSE, NULL);
+	  /*
+	  break;
+     case '3':
+	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_16x16_inline, FALSE, NULL);
+	  break;
+     case '2':
+	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
+	  break;
+     case '1':
+	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
+	  break;
+     case '0':
+	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
+	  break;
+	  }*/
+     return pixbuf;
 }
 
 int main(int argc, char **argv)
 {
+     struct power pwr;
+     pwr.charge.nof = -1;
      gtk_init(&argc, &argv);
-     GtkStatusIcon *tcon;
-     GdkPixbuf *pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_inline, FALSE, NULL);
-     tcon = gtk_status_icon_new_from_pixbuf(pixbuf);
+     GtkStatusIcon *tcon = NULL;
+     GdkPixbuf *pbuf;
+     getpwr(&pwr);
+     pbuf = mkicon(pwr);
+     gtk_status_icon_new_from_pixbuf(pbuf);
      gtk_status_icon_set_tooltip_text(tcon, "hello");
      gtk_status_icon_set_visible(tcon, TRUE);
-//     g_signal_connect_
      gtk_main();
      return EXIT_SUCCESS;
 }

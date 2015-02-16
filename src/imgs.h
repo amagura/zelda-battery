@@ -20,12 +20,12 @@ limitations under the License.
 /* GdkPixbuf RGBA C-Source image dump */
 
 #ifdef __SUNPRO_C
-#pragma align 4 (full_s1_16x16)
+#pragma align 4 (full_s1_16x16_inline)
 #endif
 #ifdef __GNUC__
-static const guint8 full_s1_16x16[] __attribute__ ((__aligned__ (4))) =
+static const guint8 full_s1_16x16_inline[] __attribute__ ((__aligned__ (4))) =
 #else
-static const guint8 full_s1_16x16[] =
+static const guint8 full_s1_16x16_inline[] =
 #endif
 { ""
   /* Pixbuf magic (0x47646b50) */
@@ -86,12 +86,12 @@ static const guint8 full_s1_16x16[] =
 /* GdkPixbuf RGBA C-Source image dump */
 
 #ifdef __SUNPRO_C
-#pragma align 4 (full_s1_10x10)
+#pragma align 4 (full_s1_10x10_inline)
 #endif
 #ifdef __GNUC__
-static const guint8 full_s1_10x10[] __attribute__ ((__aligned__ (4))) =
+static const guint8 full_s1_10x10_inline[] __attribute__ ((__aligned__ (4))) =
 #else
-static const guint8 full_s1_10x10[] =
+static const guint8 full_s1_10x10_inline[] =
 #endif
 { ""
   /* Pixbuf magic (0x47646b50) */

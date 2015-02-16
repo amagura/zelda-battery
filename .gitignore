@@ -8,6 +8,7 @@ zb-color
 zb-text
 zbatc
 zbatt
+gzbatt
 
 # automake stuff
 /autom4te.cache
