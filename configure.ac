@@ -37,6 +37,9 @@ m4_define([IF_NEWER_LINUX], [IF_LINUX([PLATFORM], [pushdef([result],CMP([$1], rm
 m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
+# Check if we have GTK+2
+PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])
+
 # Travis
 AC_MSG_CHECKING([whether build is automated])
 AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
