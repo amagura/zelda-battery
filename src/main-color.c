@@ -47,13 +47,12 @@ inline void disp(struct pp_disp_opts pp, struct power pwr)
      if (!pp.blnk.ctl.mc || (pwr.charge.raw) > pp.blnk.ctl.thold)
 	  return;
      // when not on A/C, no blinking if blinking on A/C is enabled
-     if ((!pwr.acline && pp.blnk.ctl.ac
-	  && !pp.blnk.ctl.batt)
-	 && !pp.blnk.ctl.mc)
+     if (!pwr.acline && !pp.blnk.ctl.batt)
 	  return;
-     // W
+     // When on A/C, but blinking for A/C is disabled
      if (pwr.acline && !pp.blnk.ctl.ac)
 	  return;
+     // When all the planets are in proper alignment...
      printf("\033[%sm", pp.blnk.ccode);
 }
 
@@ -73,7 +72,7 @@ int main(int argc, char **argv)
 
      char *sopts =	\
 	  "hv"		\
-	  "t:a"		\
+	  "t:a::"	\
 	  "nk:"		\
 	  "K:b:"	\
 	  "B:";
@@ -99,11 +98,7 @@ int main(int argc, char **argv)
 	  switch(c) {
 	  case 'h':
 	       zb_help("Usage: %s [OPTION]...\n", "\t\t\t");
-	       zb_arg("-t, --blink-threshold=LVL",
-		      "set the power-level at which"
-			   zb_arg_eol_tabs
-			   "  blinking ensues (defaults to 30)",
-		      "\t");
+
 	       zb_arg("-a, --ac-blink",
 		      "enable blinking while on A/C power"
 			   zb_arg_eol_tabs
@@ -116,46 +111,48 @@ int main(int argc, char **argv)
 		      "\t\t");
 	       zb_arg("-B, --radix=BASE",
 		      "base to use when calculating"
-			   zb_arg_eol_tabs
-			   "  remaining/expended power (defaults"
-			   zb_arg_eol_tabs
-			   "   to base 10)",
+		      zb_arg_eol_tabs
+		      "  remaining/expended power (defaults"
+		      zb_arg_eol_tabs
+		      "   to base 10)",
 		      "\t\t");
-	       zb_arg("-k, --battery=OFFSET",
+	       zb_arg("-b, --battery=OFFSET",
 		      "offset of desired battery"
-			   zb_arg_eol_tabs
-			   "  (e.g."
-			   zb_arg_eol_tabs
-			   "    0 -> no battery,"
-			   zb_arg_eol_tabs
-			   "    1 -> first battery)",
+		      zb_arg_eol_tabs
+		      "  (e.g."
+		      zb_arg_eol_tabs
+		      "    0 -> no battery,"
+		      zb_arg_eol_tabs
+		      "    1 -> first battery)",
 		      "\t");
-
-	       zb_arg("-c, --fg-color=CCODE",
-		      "ansi color code to use as "
-			   zb_arg_eol_tabs
-			   "  foreground color (defaults to 31)",
-			   "\t");
-zb_arg("-C, --bg-color=CCODE");
-"ansi color code to use as \n\t\t\t\t foreground color (defaults to 31)",
-
-	       zb_arg("-C, --bg-blink-color=CCODE",
-		      "ansi color code to use as \n\t\t\t\t  background color on blink (defaults to 31)",
+	       zb_arg("-t, --blink-threshold=LVL",
+		      "set the power-level at which"
+		      zb_arg_eol_tabs
+		      "  blinking ensues (defaults to 30)",
 		      "\t");
-	       zb_arg("-b, --fg-blink-color=CCODE",
-		      "ansi color code to use for \n\t\t\t\t  face-color on blink (defaults to \n\t\t\t\t   (5 + base) or 5;31)",
+	       zb_arg("-k, --normal-color=CCODE",
+		      "ansi color code to use for "
+		      zb_arg_eol_tabs
+		      "  color when not blinking"
+		      zb_arg_eol_tabs
+		      "  (defaults to 31)",
+		      "\t");
+	       zb_arg("-K, --blink-color=CCODE",
+		      "ansi color code to use for "
+		      zb_arg_eol_tabs
+		      "  color when blinking (defaults to 5;31)",
 		      "\t");
 	       goto win;
 	  case 'b':
-	       ZB_STRTONUM(pp.blink.ctl.thold, (const char *)optarg);
-	       if (pp.blink.ctl.thold > 99)
-		    pp.blink.ctl.thold = 100;
+	       ZB_STRTONUM(pp.blnk.ctl.thold, (const char *)optarg);
+	       if (pp.blnk.ctl.thold > 99)
+		    pp.blnk.ctl.thold = 100;
 	       break;
 	  case 'a':
-	       pp.blink.ctl.ac = true;
+	       pp.blnk.ctl.ac = true;
 	       break;
 	  case 'n':
-	       pp.blink.ctl.mc = false;
+	       pp.blnk.ctl.mc = false;
 	       break;
 	  case 'N':
 	       ZB_STRTONUM(pwr.charge.nof, (const char *)optarg);
