@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = zbatc zbatt zbatx
+bin_PROGRAMS = zbatc zbatt
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
-zbatx_SOURCES = main-gui.c main.c acpi.c power.c
+gzbatt_SOURCES = main-gui.c main.c acpi.c power.c imgs.h
 
 noinst_HEADERS = main.h acpi.h power.h compat.h
 
@@ -13,6 +13,7 @@ AM_LDFLAGS =
 if GTK2
 AM_CFLAGS += @GTK_CFLAGS@
 AM_LDFLAGS += @GTK_LIBS@
+bin_PROGRAMGS += gzbatt
 endif
 
 if DEBUG
