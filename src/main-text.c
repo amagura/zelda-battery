@@ -131,7 +131,7 @@ int main(int argc, char **argv)
      }
 
      int err;
-     err = init(&pwr);
+     err = getpwr(&pwr);
      ZB_DBG("err: `%d`\n", err);
      ZB_XONDBG(perror(ZB_PROGNAME));
      disp_pwr_info(txt, pwr);

@@ -91,36 +91,60 @@ void *alloca (size_t);
 #   define ZB_SENTINEL sentinel
 #  endif
 # endif
-
-# if __TINYC__
-#  ifndef __gnu_linux__
-#   define __gnu_linux__ 0
-#  endif
-# endif
 /*** $$ Compiler Compat macros $$ ***/
 
 /* OS Idenfitication macros */
-# ifndef ZB_VM_BSD
-#  define ZB_VM_BSD 0
+// Check if we are on a BSD virtual machine
+# if !(defined(ZB_VM_BSD) && defined(ZB_BSD_VM))
+#  define ZB_VM__BSD 0
+# else
+#  define ZB_VM__BSD 1
 # endif
-# ifndef ZB_VM_LINUX
-#  define ZB_VM_LINUX 0
+// Check if we are on a Linux virtual machine
+# if !(defined(ZB_VM_LINUX) && defined(ZB_LINUX_VM))
+#  define ZB_VM__LINUX 0
+# else
+#  define ZB_VM__LINUX 1
 # endif
-# ifndef ZB_VM_UNIX
-#  define ZB_VM_UNIX 0
+// Check if we are on a UNIX virtual machine
+# if !(defined(ZB_VM_UNIX) && defined(ZB_UNIX_VM))
+#  define ZB_VM__UNIX 0
+# else
+#  define ZB_VM__UNIX 1
 # endif
-# define ZB_BSD ((__FreeBSD__)			\
-		 || (__NetBSD__)		\
-		 || (__OpenBSD__)		\
-		 || (__DragonFly__)		\
-		 || (ZB_VM_BSD))
-# define ZB_LINUX ((__linux__)			\
-		   || (__gnu_linux__)		\
-		   || (ZB_VM_LINUX))
-# define ZB_UNIX (((__unix__)			\
-		   || (ZB_VM_UNIX))		\
-		  && !((ZB_BSD)			\
-		       || (ZB_LINUX)))
+// Check if we are on a UNIX-like virtual machine
+# define ZB_VM__NIX ((ZB_VM__BSD)		\
+		     || (ZB_VM__LINUX)		\
+		     || (ZB_VM__UNIX))
+// Check if we're on a BSD machine
+# if defined(__FreeBSD__)			\
+     || defined(__NetBSD__)			\
+     || defined(__OpenBSD__)			\
+     || defined(__DragonFly__)			\
+     || defined(__bsdi__)			\
+     || (ZB_VM__BSD)
+#  define ZB_BSD 1
+# else
+#  define ZB_BSD 0
+# endif
+// Check if we're on a Linux machine
+# if defined(__linux__)				\
+     || defined(__gnu_linux__)			\
+     || (ZB_VM__LINUX)
+#  define ZB_LINUX 1
+# else
+#  define ZB_LINUX 0
+# endif
+// Check if we're on a UNIX machine
+# if defined(__unix__)				\
+     || defined(__unix)				\
+     || defined(unix)				\
+     || (ZB_VM__UNIX)
+#  define ZB_UNIX 1
+# else
+#  define ZB_UNIX 0
+# endif
+// Check if we're on a UNIX-like machine
 # define ZB_NIX ((ZB_BSD)			\
 		 || (ZB_LINUX)			\
 		 || (ZB_UNIX))

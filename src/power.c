@@ -30,7 +30,7 @@ limitations under the License.
 #endif
 
 
-int init(struct power *pwr)
+int getpwr(struct power *pwr)
 {
      int retval = 0;
 #if ZB_LINUX

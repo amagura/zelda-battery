@@ -72,10 +72,7 @@ limitations under the License.
 # endif
 
 # define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
-
-/* XXX, Tired of stupid computers and compilers complaining about me
- * redefining `mempcpy': I'll redefine it if I freaking want
- * to, you bunch of brain-dead zombie slaves!! */
+# undef mempcpy
 # define mempcpy(ZB_DST, ZB_SRC, ZB_LEN) (memcpy((ZB_DST), (ZB_SRC), (ZB_LEN)) + ZB_LEN)
 
 # define ZB_ERROR(format, ...)						\
@@ -90,6 +87,7 @@ limitations under the License.
      do {						\
 	  printf("  %s%s%s\n", (opt),(tabs),(desc));	\
      } while(0)
+# define zb_arg_eol_tabs "\n\t\t\t\t"
 # define zb_help(usage, tabs)				\
      do {						\
 	  zb_usage((usage));				\

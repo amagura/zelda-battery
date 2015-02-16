@@ -50,6 +50,6 @@ struct power {
      bool acline;
 };
 
-int init PARAMS((struct power *pwr));
+int getpwr PARAMS((struct power *pwr));
 
 #endif /* ZB_POWER_H_GUARD */
