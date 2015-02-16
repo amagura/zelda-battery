@@ -7,11 +7,10 @@ compiler:
 install:
   - sudo apt-get update
   - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6
-  - sudo apt-get install libacpi-dev
+  - sudo apt-get install chicken-bin
 script:
   - autoreconf -i
-  - ./configure
+  - ./configure TRAVIS=1
   - make
 after_success:
   - make check
-  - ./zbatc; ./zbatt -f '+' -e '-'
