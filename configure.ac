@@ -37,10 +37,12 @@ m4_define([IF_NEWER_LINUX], [IF_LINUX([PLATFORM], [pushdef([result],CMP([$1], rm
 m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
 #m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
-AC_SUBST(TRAVIS)
-
+# Travis
+AC_MSG_CHECKING([whether build is automated])
+AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
+AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 # Check for libs
-m4_if([TRAVIS], [1], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]),IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported]))))
+AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported]))))
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
