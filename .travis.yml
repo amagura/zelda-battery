@@ -8,9 +8,14 @@ install:
   - sudo apt-get update
   - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6
   - sudo apt-get install chicken-bin
+  - sudo chicken-install test
 script:
   - autoreconf -i
-  - ./configure TRAVIS=1
+  - ./configure
   - make
 after_success:
+  - src/zbatt
+  - src/zbatc
+  - make clean
+  - ./configure CFLAGS=-DZB_DEBUG=0
   - make check
