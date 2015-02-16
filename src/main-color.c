@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 		    pwr.charge.nof *= -1;
 	       break;
 	  case 'c':
-	       pp.color = optarg;
+	       pp.norm.ccode = optarg;
 	       break;
 	  case 'B':
 	       /* FIXME, add support for setting the calculation radix. */
