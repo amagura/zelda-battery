@@ -26,10 +26,9 @@ limitations under the License.
 GdkPixbuf *mkicon(struct power pwr)
 {
      GdkPixbuf *pixbuf = NULL;
-/*     switch ((int)(pwr.charge.raw / 25)) {
-       case '4':*/
+     switch ((int)(pwr.charge.raw / 25)) {
+     case '4':
 	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_16x16_inline, FALSE, NULL);
-	  /*
 	  break;
      case '3':
 	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_16x16_inline, FALSE, NULL);
@@ -43,14 +42,24 @@ GdkPixbuf *mkicon(struct power pwr)
      case '0':
 	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
 	  break;
-	  }*/
+	  }
      return pixbuf;
+}
+
+inline void create_icon()
+{
+     GtkStatusIcon *tcon = gtk_status_icon_new();
+     gtk_status_icon_set_tooltip_text(tcon, "gzbatt");
+     gtk_status_icon_set_visible(tcon, TRUE);
+     sync_icon(tcon);
 }
 
 int main(int argc, char **argv)
 {
      struct power pwr;
      pwr.charge.nof = -1;
+     pwr.charge.radix = 10;
+
      gtk_init(&argc, &argv);
      GtkStatusIcon *tcon = NULL;
      GdkPixbuf *pbuf;
