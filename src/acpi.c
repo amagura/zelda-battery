@@ -38,17 +38,18 @@ limitations under the License.
 #  define ZB_ACPI_ACSTAT_PATH "/online"
 
 
-inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, signed int btlimit)
+inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int btlimit)
 {
      int result = 0;
      FILE *fp;
      char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
      /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
+     ZB_DBG("btlimit: %d\n", btlimit);
      if (btlimit == 0)
 	  goto ac_adapter;
 
      /* btlimit is passed to read_pwr_files as a negative number, so that we process the battery files in order */
-     for (int jdx = 0; jdx < (btlimit * -1); ++jdx) {
+     for (int jdx = 0; jdx < btlimit; ++jdx) {
 	  if (jdx > btlimit)
 	       memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
 	  if ((fp = fopen(batt[jdx], "r")) == NULL) {

@@ -53,7 +53,7 @@ int getpwr(struct power *pwr)
 	  exit(EXIT_FAILURE);
      }
      pwr->charge.raw = info.cap[limit];
-     pwr->charge.tr = (int)pwr->charge.raw / 10;
+     pwr->charge.tr = (int)pwr->charge.raw * (pwr->charge.radix / 100);
 # if ZB_DEBUG
      for (int idx = 0; idx < limit; ++idx) {
 	  ZB_DBG("limit: `%d`\n", limit);
@@ -75,7 +75,7 @@ int getpwr(struct power *pwr)
      ZB_DBG("%s\n", "getting hw.acpi.battery.life");			\
      sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
      pwr->charge.raw = ac_line;
-     pwr->charge.tr = (int)pwr->charge.raw / 10;
+     pwr->charge.tr = (int)pwr->charge.raw * (pwr->charge.radix / 100);
 #endif
      return retval;
 }

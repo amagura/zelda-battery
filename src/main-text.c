@@ -48,6 +48,7 @@ int main(int argc, char **argv)
 
      struct power pwr;
      pwr.charge.nof = -1;
+     pwr.charge.radix = 10;
 
      struct txt_disp_opts txt;
      txt.remaining = false;
@@ -59,16 +60,16 @@ int main(int argc, char **argv)
 	  "hv"		 \
 	  "f:e:"	 \
 	  "rx"		 \
-	  "N:B:";
+	  "b:B:";
 
      struct option lopts[] = {
 	  {"help", no_argument, 0, 'h'},
 	  {"version", no_argument, 0, 'v'},
 	  {"full", required_argument, 0, 'f'},
 	  {"empty", required_argument, 0, 'e'},
-	  {"remaining", required_argument, 0, 'r'},
-	  {"expended", required_argument, 0, 'x'},
-	  {"nth-battery", required_argument, 0, 'N'},
+	  {"remaining", no_argument, 0, 'r'},
+	  {"expended", no_argument, 0, 'x'},
+	  {"battery", required_argument, 0, 'b'},
 	  {"radix", required_argument, 0, 'B'},
 	  { 0, 0, 0, 0 }
      };
@@ -97,7 +98,7 @@ int main(int argc, char **argv)
 	       zb_arg("-x, --expended",
 		      "display expended power only\n\t\t\t\t  (overrides a previous -r option)",
 		      "\t\t");
-	       zb_arg("-N, --nth-battery=OFFSET",
+	       zb_arg("-b, --battery=OFFSET",
 		      "offset of desired battery\n\t\t\t\t  (e.g. \n\t\t\t\t    0 -> no battery,\n\t\t\t\t    1 -> first battery)",
 		      "\t");
 	       goto win;
@@ -112,18 +113,17 @@ int main(int argc, char **argv)
 	       txt.expended = false;
 	       break;
 	  case 'x':
-	       txt.expended = true;
 	       txt.remaining = false;
+	       txt.expended = true;
 	       break;
-	  case 'N':
+	  case 'b':
 	       ZB_STRTONUM(pwr.charge.nof, (const char *)optarg);
 	       if (pwr.charge.nof < 0)
 		    pwr.charge.nof *= -1;
 	       break;
 	  case 'B':
-	       /* FIXME, add support for setting the calculation radix. */
-	       ZB_ERROR("%s\n", "FIXME: add support for setting the calculation radix.");
-	       goto fail;
+	       ZB_STRTONUM(pwr.charge.radix, (const char *)optarg);
+	       break;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);
 	       goto win;

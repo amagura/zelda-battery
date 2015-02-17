@@ -74,6 +74,7 @@ tidy-local:
 	$(RM) *.s || true
 	$(RM) *.od || true
 	$(RM) test || true
+	$(RM) gzbatt || true
 
 anew: clean all
 ready: clean all tidy-local

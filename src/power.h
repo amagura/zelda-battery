@@ -40,6 +40,7 @@ limitations under the License.
 # endif
 
 struct pwr_lvl {
+     int radix;
      int tr;
      int raw;
      int nof;

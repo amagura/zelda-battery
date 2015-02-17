@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 	  {"no-blink", no_argument, 0, 'n'},
 	  {"blink-color", required_argument, 0, 'K'},
 	  {"normal-color", required_argument, 0, 'k'},
-	  {"battery", required_argument, 0, 'c'},
+	  {"battery", required_argument, 0, 'b'},
 	  {"radix", required_argument, 0, 'B'},
 	  { 0, 0, 0, 0 }
      };
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 		      "  color when blinking (defaults to 5;31)",
 		      "\t");
 	       goto win;
-	  case 'b':
+	  case 't':
 	       ZB_STRTONUM(pp.blnk.ctl.thold, (const char *)optarg);
 	       if (pp.blnk.ctl.thold > 99)
 		    pp.blnk.ctl.thold = 100;
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 	  case 'n':
 	       pp.blnk.ctl.mc = false;
 	       break;
-	  case 'N':
+	  case 'b':
 	       ZB_STRTONUM(pwr.charge.nof, (const char *)optarg);
 	       if (pwr.charge.nof < 0)
 		    pwr.charge.nof *= -1;
@@ -166,9 +166,8 @@ int main(int argc, char **argv)
 	       pp.blnk.ccode = optarg;
 	       break;
 	  case 'B':
-	       /* FIXME, add support for setting the calculation radix. */
-	       ZB_ERROR("%s\n", "FIXME: add support for setting the calculation radix.");
-	       goto fail;
+	       ZB_STRTONUM(pwr.charge.radix, (const char *)optarg);
+	       break;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);
 	       goto win;
