@@ -60,6 +60,7 @@ int getpwr(struct power *pwr)
 	  ZB_DBG("info.cap[%d]: `%d`\n", idx, info.cap[idx]);
      }
 # endif
+     ZB_DBG("pwr->charge.raw: %d\n", pwr->charge.raw);
      free(info.cap);
      ZB_DBG("info.acline: %d\n", info.acline);
      pwr->acline = info.acline;

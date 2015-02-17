@@ -38,7 +38,7 @@ limitations under the License.
 #  define ZB_ACPI_ACSTAT_PATH "/online"
 
 
-inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int btlimit)
+inline int read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimit)
 {
      int result = 0;
      FILE *fp;
@@ -48,22 +48,18 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char **batt, int btlim
      if (btlimit == 0)
 	  goto ac_adapter;
 
-     /* btlimit is passed to read_pwr_files as a negative number, so that we process the battery files in order */
-     for (int jdx = 0; jdx < btlimit; ++jdx) {
-	  if (jdx > btlimit)
-	       memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
-	  if ((fp = fopen(batt[jdx], "r")) == NULL) {
-	       /* a battery has been removed since the last call to find_pwr_files */
-	       result = errno;
-	       goto cleanup;
-	  }
-	  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
-
-	  /* get battery percentage levels */
-	  ZB_DBG("batt cap: %s\n", tmp);
-	  ZB_STRTONUM(info->cap[jdx], tmp);
-	  fclose(fp);
+     if ((fp = fopen(batt, "r")) == NULL) {
+	  /* a battery has been removed since the last call to find_pwr_files */
+	  result = errno;
+	  goto cleanup;
      }
+     fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+
+     /* get battery percentage levels */
+     ZB_DBG("batt cap: %s\n", tmp);
+     ZB_STRTONUM(info->cap[btlimit], tmp);
+     fclose(fp);
+     memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
 
 ac_adapter:
      if ((fp = fopen(ac, "r")) == NULL) {
@@ -89,7 +85,7 @@ cleanup:
      return result;
 }
 
-inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
+inline int get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      int result = 0;
      FILE *fp;
@@ -136,6 +132,8 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
 
 	  /* find batteries */
 	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
+	       if (limit != 0)
+		    continue;
 #  if ZB_USE_KCAT
 	       path = neko(dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, NULL);
 #  else
@@ -143,7 +141,7 @@ inline int get_pwr_files(glob_t globuf, char *ac, char **batt, int limit)
 	       strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
 #  endif
 	       ZB_DBG("path: %s\n", path);
-	       memcpy(batt[limit], path, ZB_ACPI_PATH_SIZE);
+	       memcpy(batt, path, ZB_ACPI_PATH_SIZE);
 #  if ZB_USE_KCAT
 	       free(path);
 #  endif
@@ -197,12 +195,7 @@ int pwr_info(struct pwr_sup *info, int btlimit)
 
 
      char ac[ZB_ACPI_PATH_SIZE+1];
-     char *batt[(ZB_ACPI_PATH_SIZE+1)*btlimit];
-
-     for (int hdx = 0; hdx < btlimit; ++hdx) {
-	  batt[hdx] = malloc(ZB_ACPI_PATH_SIZE+1);
-	  ZB_DBG("hdx: %d\n", hdx);
-     }
+     char batt[ZB_ACPI_PATH_SIZE+1];
 
      err = get_pwr_files(globuf, ac, batt, btlimit);
      globfree(&globuf);
@@ -210,22 +203,16 @@ int pwr_info(struct pwr_sup *info, int btlimit)
      if (err != 0)
 	  goto cleanup;
 
-     ZB_DBG("batts: `%s'\n", batt[0]);
+     ZB_DBG("limit: %d\nbatts: `%s'\n", btlimit, batt);
      ZB_DBG("ac: `%s'\n", ac);
-
 
      err = read_pwr_files(info, ac, batt, btlimit);
 
 cleanup:
-     for (int kdx = 0; kdx < btlimit; ++kdx) {
-	  free(batt[kdx]);
-	  ZB_DBG("kdx: %d\n", kdx);
-     }
-
      ZB_DBG("info.acline: %d\n", info->acline);
 
 #  if ZB_DEBUG
-     for (int mdx = 0; mdx < btlimit; ++mdx) {
+     for (int mdx = 0; mdx < --btlimit; ++mdx) {
 	  ZB_DBG("info.cap[%d]: %d\n", mdx, info->cap[mdx]);
      }
 #  endif

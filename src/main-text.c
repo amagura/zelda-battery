@@ -18,6 +18,7 @@ limitations under the License.
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <string.h>
 #include "main.h"
 #include "power.h"
 #include "compat.h"
@@ -29,16 +30,17 @@ struct txt_disp_opts {
   bool expended;
 };
 
-inline void disp_pwr_info(struct txt_disp_opts opts, struct power pwr)
+inline void disp(struct txt_disp_opts opts, struct power pwr)
 {
-  if (opts.remaining || !opts.expended) {
-    for (int idx = 10; idx <= pwr.charge.raw; idx += 10)
-      printf("%s", opts.full_heart);
-  }
-  if (opts.expended || !opts.remaining) {
-    for (; pwr.charge.raw < 100; pwr.charge.raw += 10)
-      printf("%s", opts.empty_heart);
-  }
+     ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
+     if (opts.remaining || !opts.expended) {
+	  for (int idx = 10; idx <= pwr.charge.raw; idx += 10)
+	       printf("%s", opts.full_heart);
+     }
+     if (opts.expended || !opts.remaining) {
+	  for (; pwr.charge.raw < 100; pwr.charge.raw += 10)
+	       printf("%s", opts.empty_heart);
+     }
 }
 
 int main(int argc, char **argv)
@@ -47,6 +49,7 @@ int main(int argc, char **argv)
      int *optc = 0;
 
      struct power pwr;
+     memset(&pwr.charge, 0, sizeof(pwr.charge));
      pwr.charge.nof = -1;
      pwr.charge.radix = 10;
 
@@ -130,11 +133,11 @@ int main(int argc, char **argv)
 	  }
      }
 
-     int err;
+     int err = 0;
      err = getpwr(&pwr);
      ZB_DBG("err: `%d`\n", err);
      ZB_XONDBG(perror(ZB_PROGNAME));
-     disp_pwr_info(txt, pwr);
+     disp(txt, pwr);
 win:
      return EXIT_SUCCESS;
 fail:
