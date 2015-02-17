@@ -23,7 +23,7 @@ limitations under the License.
 #include "power.h"
 #include "imgs.h"
 
-GdkPixbuf *mkicon(struct power pwr)
+GdkPixbuf *mkpbuf(struct power pwr)
 {
      GdkPixbuf *pixbuf = NULL;
      switch ((int)(pwr.charge.raw / 25)) {
