@@ -33,6 +33,42 @@ int stoi(int *dst, const char *src)
 }
 #endif
 
+inline int intlen(int idx)
+{
+     int hdx = !idx;
+     while (idx) {
+	  ++hdx;
+	  idx /= 10;
+     }
+     return idx;
+}
+
+inline int small_intlen(int idx)
+{
+     int hdx = abs(idx);
+     if (hdx < 100)
+	  return 2;
+     else if (hdx < 10)
+	  return 1;
+     else
+	  return 3;
+}
+
+char *itoa(int idx)
+{
+     const int len = small_intlen(idx);
+     char *tmp = (char *)malloc(sizeof(*tmp)*len + 1);
+
+     for (; idx != 0; ++tmp) {
+	  *tmp = (idx >= 0
+		  ? '0' + (idx % 10)
+		  : '0' - (idx % 10));
+	  idx /= 10;
+     }
+     return tmp;
+}
+
+
 char *neko(const char *s1, ...)
 {
      va_list vv; // variable arg vector

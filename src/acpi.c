@@ -49,15 +49,16 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimi
 	  goto ac_adapter;
 
      if ((fp = fopen(batt, "r")) == NULL) {
-	  /* a battery has been removed since the last call to find_pwr_files */
 	  result = errno;
-	  goto cleanup;
+	  ZB_DBG("errno: %d\n", errno);
+	  info->cap[0] = ZB_PWR_NBAT;
+	  goto ac_adapter;
      }
      fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
      /* get battery percentage levels */
      ZB_DBG("batt cap: %s\n", tmp);
-     ZB_STRTONUM(info->cap[btlimit], tmp);
+     ZB_STRTONUM(info->cap[0], tmp);
      fclose(fp);
      memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
 
@@ -194,8 +195,8 @@ int pwr_info(struct pwr_sup *info, int btlimit)
      ZB_DBG("ZB_ACPI_PATH_SIZE: %lu\n", ZB_ACPI_PATH_SIZE);
 
 
-     char ac[ZB_ACPI_PATH_SIZE+1];
-     char batt[ZB_ACPI_PATH_SIZE+1];
+     char ac[ZB_ACPI_PATH_SIZE+1] = "";
+     char batt[ZB_ACPI_PATH_SIZE+1] = "";
 
      err = get_pwr_files(globuf, ac, batt, btlimit);
      globfree(&globuf);

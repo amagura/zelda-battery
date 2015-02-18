@@ -68,8 +68,8 @@ int main(int argc, char **argv)
      char *sopts =	\
 	  "hv"		\
 	  "t:a::"	\
-	  "nk:"		\
-	  "K:b:"	\
+	  "nc:"		\
+	  "C:b:"	\
 	  "d:";
 
      struct option lopts[] = {
@@ -78,8 +78,8 @@ int main(int argc, char **argv)
 	  {"blink-threshold", required_argument, 0, 't'},
 	  {"ac-blink", required_argument, 0, 'a'},
 	  {"no-blink", no_argument, 0, 'n'},
-	  {"blink-color", required_argument, 0, 'K'},
-	  {"normal-color", required_argument, 0, 'k'},
+	  {"blink-color", required_argument, 0, 'C'},
+	  {"normal-color", required_argument, 0, 'c'},
 	  {"battery", required_argument, 0, 'b'},
 	  {"divisor", required_argument, 0, 'd'},
 	  { 0, 0, 0, 0 }
@@ -121,14 +121,14 @@ int main(int argc, char **argv)
 		      zb_arg_eol_tabs
 		      "  blinking ensues (defaults to 30)",
 		      "\t");
-	       zb_arg("-k, --normal-color=CCODE",
+	       zb_arg("-c, --normal-color=CCODE",
 		      "ansi color code to use for "
 		      zb_arg_eol_tabs
 		      "  color when not blinking"
 		      zb_arg_eol_tabs
 		      "  (defaults to 31)",
 		      "\t");
-	       zb_arg("-K, --blink-color=CCODE",
+	       zb_arg("-C, --blink-color=CCODE",
 		      "ansi color code to use for "
 		      zb_arg_eol_tabs
 		      "  color when blinking (defaults to 5;31)",
@@ -159,10 +159,10 @@ int main(int argc, char **argv)
 	       if (pwr.charge.nof < 0)
 		    pwr.charge.nof *= -1;
 	       break;
-	  case 'k':
+	  case 'c':
 	       pp.norm.ccode = optarg;
 	       break;
-	  case 'K':
+	  case 'C':
 	       pp.blnk.ccode = optarg;
 	       break;
 	  case 'd':

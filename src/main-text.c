@@ -33,6 +33,9 @@ struct txt_disp_opts {
 inline void disp(struct txt_disp_opts opts, struct power pwr)
 {
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
+     if (pwr.charge.raw == 0) {
+	  pwr.charge.raw = pwr.acline * 100;
+     }
      if (opts.remaining || !opts.expended) {
 	  for (int idx = 10; idx <= pwr.charge.raw; idx += 10)
 	       printf("%s", opts.full_heart);

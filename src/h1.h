@@ -53,10 +53,6 @@ h1qf_{10x10,16x16}
 h1h_{10x10,16x16}
 ***/
 
-# ifndef guint8
-#  include <gtk/gtk.h>
-# endif
-
 /** ^^ 10x10 ^^ **/
 /* GdkPixbuf RGBA C-Source image dump */
 
@@ -661,5 +657,5 @@ static const guint8 h1b_16x16[] =
   "\0\0\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\0\0\0"};
 /** $$ 16x16 $$ **/
 
-END_C_DELCS
+END_C_DECLS
 #endif /* ZB_H1_H_GUARD */
