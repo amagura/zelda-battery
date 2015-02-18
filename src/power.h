@@ -44,6 +44,7 @@ struct pwr_lvl {
      int divsr; /* tr = (int)raw / max */
      int raw;
      int nof;
+     int err;
 };
 
 struct power {

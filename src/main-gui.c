@@ -45,7 +45,7 @@ limitations under the License.
 #define GZB_AC_TIP "A/C: offline"
 #define GZB_BAT_TIP "Battery: 100%"
 #define GZB_TOOLTIP_SIZE (sizeof(GZB_AC_TIP "\n" GZB_BAT_TIP "\n" GZB_BAT_TIP))
-#define GZB_AC_IMG(ZB_PWR) (((ZB_PWR).acline) ? ltt.full : ltt.empt);
+#define GZB_AC_IMG(ZB_PWR) (((ZB_PWR).acline) ? ltt.full : ltt.empt)
 
 struct hearts {
      GdkPixbuf *full; // 80 - 100
@@ -89,8 +89,13 @@ struct hearts get_imgs(int set, bool small)
 GdkPixbuf *select_img(int set, bool small, struct power pwr)
 {
      struct hearts ltt = get_imgs(set, small);
-     ZB_DBG(pwr.charge.tr);
-     switch (pwr.charge.tr) {
+     ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
+     ZB_DBG("pwr.charge.err: %d\n", pwr.charge.err);
+     ZB_DBG("pwr.acline: %d\n", pwr.acline);
+     int test = (pwr.charge.err == ZB_PWR_OK
+		 ? pwr.charge.tr
+		 : pwr.charge.err);
+     switch (test) {
      case 5:
 	  return ltt.full;
      case 4:
@@ -104,9 +109,9 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
      case 0:
 	  return ltt.empt;
      case ZB_PWR_NWANTBAT:
-	  return GZB_AC_IMG;
+	  return GZB_AC_IMG(pwr);
      case ZB_PWR_NBAT:
-	  return GZB_AC_IMG;
+	  return GZB_AC_IMG(pwr);
      default:
 	  return ltt.bork;
      }

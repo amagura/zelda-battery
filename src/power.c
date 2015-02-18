@@ -28,11 +28,13 @@ limitations under the License.
 #elif ZB_BSD
 # include <sys/sysctl.h>
 #endif
+// fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
 
 
 int getpwr(struct power *pwr)
 {
-     int retval = ZB_PWR_OK;
+     int *retval = &pwr->charge.err;
+     *retval = 0;
 #if ZB_LINUX
      int limit;
      struct pwr_sup info;
@@ -43,10 +45,9 @@ int getpwr(struct power *pwr)
      info.cap = malloc(sizeof(*info.cap) * limit);
      info.acline = false;
 
-     if ((retval = pwr_info(&info, limit)) != ZB_PWR_OK) {
-	  ZB_DBG("err: %d\n", retval);
+     if ((*retval = pwr_info(&info, limit)) != ZB_PWR_OK) {
+	  ZB_DBG("err: %d\n", *retval);
 	  ZB_ONDBG(perror(ZB_PROGNAME));
-//	       fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
      }
 
      pwr->charge.raw = (limit != 0)
@@ -86,5 +87,5 @@ int getpwr(struct power *pwr)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
 	  : ZB_NWANTBAT;
 #endif
-     return retval;
+     return *retval;
 }

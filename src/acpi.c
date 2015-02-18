@@ -49,7 +49,7 @@ inline int read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimi
 	  goto ac_adapter;
 
      if ((fp = fopen(batt, "r")) == NULL) {
-	  result = errno;
+	  result = ZB_PWR_NBAT;
 	  ZB_DBG("errno: %d\n", errno);
 	  info->cap[0] = ZB_PWR_NBAT;
 	  goto ac_adapter;
