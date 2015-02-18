@@ -25,8 +25,7 @@ limitations under the License.
 #include "compat.h"
 
 struct onoff {
-     bool mc; /* master control */
-     bool batt; /* battery control */
+     bool mc;
      bool ac; /* A/C control */
      int thold; /* threshold */
 };
@@ -46,10 +45,6 @@ inline void disp(struct pp_disp_opts pp, struct power pwr)
      printf("\033[%sm", pp.norm.ccode);
      if (!pp.blnk.ctl.mc || (pwr.charge.raw) > pp.blnk.ctl.thold)
 	  return;
-     // when not on A/C, no blinking if blinking on A/C is enabled
-     if (!pwr.acline && !pp.blnk.ctl.batt)
-	  return;
-     // When on A/C, but blinking for A/C is disabled
      if (pwr.acline && !pp.blnk.ctl.ac)
 	  return;
      // When all the planets are in proper alignment...
@@ -63,9 +58,9 @@ int main(int argc, char **argv)
 
      struct power pwr;
      pwr.charge.nof = -1;
+     pwr.charge.divsr = 10;
      struct pp_disp_opts pp;
      pp.blnk.ctl.ac = false;
-     pp.blnk.ctl.batt = true;
      pp.blnk.ctl.mc = true;
      pp.blnk.ctl.thold = 3; // 30%
      pp.norm.ccode = "31";
@@ -75,18 +70,18 @@ int main(int argc, char **argv)
 	  "t:a::"	\
 	  "nk:"		\
 	  "K:b:"	\
-	  "B:";
+	  "d:";
 
      struct option lopts[] = {
 	  {"help", no_argument, 0, 'h'},
 	  {"version", no_argument, 0, 'v'},
 	  {"blink-threshold", required_argument, 0, 't'},
-	  {"ac-blink", optional_argument, 0, 'a'},
+	  {"ac-blink", required_argument, 0, 'a'},
 	  {"no-blink", no_argument, 0, 'n'},
 	  {"blink-color", required_argument, 0, 'K'},
 	  {"normal-color", required_argument, 0, 'k'},
 	  {"battery", required_argument, 0, 'b'},
-	  {"radix", required_argument, 0, 'B'},
+	  {"divisor", required_argument, 0, 'd'},
 	  { 0, 0, 0, 0 }
      };
 
@@ -109,22 +104,18 @@ int main(int argc, char **argv)
 			   zb_arg_eol_tabs
 			   "  (overrides a previous -a option)",
 		      "\t\t");
-	       zb_arg("-B, --radix=BASE",
-		      "base to use when calculating"
+	       zb_arg("-d, --divisor=NUM",
+		      "The value used to calculate power"
 		      zb_arg_eol_tabs
-		      "  remaining/expended power (defaults"
+		      "sample size (e.g."
 		      zb_arg_eol_tabs
-		      "   to base 10)",
+		      "    3 ->"
+		      zb_arg_eol_tabs
+		      "      current power level to the nearest 1/3,"
+		      "   10 ->"
+		      zb_arg_eol_tabs
+		      "      current power level to the nearest 1/10)",
 		      "\t\t");
-	       zb_arg("-b, --battery=OFFSET",
-		      "offset of desired battery"
-		      zb_arg_eol_tabs
-		      "  (e.g."
-		      zb_arg_eol_tabs
-		      "    0 -> no battery,"
-		      zb_arg_eol_tabs
-		      "    1 -> first battery)",
-		      "\t");
 	       zb_arg("-t, --blink-threshold=LVL",
 		      "set the power-level at which"
 		      zb_arg_eol_tabs
@@ -141,6 +132,15 @@ int main(int argc, char **argv)
 		      "ansi color code to use for "
 		      zb_arg_eol_tabs
 		      "  color when blinking (defaults to 5;31)",
+		      "\t");
+	       zb_arg("-b, --battery=OFFSET",
+		      "offset of desired battery"
+		      zb_arg_eol_tabs
+		      "  (e.g."
+		      zb_arg_eol_tabs
+		      "    0 -> no battery,"
+		      zb_arg_eol_tabs
+		      "    1 -> first battery)",
 		      "\t");
 	       goto win;
 	  case 't':
@@ -165,8 +165,8 @@ int main(int argc, char **argv)
 	  case 'K':
 	       pp.blnk.ccode = optarg;
 	       break;
-	  case 'B':
-	       ZB_STRTONUM(pwr.charge.radix, (const char *)optarg);
+	  case 'd':
+	       ZB_STRTONUM(pwr.charge.divsr, (const char *)optarg);
 	       break;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);

@@ -138,7 +138,8 @@ enum pwrsuply {
      ZB_PWR_OK = 0,
      ZB_PWR_NWANTBAT = -1,
      ZB_PWR_UNRDABL = -2,
-     ZB_PWR_MISSING = -3,
-     ZB_PWR_VIRTMACH = -4
+     ZB_PWR_NBAT = -3,
+     ZB_PWR_NAC = -4,
+     ZB_PWR_NSUPLY = -5
 };
 #endif /* ZB_MAIN_H_GUARD */

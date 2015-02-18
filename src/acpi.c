@@ -40,7 +40,7 @@ limitations under the License.
 
 inline int read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimit)
 {
-     int result = 0;
+     int result = ZB_PWR_OK;
      FILE *fp;
      char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
      /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
@@ -87,7 +87,7 @@ cleanup:
 
 inline int get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
-     int result = 0;
+     int result = ZB_PWR_OK;
      FILE *fp;
 #  if ZB_USE_KCAT
      char *path = malloc(ZB_ACPI_PATH_SIZE);
@@ -173,7 +173,7 @@ int pwr_info(struct pwr_sup *info, int btlimit)
      if (btlimit < 0) {
 	  return EINVAL;
      }
-     int err = 0;
+     int err = ZB_PWR_OK;
      glob_t globuf;
 
      glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
@@ -181,7 +181,7 @@ int pwr_info(struct pwr_sup *info, int btlimit)
      ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
      if (globuf.gl_pathc == 0)
-	  return ZB_PWR_MISSING;
+	  return ZB_PWR_NSUPLY;
 
      if (btlimit > (int)globuf.gl_pathc) {
 	  /* way more than ever needed,

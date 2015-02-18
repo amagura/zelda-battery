@@ -40,8 +40,8 @@ limitations under the License.
 # endif
 
 struct pwr_lvl {
-     int radix;
      int tr;
+     int divsr; /* tr = (int)raw / max */
      int raw;
      int nof;
 };

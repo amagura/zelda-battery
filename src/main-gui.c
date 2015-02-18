@@ -23,27 +23,90 @@ limitations under the License.
 #include "power.h"
 #include "imgs.h"
 
-GdkPixbuf *mkpbuf(struct power pwr)
+#define GZB_MKPXBF(GZB_IMG)					\
+     (gdk_pixbuf_new_from_inline(-1, GZB_IMG, FALSE, NULL))
+#define GZB_MKLTT(GZB_LTT, GZB_SET, GZB_SIZ, FAKE)		\
+     do {							\
+	  (GZB_LTT).full =					\
+	       GZB_MKPXBF(GZB_SET##f##_##GZB_SIZ##x##GZB_SIZ);	\
+	  (GZB_LTT).qtre =					\
+	       GZB_MKPXBF(GZB_SET##qe##_##GZB_SIZ##x##GZB_SIZ);	\
+	  (GZB_LTT).half =					\
+	       GZB_MKPXBF(GZB_SET##h##_##GZB_SIZ##x##GZB_SIZ);	\
+	  (GZB_LTT).qtrf =					\
+	       GZB_MKPXBF(GZB_SET##qf##_##GZB_SIZ##x##GZB_SIZ);	\
+	  (GZB_LTT).empt =					\
+	       GZB_MKPXBF(GZB_SET##e##_##GZB_SIZ##x##GZB_SIZ);	\
+	  (GZB_LTT).bork =					\
+	       GZB_MKPXBF(GZB_SET##b##_##GZB_SIZ##x##GZB_SIZ);	\
+     } while(0)
+
+
+struct hearts {
+     GdkPixbuf *full; // 80 - 100
+     GdkPixbuf *qtre; // 60 - 80
+     GdkPixbuf *half; // 40 - 60
+     GdkPixbuf *qtrf; // 20 - 40
+     GdkPixbuf *empt; // 0 - 20
+     GdkPixbuf *bork; // error
+};
+
+struct hearts get_imgs(int set, bool small)
 {
-     GdkPixbuf *pixbuf = NULL;
-     switch ((int)(pwr.charge.raw / 25)) {
-     case '4':
-	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_16x16_inline, FALSE, NULL);
+     struct hearts ltt;
+     ltt = (const struct hearts){NULL};
+     switch (set) {
+     case 1:
+	  if (small)
+	       GZB_MKLTT(ltt, h1, 10);
+	  else
+	       GZB_MKLTT(ltt, h1, 16);
 	  break;
-     case '3':
-	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_16x16_inline, FALSE, NULL);
+     case 2:
+	  if (small)
+	       GZB_MKLTT(ltt, h2, 10);
+	  else
+	       GZB_MKLTT(ltt, h2, 16);
 	  break;
-     case '2':
-	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
+     case 3:
+	  if (small)
+	       GZB_MKLTT(ltt, h3, 10);
+	  else
+	       GZB_MKLTT(ltt, h3, 16);
 	  break;
-     case '1':
-	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
-	  break;
-     case '0':
-	  pixbuf = gdk_pixbuf_new_from_inline(-1, full_s1_10x10_inline, FALSE, NULL);
-	  break;
-	  }
-     return pixbuf;
+     }
+     return ltt;
+}
+
+#define GZB_AC_IMG ((pwr.acline) ? ltt.full : ltt.empt);
+
+inline GdkPixbuf *select_img(int set, bool small)
+{
+     struct hearts ltt = get_imgs(set, small);
+     struct power pwr;
+     pwr.charge.nof = -1;
+     pwr.charge.divsr = 20;
+     int err = getpwr(&pwr);
+     switch (pwr.charge.tr) {
+     case 5:
+	  return ltt.full;
+     case 4:
+	  return ltt.qtre;
+     case 3:
+	  return ltt.half;
+     case 2:
+	  return ltt.qtrf;
+     case 1:
+	  return ltt.empt;
+     case 0:
+	  return ltt.empt;
+     case ZB_NWANT_BATT:
+	  return GZB_AC_IMG;
+     case ZB_NBAT:
+	  return GZB_AC_IMG;
+     default:
+	  return ltt.bork;
+     }
 }
 
 inline void create_icon()
@@ -56,15 +119,7 @@ inline void create_icon()
 
 int main(int argc, char **argv)
 {
-     struct power pwr;
-     pwr.charge.nof = -1;
-     pwr.charge.radix = 10;
-
      gtk_init(&argc, &argv);
-     GtkStatusIcon *tcon = NULL;
-     GdkPixbuf *pbuf;
-     getpwr(&pwr);
-     pbuf = mkicon(pwr);
      gtk_status_icon_new_from_pixbuf(pbuf);
      gtk_status_icon_set_tooltip_text(tcon, "hello");
      gtk_status_icon_set_visible(tcon, TRUE);

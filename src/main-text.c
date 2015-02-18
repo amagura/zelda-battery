@@ -51,7 +51,7 @@ int main(int argc, char **argv)
      struct power pwr;
      memset(&pwr.charge, 0, sizeof(pwr.charge));
      pwr.charge.nof = -1;
-     pwr.charge.radix = 10;
+     pwr.charge.divsr = 10;
 
      struct txt_disp_opts txt;
      txt.remaining = false;
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 	  "hv"		 \
 	  "f:e:"	 \
 	  "rx"		 \
-	  "b:B:";
+	  "b:d:";
 
      struct option lopts[] = {
 	  {"help", no_argument, 0, 'h'},
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	  {"remaining", no_argument, 0, 'r'},
 	  {"expended", no_argument, 0, 'x'},
 	  {"battery", required_argument, 0, 'b'},
-	  {"radix", required_argument, 0, 'B'},
+	  {"divisor", required_argument, 0, 'd'},
 	  { 0, 0, 0, 0 }
      };
 
@@ -87,22 +87,45 @@ int main(int argc, char **argv)
 	  case 'h':
 	       zb_help("Usage: %s [OPTION]...\n", "\t\t\t");
 	       zb_arg("-f, --full=STRING",
-		      "representation of remaining battery\n\t\t\t\t  power",
+		      "representation of remaining battery"
+		      zb_arg_eol_tabs
+		      "  power",
 		      "\t\t");
 	       zb_arg("-e, --empty=STRING",
-		      "representation of expended battery\n\t\t\t\t  power",
+		      "representation of expended battery"
+		      zb_arg_eol_tabs
+		      "  power",
 		      "\t\t");
-	       zb_arg("-B, --radix=BASE",
-		      "base to use when calculating\n\t\t\t\t  remaining/expended power (defaults\n\t\t\t\t   to base 10)",
+	       zb_arg("-d, --divisor=NUM",
+		      "The value used to calculate power"
+		      zb_arg_eol_tabs
+		      "sample size (e.g."
+		      zb_arg_eol_tabs
+		      "    3 ->"
+		      zb_arg_eol_tabs
+		      "      current power level to the nearest 1/3,"
+		      "   10 ->"
+		      zb_arg_eol_tabs
+		      "      current power level to the nearest 1/10)",
 		      "\t\t");
 	       zb_arg("-r, --remaining",
-		      "limit output to remaining power only\n\t\t\t\t  (overrides a previous -x option)",
+		      "limit output to remaining power only"
+		      zb_arg_eol_tabs
+		      "  (overrides a previous -x option)",
 		      "\t\t");
 	       zb_arg("-x, --expended",
-		      "display expended power only\n\t\t\t\t  (overrides a previous -r option)",
+		      "display expended power only"
+		      zb_arg_eol_tabs
+		      "  (overrides a previous -r option)",
 		      "\t\t");
 	       zb_arg("-b, --battery=OFFSET",
-		      "offset of desired battery\n\t\t\t\t  (e.g. \n\t\t\t\t    0 -> no battery,\n\t\t\t\t    1 -> first battery)",
+		      "offset of desired battery"
+		      zb_arg_eol_tabs
+		      "  (e.g."
+		      zb_arg_eol_tabs
+		      "    0 -> no battery,"
+		      zb_arg_eol_tabs
+		      "    1 -> first battery)",
 		      "\t");
 	       goto win;
 	  case 'e':
@@ -124,8 +147,8 @@ int main(int argc, char **argv)
 	       if (pwr.charge.nof < 0)
 		    pwr.charge.nof *= -1;
 	       break;
-	  case 'B':
-	       ZB_STRTONUM(pwr.charge.radix, (const char *)optarg);
+	  case 'd':
+	       ZB_STRTONUM(pwr.charge.divsr, (const char *)optarg);
 	       break;
 	  case 'v':
 	       printf("%s\n", PACKAGE_VERSION);

@@ -32,28 +32,30 @@ limitations under the License.
 
 int getpwr(struct power *pwr)
 {
-     int retval = 0;
+     int retval = ZB_PWR_OK;
 #if ZB_LINUX
      int limit;
+     struct pwr_sup info;
+
      if ((limit = pwr->charge.nof) < 0)
 	  limit = 1;
-     struct pwr_sup info;
+
      info.cap = malloc(sizeof(*info.cap) * limit);
      info.acline = false;
 
-     if ((retval = pwr_info(&info, limit)) != 0) {
+     if ((retval = pwr_info(&info, limit)) != ZB_PWR_OK) {
 	  ZB_DBG("err: %d\n", retval);
 	  ZB_ONDBG(perror(ZB_PROGNAME));
-	  switch (retval) {
-	  case -1:
-	       // printf("vmnstdmach");
-	       fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
-	       break;
-	  }
-	  exit(EXIT_FAILURE);
+//	       fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
      }
-     pwr->charge.raw = info.cap[limit];
-     pwr->charge.tr = (int)pwr->charge.raw * (pwr->charge.radix / 100);
+
+     pwr->charge.raw = (limit != 0)
+	  ? info.cap[limit]
+	  : ZB_PWR_NWANTBAT;
+     pwr->charge.tr = (limit != 0)
+	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
+	  : ZB_PWR_NWANTBAT;
+
 # if ZB_DEBUG
      for (int idx = 0; idx < limit; ++idx) {
 	  ZB_DBG("limit: `%d`\n", limit);
@@ -68,15 +70,21 @@ int getpwr(struct power *pwr)
      size_t size;
      int ac_line;
      size = sizeof(int);
+
      /* determine if we're running on battery or ac power */
      ZB_DBG("%s\n", "getting hw.acpi.acline");			\
      sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false);
      pwr->acline = (bool)ac_line;
+
      /* determine how much battery power is left */
      ZB_DBG("%s\n", "getting hw.acpi.battery.life");			\
      sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false);
-     pwr->charge.raw = ac_line;
-     pwr->charge.tr = (int)pwr->charge.raw * (pwr->charge.radix / 100);
+     pwr->charge.raw = (limit != 0)
+	  ? ac_line
+	  : ZB_NWANTBAT;
+     pwr->charge.tr = (limit != 0)
+	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
+	  : ZB_NWANTBAT;
 #endif
      return retval;
 }
