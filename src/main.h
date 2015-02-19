@@ -135,11 +135,11 @@ char *neko PARAMS((const char *s1, ...));
 # endif
 
 enum pwrsuply {
-     ZB_PWR_OK = 0,
-     ZB_PWR_NWANTBAT = -1,
-     ZB_PWR_UNRDABL = -2,
-     ZB_PWR_NBAT = -3,
-     ZB_PWR_NAC = -4,
-     ZB_PWR_NSUPLY = -5
+     PWR_OK = 0,
+     PWR_ERR = -1,
+     PWR_NBAT = -2,
+     PWR_NAC = -3,
+     PWR_NSUPLY = -5,
+     PWR_NREAD = -6
 };
 #endif /* ZB_MAIN_H_GUARD */

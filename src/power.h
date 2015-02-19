@@ -44,12 +44,12 @@ struct pwr_lvl {
      int divsr; /* tr = (int)raw / max */
      int raw;
      int nof;
-     int err;
 };
 
 struct power {
      struct pwr_lvl charge;
      bool acline;
+     int err;
 };
 
 int getpwr PARAMS((struct power *pwr));

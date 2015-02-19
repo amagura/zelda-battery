@@ -95,6 +95,7 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
      int test = (pwr.charge.err == ZB_PWR_OK
 		 ? pwr.charge.tr
 		 : pwr.charge.err);
+
      switch (test) {
      case 5:
 	  return ltt.full;
@@ -120,8 +121,7 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
 int sync_icon(GtkStatusIcon *tcon)
 {
      struct power pwr;
-
-//     char *tooltip = malloc(GZB_TOOLTIP_SIZE);
+     char *tooltip = malloc(GZB_TOOLTIP_SIZE);
      pwr.charge.nof = -1;
      pwr.charge.divsr = 20;
      int err = getpwr(&pwr);

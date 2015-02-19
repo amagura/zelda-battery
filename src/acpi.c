@@ -37,6 +37,20 @@ limitations under the License.
 #  define ZB_ACPI_BATCAP_PATH "/capacity"
 #  define ZB_ACPI_ACSTAT_PATH "/online"
 
+/* optionally gets information regarding the battery specified */
+inline int get_batt_info(char *cap, int btnum)
+{
+     int result = ZB_PWR_OK;
+
+     /* if no battery is desired, return `ZB_PWR_OK' */
+     if (btnum == 0)
+	  return result;
+
+     FILE *fp;
+     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+     ZB_DBG("btnum: %d\n", btnum);
+
+
 
 inline int read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimit)
 {
