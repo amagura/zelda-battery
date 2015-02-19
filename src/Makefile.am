@@ -7,7 +7,7 @@ gzbatt_SOURCES = main-gui.c main.c acpi.c power.c imgs.h
 
 noinst_HEADERS = main.h acpi.h power.h compat.h
 
-AM_CFLAGS = -O2 -Wall
+AM_CFLAGS = -O2 -Wall -DCLING=1
 AM_LDFLAGS =
 
 if GTK2

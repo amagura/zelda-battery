@@ -28,6 +28,7 @@ limitations under the License.
 #elif ZB_BSD
 # include <sys/sysctl.h>
 #endif
+
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
 
 void getpwr(struct power *pwr)
@@ -70,9 +71,9 @@ void getpwr(struct power *pwr)
      }
      pwr->charge.raw = (limit != 0)
 	  ? ac_line
-	  : ZB_PWR_ENOWANT;
+	  : PWR_ENOWANT;
      pwr->charge.tr = (limit != 0)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
-	  : ZB_PWR_ENOWANT;
+	  : PWR_ENOWANT;
 #endif
 }

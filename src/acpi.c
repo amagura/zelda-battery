@@ -27,7 +27,11 @@ limitations under the License.
 # include "main.h"
 # include "acpi.h"
 
-# if !HAVE__SYS_CLASS_POWER_SUPPLY
+# ifndef CLING
+#  define HAVE__SYS_CLASS_POWER_SUPPLY 1
+# endif
+
+# if HAVE__SYS_CLASS_POWER_SUPPLY
 #  define ZB_ACPI_ROOT "/sys/class/power_supply"
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
 #  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT)) /* the `""` here adds 1 to the overall length */
