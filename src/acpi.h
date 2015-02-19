@@ -44,7 +44,7 @@ struct pwr_sup {
      int *e; /* should point to &pwr.e */
 };
 
-int pwr_info PARAMS((struct pwr_sup *info, int btnum));
+void pwr_info PARAMS((struct pwr_sup *info, int btnum));
 
 # endif /* ZBATT_ACPI_H_GUARD */
 #endif

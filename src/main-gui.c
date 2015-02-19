@@ -90,11 +90,11 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
 {
      struct hearts ltt = get_imgs(set, small);
      ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
-     ZB_DBG("pwr.charge.err: %d\n", pwr.charge.err);
+     ZB_DBG("pwr.charge.err: %d\n", *pwr.e);
      ZB_DBG("pwr.acline: %d\n", pwr.acline);
-     int test = (pwr.charge.err == ZB_PWR_OK
+     int test = (*pwr.e == PWR_OK
 		 ? pwr.charge.tr
-		 : pwr.charge.err);
+		 : *pwr.e);
 
      switch (test) {
      case 5:
@@ -109,9 +109,9 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
 	  return ltt.empt;
      case 0:
 	  return ltt.empt;
-     case ZB_PWR_NWANTBAT:
+     case PWR_ENOWANT:
 	  return GZB_AC_IMG(pwr);
-     case ZB_PWR_NBAT:
+     case PWR_ENOBAT:
 	  return GZB_AC_IMG(pwr);
      default:
 	  return ltt.bork;
@@ -124,7 +124,7 @@ int sync_icon(GtkStatusIcon *tcon)
      char *tooltip = malloc(GZB_TOOLTIP_SIZE);
      pwr.charge.nof = -1;
      pwr.charge.divsr = 20;
-     int err = getpwr(&pwr);
+     getpwr(&pwr);
 
      gtk_status_icon_set_from_pixbuf(tcon, select_img(1, 0, pwr));
 

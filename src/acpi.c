@@ -88,9 +88,6 @@ inline int get_ac_info(bool *acline, char *acfile)
      return PWR_OK;
 }
 
-
-
-
 inline void read_pwr_files(struct pwr_sup *info,
 			   char *ac,
 			   char *batt,
@@ -102,13 +99,14 @@ inline void read_pwr_files(struct pwr_sup *info,
 
 inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
-     int result = ZB_PWR_OK;
      FILE *fp;
+
 #  if ZB_USE_KCAT
      char *path = malloc(ZB_ACPI_PATH_SIZE);
 #  else
      char path[ZB_ACPI_PATH_SIZE];
 #  endif
+
      /* the files we'll be reading only consist of
       * a single line of little text,
       * often no more than a word; but
@@ -127,21 +125,17 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
       * +30,000 batteries; so no need to use the same
       * type as `globuf.gl_pathc'; plus, `int', IIRC, is
       * the standard convention for _generic_ loop counter types. */
-     if ((int)globuf.gl_pathc <= 0)
-	  goto cleanup;
+
      for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
+
 #  if !ZB_USE_KCAT /* Disables the following so as to
 		    * prevent memory corruption when we `malloc'.
 		    */
 	  idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
 #  endif
-	  fp = fopen(globuf.gl_pathv[idx], "r");
+	  if ((fp = fopen(globuf.gl_pathv[idx], "r")) == NULL)
+	       continue;
 
-	  if (fp == (NULL)) {
-	       fclose(fp);
-	       result = errno;
-	       goto cleanup;
-	  }
 	  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 	  fclose(fp);
 
@@ -175,11 +169,7 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 #  endif
 	  }
      }
-
-cleanup:
-
      free(tmp);
-     return result;
 }
 
 void pwr_info(struct pwr_sup *info, int btnum)
@@ -217,24 +207,17 @@ void pwr_info(struct pwr_sup *info, int btnum)
      get_pwr_files(globuf, ac, batt, btnum);
      globfree(&globuf);
 
-     if (err != 0)
-	  goto cleanup;
-
-     ZB_DBG("limit: %d\nbatts: `%s'\n", btlimit, batt);
+     ZB_DBG("limit: %d\nbatts: `%s'\n", btnum, batt);
      ZB_DBG("ac: `%s'\n", ac);
 
-     err = read_pwr_files(info, ac, batt, btlimit);
+     read_pwr_files(info, ac, batt, btnum);
 
 cleanup:
      ZB_DBG("info.acline: %d\n", info->acline);
 
 #  if ZB_DEBUG
-     for (int mdx = 0; mdx < --btlimit; ++mdx) {
-	  ZB_DBG("info.cap[%d]: %d\n", mdx, info->cap[mdx]);
-     }
+     ZB_DBG("info.cap: %d\n", info->cap);
 #  endif
-
-     return err;
 }
 
 #  if 0
