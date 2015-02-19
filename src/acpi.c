@@ -44,12 +44,12 @@ inline int get_batt_info(int *cap, char *batt, int btnum)
 
      /* if no battery is desired, return `ZB_PWR_OK' */
      if (btnum == 0)
-	  return PWR_NWANT;
+	  return PWR_ENOWANT;
 
      FILE *fp;
 
      if ((fp = fopen(batt, "r")) == NULL)
-	  return PWR_NBAT;
+	  return PWR_ENOBAT;
 
      char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
 
@@ -68,7 +68,7 @@ inline int get_ac_info(bool *acline, char *acfile)
      FILE *fp;
 
      if ((fp = fopen(acfile, "r")) == NULL)
-	  return PWR_NAC;
+	  return PWR_ENOAC;
 
      char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
      fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
@@ -87,17 +87,16 @@ inline int get_ac_info(bool *acline, char *acfile)
 
 
 
-inline int *read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimit)
+inline void read_pwr_files(struct pwr_sup *info,
+			   char *ac,
+			   char *batt,
+			   int btnum)
 {
-     int err[ERR_LIMIT];
-     int *errp = &err[0];
-     *errp = get_batt_info(&info->cap, batt, btlimit);
-     ++errp;
-     *errp = get_ac_info(&info->acline, ac);
-     return errp;
+     zb_eset(info->e, get_batt_info(&info->cap, batt, btnum));
+     zb_eset(info->e, get_ac_info(&info->acline, ac));
 }
 
-inline int get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
+inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      int result = ZB_PWR_OK;
      FILE *fp;

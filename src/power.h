@@ -51,6 +51,7 @@ struct power {
      bool acline;
      int err[PWR_ELIMIT];
      int *e;
+     int esum;
 };
 
 void getpwr PARAMS((struct power *pwr));

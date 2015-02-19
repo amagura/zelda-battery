@@ -70,9 +70,9 @@ void getpwr(struct power *pwr)
      }
      pwr->charge.raw = (limit != 0)
 	  ? ac_line
-	  : ZB_PWR_NWANTBAT;
+	  : ZB_PWR_ENOWANT;
      pwr->charge.tr = (limit != 0)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
-	  : ZB_PWR_NWANTBAT;
+	  : ZB_PWR_ENOWANT;
 #endif
 }

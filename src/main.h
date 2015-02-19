@@ -150,6 +150,6 @@ enum pwrsuply {
      PWR_ENOSUPLY = -5,
      PWR_ENOREAD = -6,
      PWR_ENOWANT = -7,
-     PWR_ELIMIT = 16
+     PWR_ELIMIT = 64
 };
 #endif /* ZB_MAIN_H_GUARD */
