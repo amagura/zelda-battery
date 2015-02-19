@@ -1,23 +1,24 @@
 ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/amagura/zelda-battery)
 =============
 
-A Legend of Zelda like health-bar battery meter for Shell prompts.
-
-# Why?
-Because I wanted to be able to keep a constant tab on my laptop's power-level without having to look away from the command-line or running a command, thought it would be neat thing to do, and because I _could_.
+A Legend of Zelda like health-bar battery meter for Shell prompts and Taskbars
 
 # Supported Platforms
 ## Linux
-Kernels >= 2.6.24 are supported; support for older kernels is on the way.
+Kernels >= 2.6.24 are supported; support for older kernels is not a priority, but may be added later.
 
 ## *BSD
 Most BSDs should be supported: as long as you have `sysctlbyname`, you should be fine.  BSD systems known to work: 
 * DragonFly BSD
 * FreeBSD
 
-### Dependencies (v2.0+)
+### Dependencies (v3.0+)
 * GNU Autotools
 * C99 compliant C compiler
+
+#### GUI
+* gtk2
+* pkg-config (make)
 
 ### Building
 1. `autoreconf -i`
