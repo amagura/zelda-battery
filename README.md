@@ -16,9 +16,7 @@ Most BSDs should be supported: as long as you have `sysctlbyname`, you should be
 * GNU Autotools
 * C99 compliant C compiler
 
-#### GUI
-* gtk2
-* pkg-config (make)
+The GUI (Graphical User Interface) requires __gtk2__ and the `configure` script will need `pkg-config` to be installed, but that's only if you're building the GUI in addition to the CLI (Command Line Interface).
 
 ### Building
 1. `autoreconf -i`
