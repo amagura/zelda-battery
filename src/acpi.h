@@ -34,17 +34,17 @@ limitations under the License.
 #  include <stdbool.h>
 # endif
 
+# ifndef PWR_ELIMIT
+#  include "main.h"
+# endif
+
 struct pwr_sup {
      bool acline;
-     int *cap;
-     /* if it became necessary to know which
-      * capacity went with which battery,
-      * getting each battery's model/serial number
-      * should be an easy enough task to implement
-      */
+     int cap;
+     int *e; /* should point to &pwr.e */
 };
 
-int pwr_info PARAMS((struct pwr_sup *info, int btlimit));
+int pwr_info PARAMS((struct pwr_sup *info, int btnum));
 
 # endif /* ZBATT_ACPI_H_GUARD */
 #endif

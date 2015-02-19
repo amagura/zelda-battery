@@ -174,9 +174,8 @@ int main(int argc, char **argv)
 	  }
      }
 
-     int err;
-     err = getpwr(&pwr);
-     ZB_DBG("err: `%d`\n", err);
+     getpwr(&pwr);
+     ZB_DBG("err: `%d`\n", pwr.err);
      ZB_XONDBG(perror(ZB_PROGNAME));
      disp(pp, pwr);
 win:

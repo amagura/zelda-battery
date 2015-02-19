@@ -49,9 +49,10 @@ struct pwr_lvl {
 struct power {
      struct pwr_lvl charge;
      bool acline;
-     int err;
+     int err[PWR_ELIMIT];
+     int *e;
 };
 
-int getpwr PARAMS((struct power *pwr));
+void getpwr PARAMS((struct power *pwr));
 
 #endif /* ZB_POWER_H_GUARD */

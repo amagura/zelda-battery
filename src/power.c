@@ -38,7 +38,7 @@ void getpwr(struct power *pwr)
 
 #if ZB_LINUX
      struct pwr_sup info;
-     info.cap = malloc(sizeof(*info.cap) * (*limit));
+     info.cap = -1;
 
      /* check if there was an error */
      if ((pwr->err = pwr_info(&info, *limit)) != PWR_OK) {
@@ -70,5 +70,4 @@ void getpwr(struct power *pwr)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
 	  : ZB_PWR_NWANTBAT;
 #endif
-     return *retval;
 }

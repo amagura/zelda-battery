@@ -27,7 +27,7 @@ limitations under the License.
 # include "main.h"
 # include "acpi.h"
 
-# if HAVE__SYS_CLASS_POWER_SUPPLY
+# if !HAVE__SYS_CLASS_POWER_SUPPLY
 #  define ZB_ACPI_ROOT "/sys/class/power_supply"
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
 #  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT)) /* the `""` here adds 1 to the overall length */
@@ -38,66 +38,63 @@ limitations under the License.
 #  define ZB_ACPI_ACSTAT_PATH "/online"
 
 /* optionally gets information regarding the battery specified */
-inline int get_batt_info(char *cap, int btnum)
+inline int get_batt_info(int *cap, char *batt, int btnum)
 {
-     int result = ZB_PWR_OK;
+     ZB_DBG("btnum: %d\n", btnum);
 
      /* if no battery is desired, return `ZB_PWR_OK' */
      if (btnum == 0)
-	  return result;
+	  return PWR_NWANT;
 
      FILE *fp;
+
+     if ((fp = fopen(batt, "r")) == NULL)
+	  return PWR_NBAT;
+
      char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
-     ZB_DBG("btnum: %d\n", btnum);
 
-
-
-inline int read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimit)
-{
-     int result = ZB_PWR_OK;
-     FILE *fp;
-     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
-     /* replaces: for (int jdx = 0; jdx < limit; ++jdx) { */
-     ZB_DBG("btlimit: %d\n", btlimit);
-     if (btlimit == 0)
-	  goto ac_adapter;
-
-     if ((fp = fopen(batt, "r")) == NULL) {
-	  result = ZB_PWR_NBAT;
-	  ZB_DBG("errno: %d\n", errno);
-	  info->cap[0] = ZB_PWR_NBAT;
-	  goto ac_adapter;
-     }
      fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
-     /* get battery percentage levels */
+     /* get battery level */
      ZB_DBG("batt cap: %s\n", tmp);
-     ZB_STRTONUM(info->cap[0], tmp);
+     ZB_STRTONUM(*cap, tmp);
      fclose(fp);
-     memset(tmp, '\0', ZB_ACPI_TYPE_SIZE);
 
-ac_adapter:
-     if ((fp = fopen(ac, "r")) == NULL) {
-	  /* the A/C adapter was removed...
-	   * (is this even possible while the machine's running?
-	   * Maybe in Multics?) */
-	  result = errno;
-	  goto cleanup;
-     }
+     return PWR_OK;
+}
+
+inline int get_ac_info(bool *acline, char *acfile)
+{
+     FILE *fp;
+
+     if ((fp = fopen(acfile, "r")) == NULL)
+	  return PWR_NAC;
+
+     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
      fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
-     /* get AC adapter state */
+     /* get A/C adapter state */
      ZB_DBG("acline: %s\n", tmp);
      int *kdxtmp = malloc(sizeof(*kdxtmp));
      ZB_STRTONUM(*kdxtmp, tmp);
-     info->acline = (bool)*kdxtmp;
+     *acline = (bool)*kdxtmp;
      free(kdxtmp);
      fclose(fp);
 
-cleanup:
-     free(tmp);
+     return PWR_OK;
+}
 
-     return result;
+
+
+
+inline int *read_pwr_files(struct pwr_sup *info, char *ac, char *batt, int btlimit)
+{
+     int err[ERR_LIMIT];
+     int *errp = &err[0];
+     *errp = get_batt_info(&info->cap, batt, btlimit);
+     ++errp;
+     *errp = get_ac_info(&info->acline, ac);
+     return errp;
 }
 
 inline int get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
@@ -182,37 +179,39 @@ cleanup:
      return result;
 }
 
-int pwr_info(struct pwr_sup *info, int btlimit)
+void pwr_info(struct pwr_sup *info, int btnum)
 {
      ZB_DBG("%s: %d\n", "ZB_LINUX", ZB_LINUX);
-     if (btlimit < 0) {
-	  return EINVAL;
+
+     if (btnum < 0) {
+	  zb_eset(info->e, EINVAL);
+	  return;
      }
-     int err = ZB_PWR_OK;
+
      glob_t globuf;
 
      glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
 
      ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
-     if (globuf.gl_pathc == 0)
-	  return ZB_PWR_NSUPLY;
-
-     if (btlimit > (int)globuf.gl_pathc) {
-	  /* way more than ever needed,
-	   * since this will also find A/C power supplies
-	   * in addition to batteries. */
-	  btlimit = (int)globuf.gl_pathc;
+     if (globuf.gl_pathc == 0) {
+	  zb_eset(info->e, PWR_ENOSUPLY);
+	  return;
      }
 
-     ZB_DBG("btlimit: %d\n", btlimit);
+     if (btnum > (int)globuf.gl_pathc) {
+	  btnum = 1;
+     }
+
+     ZB_DBG("btnum: %d\n", btnum);
      ZB_DBG("ZB_ACPI_PATH_SIZE: %lu\n", ZB_ACPI_PATH_SIZE);
+     ZB_DBG("ZB_ACPI_TYPE_SIZE: %lu\n", ZB_ACPI_TYPE_SIZE);
 
 
      char ac[ZB_ACPI_PATH_SIZE+1] = "";
      char batt[ZB_ACPI_PATH_SIZE+1] = "";
 
-     err = get_pwr_files(globuf, ac, batt, btlimit);
+     get_pwr_files(globuf, ac, batt, btnum);
      globfree(&globuf);
 
      if (err != 0)

@@ -126,6 +126,14 @@ limitations under the License.
 	  }							\
      } while(0)
 # endif
+
+# define zb_eset(ZB_EPTR, ZB_ENO)			\
+     do {						\
+	  if ((ZB_EPTR) != &(ZB_EPTR)[PWR_ELIMIT]) {	\
+	       *(ZB_EPTR) = (ZB_ENO);			\
+	       ++(ZB_EPTR);				\
+	  }						\
+     } while(0)
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL
@@ -136,10 +144,12 @@ char *neko PARAMS((const char *s1, ...));
 
 enum pwrsuply {
      PWR_OK = 0,
-     PWR_ERR = -1,
-     PWR_NBAT = -2,
-     PWR_NAC = -3,
-     PWR_NSUPLY = -5,
-     PWR_NREAD = -6
+     PWR_ENOK = -1,
+     PWR_ENOBAT = -2,
+     PWR_ENOAC = -3,
+     PWR_ENOSUPLY = -5,
+     PWR_ENOREAD = -6,
+     PWR_ENOWANT = -7,
+     PWR_ELIMIT = 16
 };
 #endif /* ZB_MAIN_H_GUARD */
