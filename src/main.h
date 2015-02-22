@@ -127,13 +127,13 @@ limitations under the License.
      } while(0)
 # endif
 
-# define zb_eset(ZB_EPTR, ZB_ENO)			\
-     do {						\
-	  if ((ZB_EPTR) != &(ZB_EPTR)[PWR_ELIMIT]) {	\
-	       *(ZB_EPTR) = (ZB_ENO);			\
-	       ++(ZB_EPTR);				\
-	  }						\
-     } while(0)
+# define zb_eset(ZB_EPTR, ZB_ENO)				\
+     do {							\
+	  if ((ZB_EPTR)->num == 0)				\
+	       (ZB_EPTR)->vec[(ZB_EPTR)->num] = (ZB_ENO);	\
+	  else							\
+	       (ZB_EPTR)->vec[++(ZB_EPTR)->num] = (ZB_ENO);	\
+     } while (0)
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL

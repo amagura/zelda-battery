@@ -90,11 +90,12 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
 {
      struct hearts ltt = get_imgs(set, small);
      ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
-     ZB_DBG("pwr.charge.err: %d\n", *pwr.e);
+     ZB_DBG("pwr.e: %d\n", pwr.err.vec[pwr.err.num]);
      ZB_DBG("pwr.acline: %d\n", pwr.acline);
-     int test = (*pwr.e == PWR_OK
+     int e = pwr.err.vec[pwr.err.num];
+     int test = (e == PWR_OK
 		 ? pwr.charge.tr
-		 : *pwr.e);
+		 : e);
 
      switch (test) {
      case 5:

@@ -68,7 +68,6 @@ char *itoa(int idx)
      return tmp;
 }
 
-
 char *neko(const char *s1, ...)
 {
      va_list vv; // variable arg vector

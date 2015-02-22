@@ -38,13 +38,15 @@ limitations under the License.
 #  include "main.h"
 # endif
 
+#  include "power.h"
+
+
 struct pwr_sup {
      bool acline;
      int cap;
-     int *e; /* should point to &pwr.e */
 };
 
-void pwr_info PARAMS((struct pwr_sup *info, int btnum));
+void pwr_info PARAMS((struct pwr_sup *info, struct error *err, int btnum));
 
 # endif /* ZBATT_ACPI_H_GUARD */
 #endif

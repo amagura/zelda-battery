@@ -33,22 +33,26 @@ limitations under the License.
 
 void getpwr(struct power *pwr)
 {
-     int *btnum;
-     if ((btnum = &pwr->charge.nof) < 0)
-	  *btnum = 1;
-     pwr->e = pwr->err;
+     if (pwr->charge.nof < 0)
+	  pwr->charge.nof = 1;
+     pwr->err.num = 0;
+     pwr->err.vec[pwr->err.num] = PWR_OK;
+
+     ZB_DBG("err: %d\n", (pwr->err.vec[pwr->err.num]));
 
 #if ZB_LINUX
      struct pwr_sup info;
-     info.e = pwr->e;
      info.cap = -1;
 
      /* check if there was an error */
-     pwr_info(&info, *btnum);
-     if (*info.e != PWR_OK) {
-	  ZB_DBG("err: %d\n", *info.e);
-	  ZB_ONDBG(perror(ZB_PROGNAME));
+     pwr_info(&info, &(pwr->err), pwr->charge.nof);
+     if (pwr->err.vec[pwr->err.num] != PWR_OK) {
+	  ZB_DBG("err: %d\n", pwr->err.vec[pwr->err.num]);
+	  ZB_DBG("strerr: %s\n", strerror(pwr->err.vec[pwr->err.num]));
      }
+     pwr->charge.raw = info.cap;
+     pwr->charge.tr = (int)pwr->charge.raw / (pwr->charge.divsr);
+     pwr->acline = info.acline;
 #elif ZB_BSD
      size_t size;
      int ac_line;
@@ -76,4 +80,7 @@ void getpwr(struct power *pwr)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
 	  : PWR_ENOWANT;
 #endif
+     for (int jdx = 0; jdx < pwr->err.num; ++jdx) {
+	  pwr->err.sum += pwr->err.vec[jdx];
+     }
 }

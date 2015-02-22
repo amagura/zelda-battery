@@ -35,10 +35,6 @@ limitations under the License.
 #  include <stdbool.h>
 # endif
 
-# if !defined(ZB_ACPI_H_GUARD)
-#  include "acpi.h"
-# endif
-
 struct pwr_lvl {
      int tr;
      int divsr; /* tr = (int)raw / max */
@@ -46,12 +42,16 @@ struct pwr_lvl {
      int nof;
 };
 
+struct error {
+     int vec[PWR_ELIMIT];
+     int num;
+     int sum;
+};
+
 struct power {
      struct pwr_lvl charge;
      bool acline;
-     int err[PWR_ELIMIT];
-     int *e;
-     int esum;
+     struct error err;
 };
 
 void getpwr PARAMS((struct power *pwr));

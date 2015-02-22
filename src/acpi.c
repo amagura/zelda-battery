@@ -25,6 +25,7 @@ limitations under the License.
 # include <glob.h>
 # include <limits.h>
 # include "main.h"
+# include "power.h"
 # include "acpi.h"
 
 # ifndef CLING
@@ -89,12 +90,13 @@ inline int get_ac_info(bool *acline, char *acfile)
 }
 
 inline void read_pwr_files(struct pwr_sup *info,
+			   struct error **err,
 			   char *ac,
 			   char *batt,
 			   int btnum)
 {
-     zb_eset(info->e, get_batt_info(&info->cap, batt, btnum));
-     zb_eset(info->e, get_ac_info(&info->acline, ac));
+     zb_eset((*err), get_batt_info(&info->cap, batt, btnum));
+     zb_eset((*err), get_ac_info(&info->acline, ac));
 }
 
 inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
@@ -172,14 +174,9 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
      free(tmp);
 }
 
-void pwr_info(struct pwr_sup *info, int btnum)
+void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
 {
      ZB_DBG("%s: %d\n", "ZB_LINUX", ZB_LINUX);
-
-     if (btnum < 0) {
-	  zb_eset(info->e, EINVAL);
-	  return;
-     }
 
      glob_t globuf;
 
@@ -188,13 +185,12 @@ void pwr_info(struct pwr_sup *info, int btnum)
      ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
      if (globuf.gl_pathc == 0) {
-	  zb_eset(info->e, PWR_ENOSUPLY);
+	  zb_eset(err, PWR_ENOSUPLY);
 	  return;
      }
 
-     if (btnum > (int)globuf.gl_pathc) {
+     if (btnum > (int)globuf.gl_pathc)
 	  btnum = 1;
-     }
 
      ZB_DBG("btnum: %d\n", btnum);
      ZB_DBG("ZB_ACPI_PATH_SIZE: %lu\n", ZB_ACPI_PATH_SIZE);
@@ -210,9 +206,8 @@ void pwr_info(struct pwr_sup *info, int btnum)
      ZB_DBG("limit: %d\nbatts: `%s'\n", btnum, batt);
      ZB_DBG("ac: `%s'\n", ac);
 
-     read_pwr_files(info, ac, batt, btnum);
+     read_pwr_files(info, &err, ac, batt, btnum);
 
-cleanup:
      ZB_DBG("info.acline: %d\n", info->acline);
 
 #  if ZB_DEBUG
