@@ -3,7 +3,7 @@
 bin_PROGRAMS = zbatc zbatt
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main-gui.pyx main.c acpi.c power.c
+gzbatt_SOURCES = gzbatt.pyx main.c acpi.c power.c
 noinst_HEADERS = main.h acpi.h power.h compat.h imgs.h
 
 AM_CFLAGS =
@@ -71,7 +71,7 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
-	$(CYTHON) --embed -p2 -Wextra -o $@ $<
+	$(CYTHON) --embed -p -2 -Wextra -o $@ $<
 
 tidy-local:
 	$(RM) *.o || true
