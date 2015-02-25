@@ -28,14 +28,14 @@ limitations under the License.
 # include "power.h"
 # include "acpi.h"
 
-# ifndef CLING
+# if !defined(HAVE__SYS_CLASS_POWER_SUPPLY) && !defined(HAVE__PROC_ACPI)
 #  define HAVE__SYS_CLASS_POWER_SUPPLY 1
 # endif
 
 # if HAVE__SYS_CLASS_POWER_SUPPLY
 #  define ZB_ACPI_ROOT "/sys/class/power_supply"
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
-#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT)) /* the `""` here adds 1 to the overall length */
+#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB)) /* the `""` here adds 1 to the overall length */
 #  define ZB_ACPI_BATTYPE "Battery"
 #  define ZB_ACPI_ACTYPE "Mains"
 #  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
@@ -56,7 +56,7 @@ inline int get_batt_info(int *cap, char *batt, int btnum)
      if ((fp = fopen(batt, "r")) == NULL)
 	  return PWR_ENOBAT;
 
-     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+     char tmp[ZB_ACPI_TYPE_SIZE];
 
      fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
@@ -75,15 +75,14 @@ inline int get_ac_info(bool *acline, char *acfile)
      if ((fp = fopen(acfile, "r")) == NULL)
 	  return PWR_ENOAC;
 
-     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+     char tmp[ZB_ACPI_TYPE_SIZE];
      fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
 
      /* get A/C adapter state */
      ZB_DBG("acline: %s\n", tmp);
-     int *kdxtmp = malloc(sizeof(*kdxtmp));
-     ZB_STRTONUM(*kdxtmp, tmp);
-     *acline = (bool)*kdxtmp;
-     free(kdxtmp);
+     int kdx;
+     ZB_STRTONUM(kdx, tmp);
+     *acline = (bool)kdx;
      fclose(fp);
 
      return PWR_OK;
@@ -104,7 +103,7 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
      FILE *fp;
 
 #  if ZB_USE_KCAT
-     char *path = malloc(ZB_ACPI_PATH_SIZE);
+     char *path = NULL;
 #  else
      char path[ZB_ACPI_PATH_SIZE];
 #  endif
@@ -114,7 +113,7 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
       * often no more than a word; but
       * definitely no more than 3
       * to 5 words (i.e. a sentence). */
-     char *tmp = malloc(ZB_ACPI_TYPE_SIZE);
+     char tmp[ZB_ACPI_TYPE_SIZE];
 
      /*   Note the use of `globuf.gl_pathc` instead of `batlim`:
       * `batlim' is only used to limit the _number of batteries_;
@@ -171,7 +170,6 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 #  endif
 	  }
      }
-     free(tmp);
 }
 
 void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
@@ -197,8 +195,8 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("ZB_ACPI_TYPE_SIZE: %lu\n", ZB_ACPI_TYPE_SIZE);
 
 
-     char ac[ZB_ACPI_PATH_SIZE+1] = "";
-     char batt[ZB_ACPI_PATH_SIZE+1] = "";
+     char ac[ZB_ACPI_PATH_SIZE+1];
+     char batt[ZB_ACPI_PATH_SIZE+1];
 
      get_pwr_files(globuf, ac, batt, btnum);
      globfree(&globuf);

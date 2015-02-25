@@ -3,16 +3,16 @@
 bin_PROGRAMS = zbatc zbatt
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main-gui.c main.c acpi.c power.c imgs.h
+gzbatt_SOURCES = main-gui.c main.c acpi.c power.c
+noinst_HEADERS = main.h acpi.h power.h compat.h imgs.h
 
-noinst_HEADERS = main.h acpi.h power.h compat.h
-
-AM_CFLAGS = -O2 -Wall -DCLING=1
-AM_LDFLAGS =
+AM_CFLAGS =
+gzbatt_CFLAGS =
+gzbatt_LDFLAGS =
 
 if GTK2
-AM_CFLAGS += @GTK_CFLAGS@
-AM_LDFLAGS += @GTK_LIBS@
+gzbatt_CFLAGS += @GTK_CFLAGS@
+gzbatt_LDFLAGS += @GTK_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
@@ -36,6 +36,7 @@ endif
 
 zbatc_CFLAGS = $(AM_CFLAGS) -DZB_PROGNAME=\"zbatc\"
 zbatt_CFLAGS = $(AM_CFLAGS) -DZB_PROGNAME=\"zbatt\"
+gzbatt_CFLAGS += $(AM_CFLAGS) -DZB_PROGNAME=\"gzbatt\"
 
 .PHONY: valgrind lint
 all-local:

@@ -38,7 +38,7 @@ limitations under the License.
 # endif
 
 # ifndef ZB_USE_KCAT
-#  define ZB_USE_KCAT 1
+#  define ZB_USE_KCAT 0
 # endif
 
 /*** ^^ Externally Defined macros ^^ ***/
@@ -134,13 +134,18 @@ limitations under the License.
 	  else							\
 	       (ZB_EPTR)->vec[++(ZB_EPTR)->num] = (ZB_ENO);	\
      } while (0)
+
+# define neko(...) concat(__VA_ARGS__)
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL
-char *neko PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
+char *concat PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
 # else
-char *neko PARAMS((const char *s1, ...));
+char *concat PARAMS((const char *s1, ...));
 # endif
+
+void rev PARAMS((char *s));
+void itoa PARAMS((char *dst, int idx));
 
 enum pwrsuply {
      PWR_OK = 0,

@@ -15,6 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
@@ -46,29 +47,91 @@ inline int intlen(int idx)
 inline int small_intlen(int idx)
 {
      int hdx = abs(idx);
-     if (hdx < 100)
-	  return 2;
-     else if (hdx < 10)
-	  return 1;
-     else
-	  return 3;
+     return (hdx < 100
+	     ? 2
+	     : (hdx < 10
+		? 1
+		: 3));
 }
 
-char *itoa(int idx)
+void rev(char *s)
+{
+     int idx, hdx;
+     idx = 0;
+     while (s[idx] != '\0')
+	  ++idx;
+
+     hdx = idx - 1;
+     char tmp;
+     for (idx = 0; idx < hdx; ++idx) {
+	  tmp = s[idx];
+	  s[idx] = s[hdx];
+	  s[hdx] = tmp;
+	  --hdx;
+     }
+}
+
+void itoa(char *dst, int idx)
 {
      const int len = small_intlen(idx);
-     char *tmp = (char *)malloc(sizeof(*tmp)*len + 1);
+     char tmp[len+1];
+     char *wp = tmp;
 
-     for (; idx != 0; ++tmp) {
-	  *tmp = (idx >= 0
-		  ? '0' + (idx % 10)
-		  : '0' - (idx % 10));
+     for (; idx != 0; ++wp) {
+	  if (idx >= 0)
+	       *wp = '0' + (idx % 10);
+	  else
+	       *wp = '0' - (idx % 10);
+	  ZB_DBG("wp: `%c`\n", *wp);
 	  idx /= 10;
      }
-     return tmp;
+     *wp++ = '\0';
+     rev(tmp);
+     ZB_DBG("wp: `%s`\n", tmp);
+     memcpy(dst, tmp, len+1);
 }
 
-char *neko(const char *s1, ...)
+# if 1
+/* this one uses less memory */
+char *concat(const char *s1, ...)
+{
+  va_list args;
+  const char *s;
+  char *p, *result;
+  unsigned long l, m, n;
+
+  m = n = strlen(s1);
+  va_start(args, s1);
+  while ((s = va_arg(args, const char *))) {
+    l = strlen(s);
+    if ((m += l) < l) break;
+  }
+  va_end(args);
+  if (s || m >= INT_MAX) return NULL;
+
+  result = (char *)malloc(m + 1);
+  if (!result) return NULL;
+
+  memcpy(p = result, s1, n);
+  p += n;
+  va_start(args, s1);
+  while ((s = va_arg(args, const char *))) {
+    l = strlen(s);
+    if ((n += l) < l || n > m) break;
+    memcpy(p, s, l);
+    p += l;
+  }
+  va_end(args);
+  if (s || m != n || p != result + n) {
+    free(result);
+    return NULL;
+  }
+
+  *p = 0;
+  return result;
+}
+# else
+char *concat(const char *s1, ...)
 {
      va_list vv; // variable arg vector
      size_t allocd = 8;
@@ -85,7 +148,7 @@ char *neko(const char *s1, ...)
 
 	       /* Does more memory need to be alloc'd? */
 	       if (tmp + len + 1 > dst + allocd) {
-		    allocd = (allocd + len) * 2;
+		    allocd += len + 1;
 		    if ((newp = (char *)realloc(dst, allocd)) == NULL) {
 			 free(dst);
 			 /* XXX, if you call `va_end(vv)' here
@@ -110,3 +173,4 @@ char *neko(const char *s1, ...)
      }
      return dst;
 }
+# endif

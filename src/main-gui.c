@@ -92,6 +92,7 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
      ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
      ZB_DBG("pwr.e: %d\n", pwr.err.vec[pwr.err.num]);
      ZB_DBG("pwr.acline: %d\n", pwr.acline);
+
      int e = pwr.err.vec[pwr.err.num];
      int test = (e == PWR_OK
 		 ? pwr.charge.tr
@@ -112,35 +113,39 @@ GdkPixbuf *select_img(int set, bool small, struct power pwr)
 	  return ltt.empt;
      case PWR_ENOWANT:
 	  return GZB_AC_IMG(pwr);
-     case PWR_ENOBAT:
-	  return GZB_AC_IMG(pwr);
      default:
 	  return ltt.bork;
      }
+}
+
+GtkWidget *create_cntxt_menu()
+{
+     GtkMenuShell *menu;
+     menu = GTK_MENU_SHELL(gtk_menu_new());
+
 }
 
 int sync_icon(GtkStatusIcon *tcon)
 {
      struct power pwr;
      char *tooltip = malloc(GZB_TOOLTIP_SIZE);
+     char tmp[sizeof("100")];
      pwr.charge.nof = -1;
      pwr.charge.divsr = 20;
      getpwr(&pwr);
+     char *stat = pwr.acline ? "online\n" : "offline\n";
+     bool err = (pwr.err.vec[pwr.err.num] == PWR_ENOWANT
+		 || pwr.err.vec[pwr.err.num] == PWR_ENOBAT);
+     char *bat = (err == false ? "Battery: " : "");
+     char *perc = (err == false ? "%" : "");
+     itoa(tmp, pwr.charge.raw);
+     ZB_DBG("tmp: `%s`\n", tmp);
 
      gtk_status_icon_set_from_pixbuf(tcon, select_img(1, 0, pwr));
 
-     if (pwr.acline)
-	  gtk_status_icon_set_tooltip(tcon, "A/C: online");
-     else
-	  gtk_status_icon_set_tooltip(tcon, "A/C: offline");
-/*
-     if (pwr.acline)
-	  tooltip = nek
-     else
-	  tooltip = neko("A/C: offline\n", "Battery: ", itoa(pwr.charge.raw), "\n", NULL);
-     gtk_status_icon_set_tooltip_text(tooltip);
+     tooltip = neko("A/C: ", stat, bat, tmp, perc, NULL);
+     gtk_status_icon_set_tooltip(tcon, tooltip);
      free(tooltip);
-*/
      return 1;
 }
 
