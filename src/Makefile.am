@@ -79,6 +79,7 @@ tidy-local:
 	$(RM) *.od || true
 	$(RM) test || true
 	$(RM) gzbatt || true
+	$(RM) main_gui.c || true
 
 anew: clean all
 ready: clean all tidy-local

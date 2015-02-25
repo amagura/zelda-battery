@@ -1,5 +1,5 @@
 /****
-Copyright 2014 Alexej Magura
+Copyright 2014-2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -56,10 +56,13 @@ struct power {
 
 struct py_power {
      bool acline;
-     int charge;
+     int tr;
+     int raw;
+     int err;
 };
 
 void getpwr PARAMS((struct power *pwr));
+void sumerr PARAMS((struct error *err));
 
 struct py_power py_getpwr PARAMS(());
 #endif /* ZB_POWER_H_GUARD */

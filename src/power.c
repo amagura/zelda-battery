@@ -85,6 +85,12 @@ void getpwr(struct power *pwr)
      }
 }
 
+void sumerr(struct error *err)
+{
+     for (int idx = err->num; idx > 0; --idx)
+	  err->sum += err->vec[idx];
+}
+
 struct py_power py_getpwr()
 {
      struct power pwr;
@@ -93,6 +99,8 @@ struct py_power py_getpwr()
      pwr.charge.divsr = 20;
      getpwr(&pwr);
      pyp.acline = pwr.acline;
-     pyp.charge = pwr.charge.tr;
+     pyp.tr = pwr.charge.tr;
+     pyp.raw = pwr.charge.raw;
+     pyp.err = pwr.err.vec[pwr.err.num];
      return pyp;
 }
