@@ -3,7 +3,7 @@
 bin_PROGRAMS = zbatc zbatt
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main-gui.c main.c acpi.c power.c
+gzbatt_SOURCES = main-gui.pyx main.c acpi.c power.c
 noinst_HEADERS = main.h acpi.h power.h compat.h imgs.h
 
 AM_CFLAGS =
@@ -11,8 +11,8 @@ gzbatt_CFLAGS =
 gzbatt_LDFLAGS =
 
 if GTK2
-gzbatt_CFLAGS += @GTK_CFLAGS@
-gzbatt_LDFLAGS += @GTK_LIBS@
+gzbatt_CFLAGS += @gtk2_CFLAGS@ @py2_CFLAGS@
+gzbatt_LDFLAGS += @gtk2_LIBS@ @py2_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
@@ -69,6 +69,9 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
+
+.pyx.c:
+	$(CYTHON) --embed -p2 -Wextra -o $@ $<
 
 tidy-local:
 	$(RM) *.o || true

@@ -47,18 +47,24 @@ AC_ARG_WITH([gtk2],
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
-AM_COND_IF([GTK2],[PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])],)
+AM_COND_IF([GTK2],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])],)
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
 AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
+
 # Check for libs
 AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported]))))
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,AC_MSG_ERROR([*BSD systems without `sysctlbyname' are unsupported])),)
+
+# Check for progs
+AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
+AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_prog_CYTHON" = "xno"])
+AM_COND_IF([HAVE_CYTHON],[PKG_CHECK_MODULES([py2],[python2],,)])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],

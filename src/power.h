@@ -54,6 +54,12 @@ struct power {
      struct error err;
 };
 
+struct py_power {
+     bool acline;
+     int charge;
+};
+
 void getpwr PARAMS((struct power *pwr));
 
+struct py_power py_getpwr PARAMS(());
 #endif /* ZB_POWER_H_GUARD */
