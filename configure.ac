@@ -12,6 +12,8 @@ AC_PROG_CPP
 AC_C_INLINE
 AC_FUNC_ALLOCA
 
+# Precious variables
+
 # let Automake know if we are using clang
 
 # M4 Macros

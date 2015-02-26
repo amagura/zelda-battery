@@ -1,4 +1,0 @@
-2015-01-19 Alexej Magura <agm2819@gmail.com>
-	* acpi.c (get_pwr_files): replaced for-loop with a goto
-2015-01-17 Alexej Magura <agm2819@gmail.com>
-	* acpi.c (read_pwr_files): replaced the for-loop with a goto
