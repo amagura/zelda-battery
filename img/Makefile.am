@@ -6,6 +6,7 @@ scaledir = $(iconsdir)/scalable/apps
 pngdir = $(iconsdir)/16x16/apps
 dist_scale_DATA = full.svg empty.svg qempty.svg qfull.svg half.svg bork.svg
 dist_png_DATA = full.png empty.png qempty.png qfull.png half.png bork.png
+endif
 
 all-local: local-license
 
