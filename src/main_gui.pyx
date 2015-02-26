@@ -31,16 +31,26 @@ cdef extern from "power.h":
 
 cdef extern from "power.h":
     py_power py_getpwr()
+
+cdef extern from "main-gui.h":
+    char *scaledir()
+    char *pngdir()
 # //// $$ C Decls $$ ////
 
+SVGDIR = scaledir()
+PNGDIR = pngdir()
+
 def select_icon(tcon, charge):
-    pixbuf = gtk.gdk.pixbuf_new_from_file('../img/h1/f-16x16.png')
+    IF False:
+        pixbuf = gtk.gdk.pixbuf_new_from_file('%s/empty.svg' % SVGDIR)
+    ELSE:
+        pixbuf = gtk.gdk.pixbuf_new_from_file('%s/empty.png' % PNGDIR)
     tcon.set_from_pixbuf(pixbuf)
 
 def sync_icon(tcon):
     pwr = py_getpwr()
     select_icon(tcon, pwr.tr)
-    ttip = 'A/C Adatper: %s\n' % 'online' if pwr.acline is 1 else 'offline'
+    ttip = 'A/C: %s\n' % 'online' if pwr.acline is 1 else 'offline'
     if pwr.err is 0:
         ttip += 'Battery: %s' % str(pwr.raw)
     tcon.set_tooltip(ttip);
@@ -50,6 +60,7 @@ def create_icon():
     tcon = gtk.StatusIcon()
     tcon.set_tooltip('gzbatt')
     tcon.set_visible(True)
+    sync_icon(tcon)
     src_id = gobject.timeout_add_seconds(1, sync_icon, tcon);
 
 

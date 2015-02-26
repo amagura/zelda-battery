@@ -1,17 +1,18 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatc zbatt
+
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c
-noinst_HEADERS = main.h acpi.h power.h compat.h imgs.h
+gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c
+noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h
 
 AM_CFLAGS =
 gzbatt_CFLAGS =
 gzbatt_LDFLAGS =
 
 if GTK2
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @py2_CFLAGS@
+gzbatt_CFLAGS += @gtk2_CFLAGS@ @py2_CFLAGS@ -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
 gzbatt_LDFLAGS += @gtk2_LIBS@ @py2_LIBS@
 bin_PROGRAMS += gzbatt
 endif
@@ -80,6 +81,8 @@ tidy-local:
 	$(RM) test || true
 	$(RM) gzbatt || true
 	$(RM) main_gui.c || true
+	$(RM) *.pyc || true
+	$(RM) *.py || true
 
 anew: clean all
 ready: clean all tidy-local
