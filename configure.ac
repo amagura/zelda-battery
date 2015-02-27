@@ -65,7 +65,7 @@ IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,AC_MSG_ERROR([*BSD systems 
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
-AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_prog_CYTHON" = "xno"])
+AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_prog_CYTHON" = "xno" && test ! "x$ac_cv_prog_CYTHON" = "x"])
 AM_COND_IF([HAVE_CYTHON],[PKG_CHECK_MODULES([py2],[python2],,)])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
