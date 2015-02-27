@@ -9,6 +9,7 @@ The Pit of Despair, or tpod, is where all things precompiled get stored.
 So if you just can't get ZBatt to build on your system, be sure to check here
 before giving up.
 
+Occasionally, buggy or broken releases get patched or fixed in the tpod.
 
 
 # Supported Platforms
