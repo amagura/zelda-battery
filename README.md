@@ -17,7 +17,7 @@ BSD systems that _should_ work:
 * Midnight BSD
 * (Anything based on FreeBSD)
 
-BSD systems known to _not_ work:
+BSD systems known _not_ to work:
 * OpenBSD
 
 ### Dependencies (v3.0+)
