@@ -6,9 +6,12 @@ zba
 zbl
 zb-color
 zb-text
-zbatc
-zbatt
-gzbatt
+src/zbatc
+src/zbatt
+src/gzbatt
+/gzbatt
+/zbatt
+/zbatc
 
 # automake stuff
 /autom4te.cache
@@ -16,7 +19,9 @@ config.log
 config.status
 aclocal.m4
 Makefile
-Makefile.in
+/Makefile.in
+src/Makefile.in
+img/Makefile.in
 .deps
 /configure
 /build-aux
