@@ -4,6 +4,7 @@
 # define MAKE gmake
 #endif
 
+autoreconf -i
 ./configure --disable-native --disable-generic
 
 cd src
