@@ -66,21 +66,21 @@ limitations under the License.
 /* OS Idenfitication macros */
 
 // Check if we are on a BSD virtual machine
-# if !(defined(ZB_VM_BSD) && defined(ZB_BSD_VM))
+# if !(defined(ZB_VM_BSD) && !defined(ZB_BSD_VM))
 #  define ZB_VM__BSD 0
 # else
 #  define ZB_VM__BSD 1
 # endif
 
 // Check if we are on a Linux virtual machine
-# if !(defined(ZB_VM_LINUX) && defined(ZB_LINUX_VM))
+# if !(defined(ZB_VM_LINUX) && !defined(ZB_LINUX_VM))
 #  define ZB_VM__LINUX 0
 # else
 #  define ZB_VM__LINUX 1
 # endif
 
 // Check if we are on a UNIX virtual machine
-# if !(defined(ZB_VM_UNIX) && defined(ZB_UNIX_VM))
+# if !(defined(ZB_VM_UNIX) && !defined(ZB_UNIX_VM))
 #  define ZB_VM__UNIX 0
 # else
 #  define ZB_VM__UNIX 1
