@@ -59,13 +59,14 @@ AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LI
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],AC_DEFINE([HAVE_SYSCTLBYNAME],[1]),))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctl], [c],AC_DEFINE([HAVE_SYSCTL],[1]),))
+IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],AC_DEFINE([HAVE_SYSCTLBYNAME],[1])m4_define([HAVE_SYSCTLBYNAME], [1]),))
+IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctl], [c],AC_DEFINE([HAVE_SYSCTL],[1])m4_define([HAVE_SYSCTL], [1]),))
+IF_BSD([PLATFORM],m4_if([HAVE_SYSCTLBYNAME], [1],,[HAVE_SYSCTL], [1],, [AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `sysctl` are unsupported])]))
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
 AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_prog_CYTHON" = "xno" && test ! "x$ac_cv_prog_CYTHON" = "x"])
-AM_COND_IF([HAVE_CYTHON],[PKG_CHECK_MODULES([py2],[python2],,)],[exit 1])
+AM_COND_IF([HAVE_CYTHON],[PKG_CHECK_MODULES([py2],[python2],,)],AC_MSG_ERROR([Cython is a make dependency for the GUI]))
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
