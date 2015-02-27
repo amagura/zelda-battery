@@ -7,7 +7,7 @@ compiler:
   - tcc
 install:
   - sudo apt-get update
-  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 chicken-bin tcc
+  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 chicken-bin tcc cython python2
   - sudo chicken-install test
 script:
   - autoreconf -i
