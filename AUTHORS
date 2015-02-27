@@ -1,7 +1,3 @@
 * Alexej Magura <agm2819*gmail*>
 
-  - Everything but the implementation for `sysctlbyname`
-
-* Poul-Henning Kamp <phk@FreeBSD.org>
-
-  - The implementation of `sysctlbyname`, which I found on www.opensource.apple.com... hope they aren't any bugs in this implementation, heh.
+  - Everything
