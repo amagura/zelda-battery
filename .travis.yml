@@ -11,6 +11,7 @@ install:
 script:
   - autoreconf -i
   - ./configure --without-gtk2
+  - make clean
   - make
 after_success:
   - src/zbatt
