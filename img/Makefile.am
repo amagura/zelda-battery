@@ -9,7 +9,7 @@ if GTK2
 dist_png_DATA = full.png empty.png qempty.png qfull.png half.png bork.png
 endif
 
-all-local: local-license
+#all-local: local-license
 
 local-license:
 	sed -i 'N;$$!P;$$!D;$$d' LICENSE
