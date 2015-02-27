@@ -34,25 +34,24 @@ int stoi(int *dst, const char *src)
 }
 #endif
 
-inline int intlen(int idx)
-{
-     int hdx = !idx;
-     while (idx) {
-	  ++hdx;
-	  idx /= 10;
-     }
-     return idx;
-}
+#define zb_intlen(ZB_IDX)			\
+     do {					\
+	  int ZB_hdx = !(ZB_IDX);		\
+	  while (ZB_IDX) {			\
+	       ++ZB_hdx;			\
+	       (ZB_IDX) /= 10;			\
+	  }					\
+     } while(0)
 
-inline int small_intlen(int idx)
-{
-     int hdx = abs(idx);
-     return (hdx < 100
-	     ? 2
-	     : (hdx < 10
-		? 1
-		: 3));
-}
+#define zb_small_intlen(ZB_IDX)			\
+     do {					\
+	  int ZB_hdx = abs((ZB_IDX));		\
+	  (ZB_IDX) = (ZB_hdx < 100		\
+		      ? 2			\
+		      : (ZB_hdx < 10		\
+			 ? 1			\
+			 : 3));			\
+     } while(0)
 
 void rev(char *s)
 {
@@ -73,7 +72,8 @@ void rev(char *s)
 
 void itoa(char *dst, int idx)
 {
-     const int len = small_intlen(idx);
+     int len = idx;
+     zb_small_intlen(len);
      char tmp[len+1];
      char *wp = tmp;
 

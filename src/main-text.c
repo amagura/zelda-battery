@@ -30,7 +30,7 @@ struct txt_disp_opts {
   bool expended;
 };
 
-inline void disp(struct txt_disp_opts opts, struct power pwr)
+void disp(struct txt_disp_opts opts, struct power pwr)
 {
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
      if (pwr.charge.raw == 0) {

@@ -30,7 +30,7 @@ limitations under the License.
 
 # if defined(HAVE__SYS_CLASS_POWER_SUPPLY)
 /* optionally gets information regarding the battery specified */
-inline int get_batt_info(int *cap, char *batt, int btnum)
+int get_batt_info(int *cap, char *batt, int btnum)
 {
      ZB_DBG("btnum: %d\n", btnum);
 
@@ -55,7 +55,7 @@ inline int get_batt_info(int *cap, char *batt, int btnum)
      return PWR_OK;
 }
 
-inline int get_ac_info(bool *acline, char *acfile)
+int get_ac_info(bool *acline, char *acfile)
 {
      FILE *fp;
 
@@ -75,18 +75,19 @@ inline int get_ac_info(bool *acline, char *acfile)
      return PWR_OK;
 }
 
-inline void read_pwr_files(struct pwr_sup *info,
-			   struct error **err,
-			   char *ac,
-			   char *batt,
-			   int btnum)
-{
-     zb_eset((*err), get_batt_info(&info->cap, batt, btnum));
-     zb_eset((*err), get_ac_info(&info->acline, ac));
-}
+# define zb_read_pwr_files(ZB_INFO, ZB_ERR, ZB_AC, ZB_BATT, ZB_BTNUM)	\
+     do {								\
+	  zb_eset((ZB_ERR),						\
+		  get_batt_info(&(ZB_INFO)->cap,			\
+				(ZB_BATT),				\
+				(ZB_BTNUM)));				\
+	  zb_eset((ZB_ERR),						\
+		  get_ac_info(&(ZB_INFO)->acline,			\
+			      (ZB_AC)));				\
+     } while(0)
 
 # if ZB_USE_KCAT
-inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
+void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      FILE *fp;
 
@@ -143,7 +144,7 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
      }
 }
 # else
-inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
+void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      FILE *fp;
      char path[ZB_ACPI_PATH_SIZE];
@@ -212,7 +213,7 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("limit: %d\nbatts: `%s'\n", btnum, batt);
      ZB_DBG("ac: `%s'\n", ac);
 
-     read_pwr_files(info, &err, ac, batt, btnum);
+     zb_read_pwr_files(info, err, ac, batt, btnum);
 
      ZB_DBG("info.acline: %d\n", info->acline);
 

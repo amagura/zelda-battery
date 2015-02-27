@@ -13,17 +13,11 @@ pngdir = $(iconsdir)/16x16/apps
 
 AM_CFLAGS =
 AM_LDFLAGS =
-gzbatt_CFLAGS =
-gzbatt_LDFLAGS =
-
-if GTK2
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @py2_CFLAGS@ -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
-gzbatt_LDFLAGS += @gtk2_LIBS@ @py2_LIBS@
-bin_PROGRAMS += gzbatt
-endif
+AM_CPPFLAGS =
 
 if DEBUG
-AM_CFLAGS += -g -ggdb -DZB_DEBUG=1
+AM_CFLAGS += -g -ggdb
+AM_CPPFLAGS += -DZB_DEBUG=1
 endif
 
 if NATIVE
@@ -40,9 +34,18 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
-zbatc_CFLAGS = $(AM_CFLAGS) -DZB_PROGNAME=\"zbatc\"
-zbatt_CFLAGS = $(AM_CFLAGS) -DZB_PROGNAME=\"zbatt\"
-gzbatt_CFLAGS += $(AM_CFLAGS) -DZB_PROGNAME=\"gzbatt\"
+zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
+zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
+gzbatt_CFLAGS = $(AM_CFLAGS)
+gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
+gzbatt_LDFLAGS = $(AM_LDFLAGS)
+
+if GTK2
+gzbatt_CFLAGS += @gtk2_CFLAGS@ @py2_CFLAGS@
+gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
+gzbatt_LDFLAGS += @gtk2_LIBS@ @py2_LIBS@
+bin_PROGRAMS += gzbatt
+endif
 
 .PHONY: valgrind lint
 all-local:

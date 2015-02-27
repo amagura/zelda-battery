@@ -72,11 +72,7 @@ void *alloca (size_t);
 #  endif
 # endif
 
-# if !__clang__ && __GNUC__
-#  define inline __inline__
-# else
-#  define inline
-# endif
+# define inline
 
 # if __GNUC__ && !__clang__
 #  define ZB_SENTINEL __sentinel__

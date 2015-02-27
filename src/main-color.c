@@ -40,7 +40,7 @@ struct pp_disp_opts {
      struct colors blnk;
 };
 
-inline void disp(struct pp_disp_opts pp, struct power pwr)
+void disp(struct pp_disp_opts pp, struct power pwr)
 {
      printf("\033[%sm", pp.norm.ccode);
      if (!pp.blnk.ctl.mc || (pwr.charge.raw) > pp.blnk.ctl.thold)

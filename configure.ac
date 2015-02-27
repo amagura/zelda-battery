@@ -9,7 +9,6 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CPP
-AC_C_INLINE
 AC_FUNC_ALLOCA
 
 # Precious variables
