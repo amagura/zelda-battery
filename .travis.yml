@@ -13,9 +13,10 @@ script:
   - ./configure --without-gtk2
   - make clean
   - make
-after_success:
-  - src/zbatt
-  - src/zbatc
+  - src/zbatt || true
+  - src/zbatc || true
   - make clean
   - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
+  - make
+after_success:
   - make check
