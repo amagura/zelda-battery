@@ -55,18 +55,15 @@ AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check for libs
-AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported]))))
+AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,[AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported])])))
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],m4_define([HAVE__SYSCTLBYNAME], [1]),))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctl], [c],m4_define([HAVE__SYSCTL], [1]),))
-IF_BSD([PLATFORM],m4_if(HAVE__SYSCTLBYNAME, [1],,HAVE__SYSCTL, [1],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `sysctl` are unsupported])]))
+IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])]))
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
-AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_path_CYTHON" = "xno" && test ! "x$ac_cv_path_CYTHON" = "x"])
-AM_COND_IF([HAVE_CYTHON],[PKG_CHECK_MODULES([py2],[python2],,)],AC_MSG_ERROR([Cython is a make dependency for the GUI]))
+AM_COND_IF([GTK2],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],,[test "x$ac_cv_prog_CYTHON" = "xcython"],,[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
