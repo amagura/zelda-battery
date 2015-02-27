@@ -1,3 +1,4 @@
+#if ZB_BSD
 /*
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
@@ -34,3 +35,4 @@ sysctlbyname(const char *name, void *oldp, size_t *oldlenp, void *newp,
 	error = sysctl(real_oid, oidlen, oldp, oldlenp, newp, newlen);
 	return (error);
 }
+#endif

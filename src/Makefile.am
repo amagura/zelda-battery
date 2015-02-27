@@ -2,10 +2,10 @@
 
 bin_PROGRAMS = zbatc zbatt
 
-zbatc_SOURCES = main-color.c main.c acpi.c power.c
-zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c
-noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h
+zbatc_SOURCES = main-color.c main.c acpi.c power.c sysctlbyname.c
+zbatt_SOURCES = main-text.c main.c acpi.c power.c sysctlbyname.c
+gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c sysctlbyname.c
+noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h sysctlbyname.h
 
 iconsdir = $(pkgdatadir)/icons
 scaledir = $(iconsdir)/scalable/apps
