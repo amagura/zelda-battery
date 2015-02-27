@@ -6,16 +6,15 @@ compiler:
   - gcc-4.6
 install:
   - sudo apt-get update
-  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6
-  - sudo apt-get install chicken-bin
+  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 chicken-bin
   - sudo chicken-install test
 script:
   - autoreconf -i
-  - ./configure
+  - ./configure --without-gtk2
   - make
 after_success:
   - src/zbatt
   - src/zbatc
   - make clean
-  - ./configure CFLAGS=-DZB_DEBUG=0
+  - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
   - make check
