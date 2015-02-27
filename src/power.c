@@ -57,10 +57,10 @@ void getpwr(struct power *pwr)
      size_t size;
      int ac_line;
      int limit = pwr->charge.nof;
-     pwr->e = pwr->err;
+
      size = sizeof(int);
      /* determine if we're running on battery or ac power */
-     ZB_DBG("%s\n", "getting hw.acpi.acline");			\
+     ZB_DBG("%s\n", "getting hw.acpi.acline");
      if (sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false) == -1) {
 	  ZB_ONDBG(perror(ZB_PROGNAME));
      } else {
@@ -68,7 +68,7 @@ void getpwr(struct power *pwr)
      }
 
      /* determine how much battery power is left */
-     ZB_DBG("%s\n", "getting hw.acpi.battery.life");			\
+     ZB_DBG("%s\n", "getting hw.acpi.battery.life");
      if (sysctlbyname("hw.acpi.battery.life", &ac_line, &size, NULL, false) == -1) {
 	  ZB_ONDBG(perror(ZB_PROGNAME));
      } else {
