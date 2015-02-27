@@ -61,7 +61,12 @@ void getpwr(struct power *pwr)
      size = sizeof(int);
      /* determine if we're running on battery or ac power */
      ZB_DBG("%s\n", "getting hw.acpi.acline");
-# ifndef HAVE_LIBC /* means no `sysctlbyname`; not that we don't have libc */
+
+/* Some *BSD systems, namely OpenBSD, lack `sysctlbyname' */
+# if !defined(HAVE_SYSCTLBYNAME) && defined(HAVE_SYSCTL)
+#  include "sysctlbyname.h"
+# endif
+
      if (sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false) == -1) {
 	  ZB_ONDBG(perror(ZB_PROGNAME));
      } else {
