@@ -27,6 +27,9 @@ limitations under the License.
 # include "acpi.h"
 #elif ZB_BSD
 # include <sys/sysctl.h>
+# ifndef sysctlbyname
+#  include "sysctlbyname.h"
+# endif
 #endif
 
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
@@ -61,11 +64,6 @@ void getpwr(struct power *pwr)
      size = sizeof(int);
      /* determine if we're running on battery or ac power */
      ZB_DBG("%s\n", "getting hw.acpi.acline");
-
-/* Some *BSD systems, namely OpenBSD, lack `sysctlbyname' */
-# if !defined(HAVE_SYSCTLBYNAME) && defined(HAVE_SYSCTL)
-#  include "sysctlbyname.h"
-# endif
 
      if (sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false) == -1) {
 	  ZB_ONDBG(perror(ZB_PROGNAME));

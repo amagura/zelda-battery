@@ -59,8 +59,8 @@ AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LI
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],AC_DEFINE([HAVE_SYSCTLBYNAME],[1])m4_define([HAVE__SYSCTLBYNAME], [1]),))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctl], [c],AC_DEFINE([HAVE_SYSCTL],[1])m4_define([HAVE__SYSCTL], [1]),))
+IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],m4_define([HAVE__SYSCTLBYNAME], [1]),))
+IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctl], [c],m4_define([HAVE__SYSCTL], [1]),))
 IF_BSD([PLATFORM],m4_if(HAVE__SYSCTLBYNAME, [1],,HAVE__SYSCTL, [1],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `sysctl` are unsupported])]))
 
 # Check for progs
