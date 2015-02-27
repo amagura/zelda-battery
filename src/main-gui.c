@@ -30,6 +30,13 @@ limitations under the License.
 # define GZB_PNGDIR ""
 #endif
 
+#ifndef GZB_PROGNAME
+# ifndef ZB_PROGNAME
+#  define ZB_PROGNAME ""
+# endif
+# define GZB_PROGNAME ZB_PROGNAME
+#endif
+
 char *scaledir()
 {
      return GZB_SCALEDIR;
@@ -38,6 +45,11 @@ char *scaledir()
 char *pngdir()
 {
      return GZB_PNGDIR;
+}
+
+char *progname()
+{
+     return GZB_PROGNAME;
 }
 
 #if 0

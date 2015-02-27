@@ -28,20 +28,7 @@ limitations under the License.
 # include "power.h"
 # include "acpi.h"
 
-# if !defined(HAVE__SYS_CLASS_POWER_SUPPLY) && !defined(HAVE__PROC_ACPI)
-#  define HAVE__SYS_CLASS_POWER_SUPPLY 1
-# endif
-
-# if HAVE__SYS_CLASS_POWER_SUPPLY
-#  define ZB_ACPI_ROOT "/sys/class/power_supply"
-#  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
-#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB)) /* the `""` here adds 1 to the overall length */
-#  define ZB_ACPI_BATTYPE "Battery"
-#  define ZB_ACPI_ACTYPE "Mains"
-#  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
-#  define ZB_ACPI_BATCAP_PATH "/capacity"
-#  define ZB_ACPI_ACSTAT_PATH "/online"
-
+# if defined(HAVE__SYS_CLASS_POWER_SUPPLY)
 /* optionally gets information regarding the battery specified */
 inline int get_batt_info(int *cap, char *batt, int btnum)
 {
@@ -98,15 +85,13 @@ inline void read_pwr_files(struct pwr_sup *info,
      zb_eset((*err), get_ac_info(&info->acline, ac));
 }
 
+# if ZB_USE_KCAT
 inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      FILE *fp;
 
-#  if ZB_USE_KCAT
      char *path = NULL;
-#  else
-     char path[ZB_ACPI_PATH_SIZE];
-#  endif
+     size_t bytes;
 
      /* the files we'll be reading only consist of
       * a single line of little text,
@@ -128,12 +113,6 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
       * the standard convention for _generic_ loop counter types. */
 
      for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
-
-#  if !ZB_USE_KCAT /* Disables the following so as to
-		    * prevent memory corruption when we `malloc'.
-		    */
-	  idx && memset(path, '\0', ZB_ACPI_PATH_SIZE);
-#  endif
 	  if ((fp = fopen(globuf.gl_pathv[idx], "r")) == NULL)
 	       continue;
 
@@ -144,33 +123,61 @@ inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
 	       if (limit != 0)
 		    continue;
-#  if ZB_USE_KCAT
-	       path = neko(dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, NULL);
-#  else
-	       strcpy(path, dirname(globuf.gl_pathv[idx]));
-	       strncat(path, "/capacity", ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
-#  endif
-	       ZB_DBG("path: %s\n", path);
-	       memcpy(batt, path, ZB_ACPI_PATH_SIZE);
-#  if ZB_USE_KCAT
+	       path = neko(&bytes, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, NULL);
+	       ZB_DBG("path: `%s`\n", path);
+	       if (bytes > ZB_ACPI_PATH_SIZE)
+		    memcpy(batt, path, ZB_ACPI_PATH_SIZE);
+	       else
+		    memcpy(batt, path, bytes);
 	       free(path);
-#  endif
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-#  if ZB_USE_KCAT
-	       path = neko(dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, NULL);
-#  else
-	       strcpy(path, dirname(globuf.gl_pathv[idx]));
-	       strncat(path, "/online", (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
-#  endif
-	       ZB_DBG("path: %s\n", path);
-	       memcpy(ac, path, ZB_ACPI_PATH_SIZE);
-#  if ZB_USE_KCAT
+	       path = neko(&bytes, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, NULL);
+	       ZB_DBG("path: `%s`\n", path);
+	       if (bytes > ZB_ACPI_PATH_SIZE)
+		    memcpy(ac, path, ZB_ACPI_PATH_SIZE);
+	       else
+		    memcpy(ac, path, bytes);
 	       free(path);
-#  endif
 	  }
      }
 }
+# else
+inline void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
+{
+     FILE *fp;
+     char path[ZB_ACPI_PATH_SIZE];
+     char tmp[ZB_ACPI_TYPE_SIZE];
+
+     for (int idx = 0; idx < (int)globuf.gl_pathc; ++idx) {
+	  if (idx > 0)
+	       bzero(path, ZB_ACPI_PATH_SIZE);
+
+	  if ((fp = fopen(globuf.gl_pathv[idx], "r")) == NULL)
+	       continue;
+
+	  fgets(tmp, ZB_ACPI_TYPE_SIZE, fp);
+	  fclose(fp);
+
+	  /* find batteries */
+	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
+	       if (limit != 0)
+		    continue;
+
+	       strcpy(path, dirname(globuf.gl_pathv[idx]));
+	       strncat(path, ZB_ACPI_BATCAP_PATH, ((ZB_ACPI_PATH_SIZE) - strlen(path) - 1));
+	       ZB_DBG("path: `%s`\n", path);
+	       memcpy(batt, path, ZB_ACPI_PATH_SIZE);
+	       /* else, find AC adapter */
+	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
+	       strcpy(path, dirname(globuf.gl_pathv[idx]));
+	       strncat(path, ZB_ACPI_ACSTAT_PATH, (ZB_ACPI_PATH_SIZE - strlen(path) - 1));
+	       ZB_DBG("path: `%s`\n", path);
+	       memcpy(ac, path, ZB_ACPI_PATH_SIZE);
+	  }
+     }
+}
+# endif
 
 void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
 {
@@ -195,8 +202,9 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("ZB_ACPI_TYPE_SIZE: %lu\n", ZB_ACPI_TYPE_SIZE);
 
 
-     char ac[ZB_ACPI_PATH_SIZE+1];
-     char batt[ZB_ACPI_PATH_SIZE+1];
+     char ac[ZB_ACPI_PATH_SIZE];
+     char batt[ZB_ACPI_PATH_SIZE];
+
 
      get_pwr_files(globuf, ac, batt, btnum);
      globfree(&globuf);
@@ -212,25 +220,6 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("info.cap: %d\n", info->cap);
 #  endif
 }
-
-#  if 0
-int main()
-{
-     struct pwr_sup info;
-     int limit = 1;
-     info.cap = NULL;
-     info.cap = malloc(sizeof(info.cap)*limit);
-     info.acline = false;
-     pwr_inf(&info, limit);
-     free(info.cap);
-}
-#  endif
-# else
-#  define ZB_ACPI_ROOT "/proc/acpi/"
-#  define ZB_ACPI_GLOB ZB_ACPI_ROOT // FIXME glob not known
-#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB ZB_ACPI_ROOT)) /* the `""` here adds 1 to the overall length */
-#  define ZB_ACPI_BATCAP_PATH
-#  define ZB_ACPI_BATTYPE
-#  define ZB_ACPI_ACTYPE
+# elif defined(HAVE__PROC_ACPI)
 # endif
 #endif

@@ -40,6 +40,30 @@ limitations under the License.
 
 #  include "power.h"
 
+# if !defined(HAVE__SYS_CLASS_POWER_SUPPLY) && !defined(HAVE__PROC_ACPI)
+#  define HAVE__SYS_CLASS_POWER_SUPPLY 1
+#  define HAVE__PROC_ACPI 1
+# endif
+
+# if defined(HAVE__SYS_CLASS_POWER_SUPPLY)
+#  define ZB_ACPI_ROOT "/sys/class/power_supply"
+#  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
+#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB)) /* the `""` here adds 1 to the overall length */
+#  define ZB_ACPI_BATTYPE "Battery"
+#  define ZB_ACPI_ACTYPE "Mains"
+#  define ZB_ACPI_TYPE_SIZE (sizeof(ZB_ACPI_BATTYPE ZB_ACPI_ACTYPE ""))
+#  define ZB_ACPI_BATCAP_PATH "/capacity"
+#  define ZB_ACPI_ACSTAT_PATH "/online"
+# endif
+
+# if defined(HAVE__PROC_ACPI) && !defined(HAVE__SYS_CLASS_POWER_SUPPLY)
+#  define ZB_ACPI_ROOT "/proc/acpi"
+#  define ZB_ACPI_GLOB ZB_ACPI_ROOT // FIXME glob not known
+#  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB))
+#  define ZB_ACPI_BATCAP_PATH
+#  define ZB_ACPI_BATTYPE
+#  define ZB_ACPI_ACTYPE
+# endif
 
 struct pwr_sup {
      bool acline;

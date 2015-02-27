@@ -91,86 +91,41 @@ void itoa(char *dst, int idx)
      memcpy(dst, tmp, len+1);
 }
 
-# if 1
-/* this one uses less memory */
-char *concat(const char *s1, ...)
+char *concat(size_t *siz, const char *s1, ...)
 {
-  va_list args;
-  const char *s;
-  char *p, *result;
-  unsigned long l, m, n;
+	va_list args;
+	const char *s;
+	char *p, *result;
+	unsigned long l, m, n;
 
-  m = n = strlen(s1);
-  va_start(args, s1);
-  while ((s = va_arg(args, const char *))) {
-    l = strlen(s);
-    if ((m += l) < l) break;
-  }
-  va_end(args);
-  if (s || m >= INT_MAX) return NULL;
+	m = n = strlen(s1);
+	va_start(args, s1);
+	while ((s = va_arg(args, char *))) {
+		l = strlen(s);
+		if ((m += l) < l) break;
+	}
+	va_end(args);
+	if (s || m >= INT_MAX) return NULL;
 
-  result = (char *)malloc(m + 1);
-  if (!result) return NULL;
+	result = malloc(m + 1);
+	*siz = m + 1;
+	if (!result) return NULL;
 
-  memcpy(p = result, s1, n);
-  p += n;
-  va_start(args, s1);
-  while ((s = va_arg(args, const char *))) {
-    l = strlen(s);
-    if ((n += l) < l || n > m) break;
-    memcpy(p, s, l);
-    p += l;
-  }
-  va_end(args);
-  if (s || m != n || p != result + n) {
-    free(result);
-    return NULL;
-  }
+	memcpy(p = result, s1, n);
+	p += n;
+	va_start(args, s1);
+	while ((s = va_arg(args, char *))) {
+		l = strlen(s);
+		if ((n += l) < l || n > m) break;
+		memcpy(p, s, l);
+		p += l;
+	}
+	va_end(args);
+	if (s || m != n || p != result + n) {
+		free(result);
+		return NULL;
+	}
 
-  *p = 0;
-  return result;
+	*p = 0;
+	return result;
 }
-# else
-char *concat(const char *s1, ...)
-{
-     va_list vv; // variable arg vector
-     size_t allocd = 8;
-     char *dst = (char *)malloc(allocd);
-
-     if (dst) {
-	  char *newp, *tmp;
-	  const char *s;
-	  va_start(vv, s1);
-	  tmp = dst;
-
-	  for (s = s1; s != NULL; s = va_arg(vv, const char *)) {
-	       size_t len = strlen(s);
-
-	       /* Does more memory need to be alloc'd? */
-	       if (tmp + len + 1 > dst + allocd) {
-		    allocd += len + 1;
-		    if ((newp = (char *)realloc(dst, allocd)) == NULL) {
-			 free(dst);
-			 /* XXX, if you call `va_end(vv)' here
-			  * it will cause problems such as memory leaks */
-			 return NULL;
-
-		    }
-		    tmp = newp + (tmp - dst);
-		    dst = newp;
-	       }
-	       tmp = mempcpy(tmp, s, len);
-	  }
-
-	  /* XXX, `++' gets handled first; not the dereference op */
-	  *tmp++ = '\0'; // terminates the string accordingly.
-
-	  /* optimizes amount of memory used */
-	  if ((newp = realloc(dst, tmp - dst)) != NULL)
-	       dst = newp;
-
-	  va_end(vv);
-     }
-     return dst;
-}
-# endif

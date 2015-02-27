@@ -31,6 +31,7 @@ limitations under the License.
 
 # include <errno.h>
 # include "compat.h"
+# include <stdlib.h>
 
 /** ^^ Macros ^^ **/
 # ifndef ZB_DEBUG
@@ -63,14 +64,24 @@ limitations under the License.
 	  fprintf(stderr, (format), ##__VA_ARGS__);			\
 	  fprintf(stderr, "\n");					\
      } while(0)
+#  define ZB_SDBG(format, exp)				\
+     do {						\
+	  fprintf(stderr, "## (%s)(%s)%d\n",		\
+		  ZB_PROGNAME, __FILE__, __LINE__);	\
+	  fprintf(stderr, "#  `%s`\n", __FUNCTION__);	\
+	  fprintf(stderr, (format), (exp));		\
+	  fprintf(stderr, "\n");			\
+     } while(0)
 #  define ZB_ONDBG(...) (__VA_ARGS__)
 #  define ZB_XONDBG(ZB_X) ZB_X
 # else
 #  define ZB_DBG(format, ...)
+#  define ZB_SDBG(format, exp)
 #  define ZB_ONDBG(...)
 #  define ZB_XONDBG(ZB_X)
 # endif
 
+# undef bzero
 # define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
 # undef mempcpy
 # define mempcpy(ZB_DST, ZB_SRC, ZB_LEN) (memcpy((ZB_DST), (ZB_SRC), (ZB_LEN)) + ZB_LEN)
@@ -139,9 +150,9 @@ limitations under the License.
 /** $$ Macros $$ **/
 
 # if ZB_SENTINEL
-char *concat PARAMS((const char *s1, ...)) __attribute__ ((__sentinel__));
+char *concat PARAMS((size_t *siz, const char *s1, ...)) __attribute__ ((__sentinel__));
 # else
-char *concat PARAMS((const char *s1, ...));
+char *concat PARAMS((size_t *siz, const char *s1, ...));
 # endif
 
 void rev PARAMS((char *s));

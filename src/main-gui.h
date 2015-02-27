@@ -46,6 +46,7 @@ BEGIN_C_DECLS
 
 char *scaledir PARAMS(());
 char *pngdir PARAMS(());
+char *progname PARAMS(());
 
 END_C_DECLS
 #endif /* ZB_MAIN_GUI_H_GUARD */

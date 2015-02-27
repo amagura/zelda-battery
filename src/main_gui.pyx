@@ -35,21 +35,40 @@ cdef extern from "power.h":
 cdef extern from "main-gui.h":
     char *scaledir()
     char *pngdir()
+    char *progname()
 # //// $$ C Decls $$ ////
 
-SVGDIR = scaledir()
-PNGDIR = pngdir()
+IF False:
+    imgDir = scaledir()
+    ftype = '.svg'
+ELSE:
+    imgDir = pngdir()
+    ftype = '.png'
+progName = progname()
 
-def select_icon(tcon, charge):
-    IF False:
-        pixbuf = gtk.gdk.pixbuf_new_from_file('%s/empty.svg' % SVGDIR)
-    ELSE:
-        pixbuf = gtk.gdk.pixbuf_new_from_file('%s/empty.png' % PNGDIR)
-    tcon.set_from_pixbuf(pixbuf)
+def iconDir():
+    if os.path.exists(imgDir):
+        return imgDir
+    else:
+        return '../img'
+
+def getPixbuf(charge):
+    if charge is 5:
+        return gtk.gdk.pixbuf_new_from_file('%s/full%s' % (iconDir(), ftype))
+    elif charge is 4:
+        return gtk.gdk.pixbuf_new_from_file('%s/qfull%s' % (iconDir(), ftype))
+    elif charge is 3:
+        return gtk.gdk.pixbuf_new_from_file('%s/half%s' % (iconDir(), ftype))
+    elif charge is 2:
+        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
+    elif charge is 1 or charge is 0:
+        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
+    else:
+        return gtk.gdk.pixbuf_new_from_file('%s/bork%s' % (iconDir(), ftype))
 
 def sync_icon(tcon):
     pwr = py_getpwr()
-    select_icon(tcon, pwr.tr)
+    tcon.set_from_pixbuf(getPixbuf(pwr.tr))
     ttip = 'A/C: %s\n' % 'online' if pwr.acline is 1 else 'offline'
     if pwr.err is 0:
         ttip += 'Battery: %s' % str(pwr.raw)
@@ -62,7 +81,6 @@ def create_icon():
     tcon.set_visible(True)
     sync_icon(tcon)
     src_id = gobject.timeout_add_seconds(1, sync_icon, tcon);
-
 
 create_icon()
 gtk.main()
