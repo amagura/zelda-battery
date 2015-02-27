@@ -12,7 +12,12 @@ Most BSDs should be supported: as long as you have `sysctlbyname`, you should be
 * DragonFly BSD
 * FreeBSD
 
-BSD systems known _not_ to work:
+BSD systems that _should_ work:
+* NetBSD
+* Midnight BSD
+* (Anything based on FreeBSD)
+
+BSD systems known to _not_ work:
 * OpenBSD
 
 ### Dependencies (v3.0+)
