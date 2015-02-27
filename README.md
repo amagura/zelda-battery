@@ -4,7 +4,7 @@ ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=ma
 A Legend of Zelda like health-bar battery meter for Shell prompts and Taskbars
 
 
-# THE PIT OF DESPAIR!
+# The Pit of Despair!
 The Pit of Despair, or tpod, is where all things precompiled get stored.
 So if you just can't get ZBatt to build on your system, be sure to check here
 before giving up.
