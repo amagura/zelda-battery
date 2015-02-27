@@ -65,7 +65,7 @@ IF_BSD([PLATFORM],m4_if(HAVE__SYSCTLBYNAME, [1],,HAVE__SYSCTL, [1],,[AC_MSG_ERRO
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
-AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_prog_CYTHON" = "xno" && test ! "x$ac_cv_prog_CYTHON" = "x"])
+AM_CONDITIONAL([HAVE_CYTHON],[test ! "x$ac_cv_path_CYTHON" = "xno" && test ! "x$ac_cv_path_CYTHON" = "x"])
 AM_COND_IF([HAVE_CYTHON],[PKG_CHECK_MODULES([py2],[python2],,)],AC_MSG_ERROR([Cython is a make dependency for the GUI]))
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
