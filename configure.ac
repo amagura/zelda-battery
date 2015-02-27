@@ -61,7 +61,7 @@ AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LI
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
 IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],AC_DEFINE([HAVE_SYSCTLBYNAME],[1])m4_define([HAVE_SYSCTLBYNAME], [1]),))
 IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctl], [c],AC_DEFINE([HAVE_SYSCTL],[1])m4_define([HAVE_SYSCTL], [1]),))
-IF_BSD([PLATFORM],m4_if([HAVE_SYSCTLBYNAME], [1],,[HAVE_SYSCTL], [1],, [AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `sysctl` are unsupported])]))
+IF_BSD([PLATFORM],m4_if(HAVE_SYSCTLBYNAME, [1],,HAVE_SYSCTL, [1],, [AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `sysctl` are unsupported])]))
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
