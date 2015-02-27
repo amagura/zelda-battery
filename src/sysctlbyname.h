@@ -1,3 +1,4 @@
+#include "compat.h"
 #if ZB_BSD
 # ifndef ZB_SYSCTLBYNAME_H_GUARD
 #  define ZB_SYSCTLBYNAME_H_GUARD 1
