@@ -60,7 +60,7 @@ void getpwr(struct power *pwr)
 
      size = sizeof(int);
      /* determine if we're running on battery or ac power */
-     ZB_DBG("%s\n", "getting " ZB_SYSCTL_ACAD);
+     ZB_DBG("%s\n", "getting hw.acpi.acline");
 
      if (sysctlbyname("hw.acpi.acline", &ac_line, &size, NULL, false) == -1) {
 	  ZB_ONDBG(perror(ZB_PROGNAME));
