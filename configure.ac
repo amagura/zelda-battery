@@ -59,11 +59,8 @@ AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LI
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
 #AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-IF_BSD([PLATFORM],
-AC_CHECK_LIB([c], [sysctlbyname],,
-AC_CHECK_LIB([c], [sysctl],,AC_MSG_ERROR([*BSD systems without `sysctlbyname' or `sysctl` are unsupported]))),)
-IF_BSD([PLATFORM],
-[echo $ac_cv_lib_c_sysctlbyname])
+IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctlbyname],,),)
+IF_BSD([PLATFORM], AC_CHECK_LIB([c], [sysctl],,),)
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
