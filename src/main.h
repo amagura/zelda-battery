@@ -140,10 +140,18 @@ limitations under the License.
 
 # define zb_eset(ZB_EPTR, ZB_ENO)				\
      do {							\
-	  if ((ZB_EPTR)->num == 0)				\
-	       (ZB_EPTR)->vec[(ZB_EPTR)->num] = (ZB_ENO);	\
-	  else							\
-	       (ZB_EPTR)->vec[++(ZB_EPTR)->num] = (ZB_ENO);	\
+	  ZB_DBG("(ZB_ENO): %d\n", (ZB_ENO));			\
+	  if ((ZB_ENO) != PWR_OK) {				\
+	       (ZB_EPTR)->vec[(ZB_EPTR)->pos] = (ZB_ENO);	\
+	       (ZB_EPTR)->last = (ZB_EPTR)->pos;		\
+	       (ZB_EPTR)->vec[++(ZB_EPTR)->pos] = PWR_OK;	\
+	  }							\
+	  ZB_DBG("(ZB_EPTR)->last: %d\n", (ZB_EPTR)->last);	\
+	  ZB_DBG("(ZB_EPTR)->pos: %d\n", (ZB_EPTR)->pos);	\
+	  ZB_DBG("(ZB_EPTR)->vec[(ZB_EPTR)->last]: %d\n",	\
+		 (ZB_EPTR)->vec[(ZB_EPTR)->last]);		\
+	  ZB_DBG("(ZB_EPTR)->vec[(ZB_EPTR)->pos]: %d\n",	\
+		 (ZB_EPTR)->vec[(ZB_EPTR)->pos]);		\
      } while (0)
 
 # define neko(...) concat(__VA_ARGS__)
@@ -160,7 +168,7 @@ void itoa PARAMS((char *dst, int idx));
 
 enum pwrsuply {
      PWR_OK = 0,
-     PWR_ENOK = -1,
+     PWR_DEFAULT = -1,
      PWR_ENOBAT = -2,
      PWR_ENOAC = -3,
      PWR_ENOSUPLY = -5,

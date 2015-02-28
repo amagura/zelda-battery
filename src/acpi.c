@@ -75,16 +75,13 @@ int get_ac_info(bool *acline, char *acfile)
      return PWR_OK;
 }
 
-# define zb_read_pwr_files(ZB_INFO, ZB_ERR, ZB_AC, ZB_BATT, ZB_BTNUM)	\
-     do {								\
-	  zb_eset((ZB_ERR),						\
-		  get_batt_info(&(ZB_INFO)->cap,			\
-				(ZB_BATT),				\
-				(ZB_BTNUM)));				\
-	  zb_eset((ZB_ERR),						\
-		  get_ac_info(&(ZB_INFO)->acline,			\
-			      (ZB_AC)));				\
-     } while(0)
+void read_pwr_files(struct pwr_sup *info, struct error *err, char *ac, char *batt, int btnum)
+{
+     ZB_DBG("info->cap before: %d\n", info->cap);
+     zb_eset((err), get_batt_info(&(info->cap), batt, btnum));
+     ZB_DBG("info->cap after: %d\n", info->cap);
+     zb_eset((err), get_ac_info(&(info->acline), ac));
+}
 
 # if ZB_USE_KCAT
 void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
@@ -213,7 +210,7 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("limit: %d\nbatts: `%s'\n", btnum, batt);
      ZB_DBG("ac: `%s'\n", ac);
 
-     zb_read_pwr_files(info, err, ac, batt, btnum);
+     read_pwr_files(info, err, ac, batt, btnum);
 
      ZB_DBG("info.acline: %d\n", info->acline);
 

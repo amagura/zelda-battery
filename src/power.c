@@ -35,10 +35,10 @@ void getpwr(struct power *pwr)
 {
      if (pwr->charge.nof < 0)
 	  pwr->charge.nof = 1;
-     pwr->err.num = 0;
-     pwr->err.vec[pwr->err.num] = PWR_OK;
+     pwr->err.pos = 0;
+     pwr->err.vec[pwr->err.pos] = PWR_OK;
 
-     ZB_DBG("err: %d\n", (pwr->err.vec[pwr->err.num]));
+     ZB_DBG("err: %d\n", (pwr->err.vec[pwr->err.pos]));
 
 #if ZB_LINUX
      struct pwr_sup info;
@@ -46,10 +46,20 @@ void getpwr(struct power *pwr)
 
      /* check if there was an error */
      pwr_info(&info, &(pwr->err), pwr->charge.nof);
-     if (pwr->err.vec[pwr->err.num] != PWR_OK) {
-	  ZB_DBG("err: %d\n", pwr->err.vec[pwr->err.num]);
-	  ZB_DBG("strerr: %s\n", strerror(pwr->err.vec[pwr->err.num]));
+     ZB_DBG("pwr->err.vec[pwr->err.last]: %d\n", pwr->err.vec[pwr->err.last]);
+     ZB_DBG("pwr->err.vec[pwr->err.pos]: %d\n", pwr->err.vec[pwr->err.pos]);
+     if (pwr->err.vec[pwr->err.last] != PWR_OK) {
+	  ZB_DBG("err: %d\n", pwr->err.vec[pwr->err.last]);
+	  ZB_DBG("strerr: %s\n", strerror(pwr->err.vec[pwr->err.last]));
+	  info.cap = pwr->err.vec[pwr->err.last];
+	  pwr->err.vec[pwr->err.last--] = PWR_OK;
+	  for (; pwr->err.pos > 0; --pwr->err.pos) {
+	       if (pwr->err.vec[pwr->err.pos] != PWR_OK)
+		    break;
+	  }
+	  pwr->err.last = pwr->err.pos == 0 ? 0 : pwr->err.pos - 1;
      }
+     ZB_DBG("info.cap: %d\n", info.cap);
      pwr->charge.raw = info.cap;
      pwr->charge.tr = (int)pwr->charge.raw / (pwr->charge.divsr);
      pwr->acline = info.acline;
@@ -81,14 +91,16 @@ void getpwr(struct power *pwr)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
 	  : PWR_ENOWANT;
 #endif
-     for (int jdx = 0; jdx < pwr->err.num; ++jdx) {
+# if 0
+     for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
 	  pwr->err.sum += pwr->err.vec[jdx];
      }
+#endif
 }
 
 void sumerr(struct error *err)
 {
-     for (int idx = err->num; idx > 0; --idx)
+     for (int idx = err->pos; idx > 0; --idx)
 	  err->sum += err->vec[idx];
 }
 
@@ -102,6 +114,6 @@ struct py_power py_getpwr()
      pyp.acline = pwr.acline;
      pyp.tr = pwr.charge.tr;
      pyp.raw = pwr.charge.raw;
-     pyp.err = pwr.err.vec[pwr.err.num];
+     pyp.err = pwr.err.vec[pwr.err.last];
      return pyp;
 }

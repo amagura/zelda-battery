@@ -44,7 +44,9 @@ struct pwr_lvl {
 
 struct error {
      int vec[PWR_ELIMIT];
-     int num;
+     int pos;
+     /* FIXME, `last' should be a pointer so that we can keep track of more errors better */
+     int last;
      int sum;
 };
 
