@@ -154,6 +154,11 @@ limitations under the License.
 		 (ZB_EPTR)->vec[(ZB_EPTR)->pos]);		\
      } while (0)
 
+/*
+# define zb_efree(ZB_EPTR)			\
+     do {					\
+*/
+
 # define neko(...) concat(__VA_ARGS__)
 /** $$ Macros $$ **/
 
@@ -174,6 +179,6 @@ enum pwrsuply {
      PWR_ENOSUPLY = -5,
      PWR_ENOREAD = -6,
      PWR_ENOWANT = -7,
-     PWR_ELIMIT = 64
+     PWR_ELIMIT = 8
 };
 #endif /* ZB_MAIN_H_GUARD */

@@ -63,15 +63,19 @@ def getPixbuf(charge):
         return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
     elif charge is 1 or charge is 0:
         return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
+    elif charge is -2:
+        return gtk.gdk.pixbuf_new_from_file('%s/nobat%s' % (iconDir(), ftype))
     else:
         return gtk.gdk.pixbuf_new_from_file('%s/bork%s' % (iconDir(), ftype))
 
 def sync_icon(tcon):
     pwr = py_getpwr()
-    tcon.set_from_pixbuf(getPixbuf(pwr.tr))
+    tcon.set_from_pixbuf(getPixbuf(pwr.tr if pwr.err is 0 else pwr.err))
     ttip = 'A/C: %s\n' % 'online' if pwr.acline is 1 else 'offline'
     if pwr.err is 0:
         ttip += 'Battery: %s' % str(pwr.raw)
+    elif pwr.err is -2:
+        ttip += 'No battery!'
     tcon.set_tooltip(ttip);
     return True
 

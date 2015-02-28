@@ -52,12 +52,14 @@ void getpwr(struct power *pwr)
 	  ZB_DBG("err: %d\n", pwr->err.vec[pwr->err.last]);
 	  ZB_DBG("strerr: %s\n", strerror(pwr->err.vec[pwr->err.last]));
 	  info.cap = pwr->err.vec[pwr->err.last];
+	  /*
 	  pwr->err.vec[pwr->err.last--] = PWR_OK;
 	  for (; pwr->err.pos > 0; --pwr->err.pos) {
 	       if (pwr->err.vec[pwr->err.pos] != PWR_OK)
 		    break;
 	  }
 	  pwr->err.last = pwr->err.pos == 0 ? 0 : pwr->err.pos - 1;
+	  */
      }
      ZB_DBG("info.cap: %d\n", info.cap);
      pwr->charge.raw = info.cap;
@@ -112,8 +114,10 @@ struct py_power py_getpwr()
      pwr.charge.divsr = 20;
      getpwr(&pwr);
      pyp.acline = pwr.acline;
+     ZB_DBG("pwr.err.vec[pwr.err.last]: %d\n", pwr.err.vec[pwr.err.last]);
+     ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
+     pyp.err = pwr.err.vec[pwr.err.last];
      pyp.tr = pwr.charge.tr;
      pyp.raw = pwr.charge.raw;
-     pyp.err = pwr.err.vec[pwr.err.last];
      return pyp;
 }
