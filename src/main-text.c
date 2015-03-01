@@ -127,6 +127,7 @@ int main(int argc, char **argv)
 		      "    3 ->"
 		      zb_arg_eol_tabs
 		      "      current power level to the nearest 1/3,"
+		      zb_arg_eol_tabs
 		      "   10 ->"
 		      zb_arg_eol_tabs
 		      "      current power level to the nearest 1/10)",
