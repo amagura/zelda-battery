@@ -56,13 +56,13 @@ def getPixbuf(charge):
     if charge is 5:
         return gtk.gdk.pixbuf_new_from_file('%s/full%s' % (iconDir(), ftype))
     elif charge is 4:
-        return gtk.gdk.pixbuf_new_from_file('%s/qfull%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
     elif charge is 3:
         return gtk.gdk.pixbuf_new_from_file('%s/half%s' % (iconDir(), ftype))
     elif charge is 2:
-        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/qfull%s' % (iconDir(), ftype))
     elif charge is 1 or charge is 0:
-        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/empty%s' % (iconDir(), ftype))
     elif charge is -2:
         return gtk.gdk.pixbuf_new_from_file('%s/nobat%s' % (iconDir(), ftype))
     else:
