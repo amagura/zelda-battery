@@ -15,6 +15,10 @@ AM_CFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
 
+if TEST
+AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
+endif
+
 if DEBUG
 AM_CFLAGS += -g -ggdb
 AM_CPPFLAGS += -DZB_DEBUG=1

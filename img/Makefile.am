@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
+dist_doc_DATA = LICENSE.images
 iconsdir = $(pkgdatadir)/icons
 #scaledir = $(iconsdir)/scalable/apps
 pngdir = $(iconsdir)/16x16/apps
@@ -13,7 +14,7 @@ all-local: #local-license
 
 install-data-local: image-license
 
-image-license:
+LICENSE.images:
 	cat LICENSE > LICENSE.images
 
 clean-local:

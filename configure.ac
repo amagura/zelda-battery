@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([ZBatt], [3.0a], [agm2819@gmail.com])
+AC_INIT([ZBatt], [3.0b], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
@@ -93,7 +93,17 @@ AC_ARG_ENABLE([debug],
                no) debug=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
              esac],[debug=false])
-AM_CONDITIONAL([DEBUG], [test "x$debug" = xtrue])
+
+AC_ARG_ENABLE([testdir],
+		[  --enable-testdir	defines ZB_ACPI_ROOT for testing (default: disabled)],
+		[case "${enableval}" in
+		 yes) testdir=true ;;
+		 no) testdir=false ;;
+		 *) AC_MSG_ERROR([bad value ${enableval} for --enable-testdir]) ;;
+		 esac],[testdir=false])
+
+AM_CONDITIONAL([TEST], [test "x$testdir" = "xtrue"])
+AM_CONDITIONAL([DEBUG], [test "x$debug" = "xtrue"])
 # generic?
 m4_define([CLANG], [test "x`($CC -E -w -P -nostdinc - <<EOF
 __clang__
