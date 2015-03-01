@@ -40,7 +40,7 @@ Just place `zbatc` (zbatt-color) and `zbatt` (zbatt-text) where ever you want th
 ### Git
 ![example of the git style](/example/git.jpg)
 ```bash
-./zbatc -c 32; ./zbatt -p -f +; ./zbatc -c 31; ./zbatt -m -e -
+./zbatc -c 32; ./zbatt -r -f +; ./zbatc -c 31; ./zbatt -x -e -
 ```
 
 
