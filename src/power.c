@@ -116,7 +116,7 @@ struct py_power py_getpwr()
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
      zb_ping;
      ZB_DBG("*pwr.err.last: %d\n", *pwr.err.last);
-     pyp.err = *pwr.err.vp;
+     pyp.err = *pwr.err.last;
      pyp.tr = pwr.charge.tr;
      pyp.raw = pwr.charge.raw;
      zb_pong;

@@ -7,7 +7,7 @@ pngdir = $(iconsdir)/16x16/apps
 
 if GTK2
 #dist_scale_DATA = full.svg empty.svg qempty.svg qfull.svg half.svg bork.svg
-dist_png_DATA = full.png empty.png qempty.png qfull.png half.png bork.png
+dist_png_DATA = full.png empty.png qempty.png qfull.png half.png bork.png nobat.png
 endif
 
 all-local: #local-license

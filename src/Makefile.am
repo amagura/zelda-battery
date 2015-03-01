@@ -121,3 +121,6 @@ test-lowbat:
 
 test-empty:
 	cd "$(top_srcdir)"; make $@
+
+test-nosup:
+	cd "$(top_srcdir)"; make $@

@@ -28,4 +28,7 @@ test-empty:
 	echo 0 > 'test/BAT0/capacity'
 	echo 0 > 'test/BAT0/capacity'
 
+test-nosup:
+	rm -rf 'test/'
+
 SUBDIRS = src img

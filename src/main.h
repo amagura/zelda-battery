@@ -35,7 +35,7 @@ limitations under the License.
 
 /** ^^ Macros ^^ **/
 # ifndef ZB_DEBUG
-#  define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
+#  define ZB_DEBUG 0 // XXX change this to turn debug messages on/off
 # endif
 
 # ifndef ZB_USE_KCAT
