@@ -77,10 +77,20 @@ int get_ac_info(bool *acline, char *acfile)
 
 void read_pwr_files(struct pwr_sup *info, struct error *err, char *ac, char *batt, int btnum)
 {
+
      ZB_DBG("info->cap before: %d\n", info->cap);
+     zb_ping;
+     zb_eset((err), get_ac_info(&(info->acline), ac));
      zb_eset((err), get_batt_info(&(info->cap), batt, btnum));
+     if (info->acline == 0 && info->cap == 0) {
+	  /* power supply is most likely broken... or this is a test....  Did we pass? :P */
+	  zb_eset((err), PWR_EBRK);
+     }
+     zb_ping;
      ZB_DBG("info->cap after: %d\n", info->cap);
      zb_eset((err), get_ac_info(&(info->acline), ac));
+     zb_pong;
+     ZB_DBG("*err->vp: %d\n", *err->vp);
 }
 
 # if ZB_USE_KCAT

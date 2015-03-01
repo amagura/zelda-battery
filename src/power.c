@@ -35,10 +35,12 @@ void getpwr(struct power *pwr)
 {
      if (pwr->charge.nof < 0)
 	  pwr->charge.nof = 1;
-     pwr->err.pos = 0;
-     pwr->err.vec[pwr->err.pos] = PWR_OK;
 
-     ZB_DBG("err: %d\n", (pwr->err.vec[pwr->err.pos]));
+     memset(&pwr->err.vec, PWR_OK, sizeof(int)*PWR_ELIMIT);
+     pwr->err.vp = pwr->err.vec;
+     pwr->err.last = pwr->err.vec;
+
+     ZB_DBG("err: %d\n", *pwr->err.vp);
 
 #if ZB_LINUX
      struct pwr_sup info;
@@ -46,12 +48,12 @@ void getpwr(struct power *pwr)
 
      /* check if there was an error */
      pwr_info(&info, &(pwr->err), pwr->charge.nof);
-     ZB_DBG("pwr->err.vec[pwr->err.last]: %d\n", pwr->err.vec[pwr->err.last]);
-     ZB_DBG("pwr->err.vec[pwr->err.pos]: %d\n", pwr->err.vec[pwr->err.pos]);
-     if (pwr->err.vec[pwr->err.last] != PWR_OK) {
-	  ZB_DBG("err: %d\n", pwr->err.vec[pwr->err.last]);
-	  ZB_DBG("strerr: %s\n", strerror(pwr->err.vec[pwr->err.last]));
-	  info.cap = pwr->err.vec[pwr->err.last];
+     ZB_DBG("pwr->err.vec[pwr->err.last]: %d\n", *pwr->err.last);
+     ZB_DBG("pwr->err.vec[pwr->err.pos]: %d\n", *pwr->err.vp);
+     if (*pwr->err.last != PWR_OK) {
+	  ZB_DBG("err: %d\n", *pwr->err.last);
+	  ZB_DBG("strerr: %s\n", strerror(*pwr->err.last));
+	  info.cap = *pwr->err.last;
 	  /*
 	  pwr->err.vec[pwr->err.last--] = PWR_OK;
 	  for (; pwr->err.pos > 0; --pwr->err.pos) {
@@ -100,24 +102,23 @@ void getpwr(struct power *pwr)
 #endif
 }
 
-void sumerr(struct error *err)
-{
-     for (int idx = err->pos; idx > 0; --idx)
-	  err->sum += err->vec[idx];
-}
-
 struct py_power py_getpwr()
 {
      struct power pwr;
      struct py_power pyp;
+     memset(&pwr.charge, 0, sizeof(pwr.charge));
      pwr.charge.nof = -1;
      pwr.charge.divsr = 20;
      getpwr(&pwr);
+     ZB_DBG("lulz, I haven't segfault'd yet, derp.");
      pyp.acline = pwr.acline;
-     ZB_DBG("pwr.err.vec[pwr.err.last]: %d\n", pwr.err.vec[pwr.err.last]);
+     ZB_DBG("*pwr.err.vp: %d\n", *pwr.err.vp);
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
-     pyp.err = pwr.err.vec[pwr.err.last];
+     zb_ping;
+     ZB_DBG("*pwr.err.last: %d\n", *pwr.err.last);
+     pyp.err = *pwr.err.vp;
      pyp.tr = pwr.charge.tr;
      pyp.raw = pwr.charge.raw;
+     zb_pong;
      return pyp;
 }

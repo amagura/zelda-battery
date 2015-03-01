@@ -44,10 +44,9 @@ struct pwr_lvl {
 
 struct error {
      int vec[PWR_ELIMIT];
-     int pos;
+     int *vp;
      /* FIXME, `last' should be a pointer so that we can keep track of more errors better */
-     int last;
-     int sum;
+     int *last;
 };
 
 struct power {
@@ -64,7 +63,6 @@ struct py_power {
 };
 
 void getpwr PARAMS((struct power *pwr));
-void sumerr PARAMS((struct error *err));
 
 struct py_power py_getpwr PARAMS(());
 #endif /* ZB_POWER_H_GUARD */

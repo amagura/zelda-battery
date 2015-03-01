@@ -43,10 +43,19 @@ void disp(struct txt_disp_opts opts, struct power pwr)
 	  }
 	  return;
      }
+     ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
 
      if (pwr.charge.raw == 0) {
-	  pwr.charge.raw = pwr.acline * 100;
+	  if (pwr.acline) {
+	       for (int hdx = 0; hdx < 10; ++hdx) {
+		    printf("%s", hdx < 9
+			   ? opts.empty_heart
+			   : opts.full_heart);
+	       }
+	  }
+	  return;
      }
+
      if (opts.remaining || !opts.expended) {
 	  for (int idx = 10; idx <= pwr.charge.raw; idx += 10)
 	       printf("%s", opts.full_heart);

@@ -74,11 +74,15 @@ limitations under the License.
      } while(0)
 #  define ZB_ONDBG(...) (__VA_ARGS__)
 #  define ZB_XONDBG(ZB_X) ZB_X
+#  define zb_ping ZB_DBG("\n^^^^ %s ^^^^\n", "MARCO!");
+#  define zb_pong ZB_DBG("\n$$$$ %s $$$$\n", "POLO!");
 # else
 #  define ZB_DBG(format, ...)
 #  define ZB_SDBG(format, exp)
 #  define ZB_ONDBG(...)
 #  define ZB_XONDBG(ZB_X)
+#  define zb_ping
+#  define zb_pong
 # endif
 
 # undef bzero
@@ -141,18 +145,22 @@ limitations under the License.
 # define zb_eset(ZB_EPTR, ZB_ENO)				\
      do {							\
 	  ZB_DBG("(ZB_ENO): %d\n", (ZB_ENO));			\
+	  zb_ping;						\
 	  if ((ZB_ENO) != PWR_OK) {				\
-	       (ZB_EPTR)->vec[(ZB_EPTR)->pos] = (ZB_ENO);	\
-	       (ZB_EPTR)->last = (ZB_EPTR)->pos;		\
-	       (ZB_EPTR)->vec[++(ZB_EPTR)->pos] = PWR_OK;	\
+	       zb_ping;						\
+	       *(ZB_EPTR)->vp = (ZB_ENO);			\
+	       (ZB_EPTR)->last = (ZB_EPTR)->vp++;		\
+	       zb_ping;						\
 	  }							\
-	  ZB_DBG("(ZB_EPTR)->last: %d\n", (ZB_EPTR)->last);	\
-	  ZB_DBG("(ZB_EPTR)->pos: %d\n", (ZB_EPTR)->pos);	\
-	  ZB_DBG("(ZB_EPTR)->vec[(ZB_EPTR)->last]: %d\n",	\
-		 (ZB_EPTR)->vec[(ZB_EPTR)->last]);		\
-	  ZB_DBG("(ZB_EPTR)->vec[(ZB_EPTR)->pos]: %d\n",	\
-		 (ZB_EPTR)->vec[(ZB_EPTR)->pos]);		\
+	  ZB_DBG("*(ZB_EPTR)->last: %d\n", *((ZB_EPTR)->last));	\
+	  ZB_DBG("*(ZB_EPTR)->vp: %d\n", *((ZB_EPTR)->vp));	\
+	  zb_pong;						\
      } while (0)
+
+# define zb_esync(ZB_EPTR)			\
+     do {					\
+	  ZB_EPTR->last = ZB_EPTR->pos++;	\
+     } while(0)
 
 /*
 # define zb_efree(ZB_EPTR)			\
@@ -179,6 +187,7 @@ enum pwrsuply {
      PWR_ENOSUPLY = -5,
      PWR_ENOREAD = -6,
      PWR_ENOWANT = -7,
-     PWR_ELIMIT = 16
+     PWR_ELIMIT = 16,
+     PWR_EBRK = -8
 };
 #endif /* ZB_MAIN_H_GUARD */
