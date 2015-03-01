@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([ZBatt], [3.0b], [agm2819@gmail.com])
+AC_INIT([ZBatt], [3.0], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
