@@ -11,11 +11,11 @@ zb-text
 !/archive/**/gzbatt
 
 # automake stuff
-/autom4te.cache
-/config.log
-/config.status
-/aclocal.m4
-/Makefile
+autom4te.cache
+config.log
+config.status
+aclocal.m4
+Makefile
 #Makefile.in
 .deps
 configure
