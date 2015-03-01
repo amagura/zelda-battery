@@ -46,7 +46,9 @@ limitations under the License.
 # endif
 
 # if defined(HAVE__SYS_CLASS_POWER_SUPPLY)
-#  define ZB_ACPI_ROOT "/sys/class/power_supply"
+#  ifndef ZB_ACPI_ROOT
+#   define ZB_ACPI_ROOT "/sys/class/power_supply"
+#  endif
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT "/*/type"
 #  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB)) /* the `""` here adds 1 to the overall length */
 #  define ZB_ACPI_BATTYPE "Battery"
@@ -57,7 +59,9 @@ limitations under the License.
 # endif
 
 # if defined(HAVE__PROC_ACPI) && !defined(HAVE__SYS_CLASS_POWER_SUPPLY)
-#  define ZB_ACPI_ROOT "/proc/acpi"
+#  ifndef ZB_ACPI_ROOT
+#   define ZB_ACPI_ROOT "/proc/acpi"
+#  endif
 #  define ZB_ACPI_GLOB ZB_ACPI_ROOT // FIXME glob not known
 #  define ZB_ACPI_PATH_SIZE (sizeof(ZB_ACPI_ROOT ZB_ACPI_GLOB))
 #  define ZB_ACPI_BATCAP_PATH
