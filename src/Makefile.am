@@ -106,3 +106,18 @@ drone:
 
 akpi:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) $(AM_LDFLAGS) -o acpi acpi.c main.c
+
+test-clean:
+	cd "$(top_srcdir)"; make $@
+
+test-onac:
+	cd "$(top_srcdir)"; make $@
+
+test-noac:
+	cd "$(top_srcdir)"; make $@
+
+test-lowbat:
+	cd "$(top_srcdir)"; make $@
+
+test-empty:
+	cd "$(top_srcdir)"; make $@
