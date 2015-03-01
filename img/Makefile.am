@@ -12,7 +12,7 @@ endif
 
 all-local: #local-license
 
-install-data-local: image-license
+install-data-local: LICENSE.images
 
 LICENSE.images:
 	cat LICENSE > LICENSE.images

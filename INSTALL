@@ -1,0 +1,63 @@
+Welcome to ZBatt,
+
+# Dependencies
+
+A few dependencies that you'll need:
+
+1. GNU Autotools
+2. C99 Compliant C Compiler
+
+Compilers known to work are `gcc', `clang', and `tcc'.
+
+
+If you're going to be building the GUI, that is the
+graphical frontend for ZBatt, then you'll need:
+
+1. Cython
+2. Python 2.x.x
+3. Gtk+ 2.x.x
+
+# Building
+
+Some configure options worth noting:
+
+1. --enable-debug, --disable-debug
+
+   Turns on/off debug messages (disabled by default)
+
+   I recommend using this option, or going into `src/main.h` and setting
+   `ZB_DEBUG' to 0, since I sometimes forget to turn off debugging
+   when I make a release.
+
+>   # ifndef ZB_DEBUG
+>   #  define ZB_DEBUG 1
+>   # endif
+
+2. --without-gtk2, --with-gtk2
+
+   Enables/disables building ZBatt's graphical frontend (enabled by default)
+
+3. --enable-native, --disable-native
+
+   Enables/disables the `-march=native' `-mtune=native' options to the compiler (enabled by default)
+   If your compiler doesn't support these options, disable them.
+
+4. --enable-generic, --disable-generic
+   Enables/disables compilation for your system's generic processor type (disabled by default)
+
+
+To build ZBatt, run:
+
+autoreconf -i
+./configure --disable-debug
+make
+
+# Installation
+
+After building ZBatt, install it thusly:
+
+make install
+
+
+If you have any problems, find a bug, or would like to provide feedback:
+please send an email to <agm2819*gmail*>

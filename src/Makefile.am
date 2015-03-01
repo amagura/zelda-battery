@@ -24,6 +24,10 @@ AM_CFLAGS += -g -ggdb
 AM_CPPFLAGS += -DZB_DEBUG=1
 endif
 
+if !DEBUG
+AM_CPPFLAGS += -DZB_DEBUG=0
+endif
+
 if NATIVE
 if !GENERIC
 AM_CFLAGS += -march=native -mtune=native
