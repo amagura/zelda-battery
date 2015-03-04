@@ -4,8 +4,16 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 
 all-local:
 
-test-clean:
+test-setup:
 	mkdir -p test/{ACAD,BAT0,BAT1}
+	touch test/ACAD/online
+	touch test/BAT0/capacity
+	touch test/BAT1/capacity
+	touch test/BAT0/type
+	touch test/BAT1/type
+	touch test/ACAD/type
+
+test-clean: test-setup
 	echo 1 > 'test/ACAD/online'
 	echo 100 > 'test/BAT0/capacity'
 	echo 100 > 'test/BAT1/capactiy'
@@ -13,18 +21,18 @@ test-clean:
 	echo 'Battery' > 'test/BAT1/type'
 	echo 'Mains' > 'test/ACAD/type'
 
-test-onac:
+test-onac: test-setup
 	echo 1 > 'test/ACAD/online'
 	$(RM) -r 'test/'{BAT0,BAT1}
 
-test-noac:
+test-noac: test-setup
 	echo 0 > 'test/ACAD/online'
 
-test-lowbat:
-	echo 1 > 'test/BAT0/capacity'
-	echo 1 > 'test/BAT1/capacity'
+test-lowbat: test-setup
+	echo 10 > 'test/BAT0/capacity'
+	echo 10 > 'test/BAT1/capacity'
 
-test-empty:
+test-empty: test-setup
 	echo 0 > 'test/BAT0/capacity'
 	echo 0 > 'test/BAT0/capacity'
 

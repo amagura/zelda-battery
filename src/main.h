@@ -74,8 +74,8 @@ limitations under the License.
      } while(0)
 #  define ZB_ONDBG(...) (__VA_ARGS__)
 #  define ZB_XONDBG(ZB_X) ZB_X
-#  define zb_ping ZB_DBG("\n^^^^ %s ^^^^\n", "MARCO!");
-#  define zb_pong ZB_DBG("\n$$$$ %s $$$$\n", "POLO!");
+#  define zb_ping ZB_DBG("\n^^^^ %s ^^^^\n", "MARCO!")
+#  define zb_pong ZB_DBG("\n$$$$ %s $$$$\n", "POLO!")
 # else
 #  define ZB_DBG(format, ...)
 #  define ZB_SDBG(format, exp)

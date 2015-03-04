@@ -37,8 +37,9 @@ limitations under the License.
 
 struct pwr_lvl {
      int tr;
-     int divsr; /* tr = (int)raw / max */
+     int divsr; /* tr = (int)raw / divsr */
      int raw;
+     int rnd; /* rounded = nearbyint(raw / divsr) */
      int nof;
 };
 

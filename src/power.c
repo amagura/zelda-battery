@@ -19,6 +19,7 @@ limitations under the License.
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 #include "main.h"
 #include "power.h"
 #include "compat.h"
@@ -66,6 +67,7 @@ void getpwr(struct power *pwr)
      ZB_DBG("info.cap: %d\n", info.cap);
      pwr->charge.raw = info.cap;
      pwr->charge.tr = (int)pwr->charge.raw / (pwr->charge.divsr);
+     pwr->charge.rnd = nearbyint((double)pwr->charge.raw / (pwr->charge.divsr));
      pwr->acline = info.acline;
 #elif ZB_BSD
      size_t size;
@@ -94,6 +96,8 @@ void getpwr(struct power *pwr)
      pwr->charge.tr = (limit != 0)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
 	  : PWR_ENOWANT;
+     pwr->charge.rnd = (limit != 0)
+	  ? nearbyint((double)(pwr->charge.raw / (pwr->charge.divsr)));
 #endif
 # if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
@@ -117,7 +121,7 @@ struct py_power py_getpwr()
      zb_ping;
      ZB_DBG("*pwr.err.last: %d\n", *pwr.err.last);
      pyp.err = *pwr.err.last;
-     pyp.tr = pwr.charge.tr;
+     pyp.tr = pwr.charge.rnd;
      pyp.raw = pwr.charge.raw;
      zb_pong;
      return pyp;

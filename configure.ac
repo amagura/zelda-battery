@@ -55,6 +55,9 @@ AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check for libs
+AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])])
+
+# Check for OS specifics
 AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,[AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported])])))
 
 #AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
