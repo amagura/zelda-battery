@@ -71,7 +71,7 @@ def getPixbuf(charge):
 def sync_icon(tcon):
     pwr = py_getpwr()
     tcon.set_from_pixbuf(getPixbuf(pwr.tr if pwr.err is 0 else pwr.err))
-    ttip = 'A/C: %s\n' % 'online' if pwr.acline is 1 else 'offline'
+    ttip = 'A/C: %s\n' % ('online' if pwr.acline is 1 else 'offline')
     if pwr.err is 0:
         ttip += 'Battery: %s' % str(pwr.raw)
     elif pwr.err is -2:
