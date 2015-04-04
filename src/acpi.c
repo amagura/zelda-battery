@@ -187,9 +187,25 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("%s: %d\n", "ZB_LINUX", ZB_LINUX);
 
      glob_t globuf;
+     int globr;
 
-     glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
-
+     globr = glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
+     ZB_DBG("globr: %d\n", globr);
+     ZB_DBG("GLOB_NOSPACE: %d\n", GLOB_NOSPACE);
+     ZB_DBG("GLOB_ABORTED: %d\n", GLOB_ABORTED);
+     ZB_DBG("GlOB_NOMATH: %d\n", GLOB_NOMATCH);
+     if (globr != 0) {
+	  switch (globr) {
+	  case GLOB_NOSPACE:
+	       break;
+	  case GLOB_ABORTED:
+	       break;
+	  case GLOB_NOMATCH:
+	       break;
+	  default:
+	       break;
+	  }
+     }
      ZB_DBG("%s\n", "lulz, I haven't crashed yet, derp! :P");
 
      if (globuf.gl_pathc == 0) {
@@ -203,7 +219,6 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("btnum: %d\n", btnum);
      ZB_DBG("ZB_ACPI_PATH_SIZE: %lu\n", ZB_ACPI_PATH_SIZE);
      ZB_DBG("ZB_ACPI_TYPE_SIZE: %lu\n", ZB_ACPI_TYPE_SIZE);
-
 
      char ac[ZB_ACPI_PATH_SIZE];
      char batt[ZB_ACPI_PATH_SIZE];

@@ -846,6 +846,15 @@ test-empty: test-setup
 test-nosup:
 	rm -rf 'test/'
 
+test-depth: test-setup
+	cd "test"; \
+	for ((idx = 0; idx < 256; ++idx)); do \
+		mkdir -p "BAT$$idx"; \
+		cd "BAT$$idx"; \
+	done; \
+	echo 50 > "capacity"; \
+	echo 'Battery' > "type"
+
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

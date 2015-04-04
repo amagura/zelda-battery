@@ -5,7 +5,6 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 all-local:
 
 test-setup:
-	rm -rf 'test'
 	mkdir -p test/{ACAD,BAT0,BAT1}
 	touch test/ACAD/online
 	touch test/BAT0/capacity
@@ -40,11 +39,11 @@ test-empty: test-setup
 test-nosup:
 	rm -rf 'test/'
 
-test-depth:
+test-depth: test-setup
 	cd "test"; \
 	for ((idx = 0; idx < 256; ++idx)); do \
-		mkdir -p "BAT$idx"; \
-		cd "BAT$idx"; \
+		mkdir -p "BAT$$idx"; \
+		cd "BAT$$idx"; \
 	done; \
 	echo 50 > "capacity"; \
 	echo 'Battery' > "type"
