@@ -97,7 +97,8 @@ void getpwr(struct power *pwr)
 	  ? (int)pwr->charge.raw / (pwr->charge.divsr)
 	  : PWR_ENOWANT;
      pwr->charge.rnd = (limit != 0)
-	  ? nearbyint((double)(pwr->charge.raw / (pwr->charge.divsr)));
+	  ? nearbyint((double)(pwr->charge.raw / (pwr->charge.divsr)))
+	  : PWR_ENOWANT;
 #endif
 # if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
