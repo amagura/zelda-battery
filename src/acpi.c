@@ -127,6 +127,7 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 
 	  /* find batteries */
 	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
+	       ZB_DBG("globuf.gl_pathv[idx]: `%s`\n", globuf.gl_pathv[idx]);
 	       if (limit != 0)
 		    continue;
 	       bzero(batt, ZB_ACPI_PATH_SIZE);
@@ -213,6 +214,12 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
 	  return;
      }
 
+     ZB_DBG("globuf.gl_pathc: %d\n", globuf.gl_pathc);
+# if ZB_DEBUG
+     for (int idx = 0; idx < globuf.gl_pathc; ++idx) {
+	  ZB_DBG("globuf.gl_pathv[%d]: `%s`\n", idx, globuf.gl_pathv[idx]);
+     }
+# endif
      if (btnum > (int)globuf.gl_pathc)
 	  btnum = 1;
 

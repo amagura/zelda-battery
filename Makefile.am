@@ -41,11 +41,20 @@ test-nosup:
 
 test-depth: test-setup
 	cd "test"; \
+	rm -rf BAT0; \
 	for ((idx = 0; idx < 256; ++idx)); do \
 		mkdir -p "BAT$$idx"; \
 		cd "BAT$$idx"; \
 	done; \
 	echo 50 > "capacity"; \
 	echo 'Battery' > "type"
+
+test-breadth: test-nosup test-setup
+	cd "test"; \
+	for ((idx = 0; idx < 256; ++idx)); do \
+		mkdir -p "BAT$$idx"; \
+		echo 50 > "BAT$$idx/capacity"; \
+		echo 'Battery' > "BAT$$idx/type"; \
+	done
 
 SUBDIRS = src img
