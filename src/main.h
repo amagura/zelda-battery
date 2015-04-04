@@ -39,7 +39,7 @@ limitations under the License.
 # endif
 
 # ifndef ZB_USE_KCAT
-#  define ZB_USE_KCAT 0
+#  define ZB_USE_KCAT 1 // XXX change this to turn kcat on/off
 # endif
 
 /*** ^^ Externally Defined macros ^^ ***/
@@ -88,7 +88,8 @@ limitations under the License.
 # undef bzero
 # define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
 # undef mempcpy
-# define mempcpy(ZB_DST, ZB_SRC, ZB_LEN) (memcpy((ZB_DST), (ZB_SRC), (ZB_LEN)) + ZB_LEN)
+# define mempcpy(ZB_DST, ZB_SRC, ZB_LEN) \
+     (memcpy((ZB_DST), (ZB_SRC), (ZB_LEN)) + ZB_LEN)
 
 # define ZB_ERROR(format, ...)						\
      do {								\
@@ -172,8 +173,10 @@ limitations under the License.
 
 # if ZB_SENTINEL
 char *concat PARAMS((size_t *siz, const char *s1, ...)) __attribute__ ((__sentinel__));
+size_t catl PARAMS((size_t dstsiz, char *dst, const char *s1, ...)) __attribute__ ((__sentinel__));
 # else
 char *concat PARAMS((size_t *siz, const char *s1, ...));
+size_t catl PARAMS((size_t dstsiz, char *dst, const char *s1, ...));
 # endif
 
 void rev PARAMS((char *s));

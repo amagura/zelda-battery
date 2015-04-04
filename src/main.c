@@ -53,20 +53,20 @@ int stoi(int *dst, const char *src)
 			 : 3));			\
      } while(0)
 
+#define zb_safesub(ZB_IDX, ZB_HDX)			\
+     (((ZB_IDX) > (ZB_HDX) ? (ZB_IDX) : (ZB_HDX))	\
+      - ((ZB_IDX) > (ZB_HDX) ? (ZB_HDX) : (ZB_IDX)))
+
 void rev(char *s)
 {
      int idx, hdx;
-     idx = 0;
-     while (s[idx] != '\0')
-	  ++idx;
-
-     hdx = idx - 1;
      char tmp;
-     for (idx = 0; idx < hdx; ++idx) {
+     hdx = strlen(s) - 1;
+
+     for (idx = 0; idx < hdx; ++idx, --hdx) {
 	  tmp = s[idx];
 	  s[idx] = s[hdx];
 	  s[hdx] = tmp;
-	  --hdx;
      }
 }
 
@@ -77,18 +77,83 @@ void itoa(char *dst, int idx)
      char tmp[len+1];
      char *wp = tmp;
 
-     for (; idx != 0; ++wp) {
+     for (; idx != 0; ++wp, idx /= 10) {
 	  if (idx >= 0)
 	       *wp = '0' + (idx % 10);
 	  else
 	       *wp = '0' - (idx % 10);
 	  ZB_DBG("wp: `%c`\n", *wp);
-	  idx /= 10;
      }
      *wp++ = '\0';
      rev(tmp);
      ZB_DBG("wp: `%s`\n", tmp);
      memcpy(dst, tmp, len+1);
+}
+
+/* unlike `concat', which returns a
+ * new pointer that must then be copied
+ * or acted upon in some meaningfully meaningless
+ * manner, `catl' returns the number of bytes belonging
+ * to `buf', which could _NOT_ be filled, always copying
+ * no more than `bufsiz` of data into `buf'
+ *
+ * If the return value is an integral value, which
+ * we'll call `y', that is less than 0,
+ * then the resulting catenation has been truncated by `!y'
+ * many bytes.  Similarlly, if a positive value is returned:
+ * `y' many bytes is how much of `buf', which was _NOT_ used.
+ *
+ * XXX A failure is indicated by a return value _equal to
+ * the destination buffers size_, which may make errors somewhat
+ * harder to spot! */
+size_t catl(size_t dstsiz, char *dst, const char *s1, ...)
+{
+     va_list args;
+     const char *s;
+     char *p, *tmp;
+     unsigned long ldx, mdx, ndx;
+     size_t used = 0;
+
+     mdx = ndx = strlen(s1);
+     va_start(args, s1);
+     while ((s = va_arg(args, char *))) {
+	  ldx = strlen(s);
+	  if ((mdx += ldx) < ldx) break;
+     }
+     va_end(args);
+     if (s || mdx >= INT_MAX) return dstsiz;
+
+     tmp = malloc(mdx + 1);
+     if (!tmp) return dstsiz;
+     bzero(tmp, mdx + 1);
+
+     p = mempcpy(p = tmp, s1, ndx);
+     used += ndx;
+     ZB_DBG("p: `%s`\n", p);
+
+     va_start(args, s1);
+     while ((s = va_arg(args, char *))) {
+	  ldx = strlen(s);
+	  if ((ndx += ldx) < ldx || ndx > mdx) break;
+	  p = mempcpy(p, s, ldx);
+	  used += ldx;
+     }
+     va_end(args);
+     if (s || mdx != ndx || p != tmp + ndx) {
+	  free(tmp);
+	  return dstsiz;
+     }
+
+     *p = 0;
+     ZB_DBG("used > dstsiz: %d\n", used > dstsiz);
+     ZB_DBG("used == strlen(p): %d\n", used == strlen(p));
+     ZB_DBG("used: %d\n", used);
+     ZB_DBG("strlen(p): %d\n", strlen(p));
+     ZB_DBG("p: `%s`\n", p);
+
+     memcpy(dst, tmp, (used > dstsiz ? dstsiz : used));
+     free(tmp);
+     return dstsiz - used;
 }
 
 char *concat(size_t *siz, const char *s1, ...)
@@ -108,17 +173,17 @@ char *concat(size_t *siz, const char *s1, ...)
 	if (s || m >= INT_MAX) return NULL;
 
 	result = malloc(m + 1);
-	*siz = m + 1;
 	if (!result) return NULL;
+	*siz = m + 1;
 
 	memcpy(p = result, s1, n);
-	p += n;
+	p += n; /* moves memory address to next addressable space */
 	va_start(args, s1);
 	while ((s = va_arg(args, char *))) {
 		l = strlen(s);
 		if ((n += l) < l || n > m) break;
 		memcpy(p, s, l);
-		p += l;
+		p += l; /* moves memory address to next empty address */
 	}
 	va_end(args);
 	if (s || m != n || p != result + n) {

@@ -97,8 +97,6 @@ void read_pwr_files(struct pwr_sup *info, struct error *err, char *ac, char *bat
 void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      FILE *fp;
-
-     char *path = NULL;
      size_t bytes;
 
      /* the files we'll be reading only consist of
@@ -131,22 +129,19 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	  if (strncmp(tmp, ZB_ACPI_BATTYPE, 3) == 0 && limit-- > 0) {
 	       if (limit != 0)
 		    continue;
-	       path = neko(&bytes, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, NULL);
-	       ZB_DBG("path: `%s`\n", path);
-	       if (bytes > ZB_ACPI_PATH_SIZE)
-		    memcpy(batt, path, ZB_ACPI_PATH_SIZE);
-	       else
-		    memcpy(batt, path, bytes);
-	       free(path);
+	       bzero(batt, ZB_ACPI_PATH_SIZE);
+	       bytes = catl(ZB_ACPI_PATH_SIZE, batt, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, NULL);
+
+	       ZB_DBG("bytes: `%lu`\n", bytes);
+	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
+	       ZB_DBG("batt: `%s`\n", batt);
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-	       path = neko(&bytes, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, NULL);
-	       ZB_DBG("path: `%s`\n", path);
-	       if (bytes > ZB_ACPI_PATH_SIZE)
-		    memcpy(ac, path, ZB_ACPI_PATH_SIZE);
-	       else
-		    memcpy(ac, path, bytes);
-	       free(path);
+	       bzero(ac, ZB_ACPI_PATH_SIZE);
+	       bytes = catl(ZB_ACPI_PATH_SIZE, ac, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, NULL);
+	       ZB_DBG("bytes: `%lu`\n", bytes);
+	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
+	       ZB_DBG("ac: `%s'\n", ac);
 	  }
      }
 }
