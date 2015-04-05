@@ -95,10 +95,12 @@ bin_PROGRAMS = zbatc$(EXEEXT) zbatt$(EXEEXT) $(am__EXEEXT_1)
 @GENERIC_FALSE@@NATIVE_TRUE@am__append_5 = -march=native -mtune=native
 @CPU_KNOWN_TRUE@@GENERIC_TRUE@am__append_6 = -mtune=generic-$(CPUTYPE)
 @CPU_KNOWN_FALSE@@GENERIC_TRUE@am__append_7 = -mtune=generic
-@GTK2_TRUE@am__append_8 = @gtk2_CFLAGS@ @py2_CFLAGS@
-@GTK2_TRUE@am__append_9 = -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
-@GTK2_TRUE@am__append_10 = @gtk2_LIBS@ @py2_LIBS@
-@GTK2_TRUE@am__append_11 = gzbatt
+@STATIC_TRUE@am__append_8 = --static
+@STATIC_TRUE@am__append_9 = --static
+@GTK2_TRUE@am__append_10 = @gtk2_CFLAGS@ @py2_CFLAGS@
+@GTK2_TRUE@am__append_11 = -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
+@GTK2_TRUE@am__append_12 = @gtk2_LIBS@ @py2_LIBS@
+@GTK2_TRUE@am__append_13 = gzbatt
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -123,10 +125,14 @@ am_zbatc_OBJECTS = zbatc-main-color.$(OBJEXT) zbatc-main.$(OBJEXT) \
 	zbatc-acpi.$(OBJEXT) zbatc-power.$(OBJEXT)
 zbatc_OBJECTS = $(am_zbatc_OBJECTS)
 zbatc_LDADD = $(LDADD)
+zbatc_LINK = $(CCLD) $(zbatc_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am_zbatt_OBJECTS = zbatt-main-text.$(OBJEXT) zbatt-main.$(OBJEXT) \
 	zbatt-acpi.$(OBJEXT) zbatt-power.$(OBJEXT)
 zbatt_OBJECTS = $(am_zbatt_OBJECTS)
 zbatt_LDADD = $(LDADD)
+zbatt_LINK = $(CCLD) $(zbatt_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -296,12 +302,14 @@ AM_CFLAGS = $(am__append_2) $(am__append_5) $(am__append_6) \
 	$(am__append_7)
 AM_LDFLAGS = 
 AM_CPPFLAGS = $(am__append_1) $(am__append_3) $(am__append_4)
+zbatt_CFLAGS = $(AM_CFLAGS) $(am__append_8)
+zbatc_CFLAGS = $(AM_CFLAGS) $(am__append_9)
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
-gzbatt_CFLAGS = $(AM_CFLAGS) $(am__append_8)
+gzbatt_CFLAGS = $(AM_CFLAGS) $(am__append_10)
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS) \
-	$(am__append_9)
-gzbatt_LDFLAGS = $(AM_LDFLAGS) $(am__append_10)
+	$(am__append_11)
+gzbatt_LDFLAGS = $(AM_LDFLAGS) $(am__append_12)
 all: all-am
 
 .SUFFIXES:
@@ -384,11 +392,11 @@ gzbatt$(EXEEXT): $(gzbatt_OBJECTS) $(gzbatt_DEPENDENCIES) $(EXTRA_gzbatt_DEPENDE
 
 zbatc$(EXEEXT): $(zbatc_OBJECTS) $(zbatc_DEPENDENCIES) $(EXTRA_zbatc_DEPENDENCIES) 
 	@rm -f zbatc$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(zbatc_OBJECTS) $(zbatc_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(zbatc_LINK) $(zbatc_OBJECTS) $(zbatc_LDADD) $(LIBS)
 
 zbatt$(EXEEXT): $(zbatt_OBJECTS) $(zbatt_DEPENDENCIES) $(EXTRA_zbatt_DEPENDENCIES) 
 	@rm -f zbatt$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(zbatt_OBJECTS) $(zbatt_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(zbatt_LINK) $(zbatt_OBJECTS) $(zbatt_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -495,116 +503,116 @@ gzbatt-power.obj: power.c
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gzbatt_CPPFLAGS) $(CPPFLAGS) $(gzbatt_CFLAGS) $(CFLAGS) -c -o gzbatt-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
 
 zbatc-main-color.o: main-color.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-main-color.o -MD -MP -MF $(DEPDIR)/zbatc-main-color.Tpo -c -o zbatc-main-color.o `test -f 'main-color.c' || echo '$(srcdir)/'`main-color.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-main-color.o -MD -MP -MF $(DEPDIR)/zbatc-main-color.Tpo -c -o zbatc-main-color.o `test -f 'main-color.c' || echo '$(srcdir)/'`main-color.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-main-color.Tpo $(DEPDIR)/zbatc-main-color.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main-color.c' object='zbatc-main-color.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-main-color.o `test -f 'main-color.c' || echo '$(srcdir)/'`main-color.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-main-color.o `test -f 'main-color.c' || echo '$(srcdir)/'`main-color.c
 
 zbatc-main-color.obj: main-color.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-main-color.obj -MD -MP -MF $(DEPDIR)/zbatc-main-color.Tpo -c -o zbatc-main-color.obj `if test -f 'main-color.c'; then $(CYGPATH_W) 'main-color.c'; else $(CYGPATH_W) '$(srcdir)/main-color.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-main-color.obj -MD -MP -MF $(DEPDIR)/zbatc-main-color.Tpo -c -o zbatc-main-color.obj `if test -f 'main-color.c'; then $(CYGPATH_W) 'main-color.c'; else $(CYGPATH_W) '$(srcdir)/main-color.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-main-color.Tpo $(DEPDIR)/zbatc-main-color.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main-color.c' object='zbatc-main-color.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-main-color.obj `if test -f 'main-color.c'; then $(CYGPATH_W) 'main-color.c'; else $(CYGPATH_W) '$(srcdir)/main-color.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-main-color.obj `if test -f 'main-color.c'; then $(CYGPATH_W) 'main-color.c'; else $(CYGPATH_W) '$(srcdir)/main-color.c'; fi`
 
 zbatc-main.o: main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-main.o -MD -MP -MF $(DEPDIR)/zbatc-main.Tpo -c -o zbatc-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-main.o -MD -MP -MF $(DEPDIR)/zbatc-main.Tpo -c -o zbatc-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-main.Tpo $(DEPDIR)/zbatc-main.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='zbatc-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
 
 zbatc-main.obj: main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-main.obj -MD -MP -MF $(DEPDIR)/zbatc-main.Tpo -c -o zbatc-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-main.obj -MD -MP -MF $(DEPDIR)/zbatc-main.Tpo -c -o zbatc-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-main.Tpo $(DEPDIR)/zbatc-main.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='zbatc-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
 
 zbatc-acpi.o: acpi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-acpi.o -MD -MP -MF $(DEPDIR)/zbatc-acpi.Tpo -c -o zbatc-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-acpi.o -MD -MP -MF $(DEPDIR)/zbatc-acpi.Tpo -c -o zbatc-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-acpi.Tpo $(DEPDIR)/zbatc-acpi.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='acpi.c' object='zbatc-acpi.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
 
 zbatc-acpi.obj: acpi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-acpi.obj -MD -MP -MF $(DEPDIR)/zbatc-acpi.Tpo -c -o zbatc-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-acpi.obj -MD -MP -MF $(DEPDIR)/zbatc-acpi.Tpo -c -o zbatc-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-acpi.Tpo $(DEPDIR)/zbatc-acpi.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='acpi.c' object='zbatc-acpi.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
 
 zbatc-power.o: power.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-power.o -MD -MP -MF $(DEPDIR)/zbatc-power.Tpo -c -o zbatc-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-power.o -MD -MP -MF $(DEPDIR)/zbatc-power.Tpo -c -o zbatc-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-power.Tpo $(DEPDIR)/zbatc-power.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='power.c' object='zbatc-power.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
 
 zbatc-power.obj: power.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatc-power.obj -MD -MP -MF $(DEPDIR)/zbatc-power.Tpo -c -o zbatc-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -MT zbatc-power.obj -MD -MP -MF $(DEPDIR)/zbatc-power.Tpo -c -o zbatc-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatc-power.Tpo $(DEPDIR)/zbatc-power.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='power.c' object='zbatc-power.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatc-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatc_CPPFLAGS) $(CPPFLAGS) $(zbatc_CFLAGS) $(CFLAGS) -c -o zbatc-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
 
 zbatt-main-text.o: main-text.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-main-text.o -MD -MP -MF $(DEPDIR)/zbatt-main-text.Tpo -c -o zbatt-main-text.o `test -f 'main-text.c' || echo '$(srcdir)/'`main-text.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-main-text.o -MD -MP -MF $(DEPDIR)/zbatt-main-text.Tpo -c -o zbatt-main-text.o `test -f 'main-text.c' || echo '$(srcdir)/'`main-text.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-main-text.Tpo $(DEPDIR)/zbatt-main-text.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main-text.c' object='zbatt-main-text.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-main-text.o `test -f 'main-text.c' || echo '$(srcdir)/'`main-text.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-main-text.o `test -f 'main-text.c' || echo '$(srcdir)/'`main-text.c
 
 zbatt-main-text.obj: main-text.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-main-text.obj -MD -MP -MF $(DEPDIR)/zbatt-main-text.Tpo -c -o zbatt-main-text.obj `if test -f 'main-text.c'; then $(CYGPATH_W) 'main-text.c'; else $(CYGPATH_W) '$(srcdir)/main-text.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-main-text.obj -MD -MP -MF $(DEPDIR)/zbatt-main-text.Tpo -c -o zbatt-main-text.obj `if test -f 'main-text.c'; then $(CYGPATH_W) 'main-text.c'; else $(CYGPATH_W) '$(srcdir)/main-text.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-main-text.Tpo $(DEPDIR)/zbatt-main-text.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main-text.c' object='zbatt-main-text.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-main-text.obj `if test -f 'main-text.c'; then $(CYGPATH_W) 'main-text.c'; else $(CYGPATH_W) '$(srcdir)/main-text.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-main-text.obj `if test -f 'main-text.c'; then $(CYGPATH_W) 'main-text.c'; else $(CYGPATH_W) '$(srcdir)/main-text.c'; fi`
 
 zbatt-main.o: main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-main.o -MD -MP -MF $(DEPDIR)/zbatt-main.Tpo -c -o zbatt-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-main.o -MD -MP -MF $(DEPDIR)/zbatt-main.Tpo -c -o zbatt-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-main.Tpo $(DEPDIR)/zbatt-main.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='zbatt-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
 
 zbatt-main.obj: main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-main.obj -MD -MP -MF $(DEPDIR)/zbatt-main.Tpo -c -o zbatt-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-main.obj -MD -MP -MF $(DEPDIR)/zbatt-main.Tpo -c -o zbatt-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-main.Tpo $(DEPDIR)/zbatt-main.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='zbatt-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
 
 zbatt-acpi.o: acpi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-acpi.o -MD -MP -MF $(DEPDIR)/zbatt-acpi.Tpo -c -o zbatt-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-acpi.o -MD -MP -MF $(DEPDIR)/zbatt-acpi.Tpo -c -o zbatt-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-acpi.Tpo $(DEPDIR)/zbatt-acpi.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='acpi.c' object='zbatt-acpi.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-acpi.o `test -f 'acpi.c' || echo '$(srcdir)/'`acpi.c
 
 zbatt-acpi.obj: acpi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-acpi.obj -MD -MP -MF $(DEPDIR)/zbatt-acpi.Tpo -c -o zbatt-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-acpi.obj -MD -MP -MF $(DEPDIR)/zbatt-acpi.Tpo -c -o zbatt-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-acpi.Tpo $(DEPDIR)/zbatt-acpi.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='acpi.c' object='zbatt-acpi.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-acpi.obj `if test -f 'acpi.c'; then $(CYGPATH_W) 'acpi.c'; else $(CYGPATH_W) '$(srcdir)/acpi.c'; fi`
 
 zbatt-power.o: power.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-power.o -MD -MP -MF $(DEPDIR)/zbatt-power.Tpo -c -o zbatt-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-power.o -MD -MP -MF $(DEPDIR)/zbatt-power.Tpo -c -o zbatt-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-power.Tpo $(DEPDIR)/zbatt-power.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='power.c' object='zbatt-power.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-power.o `test -f 'power.c' || echo '$(srcdir)/'`power.c
 
 zbatt-power.obj: power.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zbatt-power.obj -MD -MP -MF $(DEPDIR)/zbatt-power.Tpo -c -o zbatt-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -MT zbatt-power.obj -MD -MP -MF $(DEPDIR)/zbatt-power.Tpo -c -o zbatt-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zbatt-power.Tpo $(DEPDIR)/zbatt-power.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='power.c' object='zbatt-power.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zbatt-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(zbatt_CPPFLAGS) $(CPPFLAGS) $(zbatt_CFLAGS) $(CFLAGS) -c -o zbatt-power.obj `if test -f 'power.c'; then $(CYGPATH_W) 'power.c'; else $(CYGPATH_W) '$(srcdir)/power.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

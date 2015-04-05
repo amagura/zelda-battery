@@ -58,6 +58,8 @@ After building ZBatt, install it thusly:
 
 make install
 
+NOTE: you can use `DESTDIR' to specify a particular installation directory.
+
 
 If you have any problems, find a bug, or would like to provide feedback:
 please send an email to <agm2819*gmail*>

@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([ZBatt], [3.0], [agm2819@gmail.com])
+AC_INIT([ZBatt], [3.0.2], [agm2819@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
@@ -97,6 +97,7 @@ AC_ARG_ENABLE([debug],
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
              esac],[debug=false])
 
+# Check for testdir
 AC_ARG_ENABLE([testdir],
 		[  --enable-testdir	defines ZB_ACPI_ROOT for testing (default: disabled)],
 		[case "${enableval}" in
@@ -107,6 +108,20 @@ AC_ARG_ENABLE([testdir],
 
 AM_CONDITIONAL([TEST], [test "x$testdir" = "xtrue"])
 AM_CONDITIONAL([DEBUG], [test "x$debug" = "xtrue"])
+
+# Check for static compilation
+AC_ARG_ENABLE([static],
+	      AS_HELP_STRING([  --enable-static	turn on static compilation (default: disabled)]),
+	      [case "${enableval}" in
+	       yes) static=true ;;
+	       no) static=false ;;
+	       *) AC_MSG_ERROR([bad value ${enableval} for --enable-static]) ;;
+	      esac],[static=false])
+
+AM_CONDITIONAL([STATIC], [test "x$static" = "xtrue"])
+AM_CONDITIONAL([GENERIC], [test "x$static" = "xtrue" || test "x$generic" = "xtrue"])
+AM_CONDITIONAL([NATIVE], [test "x$static" = "xfalse" || test "x$native" = "xtrue"])
+
 # generic?
 m4_define([CLANG], [test "x`($CC -E -w -P -nostdinc - <<EOF
 __clang__

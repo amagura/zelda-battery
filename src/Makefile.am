@@ -42,6 +42,14 @@ AM_CFLAGS += -mtune=generic
 endif
 endif
 
+zbatt_CFLAGS = $(AM_CFLAGS)
+zbatc_CFLAGS = $(AM_CFLAGS)
+
+if STATIC
+zbatt_CFLAGS += --static
+zbatc_CFLAGS += --static
+endif
+
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
 gzbatt_CFLAGS = $(AM_CFLAGS)
