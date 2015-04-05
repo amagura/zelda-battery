@@ -39,9 +39,9 @@ test-empty: test-setup
 test-nosup:
 	rm -rf 'test/'
 
-test-depth: test-setup
+test-depth: test-nosup
+	mkdir -p "test"; \
 	cd "test"; \
-	rm -rf BAT0; \
 	for ((idx = 0; idx < 256; ++idx)); do \
 		mkdir -p "BAT$$idx"; \
 		cd "BAT$$idx"; \

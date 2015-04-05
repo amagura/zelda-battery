@@ -194,7 +194,7 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      ZB_DBG("globr: %d\n", globr);
      ZB_DBG("GLOB_NOSPACE: %d\n", GLOB_NOSPACE);
      ZB_DBG("GLOB_ABORTED: %d\n", GLOB_ABORTED);
-     ZB_DBG("GlOB_NOMATH: %d\n", GLOB_NOMATCH);
+     ZB_DBG("GlOB_NOMATCH: %d\n", GLOB_NOMATCH);
      if (globr != 0) {
 	  switch (globr) {
 	  case GLOB_NOSPACE:
@@ -202,7 +202,8 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
 	  case GLOB_ABORTED:
 	       break;
 	  case GLOB_NOMATCH:
-	       break;
+	       zb_eset(err, PWR_ENOSUPLY);
+	       return;
 	  default:
 	       break;
 	  }
@@ -215,7 +216,7 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      }
 
      ZB_DBG("globuf.gl_pathc: %d\n", globuf.gl_pathc);
-# if ZB_DEBUG
+# if ZB_DEBUG > 1
      for (int idx = 0; idx < globuf.gl_pathc; ++idx) {
 	  ZB_DBG("globuf.gl_pathv[%d]: `%s`\n", idx, globuf.gl_pathv[idx]);
      }
