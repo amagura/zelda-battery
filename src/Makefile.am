@@ -1,6 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = zbatc zbatt
+_srcdir_ = $(top_srcdir)/src
+
+bin_PROGRAMS = zbatt zbatc
 
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c

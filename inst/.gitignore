@@ -1,1 +1,9 @@
-./usr
+/usr
+.tar.gz
+.tar.xz
+.7z
+.zip
+.tar.7z
+.tar.zip
+.tar.bz2
+

@@ -2,6 +2,9 @@
 
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 
+SUBDIRS = img src
+DIST_SUBDIRS = $(SUBDIRS)
+
 all-local:
 
 test-setup:
@@ -56,5 +59,3 @@ test-breadth: test-nosup test-setup
 		echo 50 > "BAT$$idx/capacity"; \
 		echo 'Battery' > "BAT$$idx/type"; \
 	done
-
-SUBDIRS = src img

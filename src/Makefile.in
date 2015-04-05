@@ -87,7 +87,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = zbatc$(EXEEXT) zbatt$(EXEEXT) $(am__EXEEXT_1)
+bin_PROGRAMS = zbatt$(EXEEXT) zbatc$(EXEEXT) $(am__EXEEXT_1)
 @TEST_TRUE@am__append_1 = -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 @DEBUG_TRUE@am__append_2 = -g -ggdb
 @DEBUG_TRUE@am__append_3 = -DZB_DEBUG=1
@@ -291,6 +291,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+_srcdir_ = $(top_srcdir)/src
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
 gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c
