@@ -27,7 +27,9 @@ AM_CPPFLAGS += -DZB_DEBUG=1
 endif
 
 if !DEBUG
+if NO_DEBUG
 AM_CPPFLAGS += -DZB_DEBUG=0
+endif
 endif
 
 if NATIVE

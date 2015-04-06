@@ -95,7 +95,9 @@ AC_ARG_ENABLE([debug],
                yes) debug=true ;;
                no) debug=false ;;
                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-             esac],[debug=false])
+             esac],[debug=no])
+[test "x$debug" = "xno" && no_debug=false]
+[test "x$debug" = "xfalse" && no_debug=true]
 
 # Check for testdir
 AC_ARG_ENABLE([testdir],
@@ -108,6 +110,7 @@ AC_ARG_ENABLE([testdir],
 
 AM_CONDITIONAL([TEST], [test "x$testdir" = "xtrue"])
 AM_CONDITIONAL([DEBUG], [test "x$debug" = "xtrue"])
+AM_CONDITIONAL([NO_DEBUG], [test "x$no_debug" = "xtrue"])
 
 # Check for static compilation
 AC_ARG_ENABLE([static],

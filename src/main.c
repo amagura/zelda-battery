@@ -23,71 +23,94 @@ limitations under the License.
 #include "main.h"
 #include "compat.h"
 
-#if 0
-int stoi(int *dst, const char *src)
+int intlen(int idx)
 {
-     errno = 0;
-#if HAVE_LIBBSD
-     *dst = strtonum(src, INT_MIN, INT_MAX, NULL);
-#endif
-     return 0;
+     int result = 0;
+     while (idx) {
+	  ++result;
+	  idx /= 10;
+     }
+     return result;
 }
-#endif
 
-#define zb_intlen(ZB_IDX)			\
-     do {					\
-	  int ZB_hdx = !(ZB_IDX);		\
-	  while (ZB_IDX) {			\
-	       ++ZB_hdx;			\
-	       (ZB_IDX) /= 10;			\
-	  }					\
-     } while(0)
-
-#define zb_small_intlen(ZB_IDX)			\
-     do {					\
-	  int ZB_hdx = abs((ZB_IDX));		\
-	  (ZB_IDX) = (ZB_hdx < 100		\
-		      ? 2			\
-		      : (ZB_hdx < 10		\
-			 ? 1			\
-			 : 3));			\
-     } while(0)
-
-#define zb_safesub(ZB_IDX, ZB_HDX)			\
-     (((ZB_IDX) > (ZB_HDX) ? (ZB_IDX) : (ZB_HDX))	\
-      - ((ZB_IDX) > (ZB_HDX) ? (ZB_HDX) : (ZB_IDX)))
+# if ZB_DEBUG
+char cpeek(char *c, char *s, short fwd)
+{
+     char tmp = 0;
+     switch (fwd) {
+     case 1:
+	  if (c == &s[strlen(s) - 1] || c == &s[strlen(s)])
+	       return *c;
+	  else
+	       tmp = *++c;
+	  --c;
+	  break;
+     case 0:
+	  if (c == s)
+	       return *c;
+	  else
+	       tmp = *--c;
+	  ++c;
+	  break;
+     }
+     return tmp;
+}
+# endif
 
 void rev(char *s)
 {
-     int idx, hdx;
+     int hdx;
      char tmp;
      hdx = strlen(s) - 1;
 
-     for (idx = 0; idx < hdx; ++idx, --hdx) {
+     for (int idx = 0; idx < hdx; ++idx, --hdx) {
 	  tmp = s[idx];
 	  s[idx] = s[hdx];
 	  s[hdx] = tmp;
      }
 }
 
-void itoa(char *dst, int idx)
+# if 0
+void posrev(char *s, int start, int end)
 {
-     int len = idx;
-     zb_small_intlen(len);
-     char tmp[len+1];
+     char tmp;
+     for (; start < end; ++start, --end) {
+	  tmp = s[start];
+	  s[start] = s[end];
+	  s[end] = tmp;
+     }
+}
+# endif
+
+void itoa(char *dst, int src)
+{
+     int len = intlen(src);
+     char tmp[++len];
      char *wp = tmp;
 
-     for (; idx != 0; ++wp, idx /= 10) {
-	  if (idx >= 0)
-	       *wp = '0' + (idx % 10);
+     for (; src != 0; ++wp, src /= 10) {
+	  if (src >= 0)
+	       *wp = '0' + (src % 10);
 	  else
-	       *wp = '0' - (idx % 10);
+	       *wp = '0' - (src % 10);
+# if ZB_DLEVEL > 1
 	  ZB_DBG("wp: `%c`\n", *wp);
+# endif
      }
-     *wp++ = '\0';
+     *wp = 0;
+# if ZB_DLEVEL > 1
+     ZB_DBG("len: %d\n", len);
+     ZB_DBG("strlen(tmp): %lu\n", strlen(tmp));
+     ZB_DBG("sizeof(tmp): %lu\n", sizeof(tmp));
+# endif
      rev(tmp);
+
+     ZB_DBG("strlen(tmp)#1: %lu\n", strlen(tmp));
+     ZB_DBG("sizeof(tmp)#1: %lu\n", sizeof(tmp));
+     //   ZB_DBG("sizeof(\"4096\"): %lu\n", sizeof("4096"));
+
      ZB_DBG("wp: `%s`\n", tmp);
-     memcpy(dst, tmp, len+1);
+     memcpy(dst, tmp, len);
 }
 
 /* unlike `concat', which returns a
@@ -106,7 +129,7 @@ void itoa(char *dst, int idx)
  * XXX A failure is indicated by a return value _equal to
  * the destination buffers size_, which may make errors somewhat
  * harder to spot! */
-size_t catl(size_t dstsiz, char *dst, const char *s1, ...)
+size_t catl(size_t bufsiz, char *buf, const char *s1, ...)
 {
      va_list args;
      const char *s;
@@ -121,10 +144,10 @@ size_t catl(size_t dstsiz, char *dst, const char *s1, ...)
 	  if ((mdx += ldx) < ldx) break;
      }
      va_end(args);
-     if (s || mdx >= INT_MAX) return dstsiz;
+     if (s || mdx >= INT_MAX) return bufsiz;
 
      tmp = malloc(mdx + 1);
-     if (!tmp) return dstsiz;
+     if (!tmp) return bufsiz;
      bzero(tmp, mdx + 1);
 
      p = mempcpy(p = tmp, s1, ndx);
@@ -141,56 +164,27 @@ size_t catl(size_t dstsiz, char *dst, const char *s1, ...)
      va_end(args);
      if (s || mdx != ndx || p != tmp + ndx) {
 	  free(tmp);
-	  return dstsiz;
+	  return bufsiz;
      }
 
+     ZB_DBG("*p: `%c'\n", *p);
+     ZB_DBG("*p--: `%c'\n", cpeek(p, tmp, 0));
      *p = 0;
-     ZB_DBG("used > dstsiz: %d\n", used > dstsiz);
+     ++used;
+# if ZB_DLEVEL > 1
+     ZB_DBG("used > bufsiz: %d\n", used > bufsiz);
      ZB_DBG("used == strlen(p): %d\n", used == strlen(p));
-     ZB_DBG("used: %d\n", used);
-     ZB_DBG("strlen(p): %d\n", strlen(p));
+     ZB_DBG("used: %lu\n", used - 0);
+     ZB_DBG("strlen(p): %lu\n", strlen(p));
+     ZB_DBG("strlen(tmp): %lu\n", strlen(tmp));
+     ZB_DBG("mdx + 1: %lu\n", mdx + 1);
      ZB_DBG("p: `%s`\n", p);
+     ZB_DBG("p == &tmp[%lu + 1]: %d\n", mdx, p == &tmp[mdx + 1]);
+     ZB_DBG("bufsiz - used: %lu\n", bufsiz - used);
+     ZB_DBG("p == &tmp[%lu]: %d\n", mdx - 0, p == &tmp[mdx]);
+# endif
 
-     memcpy(dst, tmp, (used > dstsiz ? dstsiz : used));
+     memcpy(buf, tmp, (used > bufsiz ? bufsiz : used));
      free(tmp);
-     return dstsiz - used;
-}
-
-char *concat(size_t *siz, const char *s1, ...)
-{
-	va_list args;
-	const char *s;
-	char *p, *result;
-	unsigned long l, m, n;
-
-	m = n = strlen(s1);
-	va_start(args, s1);
-	while ((s = va_arg(args, char *))) {
-		l = strlen(s);
-		if ((m += l) < l) break;
-	}
-	va_end(args);
-	if (s || m >= INT_MAX) return NULL;
-
-	result = malloc(m + 1);
-	if (!result) return NULL;
-	*siz = m + 1;
-
-	memcpy(p = result, s1, n);
-	p += n; /* moves memory address to next addressable space */
-	va_start(args, s1);
-	while ((s = va_arg(args, char *))) {
-		l = strlen(s);
-		if ((n += l) < l || n > m) break;
-		memcpy(p, s, l);
-		p += l; /* moves memory address to next empty address */
-	}
-	va_end(args);
-	if (s || m != n || p != result + n) {
-		free(result);
-		return NULL;
-	}
-
-	*p = 0;
-	return result;
+     return bufsiz - used;
 }
