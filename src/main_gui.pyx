@@ -1,5 +1,5 @@
 """""
-Copyright 2014-2015 Alexej Magura
+Copyright 2014, 2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -85,8 +85,17 @@ def create_icon():
     tcon = gtk.StatusIcon()
     tcon.set_tooltip('gzbatt')
     tcon.set_visible(True)
+    tcon.connect('popup-menu', clicked)
     sync_icon(tcon)
     src_id = gobject.timeout_add_seconds(1, sync_icon, tcon);
+
+def clicked(tcon, button, time):
+    menu = gtk.Menu()
+    quitm = gtk.ImageMenuItem(gtk.STOCK_QUIT, '_Quit')
+    quitm.connect('activate', gtk.main_quit)
+    menu.append(quitm)
+    menu.show_all()
+    menu.popup(None, None, gtk.status_icon_position_menu, button, time, tcon)
 
 create_icon()
 gtk.main()

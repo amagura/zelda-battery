@@ -5,6 +5,8 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 SUBDIRS = img src
 DIST_SUBDIRS = $(SUBDIRS)
 
+ZB_TARBALL = $(shell uname)-$(shell uname -m).tar.gz
+
 all-local:
 
 test-setup:
@@ -26,7 +28,7 @@ test-clean: test-setup
 
 test-onac: test-setup
 	echo 1 > 'test/ACAD/online'
-	$(RM) -r 'test/'{BAT0,BAT1}
+	$(RM) -r 'test/'{BAT0,BAT1} || $(ERM) -r 'test/'{BAT0,BAT1} || true
 
 test-noac: test-setup
 	echo 0 > 'test/ACAD/online'
@@ -59,3 +61,12 @@ test-breadth: test-nosup test-setup
 		echo 50 > "BAT$$idx/capacity"; \
 		echo 'Battery' > "BAT$$idx/type"; \
 	done
+
+clean-local:
+	$(RM) -r inst/usr
+
+release: clean-local
+	$(MAKE) DESTDIR="$(top_srcdir)/inst" install
+	cd inst; \
+	$(RM) $(ZB_TARBALL) ;\
+	tar czf $(ZB_TARBALL) usr

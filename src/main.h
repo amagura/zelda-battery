@@ -34,7 +34,7 @@ limitations under the License.
 # include <stdlib.h>
 
 # ifndef ZB_DEBUG
-#  define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
+#  define ZB_DEBUG 0 // XXX change this to turn debug messages on/off
 # endif
 
 # if ZB_DEBUG

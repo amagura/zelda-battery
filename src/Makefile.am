@@ -17,6 +17,8 @@ AM_CFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
 
+AM_CFLAGS += -Wall -Wextra
+
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 endif
@@ -78,9 +80,13 @@ clean-local: tidy-local
 lint:
 	for f in $(zbatt_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
 
-valgrind: $(bin_PROGRAMS)
-	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatc -c '0';
-	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatt -f '+' -e '-'; echo ---------
+valgrind: clean $(bin_PROGRAMS)
+	for f in $(bin_PROGRAMS); do \
+		$@ --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./"$$f"; \
+		echo; \
+		echo ---------; \
+		echo; \
+	done
 
 mtrace: $(bin_PROGRAMS)
 	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done
@@ -104,13 +110,11 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 
 tidy-local:
 	$(RM) *.o || true
-	$(RM) *.s || true
 	$(RM) *.od || true
-	$(RM) test || true
-	$(RM) gzbatt || true
-	$(RM) main_gui.c || true
-	$(RM) *.pyc || true
 	$(RM) *.py || true
+	$(RM) *.pyc || true
+	$(RM) test || true
+	$(RM) main_gui.c || true
 
 anew: clean all
 ready: clean all tidy-local
@@ -124,19 +128,19 @@ akpi:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) $(AM_LDFLAGS) -o acpi acpi.c main.c
 
 test-clean:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-onac:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-noac:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-lowbat:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-empty:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-nosup:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@

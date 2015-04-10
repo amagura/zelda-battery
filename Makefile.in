@@ -329,6 +329,7 @@ top_srcdir = @top_srcdir@
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 SUBDIRS = img src
 DIST_SUBDIRS = $(SUBDIRS)
+ZB_TARBALL = $(shell uname)-$(shell uname -m).tar.gz
 all: all-recursive
 
 .SUFFIXES:
@@ -721,7 +722,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic mostlyclean-am
+clean-am: clean-generic clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -792,9 +793,9 @@ uninstall-am: uninstall-dist_docDATA
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am all-local \
 	am--refresh check check-am clean clean-cscope clean-generic \
-	cscope cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
-	dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip \
-	distcheck distclean distclean-generic distclean-tags \
+	clean-local cscope cscopelist-am ctags ctags-am dist dist-all \
+	dist-bzip2 dist-gzip dist-lzip dist-shar dist-tarZ dist-xz \
+	dist-zip distcheck distclean distclean-generic distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dist_docDATA install-dvi \
@@ -830,7 +831,7 @@ test-clean: test-setup
 
 test-onac: test-setup
 	echo 1 > 'test/ACAD/online'
-	$(RM) -r 'test/'{BAT0,BAT1}
+	$(RM) -r 'test/'{BAT0,BAT1} || $(ERM) -r 'test/'{BAT0,BAT1} || true
 
 test-noac: test-setup
 	echo 0 > 'test/ACAD/online'
@@ -863,6 +864,15 @@ test-breadth: test-nosup test-setup
 		echo 50 > "BAT$$idx/capacity"; \
 		echo 'Battery' > "BAT$$idx/type"; \
 	done
+
+clean-local:
+	$(RM) -r inst/usr
+
+release: clean-local
+	$(MAKE) DESTDIR="$(top_srcdir)/inst" install
+	cd inst; \
+	$(RM) $(ZB_TARBALL) ;\
+	tar czf $(ZB_TARBALL) usr
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

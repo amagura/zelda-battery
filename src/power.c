@@ -1,5 +1,5 @@
 /****
-Copyright 2014-2015 Alexej Magura
+Copyright 2014, 2015 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -56,6 +56,7 @@ void getpwr(struct power *pwr)
 	  ZB_DBG("strerr: %s\n", strerror(*pwr->err.last));
 	  info.cap = *pwr->err.last;
 	  /*
+
 	  pwr->err.vec[pwr->err.last--] = PWR_OK;
 	  for (; pwr->err.pos > 0; --pwr->err.pos) {
 	       if (pwr->err.vec[pwr->err.pos] != PWR_OK)

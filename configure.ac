@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([ZBatt], [3.0.2], [agm2819@gmail.com])
+AC_INIT([ZBatt], [3.0.3], [agm2819@gmail.com],,[https://github.com/amagura/zelda-battery])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
@@ -11,6 +11,7 @@ AC_PROG_CC_STDC
 AC_PROG_CPP
 
 # Precious variables
+AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
 
 # let Automake know if we are using clang
 

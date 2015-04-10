@@ -91,7 +91,7 @@ bin_PROGRAMS = zbatt$(EXEEXT) zbatc$(EXEEXT) $(am__EXEEXT_1)
 @TEST_TRUE@am__append_1 = -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 @DEBUG_TRUE@am__append_2 = -g -ggdb
 @DEBUG_TRUE@am__append_3 = -DZB_DEBUG=1
-@DEBUG_FALSE@am__append_4 = -DZB_DEBUG=0
+@DEBUG_FALSE@@NO_DEBUG_TRUE@am__append_4 = -DZB_DEBUG=0
 @GENERIC_FALSE@@NATIVE_TRUE@am__append_5 = -march=native -mtune=native
 @CPU_KNOWN_TRUE@@GENERIC_TRUE@am__append_6 = -mtune=generic-$(CPUTYPE)
 @CPU_KNOWN_FALSE@@GENERIC_TRUE@am__append_7 = -mtune=generic
@@ -299,8 +299,8 @@ noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h
 iconsdir = $(pkgdatadir)/icons
 scaledir = $(iconsdir)/scalable/apps
 pngdir = $(iconsdir)/16x16/apps
-AM_CFLAGS = $(am__append_2) $(am__append_5) $(am__append_6) \
-	$(am__append_7)
+AM_CFLAGS = -Wall -Wextra $(am__append_2) $(am__append_5) \
+	$(am__append_6) $(am__append_7)
 AM_LDFLAGS = 
 AM_CPPFLAGS = $(am__append_1) $(am__append_3) $(am__append_4)
 zbatt_CFLAGS = $(AM_CFLAGS) $(am__append_8)
@@ -834,9 +834,13 @@ clean-local: tidy-local
 lint:
 	for f in $(zbatt_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
 
-valgrind: $(bin_PROGRAMS)
-	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatc -c '0';
-	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./zbatt -f '+' -e '-'; echo ---------
+valgrind: clean $(bin_PROGRAMS)
+	for f in $(bin_PROGRAMS); do \
+		$@ --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./"$$f"; \
+		echo; \
+		echo ---------; \
+		echo; \
+	done
 
 mtrace: $(bin_PROGRAMS)
 	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done
@@ -860,13 +864,11 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 
 tidy-local:
 	$(RM) *.o || true
-	$(RM) *.s || true
 	$(RM) *.od || true
-	$(RM) test || true
-	$(RM) gzbatt || true
-	$(RM) main_gui.c || true
-	$(RM) *.pyc || true
 	$(RM) *.py || true
+	$(RM) *.pyc || true
+	$(RM) test || true
+	$(RM) main_gui.c || true
 
 anew: clean all
 ready: clean all tidy-local
@@ -880,22 +882,22 @@ akpi:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) $(AM_LDFLAGS) -o acpi acpi.c main.c
 
 test-clean:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-onac:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-noac:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-lowbat:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-empty:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-nosup:
-	cd "$(top_srcdir)"; make $@
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
