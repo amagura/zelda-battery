@@ -65,7 +65,7 @@ test-breadth: test-nosup test-setup
 clean-local:
 	$(RM) -r inst/usr
 
-release: clean-local
+release: clean
 	$(MAKE) DESTDIR="$$PWD/inst" install
 	cd inst; \
 	$(RM) $(ZB_TARBALL) ;\
