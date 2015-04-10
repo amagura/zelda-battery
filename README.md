@@ -23,6 +23,12 @@ BSD systems known _not_ to work:
 ### Dependencies (v3.0+)
 * GNU Autotools
 * C99 compliant C compiler
+* Cython
+* Python 2
+* GTK+2 (?)
+* PyGTK (?)
+
+
 
 The GUI (Graphical User Interface) requires __gtk2__ and the `configure` script will need __pkg-config__, but these are optional, since you can opt out of building GUI using the `--without-gtk2` `configure` flag.
 
