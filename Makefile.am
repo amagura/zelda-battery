@@ -5,7 +5,7 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 SUBDIRS = img src
 DIST_SUBDIRS = $(SUBDIRS)
 
-ZB_TARBALL = $(shell uname)-$(shell uname -m).tar.gz
+ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz
 
 all-local:
 
@@ -66,7 +66,7 @@ clean-local:
 	$(RM) -r inst/usr
 
 release: clean-local
-	$(MAKE) DESTDIR="$(top_srcdir)/inst" install
+	$(MAKE) DESTDIR="$$PWD/inst" install
 	cd inst; \
 	$(RM) $(ZB_TARBALL) ;\
 	tar czf $(ZB_TARBALL) usr
