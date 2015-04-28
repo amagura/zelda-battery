@@ -6,7 +6,7 @@ iconsdir = $(pkgdatadir)/icons
 pngdir = $(iconsdir)/16x16/apps
 balldir = $(pngdir)/ball
 origdir = $(pngdir)/orig
-clasdir = $(pngdir)clas
+clasdir = $(pngdir)/clas
 
 if GTK2
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
