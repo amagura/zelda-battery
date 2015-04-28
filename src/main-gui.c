@@ -37,11 +37,6 @@ limitations under the License.
 # define GZB_PROGNAME ZB_PROGNAME
 #endif
 
-char *scaledir()
-{
-     return GZB_SCALEDIR;
-}
-
 char *pngdir()
 {
      return GZB_PNGDIR;
@@ -50,4 +45,9 @@ char *pngdir()
 char *progname()
 {
      return GZB_PROGNAME;
+}
+
+char *version()
+{
+     return PACKAGE_VERSION;
 }
