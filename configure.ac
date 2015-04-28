@@ -138,5 +138,9 @@ EOF
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" = "xunknown" && (]CLANG[ || ]TINYC[)])
 AC_SUBST(CPUTYPE, CPUARCH)
 
-AC_CONFIG_FILES([Makefile src/Makefile img/Makefile])
+AC_CONFIG_FILES([
+Makefile
+src/Makefile
+img/Makefile
+])
 AC_OUTPUT

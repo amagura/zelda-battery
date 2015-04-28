@@ -6,13 +6,22 @@ iconsdir = $(pkgdatadir)/icons
 pngdir = $(iconsdir)/16x16/apps
 
 if GTK2
-#dist_scale_DATA = full.svg empty.svg qempty.svg qfull.svg half.svg bork.svg
-dist_png_DATA = full.png empty.png qempty.png qfull.png half.png bork.png nobat.png
+dist_png_DATA = \
+ball/full.png ball/empty.png ball/qempty.png \
+ball/qfull.png ball/half.png ball/bork.png ball/nobat.png \
+\
+orig/full.png orig/empty.png orig/qempty.png \
+orig/qfull.png orig/half.png orig/bork.png orig/nobat.png
 endif
 
 all-local: #local-license
 
 install-data-local: LICENSE.images
+	for d in $(subdirs); do \
+	cd "$$d"; \
+	$(MAKE); \
+	cd ..; \
+	done
 
 LICENSE.images:
 	cat LICENSE > LICENSE.images
