@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 	  {"expended", no_argument, 0, 'x'},
 	  {"battery", required_argument, 0, 'b'},
 	  {"divisor", required_argument, 0, 'd'},
-	  { 0, 0, 0, 0 }
+	  {0, 0, 0, 0}
      };
 
      while ((c = getopt_long(argc, argv, sopts, lopts, optc)) != EOF) {
