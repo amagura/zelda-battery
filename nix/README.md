@@ -20,8 +20,6 @@ BSD systems that _should_ work:
 BSD systems known _not_ to work:
 * OpenBSD
 
-## UNIX
-
 ### Dependencies (v3.0+)
 * GNU Autotools
 * C99 compliant C compiler
