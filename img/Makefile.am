@@ -6,12 +6,17 @@ iconsdir = $(pkgdatadir)/icons
 pngdir = $(iconsdir)/16x16/apps
 balldir = $(pngdir)/ball
 origdir = $(pngdir)/orig
+clasdir = $(pngdir)clas
 
 if GTK2
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
+
 dist_orig_DATA = orig/full.png orig/empty.png orig/qempty.png \
 orig/qfull.png orig/half.png orig/bork.png orig/nobat.png
+
+dist_clas_DATA = clas/full.png clas/empty.png clas/qempty.png \
+clas/qfull.png clas/half.png clas/bork.png clas/nobat.png
 endif
 
 all-local: #local-license
