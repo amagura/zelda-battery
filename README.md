@@ -4,15 +4,14 @@ ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=ma
 A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskbars
 
 ***
-
-* [Building](https://github.com/amagura/zelda-battery#building)
-* [Installing](https://github.com/amagura/zelda-battery#installing)
 * [Supported Platforms](https://github.com/amagura/zelda-battery#supported-platforms)
  * [Windows](https://github.com/amagura/zelda-battery#windows)
  * [Linux](https://github.com/amagura/zelda-battery#linux)
  * [*BSD](https://github.com/amagura/zelda-battery#bsd)
 * [Depends](https://github.com/amagura/zelda-battery#dependencies)
  * [Make Depends](https://github.com/amagura/zelda-battery#make-dependencies)
+* [Building](https://github.com/amagura/zelda-battery#building)
+* [Installing](https://github.com/amagura/zelda-battery#installing)
 * [Examples](https://github.com/amagura/zelda-battery#examples)
  * [Git-esque](https://github.com/amagura/zelda-battery#git-esque)
  * [Zsh](https://github.com/amagura/zelda-battery#zsh)
@@ -22,20 +21,6 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Notes](https://github.com/amagura/zelda-battery#notes)
 
 ***
-
-# Building
-1. `autoconf -i` (try `autoreconf -fi` if `autoconf -i` doesn't work)
-2. `./configure`
-3. `make`
-
-
-
-# Installing
-
-1. Build ZBatt
-2. `make DESTDIR="<desired install directory>" install` (try running with either `sudo` or as root if you don't have permission to write to `<desired install directory>`.
-
-Alternatively, you can also just place the binaries `zbatc`, `zbatt`, and (if you built the GUI) `gzbatt` where ever you like.
 
 # Supported Platforms
 
@@ -99,6 +84,18 @@ Linux:
 * Cython (GUI make depend)
 * pkg-config (GUI make depend)
 * [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
+
+# Building
+1. `autoconf -i` (try `autoreconf -fi` if `autoconf -i` doesn't work)
+2. `./configure`
+3. `make`
+
+# Installing
+
+1. Build ZBatt
+2. `make DESTDIR="<desired install directory>" install` (try running with either `sudo` or as root if you don't have permission to write to `<desired install directory>`.
+
+Alternatively, you can also just place the binaries `zbatc`, `zbatt`, and (if you built the GUI) `gzbatt` where ever you like.
 
 # Examples
 
