@@ -11,7 +11,12 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
  * [Linux](https://github.com/amagura/zelda-battery#linux)
  * [*BSD](https://github.com/amagura/zelda-battery#bsd)
 * [Examples](https://github.com/amagura/zelda-battery#examples)
-
+ * [Git-esque](https://github.com/amagura/zelda-battery#git-esque)
+ * [Zsh](https://github.com/amagura/zelda-battery#zsh)
+ * [Bash](https://github.com/amagura/zelda-battery#bash)
+ * [Mksh](https://github.com/amagura/zelda-battery#mksh-korn-shell)
+ * [Tcsh](https://github.com/amagura/zelda-battery#tcsh)
+* [Notes](https://github.com/amagura/zelda-battery#notes)
 
 # Building
 1. `autoconf -i` (try `autoreconf -fi` if `autoconf -i` doesn't work)
@@ -58,7 +63,7 @@ Kernels >= 2.6.24 are supported; support for older kernels is not a priority, bu
 * GTK+2 (GUI depend)
 * PyGTK (GUI depend)
 
-#### Make Depedencies
+#### Make Dependencies
 * GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
 * Cython (GUI make depend)
@@ -92,12 +97,6 @@ BSD systems known _not_ to work:
 * pkg-config (GUI make depend)
 
 # Examples
-
-## GUI
-### FreeBSD
-![example of gzbatt on FreeBSD](/example/FreeBSD-small.png)
-
-## Command-line
 
 The command-line is _extremely_ flexible, so while there are defaults
 there's nothing stopping you from defining your own experience.
