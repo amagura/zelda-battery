@@ -43,8 +43,8 @@ BSD systems that _don't_ work:
 * OpenBSD (soz, peeps)
 
 # Dependencies
-#### Windows
-The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
+## Windows
+The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.
 
 #### Linux and BSD
 * Python 2 (GUI)
