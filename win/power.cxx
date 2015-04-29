@@ -1,5 +1,5 @@
 
-#define _WIN32_WINNT NTDDI_WINXP
+#define _WIN32_WINNT NTDDI_WINXP /* most basic version of Windows XP */
 #include <Windows.h>
 
 
