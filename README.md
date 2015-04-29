@@ -25,7 +25,7 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 Windows XP and later are supported; support for older versions of Windows may come later.
 
 ## Linux
-Kernels >= 2.6.24 are supported; support for older kernels is not a priority, but may be added <s>if you say pretty please</s> later.
+Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
 
 ## BSD
 Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html), you should be fine.
