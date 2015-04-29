@@ -11,6 +11,9 @@ zbatc
 gzbatt
 main_gui.c
 
+# emacs files
+.\#*
+
 # automake stuff
 autom4te.cache
 config.log
