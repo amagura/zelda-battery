@@ -1,0 +1,32 @@
+# object files
+*.o
+
+# binaries
+zba
+zbl
+zb-color
+zb-text
+zbatt
+zbatc
+gzbatt
+main_gui.c
+!/archive/**/zbatc
+!/archive/**/zbatt
+!/archive/**/gzbatt
+
+# automake stuff
+autom4te.cache
+config.log
+config.status
+aclocal.m4
+Makefile
+Makefile.in
+.deps
+configure
+build-aux
+
+# misc
+/tmp
+PROFILE-*
+nohup.out
+test.sh
