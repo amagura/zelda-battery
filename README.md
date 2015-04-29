@@ -47,27 +47,26 @@ BSD systems known _not_ to work:
 The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
 
 #### Linux and BSD
-* Python 2 (GUI depend)
-* GTK+2 (GUI depend)
-* PyGTK (GUI depend)
+* Python 2 (GUI)
+* GTK+2 (GUI)
+* PyGTK (GUI)
 
 ## Make Dependencies
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
+* GNU Autotools (i.e. automake, autoconf)
+* Make
 
 #### Windows
 * C++98 compliant C++ compiler
 
 #### Linux
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
-* Cython (GUI make depend)
-* pkg-config (GUI make depend)
+* Cython (GUI)
+* pkg-config (GUI)
 
 #### BSD
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
-* Cython (GUI make depend)
-* pkg-config (GUI make depend)
+* Cython (GUI)
+* pkg-config (GUI)
 * [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
 
 # Building
@@ -76,8 +75,8 @@ The Windows version of ZBatt has no extraneous dependencies: it depends on the W
 3. `make`
 
 # Installing
-1. Build ZBatt
-2. `make DESTDIR="<desired install directory>" install` (try running with either `sudo` or as root if you don't have permission to write to `<desired install directory>`.
+1. Build ZBatt :P
+2. `make DESTDIR="<DIR>" install` (try running with either `sudo` or as root if you don't have permission to write to `<DIR>`.
 
 Alternatively, you can also just place the binaries `zbatc`, `zbatt`, and (if you built the GUI) `gzbatt` where ever you like.
 
