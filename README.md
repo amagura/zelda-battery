@@ -108,6 +108,8 @@ there's nothing stopping you from defining your own experience.
 ./zbatc -c 32; ./zbatt -r -f +; ./zbatc -c 31; ./zbatt -x -e -
 ```
 
+***
+
 To make it even easier to integrate the command-line with your current
 environment, I've gone ahead and provided examples for every shell
 I could get my hands on.  That said, it is worth noting that some shells
