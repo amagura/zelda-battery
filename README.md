@@ -95,7 +95,7 @@ BSD systems known _not_ to work:
 
 ## GUI
 ### FreeBSD
-![example of gzbatt on FreeBSD](/example/FreeBSD.png)
+![example of gzbatt on FreeBSD](/example/FreeBSD-small.png)
 
 ## Command-line
 
