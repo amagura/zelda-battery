@@ -108,22 +108,6 @@ there's nothing stopping you from defining your own experience.
 ./zbatc -c 32; ./zbatt -r -f +; ./zbatc -c 31; ./zbatt -x -e -
 ```
 
-***
-
-To make it even easier to integrate the command-line with your current
-environment, I've gone ahead and provided examples for every shell
-I could get my hands on.  That said, it is worth noting that some shells
-are better equiped for this sort of thing than others.  Under some shells
-the CLI will only update every time you run a command: if you're on battery power
-and you haven't touched your terminal for the past hour and you think you're still
-cool because you just checked and the CLI says you're still at 80% battery--think again!
-
-Zsh, so far, is the only shell I know of that supports updating its prompt
-after a given amount of time.  I keep mine set to 60 seconds: not too long, but long
-enough so that I rarely have my prompt refresh in the middle of an expansion.
-
-All the same, pick whatever works best for _you_!
-
 ### Zsh
 ![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
 ```bash
