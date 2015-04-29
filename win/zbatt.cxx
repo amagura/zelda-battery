@@ -20,11 +20,6 @@ limitations under the License.
 
 int main(int argc, char **argv)
 {
-     int optc = argc;
-     char **optv = argv;
-
-     optc -= (optc > 0);
-     optv += (optc > 0);
 
 
      return 0;
