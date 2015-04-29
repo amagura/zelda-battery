@@ -108,9 +108,8 @@ there's nothing stopping you from defining your own experience.
 ./zbatc -c 32; ./zbatt -r -f +; ./zbatc -c 31; ./zbatt -x -e -
 ```
 
-To make it even easier to integrate the command-line with your current
-environment, I've gone ahead and provided examples for just about every shell
-I could get my hands on.
+To make it even easier to integrate ZBatt with your current command-line experience,
+I've gone ahead and provided examples for some shells.
 
 ### Zsh
 ![example showing zelda-battery in a Zsh prompt](/example/zsh.jpg)
@@ -124,7 +123,6 @@ TRAPALRM () {
     zle reset-prompt # refreshs the terminal prompt
 }
 ```
-
 
 ### Bash
 ![example showing zelda-battery in a Bash prompt](/example/bash.jpg)
