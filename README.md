@@ -27,8 +27,10 @@ Windows XP and later are supported; support for older versions of Windows may co
 ## Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority, but may be added <s>if you say pretty please</s> later.
 
-## *BSD
-Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html), you should be fine.  BSD systems known to work:
+## BSD
+Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html), you should be fine.
+
+BSD systems known to work:
 * DragonFlyBSD
 * FreeBSD
 
@@ -44,7 +46,7 @@ BSD systems known _not_ to work:
 #### Windows
 The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
 
-#### Linux and *BSD
+#### Linux and BSD
 * Python 2 (GUI depend)
 * GTK+2 (GUI depend)
 * PyGTK (GUI depend)
@@ -61,7 +63,7 @@ The Windows version of ZBatt has no extraneous dependencies: it depends on the W
 * Cython (GUI make depend)
 * pkg-config (GUI make depend)
 
-#### *BSD
+#### BSD
 * GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
 * Cython (GUI make depend)
