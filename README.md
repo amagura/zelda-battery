@@ -8,6 +8,7 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Installing](https://github.com/amagura/zelda-battery#installing)
 * [Supported Platforms](https://github.com/amagura/zelda-battery#supported-platforms)
  * [Windows](https://github.com/amagura/zelda-battery#windows)
+  * [Depends](https://github.com/amagura/zelda-battery#dependencies)
  * [Linux](https://github.com/amagura/zelda-battery#linux)
  * [*BSD](https://github.com/amagura/zelda-battery#bsd)
 * [Examples](https://github.com/amagura/zelda-battery#examples)
