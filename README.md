@@ -109,7 +109,7 @@ there's nothing stopping you from defining your own experience.
 ```
 
 To make it even easier to integrate the command-line with your current
-environment, I've gone ahead and provided examples for every shell
+environment, I've gone ahead and provided examples for just about every shell
 I could get my hands on.
 
 ### Zsh
@@ -152,5 +152,5 @@ As long as you use the `TMOUT` and `TRAPALRM`/`zle reset-prompt` stuff, your Zsh
 ## Bash
 AFAIK there is _no_ way to periodically refresh a bash prompt without either running `clear`/`Ctrl-L` or pressing enter, which causes the prompt to be redrawn.
 
-## Screenshot Submissions
-Screenshot submissions are always appreciated; thank you.
+## Submissions
+Screenshot, command-line prompt examples, and all other submissions are appreciated as always; thank you.
