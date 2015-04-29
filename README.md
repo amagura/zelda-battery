@@ -3,10 +3,6 @@ ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=ma
 
 A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskbars
 
-# FYI
-- Dependencies are specified under [Supported Platforms](https://github.com/amagura/zelda-battery#supported-platforms)
-- Screenshot submissions are always appreciated; thank you.
-
 # Index
 * [Building](https://github.com/amagura/zelda-battery#building)
 * [Installing](https://github.com/amagura/zelda-battery#installing)
@@ -163,3 +159,6 @@ As long as you use the `TMOUT` and `TRAPALRM`/`zle reset-prompt` stuff, your Zsh
 
 ## Bash
 AFAIK there is _no_ way to periodically refresh a bash prompt without either running `clear`/`Ctrl-L` or pressing enter, which causes the prompt to be redrawn.
+
+## Screenshot Submissions
+Screenshot submissions are always appreciated; thank you.
