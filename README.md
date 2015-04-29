@@ -39,7 +39,7 @@ BSD systems that _should_ work:
 * Midnight BSD
 * (Anything based on FreeBSD, lulz)
 
-BSD systems that do _not_ work:
+BSD systems that _don't_ work:
 * OpenBSD (soz, peeps)
 
 # Dependencies
