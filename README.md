@@ -45,6 +45,7 @@ BSD systems that _don't_ work:
 # Dependencies
 ## Windows
 The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.
+So you shouldn't need to install anything.
 
 #### Linux and BSD
 * Python 2 (GUI)
