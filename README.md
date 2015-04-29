@@ -22,14 +22,6 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 -->
 # Supported Platforms
 
-This _probably_ goes without saying, but if you cannot get ZBatt to work or compile on
-a supported platform, please send me an email detailing:
-
-1. the misbehaving OS and version thereof
-  * if you are on a UNIX-like system, please include the output from `uname -a`
-2. the version of ZBatt that you are trying(?) to use
-  * if a previous version of ZBatt was working, please include that info.
-
 ## Windows
 
 All Windows systems XP and later are supported; support for older Windows versions will come later.
