@@ -10,22 +10,28 @@ AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CPP
 
+# Get System Type
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+
 # Precious variables
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
-
 # let Automake know if we are using clang
 
-# M4 Macros
+[echo "$host"]
+
 m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([rm_dots], [translit($1, [.])])
 m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
 m4_define([CPUARCH], rm_newline(m4_esyscmd([uname -m])))
 m4_define([IS_LINUX], [m4_if($1, [Linux], TRUE_TEST($1), FALSE_TEST($1))])
+m4_define([ISNT_LINUX], [m4_if($1, [Linux], FALSE_TEST($1), TRUE_TEST($1))])
 m4_define([TRUE_TEST], [test x"$1" = x"$1"])
 m4_define([FALSE_TEST], [test x"$1" = x"not $2"])
 m4_define([IF_LINUX], [m4_if(
 $1, [Linux],[$2],[$3])])
+
 m4_define([IF_BSD], [m4_if(
 $1, [NetBSD],[$2],
 $1, [FreeBSD],[$2],
@@ -135,7 +141,7 @@ m4_define([TINYC], [test ! "x`($CC -E -w -P -nostdinc - <<EOF
 __TINYC__
 EOF
 )`" = "x__TINYC__"])
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" = "xunknown" && (]CLANG[ || ]TINYC[)])
+AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" =		"xunknown" && (]CLANG[ || ]TINYC[)])
 AC_SUBST(CPUTYPE, CPUARCH)
 
 AC_CONFIG_FILES([Makefile src/Makefile img/Makefile])

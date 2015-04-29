@@ -10,9 +10,9 @@ zbatt
 zbatc
 gzbatt
 main_gui.c
-!/archive/**/zbatc
-!/archive/**/zbatt
-!/archive/**/gzbatt
+
+# emacs files
+.\#*
 
 # automake stuff
 autom4te.cache
