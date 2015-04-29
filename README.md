@@ -41,10 +41,10 @@ BSD systems known _not_ to work:
 * OpenBSD (soz, peeps)
 
 # Dependencies
-Windows:
+#### Windows
 The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
 
-Linux and *BSD:
+#### Linux and *BSD
 * Python 2 (GUI depend)
 * GTK+2 (GUI depend)
 * PyGTK (GUI depend)
@@ -52,16 +52,16 @@ Linux and *BSD:
 ## Make Dependencies
 * GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 
-Windows:
+#### Windows
 * C++98 compliant C++ compiler
 
-Linux:
+#### Linux
 * GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
 * Cython (GUI make depend)
 * pkg-config (GUI make depend)
 
-\*BSD:
+#### *BSD
 * GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
 * Cython (GUI make depend)
