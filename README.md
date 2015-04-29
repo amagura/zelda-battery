@@ -3,10 +3,9 @@ ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=ma
 
 A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskbars
 
-# NOTE
-Dependencies are specified under [Supported Platforms](https://github.com/amagura/zelda-battery#supported-platforms)
-
-Also, screenshot submissions are always appreciated; thank you.
+# FYI
+- Dependencies are specified under [Supported Platforms](https://github.com/amagura/zelda-battery#supported-platforms)
+- Screenshot submissions are always appreciated; thank you.
 
 # Index
 * [Building](https://github.com/amagura/zelda-battery#building)
