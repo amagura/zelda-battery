@@ -22,7 +22,7 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 -->
 # Supported Platforms
 ## Windows
-Windows >= XP
+Windows XP and later.
 
 ## Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
