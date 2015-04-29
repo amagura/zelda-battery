@@ -102,6 +102,7 @@ BSD systems known _not_ to work:
 The command-line is _extremely_ flexible, so while there are defaults
 there's nothing stopping you from defining your own experience.
 
+### Git-esque
 ![example of the git style](/example/git.jpg)
 ```bash
 ./zbatc -c 32; ./zbatt -r -f +; ./zbatc -c 31; ./zbatt -x -e -
