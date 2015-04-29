@@ -8,14 +8,10 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Installing](https://github.com/amagura/zelda-battery#installing)
 * [Supported Platforms](https://github.com/amagura/zelda-battery#supported-platforms)
  * [Windows](https://github.com/amagura/zelda-battery#windows)
-   * [Depends](https://github.com/amagura/zelda-battery#dependencies)
-     * [Make Depends](https://github.com/amagura/zelda-battery#make-dependencies)
  * [Linux](https://github.com/amagura/zelda-battery#linux)
-   * [Depends](https://github.com/amagura/zelda-battery#dependencies-1)
-     * [Make Depends](https://github.com/amagura/zelda-battery#make-dependencies-1)
  * [*BSD](https://github.com/amagura/zelda-battery#bsd)
-   * [Depends](https://github.com/amagura/zelda-battery#dependencies-2)
-     * [Make Depends](https://github.com/amagura/zelda-battery#make-dependencies-2)
+ * [Depends](https://github.com/amagura/zelda-battery#dependencies)
+  * [Make Depends](https://github.com/amagura/zelda-battery#make-dependencies)
 * [Examples](https://github.com/amagura/zelda-battery#examples)
  * [Git-esque](https://github.com/amagura/zelda-battery#git-esque)
  * [Zsh](https://github.com/amagura/zelda-battery#zsh)
@@ -52,28 +48,8 @@ a supported platform, please send me an email detailing:
 
 All Windows systems XP and later are supported; support for older Windows versions will come later.
 
-### Dependencies
-
-The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
-
-#### Make Dependencies
-
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
-* C++98 compliant C++ compiler
-
 ## Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority, but may be added <s>if you say pretty please</s> later.
-
-### Dependencies
-* Python 2 (GUI depend)
-* GTK+2 (GUI depend)
-* PyGTK (GUI depend)
-
-#### Make Dependencies
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
-* C99 compliant C compiler
-* Cython (GUI make depend)
-* pkg-config (GUI make depend)
 
 ## *BSD
 Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html), you should be fine.  BSD systems known to work (i.e. systems I've personally tested ZBatt on):
@@ -89,18 +65,37 @@ BSD systems that _should_ work:
 BSD systems known _not_ to work:
 * OpenBSD (soz, peeps)
 
-### Dependencies
+# Dependencies
+
+Windows:
+
+The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
+
+Linux and *BSD:
 
 * Python 2 (GUI depend)
 * GTK+2 (GUI depend)
 * PyGTK (GUI depend)
-* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
 
-#### Make Dependencies
+## Make Dependencies
+
+* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
+
+Windows:
+* C++98 compliant C++ compiler
+
+Linux:
 * GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
 * C99 compliant C compiler
 * Cython (GUI make depend)
 * pkg-config (GUI make depend)
+
+\*BSD:
+* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
+* C99 compliant C compiler
+* Cython (GUI make depend)
+* pkg-config (GUI make depend)
+* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
 
 # Examples
 
