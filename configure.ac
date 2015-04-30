@@ -14,6 +14,11 @@ AC_PROG_SED
 # Get System Type
 AC_CANONICAL_HOST
 
+# Check for pkg-config
+PKG_PROG_PKG_CONFIG()
+
+m4_define([PKG_CONF_CHECK], [AS_IF([test "x$PKG_CONFIG" != ""], [$1], [$2])])
+
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"]
@@ -28,9 +33,6 @@ AC_SUBST([ZB_HOST])
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])
 
-# Check for pkg-config
-AC_CHECK_PROGS([PKGCONF], [pkg-config], [no])
-
 # Precious variables
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
 # Should we use gtk2
@@ -39,7 +41,8 @@ AC_ARG_WITH([gtk2],
 	[],
 	[with_gtk2=yes])
 
-AS_IF([test "x$with_gtk2" != "xno" && test "x$ZB_HOST" != "xwindows"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
+AS_IF([test "x$with_gtk2" != "xno" && test "x$ZB_HOST" != "xwindows"],
+ [PKG_CONF_CHECK([PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])],)])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
