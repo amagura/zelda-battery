@@ -1,4 +1,4 @@
-ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/amagura/zelda-battery)
+ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/amagura/zelda-battery) [![Build Status](https://drone.io/github.com/amagura/zelda-battery/status.png)](https://drone.io/github.com/amagura/zelda-battery/latest)
 =============
 
 A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskbars
@@ -21,13 +21,9 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Notes](https://github.com/amagura/zelda-battery#notes)
 -->
 # Supported Platforms
-## Windows
-Windows XP and later.
-
-## Linux
+### Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
-
-## BSD
+### BSD
 Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
 
 BSD systems known to work:
@@ -40,35 +36,32 @@ BSD systems that _should_ work:
 * (Anything based on FreeBSD, lulz)
 
 BSD systems that _don't_ work:
-* OpenBSD (soz, peeps)
+<ul><li>OpenBSD (soz, peeps)</li></ul>
+### Windows
+Windows XP and later.
 
 # Dependencies
-## Windows
-The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
-So you shouldn't need to install anything for ZBatt to work.
-
-#### Linux and BSD
+### Linux and BSD
 * Python 2 (GUI)
 * GTK+2 (GUI)
 * PyGTK (GUI)
+
+### Windows
+The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
+So you shouldn't need to install anything for ZBatt to work.
 
 ## Make Dependencies
 * GNU Autotools (i.e. automake, autoconf)
 * Make
 
-#### Windows
+### Windows
 * C++98 compliant C++ compiler
 
-#### Linux
+### Linux and BSD
 * C99 compliant C compiler
 * Cython (GUI)
 * pkg-config (GUI)
-
-#### BSD
-* C99 compliant C compiler
-* Cython (GUI)
-* pkg-config (GUI)
-* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
+* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) (__BSD only__)
 
 # Building
 1. `autoreconf -fi`
@@ -76,9 +69,10 @@ So you shouldn't need to install anything for ZBatt to work.
 3. `make`
 
 # Installing
-1. Build ZBatt :P
-2. `make DESTDIR="<DIR>" install` (try running with either `sudo` or as root if you don't have permission to write to `<DIR>`.
+1. `make DESTDIR="<DIR>" install`
 
+If the install fails because of permissions, try running it with `sudo`.
+***
 Alternatively, you can also just place the binaries `zbatc`, `zbatt`, and (if you built the GUI) `gzbatt` where ever you like.
 
 # Examples
