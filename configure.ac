@@ -39,7 +39,7 @@ AC_ARG_WITH([gtk2],
 	[],
 	[with_gtk2=yes])
 
-m4_define([PKG_CONF_FOUND], [m4_if([rm_newline([m4_esyscmd([echo x$PKG_CONFIG])])], [x], [0], [1])])
+m4_define([PKG_CONF_FOUND], m4_if(rm_newline(m4_esyscmd([echo x$PKG_CONFIG])), [x], [0], [1]))
 
 AS_ECHO([[PKG_CONFIG:]][$PKG_CONFIG])
 m4_if([PKG_CONF_FOUND], [1], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
