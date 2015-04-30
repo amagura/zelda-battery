@@ -4,6 +4,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
+m4_define([rm_newline], [translit($1, [
+])])
+m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
+m4_define([IF_WINDOWS], m4_if(m4_bpatsubst([PLATFORM], [\(CYGWIN\)_.*], [\1]), [CYGWIN], [$1], [$2]))
+
 # Check for compilers
 dnl C
 AC_PROG_CC
@@ -16,11 +21,7 @@ AC_PROG_GREP
 AC_CANONICAL_HOST
 
 # Check for pkg-config
-AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
-AM_CONDITIONAL([PKG_CONFIG], [test "$ac_cv_path_PKG_CONFIG" != "xno"])
-
-export ZB_GREP="$ac_cv_path_GREP"
-m4_define([PKG_CONF_NOT_FOUND], m4_if(rm_newline([esyscmd([cmd <<< 'echo %OS%' 2>&1 | "$ac_cv_path_GREP" 'Windows' -o || echo 'no'])]), [Windows], [1], [0]))
+PKG_PROG_PKG_CONFIG()
 
 # host checking
 AS_CASE([$host],
@@ -42,9 +43,9 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	m4_if([PKG_CONF_NOT_FOUND], [1], [with_gtk2=no], [with_gtk2=yes]))
+	IF_WINDOWS([with_gtk2=no], [with_gtk2=yes]))
 
-AM_COND_IF([PKG_CONFIG], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
+IF_WINDOWS(,[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
