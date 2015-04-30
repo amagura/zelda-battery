@@ -45,9 +45,9 @@ m4_if([PKG_CONF_FOUND], [1], [AS_IF([test "x$ZB_HOST" = "xwindows"],,[AS_IF([tes
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
-m4_if([PKG_CONF_FOUND], [0], [GTK2_TRUE=
+m4_if([PKG_CONF_FOUND], [0], [[GTK2_TRUE=
 GTK2_FALSE='#'
-])
+]])
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
