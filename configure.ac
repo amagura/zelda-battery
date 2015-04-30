@@ -32,15 +32,11 @@ PKG_PROG_PKG_CONFIG()
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],
-  [*pc-cygwin|*-w64-mingw32], [ZB_HOST="windows"],
-  [*bsd*], [ZB_HOST="bsd"]
-  	   [m4_define([ZB__HOST], [bsd])],
-  [ZB_HOST=""][m4_define([ZB__HOST], [])])
-
-AS_CASE([$host],
-	[x86_64-*-mingw32], [AC_DEFINE([MINGW64_HOST], [1])],
-	[i686-*-mingw32], [AC_DEFINE([MINGW32_HOST], [1])],
-	[])
+  [*-pc-cygwin], [ZB_HOST="windows"],
+  [i686-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW64_HOST], [1])],
+  [x86_64-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW32_HOST], [1])],
+  [*bsd*], [ZB_HOST="bsd"],
+  [ZB_HOST=""])
 
 AM_CONDITIONAL([LINUX], [test "x$ZB_HOST" = "xlinux"])
 AM_CONDITIONAL([WINDOWS], [test "x$ZB_HOST" = "xwindows"])
