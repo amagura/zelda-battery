@@ -21,7 +21,7 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Notes](https://github.com/amagura/zelda-battery#notes)
 -->
 # Supported Platforms
-Linux, *BSD, and Windows are supported.
+Linux, *BSD, and Windows systems are supported.
 
 ## Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
