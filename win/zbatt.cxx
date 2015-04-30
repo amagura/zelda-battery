@@ -43,7 +43,7 @@ void disp(LPSYSTEM_POWER_STATUS spwr)
      }
      /* TODO implement remaining and expended */
 
-     for (int jdx = 0; jdx <= spwr->BatteryLifePercent; jdx += 10)
+     for (int jdx = 10; jdx <= spwr->BatteryLifePercent; jdx += 10)
 	  std::cout << hrt.full;
 
      for (int kdx = spwr->BatteryLifePercent; kdx < 100; kdx += 10)
