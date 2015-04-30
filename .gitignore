@@ -30,3 +30,4 @@ build-aux
 PROFILE-*
 nohup.out
 test.sh
+LICENSE.images
