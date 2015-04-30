@@ -34,3 +34,7 @@ PROFILE-*
 nohup.out
 test.sh
 LICENSE.images
+
+# submodules
+src/*.c
+src/*.h
