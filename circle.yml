@@ -1,6 +1,6 @@
 machine:
-  environment:
-    TRAVIS: "true"
+  timezone:
+    America/Denver
 
 checkout:
   post:
@@ -8,6 +8,9 @@ checkout:
     - git submodule update --init
 
 test:
+  timeout: 300
+  environment:
+    TRAVIS: "true"
   override:
     - cd nix; autoreconf -fi
     - cd nix; ./configure --enable-generic --without-gtk2
