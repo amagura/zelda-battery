@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	  "t:a::"	\
 	  "nc:"		\
 	  "C:b:"	\
-	  "d:";
+	  "pd:";
 
      struct option lopts[] = {
 	  {"help", no_argument, 0, 'h'},
@@ -88,6 +88,7 @@ int main(int argc, char **argv)
 	  {"normal-color", required_argument, 0, 'c'},
 	  {"battery", required_argument, 0, 'b'},
 	  {"divisor", required_argument, 0, 'd'},
+	  {"print-info", no_argument, 0, 'p'},
 	  { 0, 0, 0, 0 }
      };
 
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
 
 	  switch(c) {
 	  case 'h':
-	       zb_help("Usage: %s [OPTION]...\n", "\t\t\t");
+	       zb_help("Usage: %s [OPTION]...\n", "\t\t");
 
 	       zb_arg("-a, --ac-blink",
 		      "enable blinking while on A/C power"
@@ -111,44 +112,49 @@ int main(int argc, char **argv)
 			   "  (overrides a previous -a option)",
 		      "\t\t");
 	       zb_arg("-d, --divisor=NUM",
-		      "The value used to calculate power"
+		      "value used to calculate power sample"
 		      zb_arg_eol_tabs
-		      "sample size (e.g."
+		      "size: e.g. 3 is to the"
 		      zb_arg_eol_tabs
-		      "    3 ->"
+		      "nearest 1/3, and 10 is to the"
 		      zb_arg_eol_tabs
-		      "      current power level to the nearest 1/3,"
-		      zb_arg_eol_tabs
-		      "   10 ->"
-		      zb_arg_eol_tabs
-		      "      current power level to the nearest 1/10)",
+		      "nearest 1/10 (default: 10)",
 		      "\t\t");
-	       zb_arg("-t, --blink-threshold=LVL",
-		      "set the power-level at which"
+	       zb_arg("-t, --blink-threshold=NUM",
+		      "battery charge threshold"
 		      zb_arg_eol_tabs
-		      "  blinking ensues (defaults to 30)",
+		      "where blinking ensues (default: 3)"
+		      zb_arg_eol_tabs
+		      "the blink threshold affected by"
+		      zb_arg_eol_tabs
+		      "the divisor, so a threshold of 3"
+		      zb_arg_eol_tabs
+		      "will trigger on charge levels >= 30"
+		      zb_arg_eol_tabs
+		      "(threshold * divisor = charge level"
+		      zb_arg_eol_tabs
+		      "  where blinking starts)",
 		      "\t");
 	       zb_arg("-c, --normal-color=CCODE",
-		      "ansi color code to use for "
+		      "ansi color code to use when not"
 		      zb_arg_eol_tabs
-		      "  color when not blinking"
-		      zb_arg_eol_tabs
-		      "  (defaults to 31)",
+		      "  blinking (default: 31)",
 		      "\t");
 	       zb_arg("-C, --blink-color=CCODE",
-		      "ansi color code to use for "
+		      "ansi color code to use when "
 		      zb_arg_eol_tabs
-		      "  color when blinking (defaults to 5;31)",
+		      "  blinking (default: 5;31)",
 		      "\t");
 	       zb_arg("-b, --battery=OFFSET",
-		      "offset of desired battery"
+		      "desired battery offset"
 		      zb_arg_eol_tabs
-		      "  (e.g."
+		      "(e.g. 0 is no-op; 1 is the fisrt battery)",
+		      "\t\t");
+	       zb_arg("-p,  --print-info",
+		      "print statisical info to a temporary file:"
 		      zb_arg_eol_tabs
-		      "    0 -> no battery,"
-		      zb_arg_eol_tabs
-		      "    1 -> first battery)",
-		      "\t");
+		      "the file will be dumped to stdout on exit",
+		      "\t\t");
 	       goto win;
 	  case 't':
 	       ZB_STRTONUM(pp.blnk.ctl.thold, (const char *)optarg);
