@@ -22,7 +22,6 @@ AM_CONDITIONAL([PKG_CONFIG], [test "$ac_cv_path_PKG_CONFIG" != "xno"])
 export ZB_GREP="$ac_cv_path_GREP"
 m4_define([PKG_CONF_NOT_FOUND], m4_if(rm_newline([esyscmd([cmd <<< 'echo %OS%' 2>&1 | "$ac_cv_path_GREP" 'Windows' -o || echo 'no'])]), [Windows], [1], [0]))
 
-AS_ECHO([PKG_CONF_NOT_FOUND])
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"]
