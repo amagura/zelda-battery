@@ -33,7 +33,8 @@ build-aux
 PROFILE-*
 nohup.out
 test.sh
-LICENSE.images
+/test
+/img/LICENSE.images
 
 # submodules
 src/*.c

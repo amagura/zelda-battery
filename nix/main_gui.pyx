@@ -33,17 +33,13 @@ cdef extern from "power.h":
     py_power py_getpwr()
 
 cdef extern from "main-gui.h":
-    char *scaledir()
     char *pngdir()
     char *progname()
+    char *version()
 # //// $$ C Decls $$ ////
 
-IF False:
-    imgDir = scaledir()
-    ftype = '.svg'
-ELSE:
-    imgDir = pngdir()
-    ftype = '.png'
+imgDir = pngdir()
+ftype = '.png'
 progName = progname()
 
 def iconDir():
