@@ -21,10 +21,10 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Notes](https://github.com/amagura/zelda-battery#notes)
 -->
 # Supported Platforms
-## Linux
+### Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
 
-## BSD
+### BSD
 Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
 
 BSD systems known to work:
@@ -39,7 +39,7 @@ BSD systems that _should_ work:
 BSD systems that _don't_ work:
 * OpenBSD (soz, peeps)
 
-## Windows
+### Windows
 Windows XP and later.
 
 # Dependencies
@@ -52,7 +52,7 @@ Windows XP and later.
 The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
 So you shouldn't need to install anything for ZBatt to work.
 
-# Make Dependencies
+## Make Dependencies
 * GNU Autotools (i.e. automake, autoconf)
 * Make
 
