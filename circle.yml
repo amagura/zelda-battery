@@ -5,7 +5,7 @@ machine:
 checkout:
   post:
     - git submodule sync
-    - git submodule update --init
+    - git submodule update
 
 test:
   override:
