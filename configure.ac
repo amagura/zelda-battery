@@ -73,7 +73,7 @@ AC_ARG_WITH([gtk2],
 	[],
 	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]))
 
-IF_WINDOWS(,[AS_IF([test "x$ZB_HOST" != "xwindows"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
+IF_WINDOWS(,[AS_IF([test "x$ZB_HOST" != "xwindows" && test "x$with_gtk2" = "xyes"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
 AS_IF([test "x$ZB_HOST" = "xwindows"], [with_gtk2=no])
 
 # Check if we have GTK+2
