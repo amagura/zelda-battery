@@ -26,7 +26,6 @@ Makefile
 Makefile.in
 .deps
 configure
-build-aux
 
 # misc
 /tmp
