@@ -38,7 +38,7 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	[with_gtk2=yes])
+	AS_IF([test "x$ac_cv_path_PKG_CONFIG" = "xno"], [with_gtk2=no], [with_gtk2=yes]))
 
 AM_COND_IF([PKG_CONFIG], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
