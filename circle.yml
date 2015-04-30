@@ -8,6 +8,7 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
+    - automake --version
 
 test:
   override:
