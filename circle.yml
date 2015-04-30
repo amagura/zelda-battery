@@ -11,4 +11,4 @@ test:
   override:
     - cd nix; autoreconf -fi
     - cd nix; ./configure --enable-generic --without-gtk2
-    - cd nix; make
+    - cd nix; make anew
