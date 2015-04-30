@@ -21,8 +21,8 @@ limitations under the License.
 void disp(LPSYSTEM_POWER_STATUS spwr)
 {
      struct hearts hrt;
-     hrt.full = (char *)"\u2661";
-     hrt.empty = (char *)"\u2665";
+     hrt.full = (char *)"+";
+     hrt.empty = (char *)"-";
      if (spwr->BatteryFlag == 128) { // no system battery
 	  for (int idx = 0; idx < 10; ++idx) {
 	       if (idx % 2 == 0) {
