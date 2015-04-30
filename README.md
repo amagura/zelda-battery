@@ -43,11 +43,11 @@ BSD systems that _don't_ work:
 * OpenBSD (soz, peeps)
 
 # Dependencies
-## Windows
+### Windows
 The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
 So you shouldn't need to install anything for ZBatt to work.
 
-## Linux and BSD
+### Linux and BSD
 * Python 2 (GUI)
 * GTK+2 (GUI)
 * PyGTK (GUI)
@@ -56,15 +56,15 @@ So you shouldn't need to install anything for ZBatt to work.
 * GNU Autotools (i.e. automake, autoconf)
 * Make
 
-## Windows
+### Windows
 * C++98 compliant C++ compiler
 
-## Linux
+### Linux
 * C99 compliant C compiler
 * Cython (GUI)
 * pkg-config (GUI)
 
-## BSD
+### BSD
 * C99 compliant C compiler
 * Cython (GUI)
 * pkg-config (GUI)
