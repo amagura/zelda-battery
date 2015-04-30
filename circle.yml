@@ -10,8 +10,10 @@ checkout:
     - git submodule update --init
 
 test:
+  pwd: nix
   override:
-    - cd nix; autoreconf -fi
-    - cd nix; ./configure --enable-generic --without-gtk2
-    - cd nix; make anew &
+    - autoreconf -fi
+    - ./configure --enable-generic --without-gtk2
+    - make anew:
+        background: true
     - sleep 300; kill -9 %1
