@@ -1,23 +1,18 @@
 Welcome to ZBatt,
 
-# Dependencies
-
-A few dependencies that you'll need:
-
-1. GNU Autotools
-2. C99 Compliant C Compiler
-
-Compilers known to work are `gcc', `clang', and `tcc'.
-
-
-If you're going to be building the GUI, that is the
-graphical frontend for ZBatt, then you'll need:
-
-1. Cython
-2. Python 2.x.x
-3. Gtk+ 2.x.x
-
 # Building
+
+Unix-like systems, enter the `nix' directory and run:
+
+1. autoreconf -fi
+2. ./configure
+3. make
+
+Windows systems, enter the `win' directory and run:
+
+1. autoreconf -fi
+2. ./configure
+3. make
 
 Some configure options worth noting:
 
