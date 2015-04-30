@@ -37,5 +37,5 @@ test
 LICENSE.images
 
 # submodules
-src/*.c
-src/*.h
+modules/*.c
+modules/*.h
