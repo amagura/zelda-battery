@@ -17,8 +17,6 @@ AC_CANONICAL_HOST
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
 
-m4_define([PKG_CONF_CHECK], [AS_IF([test "x$PKG_CONFIG" != "x"], [$1], [$2])])
-
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"]
@@ -41,7 +39,8 @@ AC_ARG_WITH([gtk2],
 	[],
 	[with_gtk2=yes])
 
-AS_IF([test "x$ZB_HOST" = "xwindows"],,[AS_IF([test "x$with_gtk2" != "xno"],[PKG_CONF_CHECK([PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])],)])])
+AS_IF([test "x$ZB_HOST" = "xwindows"],,[AS_IF([test "x$with_gtk2" != "xno"],
+[test "x$PKG_CONFIG" != "x" && PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])],)])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
