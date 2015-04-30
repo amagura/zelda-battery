@@ -18,7 +18,7 @@ AC_CANONICAL_HOST
 PKG_PROG_PKG_CONFIG()
 AC_CHECK_PROG([PKG_CONF], [pkg-config], [yes], [no])
 
-m4_define([PKG_CONF_FOUND], m4_if("x$ac_cv_prog_PKG_CONF", [x], [0], [1]))
+m4_define([PKG_CONF_FOUND], m4_if("x$ac_cv_prog_PKG_CONF", [xno], [0], [1]))
 
 # host checking
 AS_CASE([$host],
