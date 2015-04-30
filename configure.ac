@@ -40,7 +40,10 @@ AC_ARG_WITH([gtk2],
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
-AS_IF([test "x$with_gtk2" = "xyes"],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])],)
+
+if test "x$with_gtk2" = "xyes"; then
+PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])
+fi
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
