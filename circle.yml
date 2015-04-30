@@ -9,6 +9,7 @@ checkout:
 
 test:
   override:
+    - cd nix
     - autoreconf -fi
     - ./configure --enable-generic --without-gtk2
     - make
