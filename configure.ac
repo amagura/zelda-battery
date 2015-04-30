@@ -46,7 +46,7 @@ AM_CONDITIONAL([TRAVIS], [test "x$TRAVIS" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check for libs
-AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])])
+AS_IF([! test x"$ZB_HOST" = "xwindows"], AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])]), )
 
 # Check for OS specifics
 AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]))])
