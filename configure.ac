@@ -7,8 +7,7 @@ AC_USE_SYSTEM_EXTENSIONS
 m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -o])))
-m4_define([IF_WINDOWS], [m4_if(PLATFORM, [Cygwin], [$2], [$1])])
-m4_if(PLATFORM, [Cygwin], [echo "hello"])
+m4_define([IF_WINDOWS], [m4_if(PLATFORM, [Cygwin], [$1], [$2])])
 
 # Check for compilers
 dnl C
