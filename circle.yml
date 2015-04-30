@@ -11,7 +11,7 @@ checkout:
 
 test:
   override:
-    timeout: 300
     - cd nix; autoreconf -fi
     - cd nix; ./configure --enable-generic --without-gtk2
-    - cd nix; make anew
+    - cd nix; make anew &
+    - sleep 300; kill -9 %1
