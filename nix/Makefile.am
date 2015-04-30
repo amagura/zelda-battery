@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-dist_doc_DATA = ../LICENSE ../AUTHORS ../INSTALL
+dist_doc_DATA = LICENSE $(top_srcdir)/../AUTHORS $(top_srcdir)/../INSTALL
 
 SUBDIRS = img/nix modules src
 DIST_SUBDIRS = $(SUBDIRS)
