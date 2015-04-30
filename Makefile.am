@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-dist_doc_DATA = LICENSE AUTHORS INSTALL
+dist_doc_DATA = doc/LICENSE doc/AUTHORS doc/INSTALL
 
 if WINDOWS_HOST
 SUBDIRS = img src win
