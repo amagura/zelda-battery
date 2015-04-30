@@ -38,6 +38,7 @@ AS_CASE([$host],
   [*bsd*], [ZB_HOST="bsd"],
   [ZB_HOST=""])
 
+[echo $ZB_HOST]
 AM_CONDITIONAL([LINUX], [test "x$ZB_HOST" = "xlinux"])
 AM_CONDITIONAL([WINDOWS], [test "x$ZB_HOST" = "xwindows"])
 AM_CONDITIONAL([BSD], [test "x$ZB_HOST" = "xbsd"])
