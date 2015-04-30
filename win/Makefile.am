@@ -1,30 +1,30 @@
 ## Process this file with automake to produce Makefile.in
 
-_srcdir_ = $(top_srcdir)/src
+_srcdir_ = $(top_srcdir)/win
 
 bin_PROGRAMS = zbatt zbatc gzbatt
 
 zbatc_SOURCES = zbatc.cxx
 zbatt_SOURCES = zbatt.cxx
 gzbatt_SOURCES = gzbatt.cxx
-noinst_HEADERS =
+noinst_HEADERS = main.hxx
 
 iconsdir = $(pkgdatadir)/icons
 scaledir = $(iconsdir)/scalable/apps
 pngdir = $(iconsdir)/16x16/apps
 
-AM_CFLAGS =
+AM_CXXFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
 
-AM_CFLAGS += -Wall -Wextra
+AM_CXXFLAGS += -Wall -Wextra
 
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 endif
 
 if DEBUG
-AM_CFLAGS += -g -ggdb
+AM_CXXFLAGS += -g -ggdb
 AM_CPPFLAGS += -DZB_DEBUG=1
 endif
 
@@ -36,38 +36,31 @@ endif
 
 if NATIVE
 if !GENERIC
-AM_CFLAGS += -march=native -mtune=native
+AM_CXXFLAGS += -march=native -mtune=native
 endif
 endif
 
 if GENERIC
 if CPU_KNOWN
-AM_CFLAGS += -mtune=generic-$(CPUTYPE)
+AM_CXXFLAGS += -mtune=generic-$(CPUTYPE)
 else
-AM_CFLAGS += -mtune=generic
+AM_CXXFLAGS += -mtune=generic
 endif
 endif
 
-zbatt_CFLAGS = $(AM_CFLAGS)
-zbatc_CFLAGS = $(AM_CFLAGS)
+zbatt_CXXFLAGS = $(AM_CXXFLAGS)
+zbatc_CXXFLAGS = $(AM_CXXFLAGS)
 
 if STATIC
-zbatt_CFLAGS += --static
-zbatc_CFLAGS += --static
+zbatt_CXXFLAGS += --static
+zbatc_CXXFLAGS += --static
 endif
 
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
-gzbatt_CFLAGS = $(AM_CFLAGS)
+gzbatt_CXXFLAGS = $(AM_CXXFLAGS)
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
-
-if GTK2
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
-gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
-gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
-bin_PROGRAMS += gzbatt
-endif
 
 .PHONY: valgrind lint
 all-local:
@@ -92,8 +85,8 @@ mtrace: $(bin_PROGRAMS)
 	for f in $^; do MALLOC_TRACE=./mtrace.txt ./$$f; mtrace ./$$f ./mtrace.txt; echo; cat mtrace.txt; echo; echo; done
 
 expand:
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatt_SOURCES)
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatc_SOURCES)
+	$(CC) $(AM_CXXFLAGS) $(AM_CPPFLAGS) -E $(zbatt_SOURCES)
+	$(CC) $(AM_CXXFLAGS) $(AM_CPPFLAGS) -E $(zbatc_SOURCES)
 
 check-local: $(bin_PROGRAMS)
 	csi -qn test.scm
@@ -103,7 +96,7 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	for f in $(zbatc_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
 
 .c.s:
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
+	$(CC) $(AM_CXXFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
 	$(CYTHON) --embed -p -2 -Wextra -o $@ $<
@@ -125,7 +118,7 @@ drone:
 	cd /sys/class/power_supply; ls -R; ls -R /sys/class/power_supply
 
 akpi:
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) $(AM_LDFLAGS) -o acpi acpi.c main.c
+	$(CC) $(AM_CXXFLAGS) $(AM_CPPFLAGS) $(AM_LDFLAGS) -o acpi acpi.c main.c
 
 test-clean:
 	cd "$(top_srcdir)"; $(MAKE) $@
