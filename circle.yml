@@ -9,6 +9,6 @@ checkout:
 
 test:
   override:
-    autoreconf -fi
-    ./configure --enable-generic --without-gtk2
-    make
+    - autoreconf -fi
+    - ./configure --enable-generic --without-gtk2
+    - make
