@@ -8,6 +8,7 @@ balldir = $(pngdir)/ball
 origdir = $(pngdir)/orig
 clasdir = $(pngdir)/clas
 
+
 if GTK2
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
