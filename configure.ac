@@ -16,6 +16,7 @@ AC_CANONICAL_HOST
 
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
+m4_define([PKG_CONF_FOUND], m4_if(rm_newline(m4_esyscmd([echo x$PKG_CONFIG])), [x], [0], [1]))
 
 # host checking
 AS_CASE([$host],
@@ -37,16 +38,12 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	[with_gtk2=yes])
-
-m4_define([PKG_CONF_FOUND], m4_if(rm_newline(m4_esyscmd([echo x$PKG_CONFIG])), [x], [0], [1]))
+	m4_if([PKG_CONF_FOUND], [1], [with_gtk2=yes], [with_gtk2=no]))
 
 m4_if([PKG_CONF_FOUND], [1], [[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])]])
 
 # Check if we have GTK+2
-[test x"$PKG_CONFIG" = "x" && PKG_CONFIG="no"]
-AM_CONDITIONAL([GTK2], [test "x$with_gtk2 x$PKG_CONFIG" != "xyes xno" && test "x$with_gtk2" = "xyes"])
-[test x"$PKG_CONFIG" = "xno" && PKG_CONFIG=""]
+AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
