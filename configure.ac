@@ -34,14 +34,17 @@ AC_CHECK_PROGS([PKGCONF], [pkg-config], [no])
 # Precious variables
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
 # Should we use gtk2
-AC_ARG_WITH([gtk2],
-	AS_HELP_STRING([--without-gtk2], [disable building the gui (only for Linux and BSD systems)]),
+AS_IF([test "x$ZB_HOST" != "xwindows"],
+ [AC_ARG_WITH([gtk2],
+	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[with_gtk2=yes],
-	AS_IF([! test "x$ZB_HOST" = "xwindows"], [with_gtk2=yes], [with_gtk2=no]))
+	[with_gtk2=yes])])
+
+AS_IF([test "x$ZB_HOST" = "xwindows"], [with_gtk2="no"])
+AS_IF([test "x$with_gtk2" != "xno"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
-AM_COND_IF([GTK2], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])],)
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
