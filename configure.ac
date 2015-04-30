@@ -23,6 +23,7 @@ AC_PROG_SED
 AC_PROG_GREP
 
 # Get System Type
+AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
 # Check for pkg-config
