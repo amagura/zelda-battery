@@ -15,9 +15,8 @@ AC_PROG_SED
 AC_CANONICAL_HOST
 
 # Check for pkg-config
-PKG_PROG_PKG_CONFIG()
-AC_CHECK_PROG([PKG_CONF], [pkg-config], [yes], [no])
-AM_CONDITIONAL([PKG_CONF], [test "$ac_cv_prog_PKG_CONF" != "xno"])
+AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
+AM_CONDITIONAL([PKG_CONFIG], [test "$ac_cv_path_PKG_CONFIG" != "xno"])
 
 # host checking
 AS_CASE([$host],
@@ -41,7 +40,7 @@ AC_ARG_WITH([gtk2],
 	[],
 	[with_gtk2=yes])
 
-AM_COND_IF([PKG_CONF], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
+AM_COND_IF([PKG_CONFIG], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
