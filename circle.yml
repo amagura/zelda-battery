@@ -1,0 +1,14 @@
+machine:
+  environment:
+    TRAVIS: "true"
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
+test:
+  override:
+    autoreconf -fi
+    ./configure --enable-generic --without-gtk2
+    make
