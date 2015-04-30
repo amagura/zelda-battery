@@ -32,19 +32,7 @@ AC_SUBST([CPUARCH])
 
 # Precious variables
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
-# let Automake know if we are using clang
-
-m4_define([IF_LINUX], [m4_if([ZB__HOST], [linux], [$1], [$2])])
-m4_define([IF_BSD], [m4_if([ZB__HOST], [bsd], [$1], [$2])])
-m4_define([IF_WINDOWS], [m4_if([ZB__HOST], [windows], [$1], [$2])])
-m4_define([IFNT_WINDOWS], [m4_if([ZB__HOST], [windows], [$2], [$1])])
-m4_define([rm_newline], [translit($1, [
-])])
-m4_define([rm_dots], [translit($1, [.])])
-m4_define([CMP], [m4_if(m4_eval(([$1] == [$2])), 1, 0, m4_if(m4_eval(([$1] > [$2])), 1, 1, -1))])
-IF_LINUX(m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*], []))))
-m4_define([IF_NEWER_LINUX], [IF_LINUX([pushdef([result],CMP([$1], rm_dots([2.6.24])))m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
-
+# Should we use gtk2
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui]),
 	[],
