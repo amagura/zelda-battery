@@ -8,9 +8,11 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
-    - automake --version
 
 test:
+  pre:
+    sudo apt-get update
+    sudo apt-get install automake-1.15
   override:
     - cd nix; autoreconf -fi
     - cd nix; ./configure --enable-generic --without-gtk2
