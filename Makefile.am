@@ -3,9 +3,9 @@
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 
 if WINDOWS_HOST
-SUBDIRS = img module win
+SUBDIRS = img win
 else
-SUBDIRS = img module nix
+SUBDIRS = img nix
 endif
 DIST_SUBDIRS = $(SUBDIRS)
 

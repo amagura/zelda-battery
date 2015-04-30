@@ -1,3 +1,0 @@
-[submodule "module/common"]
-	path = module/common
-	url = https://github.com/amagura/common

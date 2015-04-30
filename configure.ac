@@ -4,22 +4,26 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
-AC_LANG([C])
+AC_LANG(C)
 AC_RUN_IFELSE([AC_LANG_PROGRAM([
-# include "module/common/c/compat.h"
+#include "module/common/c/compat.h"
 ],[
-# if COMMON_WINDOWS
+#if COMMON__WINDOWS
 return 0;
-# else
+#else
 return 1;
-])], [m4_define([IS_WINDOWS], [1])], [m4_define([IS_WINDOWS], [0])])
+#endif
+return 2;
+])], [m4_define([IS_WINDOWS], [1])][:], [m4_define([IS_WINDOWS], [0])][:])
 
+
+#AS_ECHO([[WINDOWS:]][IS_WINDOWS])
+m4_define([IF_WINDOWS], [m4_if([IS_WINDOWS], [1], [$1], [$2])])
 # Check for compilers
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CXX
-
 
 # Check for sed and grep
 AC_PROG_SED
@@ -77,9 +81,8 @@ AC_ARG_WITH([gtk2],
 	[],
 	[with_gtk2=yes])
 
-m4_if([IS_WINDOWS], [1], [with_gtk2=no])
-m4_if([IS_WINDOWS], [0], [AS_IF([test "x$ZB_HOST" != "xwindows" && test "x$with_gtk2" = "xyes"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
-AS_IF([test "x$ZB_HOST" = "xwindows"], [with_gtk2=no])
+IF_WINDOWS([with_gtk2=no])
+IF_WINDOWS(,[AS_IF([test "x$with_gtk2" = "xyes"],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
@@ -101,7 +104,7 @@ AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_
 AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])])],)
 
 # Check for progs
-m4_if([IS_WINDOWS], [0],,[AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
+IF_WINDOWS(,[AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
 AM_COND_IF([GTK2],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([python2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([python2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
@@ -172,5 +175,5 @@ EOF
 )`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
-AC_CONFIG_FILES([Makefile nix/Makefile module/Makefile img/Makefile win/Makefile])
+AC_CONFIG_FILES([Makefile nix/Makefile img/Makefile win/Makefile])
 AC_OUTPUT
