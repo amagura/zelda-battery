@@ -2,7 +2,7 @@
 
 dist_doc_DATA = ../LICENSE ../AUTHORS ../INSTALL
 
-SUBDIRS = img/nix src nix
+SUBDIRS = img/nix modules src
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz

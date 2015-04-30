@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-_srcdir_ = $(top_srcdir)/nix
+_srcdir_ = $(top_srcdir)/nix/src
 
 bin_PROGRAMS = zbatt zbatc
 
