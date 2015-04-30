@@ -70,7 +70,7 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 # Should we use gtk2
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
-	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]),
+	[],
 	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]))
 
 IF_WINDOWS(,[AS_IF([test "x$ZB_HOST" != "xwindows"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
