@@ -54,14 +54,14 @@ So you shouldn't need to install anything for ZBatt to work.
 * GNU Autotools (i.e. automake, autoconf)
 * Make
 
-### Windows
-* C++98 compliant C++ compiler
-
 ### Linux and BSD
 * C99 compliant C compiler
 * Cython (GUI)
 * pkg-config (GUI)
 * [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) (__BSD only__)
+
+### Windows
+* C++98 compliant C++ compiler
 
 # Building
 1. `autoreconf -fi`
