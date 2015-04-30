@@ -21,8 +21,7 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 * [Notes](https://github.com/amagura/zelda-battery#notes)
 -->
 # Supported Platforms
-## Windows
-Windows XP and later.
+Linux, *BSD, and Windows are supported.
 
 ## Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
@@ -42,15 +41,18 @@ BSD systems that _should_ work:
 BSD systems that _don't_ work:
 * OpenBSD (soz, peeps)
 
-# Dependencies
-### Windows
-The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
-So you shouldn't need to install anything for ZBatt to work.
+## Windows
+Windows XP and later.
 
+# Dependencies
 ### Linux and BSD
 * Python 2 (GUI)
 * GTK+2 (GUI)
 * PyGTK (GUI)
+
+### Windows
+The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
+So you shouldn't need to install anything for ZBatt to work.
 
 # Make Dependencies
 * GNU Autotools (i.e. automake, autoconf)
