@@ -41,7 +41,7 @@ AC_ARG_WITH([gtk2],
 
 m4_define([PKG_CONF_FOUND], [rm_newline([m4_esyscmd([if test "x$PKG_CONFIG" = "x"; then echo 0; else echo 1; fi])])])
 
-m4_if([PKG_CONF_FOUND], [1], [AS_IF([test "x$ZB_HOST" = "xwindows"],,[AS_IF([test "x$with_gtk2" != "xno"],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])])
+m4_if([PKG_CONF_FOUND], [1], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
 # Check if we have GTK+2
 [test x"$PKG_CONFIG" = "x" && PKG_CONFIG="no"]
