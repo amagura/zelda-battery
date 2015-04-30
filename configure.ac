@@ -17,8 +17,7 @@ AC_CANONICAL_HOST
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
 AC_CHECK_PROG([PKG_CONF], [pkg-config], [yes], [no])
-
-m4_define([PKG_CONF_FOUND], m4_if("x$ac_cv_prog_PKG_CONF", [xno], [0], [1]))
+AM_CONDITIONAL([PKG_CONF], [test "$ac_cv_prog_PKG_CONF" != "xno"])
 
 # host checking
 AS_CASE([$host],
@@ -40,9 +39,9 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	m4_if([PKG_CONF_FOUND], [1], [with_gtk2=yes], [with_gtk2=no]))
+	[with_gtk2=yes])
 
-m4_if([PKG_CONF_FOUND], [1], [[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])]])
+AM_COND_IF([PKG_CONF], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
