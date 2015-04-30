@@ -13,9 +13,12 @@ m4_define([IF_WINDOWS], [m4_if(PLATFORM, [Cygwin], [$1], [$2])])
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
+AC_PROG_CPP
+dnl C++
 AC_PROG_CXX
 AC_PROG_CXXCPP
-AC_PROG_CPP
+
+# Check for sed and grep
 AC_PROG_SED
 AC_PROG_GREP
 
