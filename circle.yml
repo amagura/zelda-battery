@@ -1,4 +1,5 @@
 machine:
+  timeout: 300
   timezone:
     America/Denver
 
@@ -8,7 +9,6 @@ checkout:
     - git submodule update --init
 
 test:
-  timeout: 300
   environment:
     TRAVIS: "true"
   override:
