@@ -18,12 +18,12 @@ limitations under the License.
 #include "main.hxx"
 #include <iostream>
 
-void disp(LPSYSTEM_POWER_STATUS spwr)
+void disp(LPSYSTEM_POWER_STATUS pwr)
 {
      struct hearts hrt;
      hrt.full = (char *)"+";
      hrt.empty = (char *)"-";
-     if (spwr->BatteryFlag == 128) { // no system battery
+     if (pwr->BatteryFlag == 128) { // no system battery
 	  for (int idx = 0; idx < 10; ++idx) {
 	       if (idx % 2 == 0) {
 		    std::cout << hrt.empty;
@@ -34,8 +34,8 @@ void disp(LPSYSTEM_POWER_STATUS spwr)
 	  return;
      }
 
-     if (spwr->BatteryLifePercent == 0) {
-	  if (spwr->ACLineStatus != 255 && spwr->ACLineStatus) {
+     if (pwr->BatteryLifePercent == 0) {
+	  if (pwr->ACLineStatus != 255 && pwr->ACLineStatus) {
 	       for (int hdx = 0; hdx < 10; ++hdx)
 		    std::cout << (hdx < 9 ? hrt.empty : hrt.full);
 	       return;
@@ -43,20 +43,20 @@ void disp(LPSYSTEM_POWER_STATUS spwr)
      }
      /* TODO implement remaining and expended */
 
-     for (int jdx = 10; jdx <= spwr->BatteryLifePercent; jdx += 10)
+     for (int jdx = 10; jdx <= pwr->BatteryLifePercent; jdx += 10)
 	  std::cout << hrt.full;
 
-     for (int kdx = spwr->BatteryLifePercent; kdx < 100; kdx += 10)
+     for (int kdx = pwr->BatteryLifePercent; kdx < 100; kdx += 10)
 	  std::cout << hrt.empty;
 }
 
 int main(int argc, char **argv)
 {
 
-     SYSTEM_POWER_STATUS spwr;
-     if (!GetSystemPowerStatus(&spwr))
+     SYSTEM_POWER_STATUS pwr;
+     if (!GetSystemPowerStatus(&pwr))
 	  goto fail;
-     disp(&spwr);
+     disp(&pwr);
 
 win:
      return 0;

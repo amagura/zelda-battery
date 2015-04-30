@@ -44,6 +44,7 @@ void disp(struct pp_disp_opts pp, struct power pwr)
 {
      printf("\033[%sm", pp.norm.ccode);
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
+     ZB_DBG("(pwr.charge.raw) > pp.blnk.ctl.thold: %d\n", pwr.charge.raw > pp.blnk.ctl.thold);
      if (!pp.blnk.ctl.mc || (pwr.charge.raw) > pp.blnk.ctl.thold)
 	  return;
      if (pwr.acline && !pp.blnk.ctl.ac) {
@@ -66,7 +67,7 @@ int main(int argc, char **argv)
      struct pp_disp_opts pp;
      pp.blnk.ctl.ac = false;
      pp.blnk.ctl.mc = true;
-     pp.blnk.ctl.thold = 3; // 30%
+     pp.blnk.ctl.thold = 30; // 30%
      pp.norm.ccode = "31";
      pp.blnk.ccode = "5";
 
