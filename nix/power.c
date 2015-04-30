@@ -43,7 +43,7 @@ void getpwr(struct power *pwr)
 
      ZB_DBG("err: %d\n", *pwr->err.vp);
 
-#if COMMON__LINUX
+#if ZB_LINUX
      struct pwr_sup info;
      info.cap = -1;
 
@@ -70,7 +70,7 @@ void getpwr(struct power *pwr)
      pwr->charge.tr = (int)pwr->charge.raw / (pwr->charge.divsr);
      pwr->charge.rnd = nearbyint((double)pwr->charge.raw / (pwr->charge.divsr));
      pwr->acline = info.acline;
-#elif COMMON__BSD
+#elif ZB_BSD
      size_t size;
      int ac_line;
      int limit = pwr->charge.nof;
