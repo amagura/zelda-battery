@@ -28,50 +28,86 @@ AM_CFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
 AM_CXXFLAGS =
-AM_CPPXXFLAGS =
 
+if WINDOWS
+AM_CXXFLAGS += -Wall -Wextra
+else
 AM_CFLAGS += -Wall -Wextra
+endif
 
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 endif
 
 if DEBUG
+if WINDOWS
+AM_CXXFLAGS += -g -ggdb
+else
 AM_CFLAGS += -g -ggdb
+endif
 AM_CPPFLAGS += -DZB_DEBUG=1
 endif
 
 if !DEBUG
 if NO_DEBUG
+if WINDOWS
+AM_CXXFLAGS += -DZB_DEBUG=0
+else
 AM_CPPFLAGS += -DZB_DEBUG=0
+endif
 endif
 endif
 
 if NATIVE
 if !GENERIC
+if WINDOWS
+AM_CXXFLAGS += -march=native -mtune=native
+else
 AM_CFLAGS += -march=native -mtune=native
+endif
 endif
 endif
 
 if GENERIC
 if CPU_KNOWN
+if WINDOWS
+AM_CXXFLAGS += -mtune=generic-$(CPUTYPE)
+else
 AM_CFLAGS += -mtune=generic-$(CPUTYPE)
+endif
+else
+if WINDOWS
+AM_CXXFLAGS += -mtune=generic
 else
 AM_CFLAGS += -mtune=generic
 endif
 endif
+endif
 
+if WINDOWS
+zbatt_CXXFLAGS = $(AM_CXXFLAGS)
+zbatc_CXXFLAGS = $(AM_CXXFLAGS)
+gzbatt_CXXFLAGS = $(AM_CXXFLAGS)
+else
 zbatt_CFLAGS = $(AM_CFLAGS)
 zbatc_CFLAGS = $(AM_CFLAGS)
+endif
 
 if STATIC
+if WINDOWS
+zbatt_CXXFLAGS += --static
+zbatc_CXXFLAGS += --static
+else
 zbatt_CFLAGS += --static
 zbatc_CFLAGS += --static
+endif
 endif
 
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
+if !WINDOWS
 gzbatt_CFLAGS = $(AM_CFLAGS)
+endif
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
