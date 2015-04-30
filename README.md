@@ -71,11 +71,10 @@ So you shouldn't need to install anything for ZBatt to work.
 3. `make`
 
 # Installing
-1. Build ZBatt :P
-2. `make DESTDIR="<DIR>" install`
+1. `make DESTDIR="<DIR>" install`
 
-If step 2 fails because of permissions, try running it with `sudo`.
-
+If the install fails because of permissions, try running it with `sudo`.
+***
 Alternatively, you can also just place the binaries `zbatc`, `zbatt`, and (if you built the GUI) `gzbatt` where ever you like.
 
 # Examples
