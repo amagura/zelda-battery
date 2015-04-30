@@ -2,12 +2,18 @@
 
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 
-SUBDIRS = img src
+if WINDOWS_HOST
+SUBDIRS = img src win
+else
+SUBDIRS = img src nix
+endif
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz
 
 all-local:
+
+anew: clean all
 
 test-setup:
 	mkdir -p test/{ACAD,BAT0,BAT1}

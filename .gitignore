@@ -9,10 +9,13 @@ zb-text
 zbatt
 zbatc
 gzbatt
+zbatt.exe
+zbatc.exe
+gzbatt.exe
 main_gui.c
-!/archive/**/zbatc
-!/archive/**/zbatt
-!/archive/**/gzbatt
+
+# emacs files
+.\#*
 
 # automake stuff
 autom4te.cache
@@ -32,3 +35,7 @@ nohup.out
 test.sh
 /test
 /img/LICENSE.images
+
+# submodules
+src/*.c
+src/*.h

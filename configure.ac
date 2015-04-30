@@ -4,70 +4,100 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
+m4_define([rm_newline], [translit($1, [
+])])
+m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -o])))
+m4_define([IF_WINDOWS], [m4_if(PLATFORM, [Cygwin], [$1], [$2])])
+
 # Check for compilers
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CPP
+dnl C++
+AC_PROG_CXX
+AC_PROG_CXXCPP
+
+# Check for sed and grep
+AC_PROG_SED
+AC_PROG_GREP
+
+# Get System Type
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+
+# Check for pkg-config
+PKG_PROG_PKG_CONFIG()
+
+# build checking
+AS_CASE([$build],
+  [*linux*], [ZB_BUILD="linux"],
+  [*cygwin], [ZB_BUILD="windows"],
+  [*mingw32], [ZB_BUILD="windows"],
+  [*bsd*], [ZB_BUILD="bsd"],
+  [ZB_BUILD=""])
+
+AC_SUBST([ZB_BUILD])
+
+AM_CONDITIONAL([LINUX_BUILD], [test "x$ZB_BUILD" = "xlinux"])
+AM_CONDITIONAL([WINDOWS_BUILD], [test "x$ZB_BUILD" = "xwindows"])
+AM_CONDITIONAL([BSD_BUILD], [test "x$ZB_BUILD" = "xbsd"])
+
+# host checking
+AS_CASE([$host],
+  [*linux*], [ZB_HOST="linux"],
+  [*cygwin], [ZB_HOST="windows"],
+  [*mingw32], [ZB_HOST="windows"],
+  [*bsd*], [ZB_HOST="bsd"],
+  [ZB_HOST=""])
+AC_SUBST([ZB_HOST])
+AM_CONDITIONAL([LINUX_HOST], [test "x$ZB_HOST" = "xlinux"])
+AM_CONDITIONAL([WINDOWS_HOST], [test "x$ZB_HOST" = "xwindows"])
+AM_CONDITIONAL([BSD_HOST], [test "x$ZB_HOST" = "xbsd"])
+
+AS_IF([test "x$ZB_HOST" = "xwindows"],
+[AC_CHECK_HEADER([Windows.h],[AC_DEFINE([HAVE_WINDOWS_H], [1])],
+	[AC_CHECK_HEADER([windows.h],[AC_DEFINE([HAVE__WINDOWS_H], [1])])])
+AC_CHECK_HEADERS([Winapifamily.h winapifamily.h _mingw_unicode.h specstrings.h])
+AC_CHECK_HEADER([Shellapi.h],[AC_DEFINE([HAVE_SHELLAPI_H], [1])],
+	[AC_CHECK_HEADER([shellapi.h],[AC_DEFINE([HAVE__SHELLAPI_H], [1])])])])
+
+[CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
+AC_SUBST([CPUARCH])
 
 # Precious variables
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
-
-# let Automake know if we are using clang
-
-# M4 Macros
-m4_define([rm_newline], [translit($1, [
-])])
-m4_define([rm_dots], [translit($1, [.])])
-m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
-m4_define([CPUARCH], rm_newline(m4_esyscmd([uname -m])))
-m4_define([IS_LINUX], [m4_if($1, [Linux], TRUE_TEST($1), FALSE_TEST($1))])
-m4_define([TRUE_TEST], [test x"$1" = x"$1"])
-m4_define([FALSE_TEST], [test x"$1" = x"not $2"])
-m4_define([IF_LINUX], [m4_if(
-$1, [Linux],[$2],[$3])])
-m4_define([IF_BSD], [m4_if(
-$1, [NetBSD],[$2],
-$1, [FreeBSD],[$2],
-$1, [OpenBSD],[$2],
-$1, [DragonFly],[$2],[$3])])
-m4_define([IS_BSD], [IF_BSD($1, [test x"$1" = x"$1"], [test x"$1" = x"not a BSD"])])
-m4_define([CMP], [m4_if(m4_eval(([$1] == [$2])), 1, 0, m4_if(m4_eval(([$1] > [$2])), 1, 1, -1))])
-m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*], [])))
-m4_define([IF_NEWER_LINUX], [IF_LINUX([PLATFORM], [pushdef([result],CMP([$1], rm_dots([2.6.24])))
-m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
-
+# Should we use gtk2
 AC_ARG_WITH([gtk2],
-	AS_HELP_STRING([--without-gtk2], [disable building the gui]),
+	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	[with_gtk2=yes])
-#m4_define([GTK2_CFLAGS], rm_newline(m4_esyscmd([pkg-config --cflags gtk+-2.0])))
-#m4_define([GTK2_LIBS], rm_newline(m4_esyscmd([pkg-config --libs gtk+-2.0])))
+	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]))
 
-#m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
+IF_WINDOWS(,[AS_IF([test "x$ZB_HOST" != "xwindows" && test "x$with_gtk2" = "xyes"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
+AS_IF([test "x$ZB_HOST" = "xwindows"], [with_gtk2=no])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
-AM_COND_IF([GTK2],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])],)
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
-AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
+AM_CONDITIONAL([TRAVIS], [test "x$TRAVIS" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check for libs
-AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])])
+AS_IF([! test x"$ZB_HOST" = "xwindows"], AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])]), )
 
 # Check for OS specifics
-AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,[AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported])])))
+AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]))])
+AS_IF([test x"$ZB_HOST" = x"linux"],
+ [AC_CHECK_FILES([/sys/class/power_supply],,
+   AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],)
 
-#AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
-#AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])]))
+AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])])],)
 
 # Check for progs
-AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
-AM_COND_IF([GTK2],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([py2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([py2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])
+IF_WINDOWS(,[AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
+AM_COND_IF([GTK2],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([python2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([python2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
@@ -135,12 +165,7 @@ m4_define([TINYC], [test ! "x`($CC -E -w -P -nostdinc - <<EOF
 __TINYC__
 EOF
 )`" = "x__TINYC__"])
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" = "xunknown" && (]CLANG[ || ]TINYC[)])
-AC_SUBST(CPUTYPE, CPUARCH)
+AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
-AC_CONFIG_FILES([
-Makefile
-src/Makefile
-img/Makefile
-])
+AC_CONFIG_FILES([Makefile src/Makefile nix/Makefile win/Makefile img/Makefile])
 AC_OUTPUT
