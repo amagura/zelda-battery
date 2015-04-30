@@ -16,7 +16,7 @@ AC_CANONICAL_HOST
 
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
-m4_define([PKG_CONF_FOUND], m4_if(rm_newline(m4_esyscmd([echo x$PKG_CONFIG])), [x], [0], [1]))
+m4_define([PKG_CONF_FOUND], m4_if("x$PKG_CONFIG", [x], [0], [1]))
 
 # host checking
 AS_CASE([$host],
