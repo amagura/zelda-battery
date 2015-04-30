@@ -7,8 +7,7 @@ compiler:
   - tcc
 install:
   - sudo apt-get update
-  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 chicken-bin tcc
-  - sudo chicken-install test
+  - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 tcc
 script:
   - cd nix
   - autoreconf -i
