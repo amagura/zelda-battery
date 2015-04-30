@@ -88,10 +88,10 @@ AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 AS_IF([! test x"$ZB_HOST" = "xwindows"], AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])]), )
 
 # Check for OS specifics
-AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]))])
-AS_IF([test x"$ZB_HOST" = x"linux"],
- [AC_CHECK_FILES([/sys/class/power_supply],,
-   AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],)
+AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]),
+	    AS_IF([test x"$ZB_HOST" = x"linux"],
+	     [AC_CHECK_FILES([/sys/class/power_supply],,
+	        AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],))])
 
 AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])])],)
 
