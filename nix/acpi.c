@@ -132,11 +132,10 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	       ZB_DBG("globuf.gl_pathv[idx]: `%s`\n", globuf.gl_pathv[idx]);
 	       if (limit != 0)
 		    continue;
-	       bzero(batt, ZB_ACPI_PATH_SIZE);
 #  if ZB_DEBUG
-	       bytes = catl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH);
+	       bytes = concatl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, (void *)NULL);
 #  else
-	       catl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH);
+	       concatl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH, (void *)NULL);
 #  endif
 
 	       ZB_DBG("bytes: `%lu`\n", bytes - 0);
@@ -144,11 +143,10 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	       ZB_DBG("batt: `%s`\n", batt);
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
-	       bzero(ac, ZB_ACPI_PATH_SIZE);
 #  if ZB_DEBUG
-	       bytes = catl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH);
+	       bytes = concatl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, (void *)NULL);
 #  else
-	       catl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH);
+	       concatl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH, (void *)NULL);
 #  endif
 	       ZB_DBG("bytes: `%lu`\n", bytes - 0);
 	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
@@ -201,10 +199,10 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
      int globr;
 
      globr = glob(ZB_ACPI_GLOB, 0, NULL, &globuf);
-     ZB_DBG("globr: %d\n", globr);
      ZB_DBG("GLOB_NOSPACE: %d\n", GLOB_NOSPACE);
      ZB_DBG("GLOB_ABORTED: %d\n", GLOB_ABORTED);
      ZB_DBG("GlOB_NOMATCH: %d\n", GLOB_NOMATCH);
+     ZB_DBG("globr: %d\n", globr);
      if (globr != 0) {
 	  switch (globr) {
 	  case GLOB_NOSPACE:

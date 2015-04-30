@@ -24,8 +24,6 @@ test-setup:
 	touch test/BAT0/type
 	touch test/BAT1/type
 	touch test/ACAD/type
-
-test-clean: test-setup
 	echo 1 > 'test/ACAD/online'
 	echo 100 > 'test/BAT0/capacity'
 	echo 100 > 'test/BAT1/capactiy'
@@ -33,14 +31,17 @@ test-clean: test-setup
 	echo 'Battery' > 'test/BAT1/type'
 	echo 'Mains' > 'test/ACAD/type'
 
-test-onac: test-setup
+test-clean:
+	$(RM) -r test
+
+test-onac: test-clean test-setup
 	echo 1 > 'test/ACAD/online'
 	$(RM) -r 'test/'{BAT0,BAT1} || $(ERM) -r 'test/'{BAT0,BAT1} || true
 
-test-noac: test-setup
+test-noac: test-clean test-setup
 	echo 0 > 'test/ACAD/online'
 
-test-lowbat: test-setup
+test-lowbat: test-clean test-setup
 	echo 10 > 'test/BAT0/capacity'
 	echo 10 > 'test/BAT1/capacity'
 
@@ -49,9 +50,9 @@ test-empty: test-setup
 	echo 0 > 'test/BAT0/capacity'
 
 test-nosup:
-	rm -rf 'test/'
+	$(RM) -r test
 
-test-depth: test-nosup
+test-depth: test-clean
 	mkdir -p "test"; \
 	cd "test"; \
 	for ((idx = 0; idx < 256; ++idx)); do \
@@ -61,7 +62,7 @@ test-depth: test-nosup
 	echo 50 > "capacity"; \
 	echo 'Battery' > "type"
 
-test-breadth: test-nosup test-setup
+test-breadth: test-clean test-setup
 	cd "test"; \
 	for ((idx = 0; idx < 256; ++idx)); do \
 		mkdir -p "BAT$$idx"; \

@@ -34,7 +34,7 @@ limitations under the License.
 # include <stdlib.h>
 
 # ifndef ZB_DEBUG
-#  define ZB_DEBUG 0 // XXX change this to turn debug messages on/off
+#  define ZB_DEBUG 1 // XXX change this to turn debug messages on/off
 # endif
 
 # if ZB_DEBUG
@@ -221,9 +221,9 @@ limitations under the License.
 size_t concatl PARAMS((char *dest, size_t destsiz, const char *s1, ...));
 size_t concatm PARAMS((char *dest, size_t destsiz, const char *s1, ...));
 # undef catl
-# define catl(...) (concatl(##__VA_ARGS__, (void *)NULL))
+# define catl(...) (concatl(__VA_ARGS__, (void *)NULL))
 # undef catm
-# define catm(...) (concatm(##__VA_ARGS__, (void *)NULL))
+# define catm(...) (concatm(__VA_ARGS__, (void *)NULL))
 
 /** intlen: find how many digits a given integral contains. **/
 size_t intlenm PARAMS((int n));
