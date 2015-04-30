@@ -33,8 +33,7 @@ PKG_PROG_PKG_CONFIG()
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],
   [*cygwin], [ZB_HOST="windows"],
-  [i686-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW64_HOST], [1])],
-  [x86_64-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW32_HOST], [1])],
+  [*mingw32], [ZB_HOST="windows"],
   [*bsd*], [ZB_HOST="bsd"],
   [ZB_HOST=""])
 AC_SUBST([ZB_HOST])
@@ -59,7 +58,8 @@ AC_ARG_WITH([gtk2],
 	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]),
 	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]))
 
-IF_WINDOWS(,[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
+IF_WINDOWS(,[AS_IF([test "x$ZB_HOST" != "xwindows"], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])
+AS_IF([test "x$ZB_HOST" = "xwindows"], [with_gtk2=no])
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
