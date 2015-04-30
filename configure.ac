@@ -32,7 +32,7 @@ PKG_PROG_PKG_CONFIG()
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],
-  [*-pc-cygwin], [ZB_HOST="windows"],
+  [*cygwin], [ZB_HOST="windows"],
   [i686-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW64_HOST], [1])],
   [x86_64-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW32_HOST], [1])],
   [*bsd*], [ZB_HOST="bsd"],
