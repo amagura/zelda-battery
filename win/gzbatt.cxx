@@ -22,6 +22,6 @@ int main()
 {
      SYSTEM_POWER_STATUS syspwr;
      if (GetSystemPowerStatus(&syspwr))
-	  std::cout << "AC line active: " << syspwr.ACLineStatus == 1 ? "yes" : "no" << std::endl;
+	  std::cout << "AC line active: " << (syspwr.ACLineStatus == 1 ? "yes" : "no") << std::endl;
      return 0;
 }

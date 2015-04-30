@@ -84,5 +84,6 @@ limitations under the License.
 #  endif
 # endif
 
+# define _WIN32_WINNT NTDDI_WINXP
 
 #endif /* ZB_MAIN_HXX_GUARD */
