@@ -61,7 +61,7 @@ So you shouldn't need to install anything for ZBatt to work.
 * [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) (__BSD only__)
 
 ### Windows
-* C++98 compliant C++ compiler
+* C++11 compliant C++ compiler
 
 # Building
 1. `autoreconf -fi`
