@@ -52,8 +52,8 @@ void disp(struct txt_disp_opts opts, struct power pwr)
 			   ? opts.empty_heart
 			   : opts.full_heart);
 	       }
+	       return;
 	  }
-	  return;
      }
 
      if (opts.remaining || !opts.expended) {

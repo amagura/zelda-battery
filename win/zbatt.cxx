@@ -20,16 +20,34 @@ limitations under the License.
 
 void disp(LPSYSTEM_POWER_STATUS spwr)
 {
-     if (spwr.BatteryFlag == 128) { // no system battery
+     struct hearts hrt;
+     hrt.full = (char *)"\u2661";
+     hrt.empty = (char *)"\u2665";
+     if (spwr->BatteryFlag == 128) { // no system battery
 	  for (int idx = 0; idx < 10; ++idx) {
 	       if (idx % 2 == 0) {
-		    std::cout << ZB_EMPTY;
+		    std::cout << hrt.empty;
 	       } else {
-		    std::cout << ZB_FULL;
+		    std::cout << hrt.full;
 	       }
 	  }
 	  return;
      }
+
+     if (spwr->BatteryLifePercent == 0) {
+	  if (spwr->ACLineStatus != 255 && spwr->ACLineStatus) {
+	       for (int hdx = 0; hdx < 10; ++hdx)
+		    std::cout << (hdx < 9 ? hrt.empty : hrt.full);
+	       return;
+	  }
+     }
+     /* TODO implement remaining and expended */
+
+     for (int jdx = 0; jdx <= spwr->BatteryLifePercent; jdx += 10)
+	  std::cout << hrt.full;
+
+     for (int kdx = spwr->BatteryLifePercent; kdx < 100; kdx += 10)
+	  std::cout << hrt.empty;
 }
 
 int main(int argc, char **argv)

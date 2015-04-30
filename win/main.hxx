@@ -86,9 +86,9 @@ limitations under the License.
 
 # define _WIN32_WINNT NTDDI_WINXP
 
-enum class hearts : char * {
-     ZB_FULL = "\u2661",
-     ZB_EMPTY = "\u2665"
+struct hearts {
+     char *full;
+     char *empty;
 };
 
 #endif /* ZB_MAIN_HXX_GUARD */
