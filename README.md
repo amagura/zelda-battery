@@ -59,16 +59,11 @@ So you shouldn't need to install anything for ZBatt to work.
 ### Windows
 * C++98 compliant C++ compiler
 
-### Linux
+### Linux and BSD
 * C99 compliant C compiler
 * Cython (GUI)
 * pkg-config (GUI)
-
-### BSD
-* C99 compliant C compiler
-* Cython (GUI)
-* pkg-config (GUI)
-* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
+* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) (__BSD only__)
 
 # Building
 1. `autoreconf -fi`
