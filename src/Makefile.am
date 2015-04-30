@@ -2,21 +2,22 @@
 
 _srcdir_ = $(top_srcdir)/src
 
-if WINDOWS
-bin_PROGRAMS = zbatt zbatc gzbatt
-else
 bin_PROGRAMS = zbatt zbatc
-endif
+zbatc_SOURCES =
+zbatt_SOURCES =
+gzbatt_SOURCES =
+noinst_HEADERS =
 
 if WINDOWS
-zbatc_SOURCES = zbatc.cxx
-zbatt_SOURCES = zbatt.cxx
-gzbatt_SOURCES = gzbatt.cxx
+bin_PROGRAMS += gzbatt
+zbatc_SOURCES += zbatc.cxx
+zbatt_SOURCES += zbatt.cxx
+gzbatt_SOURCES += gzbatt.cxx
 else
-zbatc_SOURCES = main-color.c main.c acpi.c power.c
-zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c
-noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h
+zbatc_SOURCES += main-color.c main.c acpi.c power.c
+zbatt_SOURCES += main-text.c main.c acpi.c power.c
+gzbatt_SOURCES += main_gui.pyx main-gui.c main.c acpi.c power.c
+noinst_HEADERS += main.h acpi.h power.h compat.h main-gui.h
 endif
 
 iconsdir = $(pkgdatadir)/icons
@@ -26,6 +27,8 @@ pngdir = $(iconsdir)/16x16/apps
 AM_CFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
+AM_CXXFLAGS =
+AM_CPPXXFLAGS =
 
 AM_CFLAGS += -Wall -Wextra
 
