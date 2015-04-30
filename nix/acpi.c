@@ -15,8 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#if defined(__linux__)		\
-     || defined(__gnu_linux__)
+#include "compat.h"
+#if ZB_LINUX
 # include <stdlib.h>
 # include <stdio.h>
 # include <stdbool.h>
@@ -97,7 +97,9 @@ void read_pwr_files(struct pwr_sup *info, struct error *err, char *ac, char *bat
 void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 {
      FILE *fp;
-     ZB_XONDBG(size_t bytes);
+#  if ZB_DEBUG
+     size_t bytes;
+#  endif
 
      /* the files we'll be reading only consist of
       * a single line of little text,
@@ -131,7 +133,11 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	       if (limit != 0)
 		    continue;
 	       bzero(batt, ZB_ACPI_PATH_SIZE);
-	       ZB_XONDBG(bytes = )catl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH);
+#  if ZB_DEBUG
+	       bytes = catl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH);
+#  else
+	       catl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH);
+#  endif
 
 	       ZB_DBG("bytes: `%lu`\n", bytes - 0);
 	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
@@ -139,7 +145,11 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
 	       bzero(ac, ZB_ACPI_PATH_SIZE);
-	       ZB_XONDBG(bytes = )catl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH);
+#  if ZB_DEBUG
+	       bytes = catl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH);
+#  else
+	       catl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH);
+#  endif
 	       ZB_DBG("bytes: `%lu`\n", bytes - 0);
 	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
 	       ZB_DBG("ac: `%s'\n", ac);

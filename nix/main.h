@@ -17,19 +17,6 @@ limitations under the License.
 ****/
 #ifndef ZB_MAIN_H_GUARD
 # define ZB_MAIN_H_GUARD 1
-/* BEGIN_C_DECLS should be used at the beginning of your declarations,
-so that C++ compilers don't mangle their names.  Use END_C_DECLS at
-the end of C declarations. */
-#undef BEGIN_C_DECLS
-#undef END_C_DECLS
-#ifdef __cplusplus
-# define BEGIN_C_DECLS extern "C" {
-# define END_C_DECLS }
-#else
-# define BEGIN_C_DECLS /* empty */
-# define END_C_DECLS /* empty */
-#endif
-
 /* PARAMS is a macro used to wrap function prototypes, so that
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
@@ -42,19 +29,17 @@ the end of C declarations. */
 #  define PARAMS(protos) ()
 # endif
 
-BEGIN_C_DECLS
-
 # include <errno.h>
-# include <stdlib.h>
 # include "compat.h"
+# include <stdlib.h>
 
 # ifndef ZB_DEBUG
 #  define ZB_DEBUG 0 // XXX change this to turn debug messages on/off
 # endif
 
 # if ZB_DEBUG
-#  ifndef ZB_DLVL
-#   define ZB_DLVL 2 // XXX change this to increase/decrease debug verbosity
+#  ifndef ZB_DLEVEL
+#   define ZB_DLEVEL 2 // XXX change this to increase/decrease debug verbosity
 #  endif
 # endif
 
@@ -134,26 +119,26 @@ BEGIN_C_DECLS
      } while (0)
 
 
-# ifndef bzero
-#  define bzero(COM_B, COM_LEN)						\
-     (memset((void *)(COM_B), '\0', (size_t)(COM_LEN)), (void)0)
-# endif
-
-# ifndef bcopy
-#  define bcopy(COM_B1, COM_B2, COM_LEN)			\
-     (memmove((void *)(COM_B2),					\
-	      (const void *)(COM_B1),				\
-	      (size_t)(COM_LEN)),				\
+# undef bzero
+# define bzero(COM_B, COM_LEN)			\
+     (memset((void *)(COM_B),			\
+	     '\0',				\
+	     (size_t)(COM_LEN)),		\
       (void)0)
-# endif
 
-# ifndef mempcpy
-#  define mempcpy(COM_D, COM_S, COM_L)		\
+# undef bcopy
+# define bcopy(COM_B1, COM_B2, COM_LEN)		\
+     (memmove((void *)(COM_B2),			\
+	      (const void *)(COM_B1),		\
+	      (size_t)(COM_LEN)),		\
+      (void)0)
+
+# undef mempcpy
+# define mempcpy(COM_D, COM_S, COM_L)		\
      (memcpy((void *)(COM_D),			\
 	     (const void *)(COM_S),		\
 	     (size_t)(COM_L))			\
       + (size_t)(COM_L))
-# endif
 
 #  define mempmove(COM_D, COM_S, COM_L)		\
      (memmove((void *)(COM_D),			\
@@ -240,15 +225,12 @@ BEGIN_C_DECLS
 /** $$ Macros $$ **/
 
 /** concat: catenate several strings together **/
-char *concat PARAMS((const char *s1, ...)); // XXX return value needs free
 size_t concatl PARAMS((char *dest, size_t destsiz, const char *s1, ...));
 size_t concatm PARAMS((char *dest, size_t destsiz, const char *s1, ...));
-# undef cat
-# define cat(...) (concat(__VA_ARGS__, (void *)NULL))
 # undef catl
-# define catl(...) (concatl(__VA_ARGS__, (void *)NULL))
+# define catl(...) (concatl(##__VA_ARGS__, (void *)NULL))
 # undef catm
-# define catm(...) (concatm(__VA_ARGS__, (void *)NULL))
+# define catm(...) (concatm(##__VA_ARGS__, (void *)NULL))
 
 /** intlen: find how many digits a given integral contains. **/
 int intlen PARAMS((int n));
@@ -271,7 +253,5 @@ enum pwrsuply {
      PWR_ELIMIT = 16,
      PWR_EBRK = -8
 };
-
-END_C_DECLS
 
 #endif /* ZB_MAIN_H_GUARD */

@@ -25,7 +25,7 @@ limitations under the License.
 #include "compat.h"
 
 struct onoff {
-     bool mc; /* master control */
+     bool mc;
      bool ac; /* A/C control */
      int thold; /* threshold */
 };
@@ -42,17 +42,17 @@ struct pp_disp_opts {
 
 void disp(struct pp_disp_opts pp, struct power pwr)
 {
-     ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
      printf("\033[%sm", pp.norm.ccode);
-     if (pp.blnk.ctl.mc)
-	  return;
-     if ((pwr.charge.raw) > pp.blnk.ctl.thold)
+     ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
+     ZB_DBG("(pwr.charge.raw) > pp.blnk.ctl.thold: %d\n", pwr.charge.raw > pp.blnk.ctl.thold);
+     if (!pp.blnk.ctl.mc || (pwr.charge.raw) > pp.blnk.ctl.thold)
 	  return;
      if (pwr.acline && !pp.blnk.ctl.ac) {
 	  ZB_DBG("%s\n", "On A/C power: no need to blink");
 	  return;
      }
-
+     // When all the planets are in proper alignment...
+     ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
      printf("\033[%sm", pp.blnk.ccode);
 }
 

@@ -1,4 +1,4 @@
- /****
+/****
 Copyright 2014, 2015 Alexej Magura
 
 This file is a part of ZBatt
@@ -22,6 +22,7 @@ limitations under the License.
 #include <limits.h>
 #include "main.h"
 
+# if 0
 int intlen(int idx)
 {
      int result = 0;
@@ -31,6 +32,7 @@ int intlen(int idx)
      }
      return result;
 }
+# endif
 
 size_t intlenm(int src)
 {
@@ -54,6 +56,7 @@ void rev(char *s)
      }
 }
 
+# if 0
 char *revp(const char *s)
 {
      int idx = 0;
@@ -94,6 +97,7 @@ char *revnp(char *s, size_t n)
      }
      return &s[0] + len;
 }
+# endif
 
 char cpeek(const char *c, const char *s, const short fwd)
 {
@@ -139,7 +143,7 @@ void itoa(char *dst, int src)
 	  ZB_DBG("*wp: `%c`\n", *wp);
 #endif
      }
-     *wp++ = '\0';
+     *wp = '\0';
 #if ZB_DLVL > 1
      ZB_DBG("len: %lu\n", len);
      ZB_DBG("strlen(tmp): %lu\n", strlen(tmp));
@@ -156,6 +160,7 @@ void itoa(char *dst, int src)
      memcpy(dst, tmp, len);
 }
 
+# if 0
 char *itoap(const int src)
 {
      ZB_DBG("src: %d\n", src);
@@ -177,49 +182,7 @@ char *itoap(const int src)
 
      return dst;
 }
-
-
-char *concat(const char *s1, ...)
-{
-	va_list args;
-	const char *s;
-	char *p, *result;
-	unsigned long l, m, n;
-
-	m = n = strlen(s1);
-	va_start(args, s1);
-	while ((s = va_arg(args, char *))) {
-		l = strlen(s);
-		if ((m += l) < l) break;
-	}
-	va_end(args);
-	if (s || m >= INT_MAX) return NULL;
-
-#if defined(__cplusplus)
-	result = (char *)malloc(m + 1);
-#else
-	result = malloc(m + 1);
-#endif
-	if (!result) return NULL;
-
-	memcpy(p = result, s1, n);
-	p += n;
-	va_start(args, s1);
-	while ((s = va_arg(args, char *))) {
-		l = strlen(s);
-		if ((n += l) < l || n > m) break;
-		memcpy(p, s, l);
-		p += l;
-	}
-	va_end(args);
-	if (s || m != n || p != result + n) {
-		free(result);
-		return NULL;
-	}
-
-	*p = '\0';
-	return result;
-}
+# endif
 
 /* unlike `concat', which returns a
  * new pointer that must then be copied
@@ -254,18 +217,13 @@ size_t concatl(char *dst, size_t sz, const char *s1, ...)
      va_end(args);
      if (s || mdx >= INT_MAX) return sz;
 
-#if defined(__cplusplus)
-     tmp = (char *)malloc(mdx + 1);
-#else
      tmp = malloc(mdx + 1);
-#endif
      if (!tmp) return sz;
      bzero(tmp, mdx + 1);
      bzero(dst, mdx + 1);
 
      p = tmp;
      p = mempcpy(p, (char *)s1, ndx);
-
      used += ndx;
      ZB_DBG("p: `%s`\n", p);
      ZB_DBG("used: %lu\n", used - 0);
@@ -318,17 +276,12 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
      va_end(args);
      if (s || mdx >= INT_MAX) return sz;
 
-#if defined(__cplusplus)
-     tmp = (char *)malloc(mdx + 1);
-#else
      tmp = malloc(mdx + 1);
-#endif
      if (!tmp) return sz;
      bzero(tmp, mdx + 1);
 
      p = tmp;
      p = mempcpy(p, (char *)s1, ndx);
-
      used += ndx;
      ZB_DBG("p: `%s`\n", p);
      ZB_DBG("used: %lu\n", used - 0);
@@ -346,7 +299,7 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
 	  return sz;
      }
      ZB_DBG("tmp: `%s'\n", tmp);
-#if defined(mempmove) && 0
+#if defined(mempmove)
      p = mempmove(dst, tmp, (used > sz ? sz : used));
 #else
      memmove(dst, tmp, (used > sz ? sz : used));
