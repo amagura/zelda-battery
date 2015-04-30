@@ -9,6 +9,8 @@ ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz
 
 all-local:
 
+anew: clean all
+
 test-setup:
 	mkdir -p test/{ACAD,BAT0,BAT1}
 	touch test/ACAD/online

@@ -9,48 +9,46 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CPP
+AC_PROG_SED
 
 # Get System Type
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
+# host checking
+AS_CASE([$host],
+  [*linux*], [ZB_HOST="linux"]
+  	     [m4_define([ZB__HOST], [linux])],
+  [*pc-cygwin], [ZB_HOST="windows"]
+  		[m4_define([ZB__HOST], [windows])],
+  [*bsd*], [ZB_HOST="bsd"]
+  	   [m4_define([ZB__HOST], [bsd])],
+  [ZB_HOST=""][m4_define([ZB__HOST], [])])
+AC_SUBST([ZB_HOST])
+
+
+[CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
+AC_SUBST([CPUARCH])
+
 # Precious variables
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
 # let Automake know if we are using clang
 
-[echo "$host"]
-
+m4_define([IF_LINUX], [m4_if([ZB__HOST], [linux], [$1], [$2])])
+m4_define([IF_BSD], [m4_if([ZB__HOST], [bsd], [$1], [$2])])
+m4_define([IF_WINDOWS], [m4_if([ZB__HOST], [windows], [$1], [$2])])
+m4_define([IFNT_WINDOWS], [m4_if([ZB__HOST], [windows], [$2], [$1])])
 m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([rm_dots], [translit($1, [.])])
-m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -s])))
-m4_define([CPUARCH], rm_newline(m4_esyscmd([uname -m])))
-m4_define([IS_LINUX], [m4_if($1, [Linux], TRUE_TEST($1), FALSE_TEST($1))])
-m4_define([ISNT_LINUX], [m4_if($1, [Linux], FALSE_TEST($1), TRUE_TEST($1))])
-m4_define([TRUE_TEST], [test x"$1" = x"$1"])
-m4_define([FALSE_TEST], [test x"$1" = x"not $2"])
-m4_define([IF_LINUX], [m4_if(
-$1, [Linux],[$2],[$3])])
-
-m4_define([IF_BSD], [m4_if(
-$1, [NetBSD],[$2],
-$1, [FreeBSD],[$2],
-$1, [OpenBSD],[$2],
-$1, [DragonFly],[$2],[$3])])
-m4_define([IS_BSD], [IF_BSD($1, [test x"$1" = x"$1"], [test x"$1" = x"not a BSD"])])
 m4_define([CMP], [m4_if(m4_eval(([$1] == [$2])), 1, 0, m4_if(m4_eval(([$1] > [$2])), 1, 1, -1))])
-m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*], [])))
-m4_define([IF_NEWER_LINUX], [IF_LINUX([PLATFORM], [pushdef([result],CMP([$1], rm_dots([2.6.24])))
-m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
+IF_LINUX(m4_define([KERNEL], rm_newline(m4_bpatsubst(m4_esyscmd([uname -r]), [[^.0-9].*], []))))
+m4_define([IF_NEWER_LINUX], [IF_LINUX([pushdef([result],CMP([$1], rm_dots([2.6.24])))m4_if(result,1,[$2],result,0,[$2],[result],[-1],[$3])],,)])
 
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui]),
 	[],
 	[with_gtk2=yes])
-#m4_define([GTK2_CFLAGS], rm_newline(m4_esyscmd([pkg-config --cflags gtk+-2.0])))
-#m4_define([GTK2_LIBS], rm_newline(m4_esyscmd([pkg-config --libs gtk+-2.0])))
-
-#m4_if(PLATFORM, [Linux] [AM_CONDITIONAL([Linux
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
@@ -65,11 +63,12 @@ AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])])
 
 # Check for OS specifics
-AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]), IF_NEWER_LINUX(rm_dots(KERNEL),AC_CHECK_FILES([/sys/class/power_supply],,AC_MSG_ERROR([Linux kernel versions >= 2.6.24 without /sys/class/power_supply are unsupported])),AC_CHECK_FILES([/proc/acpi/ac_adapter],,[AC_MSG_ERROR([Linux kernel version < 2.6.24 without /proc/acpi/ac_adapter are unsupported])])))
+AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]))])
+AS_IF([test x"$ZB_HOST" = x"linux"],
+ [AC_CHECK_FILES([/sys/class/power_supply],,
+   AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],)
 
-#AM_CONDITIONAL([LINUX], IS_LINUX([PLATFORM]))#  [test x]PLATFORM[= x"Linux"])#m4_if(PLATFORM, [Linux], _TRUE))
-#AM_CONDITIONAL([BSD], IS_BSD([PLATFORM]))# [test x]PLATFORM[= x"BSD"]) #m4_if(PLATFORM, [BSD], _TRUE))
-IF_BSD([PLATFORM], AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])]))
+AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])])],)
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
@@ -141,8 +140,7 @@ m4_define([TINYC], [test ! "x`($CC -E -w -P -nostdinc - <<EOF
 __TINYC__
 EOF
 )`" = "x__TINYC__"])
-AM_CONDITIONAL([CPU_KNOWN], [test ! "x]CPUARCH[" = "x" && test ! "x]CPUARCH[" =		"xunknown" && (]CLANG[ || ]TINYC[)])
-AC_SUBST(CPUTYPE, CPUARCH)
+AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
 AC_CONFIG_FILES([Makefile src/Makefile img/Makefile])
 AC_OUTPUT

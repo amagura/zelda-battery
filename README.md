@@ -75,7 +75,7 @@ Linux:
 * [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
 
 # Building
-1. `autoconf -i` (try `autoreconf -fi` if `autoconf -i` doesn't work)
+1. `autoreconf -fi`
 2. `./configure`
 3. `make`
 
