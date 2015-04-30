@@ -41,6 +41,7 @@ AC_ARG_WITH([gtk2],
 
 m4_define([PKG_CONF_FOUND], [rm_newline([m4_esyscmd([if test "x$PKG_CONFIG" = "x"; then echo 0; else echo 1; fi])])])
 
+AS_ECHO([[PKG_CONFIG:]][$PKG_CONFIG])
 m4_if([PKG_CONF_FOUND], [1], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
 # Check if we have GTK+2
