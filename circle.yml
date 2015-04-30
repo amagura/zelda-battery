@@ -1,5 +1,4 @@
 machine:
-  timeout: 300
   timezone:
     America/Denver
 
@@ -12,6 +11,7 @@ test:
   environment:
     TRAVIS: "true"
   override:
+    timeout: 300
     - cd nix; autoreconf -fi
     - cd nix; ./configure --enable-generic --without-gtk2
     - cd nix; make anew
