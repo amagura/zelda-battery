@@ -12,7 +12,6 @@ AC_PROG_CPP
 AC_PROG_SED
 
 # Get System Type
-AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
 # host checking
@@ -26,7 +25,6 @@ AS_CASE([$host],
   [ZB_HOST=""][m4_define([ZB__HOST], [])])
 AC_SUBST([ZB_HOST])
 
-
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])
 
@@ -34,9 +32,9 @@ AC_SUBST([CPUARCH])
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
 # Should we use gtk2
 AC_ARG_WITH([gtk2],
-	AS_HELP_STRING([--without-gtk2], [disable building the gui]),
-	[],
-	[with_gtk2=yes])
+	AS_HELP_STRING([--without-gtk2], [disable building the gui (only for Linux and BSD systems)]),
+	[with_gtk2=yes],
+	AS_IF([! test "x$ZB_HOST" = "xwindows"], [with_gtk2=yes], [with_gtk2=no]))
 
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
@@ -44,7 +42,7 @@ AM_COND_IF([GTK2],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"]
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
-AM_CONDITIONAL([TRAVIS], [test "x`echo -n $TRAVIS`" = "xtrue"])
+AM_CONDITIONAL([TRAVIS], [test "x$TRAVIS" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check for libs
@@ -60,7 +58,7 @@ AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_
 
 # Check for progs
 AM_COND_IF([GTK2],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
-AM_COND_IF([GTK2],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([py2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([py2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])
+AM_COND_IF([GTK2],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([python2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([python2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],

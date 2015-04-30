@@ -63,9 +63,9 @@ gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
 if GTK2
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @py2_CFLAGS@
+gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
 gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
-gzbatt_LDFLAGS += @gtk2_LIBS@ @py2_LIBS@
+gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
