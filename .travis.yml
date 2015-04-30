@@ -14,8 +14,8 @@ script:
   - ./configure --without-gtk2
   - make clean
   - make
-  - src/zbatt || true
-  - src/zbatc || true
+  - nix/zbatt || true
+  - nix/zbatc || true
   - make clean
   - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
   - make
