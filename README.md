@@ -22,15 +22,15 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 -->
 # Supported Platforms
 ## Windows
-
-All Windows systems XP and later are supported; support for older Windows versions will come later.
+Windows XP and later.
 
 ## Linux
-Kernels >= 2.6.24 are supported; support for older kernels is not a priority, but may be added <s>if you say pretty please</s> later.
+Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
 
-## *BSD
-Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html), you should be fine.  BSD systems known to work (i.e. systems I've personally tested ZBatt on):
+## BSD
+Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
 
+BSD systems known to work:
 * DragonFlyBSD
 * FreeBSD
 
@@ -39,39 +39,35 @@ BSD systems that _should_ work:
 * Midnight BSD
 * (Anything based on FreeBSD, lulz)
 
-BSD systems known _not_ to work:
+BSD systems that _don't_ work:
 * OpenBSD (soz, peeps)
 
 # Dependencies
+## Windows
+The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
+So you shouldn't need to install anything for ZBatt to work.
 
-Windows:
-
-The Windows version of ZBatt has no extraneous dependencies: it depends on the Windows API.
-
-Linux and *BSD:
-
-* Python 2 (GUI depend)
-* GTK+2 (GUI depend)
-* PyGTK (GUI depend)
+#### Linux and BSD
+* Python 2 (GUI)
+* GTK+2 (GUI)
+* PyGTK (GUI)
 
 ## Make Dependencies
+* GNU Autotools (i.e. automake, autoconf)
+* Make
 
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
-
-Windows:
+#### Windows
 * C++98 compliant C++ compiler
 
-Linux:
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
+#### Linux
 * C99 compliant C compiler
-* Cython (GUI make depend)
-* pkg-config (GUI make depend)
+* Cython (GUI)
+* pkg-config (GUI)
 
-\*BSD:
-* GNU Autotools (i.e. automake, autoconf, (doesn't need to be GNU) make)
+#### BSD
 * C99 compliant C compiler
-* Cython (GUI make depend)
-* pkg-config (GUI make depend)
+* Cython (GUI)
+* pkg-config (GUI)
 * [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html)
 
 # Building
@@ -80,14 +76,12 @@ Linux:
 3. `make`
 
 # Installing
-
-1. Build ZBatt
-2. `make DESTDIR="<desired install directory>" install` (try running with either `sudo` or as root if you don't have permission to write to `<desired install directory>`.
+1. Build ZBatt :P
+2. `make DESTDIR="<DIR>" install` (try running with either `sudo` or as root if you don't have permission to write to `<DIR>`.
 
 Alternatively, you can also just place the binaries `zbatc`, `zbatt`, and (if you built the GUI) `gzbatt` where ever you like.
 
 # Examples
-
 The command-line is _extremely_ flexible, so while there are defaults
 there's nothing stopping you from defining your own experience.
 
