@@ -64,6 +64,8 @@ So you shouldn't need to install anything for ZBatt to work.
 * C++11 compliant C++ compiler
 
 # Building
+1. `git submodule sync`
+2. `git submodule --init`
 1. `autoreconf -fi`
 2. `./configure`
 3. `make`
