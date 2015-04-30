@@ -18,7 +18,7 @@ limitations under the License.
 #ifndef ZB_MAIN_HXX_GUARD
 # define ZB_MAIN_HXX_GUARD 1
 
-# include "../src/compat.h"
+# include "../src/common.h"
 
 /* ZBatt only supports Windows XP and later, for now */
 # define _WIN32_WINNT NTDDI_WINXP
