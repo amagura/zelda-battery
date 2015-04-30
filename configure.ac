@@ -146,5 +146,5 @@ EOF
 )`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
-AC_CONFIG_FILES([Makefile src/Makefile img/Makefile])
+AC_CONFIG_FILES([Makefile nix/Makefile win/Makefile img/Makefile])
 AC_OUTPUT
