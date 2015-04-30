@@ -39,12 +39,14 @@ AC_ARG_WITH([gtk2],
 	[],
 	[with_gtk2=yes])
 
-m4_define([PKG_CONF_FOUND], [rm_newline([m4_esyscmd([if test "x$PKG_CONFIG" != "x"; then echo 0; else echo 1; fi])])])
+m4_define([PKG_CONF_FOUND], [rm_newline([m4_esyscmd([if test "x$PKG_CONFIG" = "x"; then echo 0; else echo 1; fi])])])
 
 m4_if([PKG_CONF_FOUND], [1], [AS_IF([test "x$ZB_HOST" = "xwindows"],,[AS_IF([test "x$with_gtk2" != "xno"],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])])])
 
 # Check if we have GTK+2
-AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes" && test "x$PKG_CONFIG" != "x"])
+[test x"$PKG_CONFIG" = "x" && PKG_CONFIG="no"]
+AM_CONDITIONAL([GTK2], [test "x$with_gtk2 x$PKG_CONFIG" != "xyes xno" && test "x$with_gtk2" = "xyes"])
+[test x"$PKG_CONFIG" = "xno" && PKG_CONFIG=""]
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
