@@ -126,13 +126,6 @@ limitations under the License.
 	     (size_t)(COM_LEN)),		\
       (void)0)
 
-# undef bcopy
-# define bcopy(COM_B1, COM_B2, COM_LEN)		\
-     (memmove((void *)(COM_B2),			\
-	      (const void *)(COM_B1),		\
-	      (size_t)(COM_LEN)),		\
-      (void)0)
-
 # undef mempcpy
 # define mempcpy(COM_D, COM_S, COM_L)		\
      (memcpy((void *)(COM_D),			\
@@ -233,9 +226,8 @@ size_t concatm PARAMS((char *dest, size_t destsiz, const char *s1, ...));
 # define catm(...) (concatm(##__VA_ARGS__, (void *)NULL))
 
 /** intlen: find how many digits a given integral contains. **/
-int intlen PARAMS((int n));
-size_t intlenm PARAMS((int src)); /* XXX for use with malloc'ing for
-				   * calls to `itoa' */
+size_t intlenm PARAMS((int n));
+
 /** rev: reverse an array of characters **/
 void rev PARAMS((char *s));
 
