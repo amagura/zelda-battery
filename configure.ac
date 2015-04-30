@@ -13,6 +13,8 @@ m4_define([IF_WINDOWS], [m4_if(PLATFORM, [Cygwin], [$1], [$2])])
 dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
+AC_PROG_CXX
+AC_PROG_CXXCPP
 AC_PROG_CPP
 AC_PROG_SED
 AC_PROG_GREP
@@ -34,6 +36,8 @@ AS_CASE([$host],
   [ZB_HOST=""][m4_define([ZB__HOST], [])])
 
 AM_CONDITIONAL([LINUX_BOX], [test "x$ZB_HOST" = "xlinux"])
+AM_CONDITIONAL([WINDOWS_BOX], [test "x$ZB_HOST" = "xwindows"])
+AM_CONDITIONAL([BSD_BOX], [test "x$ZB_HOST" = "xbsd"])
 
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])
