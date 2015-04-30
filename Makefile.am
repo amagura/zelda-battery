@@ -1,8 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
-dist_doc_DATA = LICENSE $(top_srcdir)/../AUTHORS $(top_srcdir)/../INSTALL
+dist_doc_DATA = LICENSE AUTHORS INSTALL
 
-SUBDIRS = img/nix modules src
+if WINDOWS_HOST
+SUBDIRS = img/win module win
+else
+SUBDIRS = img/nix module nix
+endif
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz
