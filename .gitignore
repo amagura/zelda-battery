@@ -9,6 +9,9 @@ zb-text
 zbatt
 zbatc
 gzbatt
+zbatt.exe
+zbatc.exe
+gzbatt.exe
 main_gui.c
 
 # emacs files
