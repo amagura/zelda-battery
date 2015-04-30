@@ -20,7 +20,7 @@ dist_clas_DATA = clas/full.png clas/empty.png clas/qempty.png \
 clas/qfull.png clas/half.png clas/bork.png clas/nobat.png
 endif
 
-all-local: #local-license
+all-local:
 
 install-data-local: LICENSE.images
 	for d in $(subdirs); do \
