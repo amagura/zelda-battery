@@ -38,9 +38,9 @@ AS_CASE([$host],
   	   [m4_define([ZB__HOST], [bsd])],
   [ZB_HOST=""][m4_define([ZB__HOST], [])])
 
-AM_CONDITIONAL([LINUX_BOX], [test "x$ZB_HOST" = "xlinux"])
-AM_CONDITIONAL([WINDOWS_BOX], [test "x$ZB_HOST" = "xwindows"])
-AM_CONDITIONAL([BSD_BOX], [test "x$ZB_HOST" = "xbsd"])
+AM_CONDITIONAL([LINUX], [test "x$ZB_HOST" = "xlinux"])
+AM_CONDITIONAL([WINDOWS], [test "x$ZB_HOST" = "xwindows"])
+AM_CONDITIONAL([BSD], [test "x$ZB_HOST" = "xbsd"])
 
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])

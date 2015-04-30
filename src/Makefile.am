@@ -2,13 +2,13 @@
 
 _srcdir_ = $(top_srcdir)/src
 
-if WINDOWS_BOX
+if WINDOWS
 bin_PROGRAMS = zbatt zbatc gzbatt
 else
 bin_PROGRAMS = zbatt zbatc
 endif
 
-if WINDOWS_BOX
+if WINDOWS
 zbatc_SOURCES = zbatc.cxx
 zbatt_SOURCES = zbatt.cxx
 gzbatt_SOURCES = gzbatt.cxx
@@ -73,7 +73,7 @@ gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
 if GTK2
-if !WINDOWS_BOX
+if !WINDOWS
 gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
 gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
 gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
