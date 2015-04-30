@@ -30,17 +30,26 @@ PKG_PROG_PKG_CONFIG()
 
 # host checking
 AS_CASE([$host],
-  [*linux*], [ZB_HOST="linux"]
-  	     [m4_define([ZB__HOST], [linux])],
-  [*pc-cygwin], [ZB_HOST="windows"]
-  		[m4_define([ZB__HOST], [windows])],
+  [*linux*], [ZB_HOST="linux"],
+  [*pc-cygwin|*-w64-mingw32], [ZB_HOST="windows"],
   [*bsd*], [ZB_HOST="bsd"]
   	   [m4_define([ZB__HOST], [bsd])],
   [ZB_HOST=""][m4_define([ZB__HOST], [])])
 
+AS_CASE([$host],
+	[x86_64-*-mingw32], [AC_DEFINE([MINGW64_HOST], [1])],
+	[i686-*-mingw32], [AC_DEFINE([MINGW32_HOST], [1])],
+	[])
+
 AM_CONDITIONAL([LINUX], [test "x$ZB_HOST" = "xlinux"])
 AM_CONDITIONAL([WINDOWS], [test "x$ZB_HOST" = "xwindows"])
 AM_CONDITIONAL([BSD], [test "x$ZB_HOST" = "xbsd"])
+
+AS_IF([test "x$ZB_HOST" = "xwindows"], [
+ AC_CHECK_HEADER([Windows.h],,
+  AC_CHECK_FILES([/usr/$host/include/windows.h]))
+ AC_CHECK_HEADER([Shellapi.h],,
+  AC_CHECK_FILES([/usr/$host/include/shellapi.h]))])
 
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])

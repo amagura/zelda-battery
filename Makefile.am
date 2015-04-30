@@ -2,7 +2,11 @@
 
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 
-SUBDIRS = img nix win
+if WINDOWS
+SUBDIRS = img win
+else
+SUBDIRS = img nix
+endif
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz

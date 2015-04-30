@@ -18,14 +18,6 @@ limitations under the License.
 #include <iostream>
 #include "main.hxx"
 
-/* XXX allows me to compile ZBatt on Linux for windows */
-#if defined(__MINGW32__)			\
-     && (defined(__linux__)			\
-	 || defined(__gnu_linux__))
-#include <Windows.h>
-#include <Shellapi.h>
-
-
 int main()
 {
      SYSTEM_POWER_STATUS syspwr;

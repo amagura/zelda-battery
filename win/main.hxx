@@ -25,4 +25,15 @@ limitations under the License.
 #  define NTDDI_VERSION NTDDI_WINXP
 # endif
 
+#if defined(__MINGW32__) || defined(MINGW32_HOST)
+# include "/usr/i686-w64-mingw32/include/windows.h"
+# include "/usr/i686-w64-mingw32/include/shellapi.h"
+#elif defined(__MINGW64__) || defined(MINGW64_HOST)
+# include "/usr/x86_64-w64-mingw32/include/windows.h"
+# include "/usr/x86_64-w64-mingw32/include/shellapi.h"
+#else
+# include <Windows.h>
+# include <Shellapi.h>
+#endif
+
 #endif /* ZB_MAIN_HXX_GUARD */
