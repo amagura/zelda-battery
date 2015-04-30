@@ -18,6 +18,10 @@ AC_CANONICAL_HOST
 AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
 AM_CONDITIONAL([PKG_CONFIG], [test "$ac_cv_path_PKG_CONFIG" != "xno"])
 
+if test -z "$ac_cv_path_PKG_CONFIG"; then :
+m4_define([PKG_CONF_NOT_FOUND], [1])
+fi
+
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"]
@@ -38,7 +42,7 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	AS_IF([test "x$ac_cv_path_PKG_CONFIG" = "xno"], [with_gtk2=no], [with_gtk2=yes]))
+	[with_gtk2=yes])
 
 AM_COND_IF([PKG_CONFIG], [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
