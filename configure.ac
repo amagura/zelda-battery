@@ -37,8 +37,7 @@ AS_CASE([$host],
   [x86_64-w64-mingw32], [ZB_HOST="windows"][AC_DEFINE([MINGW32_HOST], [1])],
   [*bsd*], [ZB_HOST="bsd"],
   [ZB_HOST=""])
-
-AS_ECHO([[$ZB_HOST]], [$ZB_HOST])
+AC_SUBST([ZB_HOST])
 AM_CONDITIONAL([LINUX], [test "x$ZB_HOST" = "xlinux"])
 AM_CONDITIONAL([WINDOWS], [test "x$ZB_HOST" = "xwindows"])
 AM_CONDITIONAL([BSD], [test "x$ZB_HOST" = "xbsd"])
