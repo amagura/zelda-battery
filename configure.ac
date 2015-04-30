@@ -8,8 +8,6 @@ m4_define([rm_newline], [translit($1, [
 ])])
 m4_define([PLATFORM], rm_newline(m4_esyscmd([uname -o])))
 m4_define([IF_WINDOWS], [m4_if([PLATFORM], [Cygwin], [$1], [$2])])
-AS_ECHO([[PLATFORM: ]][PLATFORM])
-AS_ECHO([m4_bpatsubst([PLATFORM], [^\(CYGWIN\).+$], [\1])])
 
 # Check for compilers
 dnl C
@@ -45,7 +43,7 @@ AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is prese
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui (enabled by default)]),
 	[],
-	IF_WINDOWS([with_gtk2=no], [with_gtk2=yes]))
+	IF_WINDOWS([[with_gtk2=no]], [[with_gtk2=yes]]))
 
 IF_WINDOWS(,[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [HAVE_GTK="no"])])
 
