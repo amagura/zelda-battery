@@ -36,6 +36,8 @@ AC_ARG_WITH([gtk2],
 	[with_gtk2=yes],
 	AS_IF([! test "x$ZB_HOST" = "xwindows"], [with_gtk2=yes], [with_gtk2=no]))
 
+[echo $ZB_HOST]
+
 # Check if we have GTK+2
 AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
 AM_COND_IF([GTK2],[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], [HAVE_GTK="yes"], [no])],)
