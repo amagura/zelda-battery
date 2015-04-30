@@ -2,7 +2,7 @@
 
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 
-if WINDOWS
+if WINDOWS_HOST
 SUBDIRS = img win
 else
 SUBDIRS = img nix

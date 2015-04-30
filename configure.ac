@@ -29,6 +29,20 @@ AC_CANONICAL_HOST
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
 
+# build checking
+AS_CASE([$build],
+  [*linux*], [ZB_BUILD="linux"],
+  [*cygwin], [ZB_BUILD="windows"],
+  [*mingw32], [ZB_BUILD="windows"],
+  [*bsd*], [ZB_BUILD="bsd"],
+  [ZB_BUILD=""])
+
+AC_SUBST([ZB_BUILD])
+
+AM_CONDITIONAL([LINUX_BUILD], [test "x$ZB_BUILD" = "xlinux"])
+AM_CONDITIONAL([WINDOWS_BUILD], [test "x$ZB_BUILD" = "xwindows"])
+AM_CONDITIONAL([BSD_BUILD], [test "x$ZB_BUILD" = "xbsd"])
+
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],
@@ -37,15 +51,16 @@ AS_CASE([$host],
   [*bsd*], [ZB_HOST="bsd"],
   [ZB_HOST=""])
 AC_SUBST([ZB_HOST])
-AM_CONDITIONAL([LINUX], [test "x$ZB_HOST" = "xlinux"])
-AM_CONDITIONAL([WINDOWS], [test "x$ZB_HOST" = "xwindows"])
-AM_CONDITIONAL([BSD], [test "x$ZB_HOST" = "xbsd"])
+AM_CONDITIONAL([LINUX_HOST], [test "x$ZB_HOST" = "xlinux"])
+AM_CONDITIONAL([WINDOWS_HOST], [test "x$ZB_HOST" = "xwindows"])
+AM_CONDITIONAL([BSD_HOST], [test "x$ZB_HOST" = "xbsd"])
 
-AS_IF([test "x$ZB_HOST" = "xwindows"], [
- AC_CHECK_HEADER([Windows.h],,
-  AC_CHECK_FILES([/usr/$host/include/windows.h]))
- AC_CHECK_HEADER([Shellapi.h],,
-  AC_CHECK_FILES([/usr/$host/include/shellapi.h]))])
+AS_IF([test "x$ZB_HOST" = "xwindows"],
+[AC_CHECK_HEADER([Windows.h],[AC_DEFINE([HAVE_WINDOWS_H], [1])],
+	[AC_CHECK_HEADER([windows.h],[AC_DEFINE([HAVE__WINDOWS_H], [1])])])
+AC_CHECK_HEADERS([Winapifamily.h winapifamily.h _mingw_unicode.h specstrings.h])
+AC_CHECK_HEADER([Shellapi.h],[AC_DEFINE([HAVE_SHELLAPI_H], [1])],
+	[AC_CHECK_HEADER([shellapi.h],[AC_DEFINE([HAVE__SHELLAPI_H], [1])])])])
 
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])

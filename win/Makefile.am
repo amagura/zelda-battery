@@ -19,6 +19,18 @@ AM_CPPFLAGS =
 
 AM_CXXFLAGS += -Wall -Wextra
 
+if LINUX_BUILD
+AM_CPPFLAGS += -DZB_LINUX_BUILD=1
+endif
+
+if WINDOWS_BUILD
+AM_CPPFLAGS += -DZB_WINDOWS_BUILD=1
+endif
+
+if BSD_BUILD
+AM_CPPFLAGS += -DZB_BSD_BUILD=1
+endif
+
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 endif

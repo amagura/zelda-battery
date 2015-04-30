@@ -23,28 +23,66 @@ limitations under the License.
 /* ZBatt only supports Windows XP and later, for now */
 # define _WIN32_WINNT NTDDI_WINXP
 
+/**
 # if !defined(NTDDI_VERSION)
 #  define NTDDI_VERSION NTDDI_WINXP
 # endif
-
-# if defined(HAVE__USR_I686_W64_MINGW32_INCLUDE_WINDOWS_H)
-#  include "/usr/i686-w64-mingw32/include/windows.h"
-# else
-#  include <Windows.h>
+**/
+# if COMMON_x86
+#  if defined(HAVE__USR_I686_W64_MINGW32_INCLUDE_WINDOWS_H)
+#   include "/usr/i686-w64-mingw32/include/windows.h"
+#  else
+#   if defined(HAVE_WINDOWS_H)
+#    include <Windows.h>
+#   elif defined(HAVE__WINDOWS_H)
+#    include <windows.h>
+#   elif !ZB_WINDOWS_BUILD
+#    include <windows.h>
+#   else
+#    include <Windows.h>
+#   endif
+#  endif
+#  if defined(HAVE__USR_I686_W64_MINGW32_INCLUDE_SHELLAPI_H)
+#   include "/usr/i686-w64-mingw32/include/shellapi.h"
+#  else
+#   if defined(HAVE_SHELLAPI_H)
+#    include <Shellapi.h>
+#   elif defined(HAVE__SHELLAPI_H)
+#    include <shellapi.h>
+#   elif !ZB_WINDOWS_BUILD
+#    include <shellapi.h>
+#   else
+#    include <Shellapi.h>
+#   endif
+#  endif
+# elif COMMON_amd64
+#  if defined(HAVE__USR_X86_64_w64_MINGW32_INCLUDE_WINDOWS_H)
+#   include "/usr/x86_64-w64-mingw32/include/windows.h"
+#  else
+#   if defined(HAVE_WINDOWS_H)
+#    include <Windows.h>
+#   elif defined(HAVE__WINDOWS_H)
+#    include <windows.h>
+#   elif !ZB_WINDOWS_BUILD
+#    include <windows.h>
+#   else
+#    include <Windows.h>
+#   endif
+#  endif
+#  if defined(HAVE__USR_X86_64_w64_MINGW32_INCLUDE_SHELLAPI_H)
+#   include "/usr/x86_64-w64-mingw32/include/shellapi.h"
+#  else
+#   if defined(HAVE_SHELLAPI_H)
+#    include <Shellapi.h>
+#   elif defined(HAVE__SHELLAPI_H)
+#    include <shellapi.h>
+#   elif !ZB_WINDOWS_BUILD
+#    include <shellapi.h>
+#   else
+#    include <Shellapi.h>
+#   endif
+#  endif
 # endif
 
-# if defined(HAVE__USR_I686_W64_MINGW32_INCLUDE_SHELLAPI_H)
-#  include "/usr/i686-w64-mingw32/include/shellapi.h"
-# else
-#  include <Shellapi.h>
-#  include "/usr/i686-w64-mingw32/include/windows.h"
-
-#elif defined(__MINGW64__) || defined(MINGW64_HOST)
-# include "/usr/x86_64-w64-mingw32/include/windows.h"
-# include "/usr/x86_64-w64-mingw32/include/shellapi.h"
-#else
-# include <Windows.h>
-# include <Shellapi.h>
-#endif
 
 #endif /* ZB_MAIN_HXX_GUARD */
