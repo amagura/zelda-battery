@@ -11,8 +11,9 @@ checkout:
 
 test:
   pre:
-    sudo apt-get update
-    sudo apt-get install automake-1.15
+   - sudo apt-get update
+   - sudo apt-cache search automake
+   - sudo apt-get install automake-1.15
   override:
     - cd nix; autoreconf -fi
     - cd nix; ./configure --enable-generic --without-gtk2
