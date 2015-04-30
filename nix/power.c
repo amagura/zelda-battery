@@ -22,11 +22,11 @@ limitations under the License.
 #include <math.h>
 #include "main.h"
 #include "power.h"
-#include "../module/common/c/compat/os.h"
+#include "compat.h"
 
-#if COMMON__LINUX
+#if ZB_LINUX
 # include "acpi.h"
-#elif COMMON__BSD
+#elif ZB_BSD
 # include <sys/sysctl.h>
 #endif
 

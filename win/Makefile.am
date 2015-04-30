@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-_srcdir_ = $(top_srcdir)/win
-
 bin_PROGRAMS = zbatt zbatc gzbatt
 
 zbatc_SOURCES = zbatc.cxx

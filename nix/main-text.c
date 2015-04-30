@@ -30,39 +30,39 @@ struct txt_disp_opts {
   bool expended;
 };
 
-void disp(struct txt_disp_opts opts, struct power pwr)
+void disp(struct txt_disp_opts *opts, struct power *pwr)
 {
-     ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
-     if (pwr.charge.raw == PWR_ENOBAT) {
+     ZB_DBG("pwr.charge.raw: %d\n", pwr->charge.raw);
+     if (pwr->charge.raw == PWR_ENOBAT) {
 	  for (int idx = 0; idx < 10; ++idx) {
 	       if (idx % 2 == 0) {
-		    printf("%s", opts.empty_heart);
+		    printf("%s", opts->empty_heart);
 	       } else {
-		    printf("%s", opts.full_heart);
+		    printf("%s", opts->full_heart);
 	       }
 	  }
 	  return;
      }
-     ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
+     ZB_DBG("pwr.charge.tr: %d\n", pwr->charge.tr);
 
-     if (pwr.charge.raw == 0) {
-	  if (pwr.acline) {
+     if (pwr->charge.raw == 0) {
+	  if (pwr->acline) {
 	       for (int hdx = 0; hdx < 10; ++hdx) {
 		    printf("%s", hdx < 9
-			   ? opts.empty_heart
-			   : opts.full_heart);
+			   ? opts->empty_heart
+			   : opts->full_heart);
 	       }
 	       return;
 	  }
      }
 
-     if (opts.remaining || !opts.expended) {
-	  for (int idx = 10; idx <= pwr.charge.raw; idx += 10)
-	       printf("%s", opts.full_heart);
+     if (opts->remaining || !opts->expended) {
+	  for (int idx = 10; idx <= pwr->charge.raw; idx += 10)
+	       printf("%s", opts->full_heart);
      }
-     if (opts.expended || !opts.remaining) {
-	  for (; pwr.charge.raw < 100; pwr.charge.raw += 10)
-	       printf("%s", opts.empty_heart);
+     if (opts->expended || !opts->remaining) {
+	  for (; pwr->charge.raw < 100; pwr->charge.raw += 10)
+	       printf("%s", opts->empty_heart);
      }
 }
 
@@ -73,6 +73,7 @@ int main(int argc, char **argv)
 
      struct power pwr;
      memset(&pwr.charge, 0, sizeof(pwr.charge));
+     pwr.acline = false;
      pwr.charge.nof = -1;
      pwr.charge.divsr = 10;
 
@@ -182,7 +183,7 @@ int main(int argc, char **argv)
 
      getpwr(&pwr);
      ZB_XONDBG(perror(ZB_PROGNAME));
-     disp(txt, pwr);
+     disp(&txt, &pwr);
 win:
      return EXIT_SUCCESS;
 fail:

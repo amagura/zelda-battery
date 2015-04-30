@@ -46,6 +46,7 @@ BEGIN_C_DECLS
 
 # include <errno.h>
 # include <stdlib.h>
+# include "compat.h"
 
 # ifndef ZB_DEBUG
 #  define ZB_DEBUG 0 // XXX change this to turn debug messages on/off
@@ -72,7 +73,7 @@ BEGIN_C_DECLS
 /*** $$ Externally Defined macros $$ ***/
 
 # if ZB_DEBUG
-#  if defined(__linux__) || defined(__gnu_linux__)
+#  if ZB_LINUX
 #   include <mcheck.h>
 #  endif
 #  define ZB_DBG(format, ...)						\
@@ -258,9 +259,6 @@ void rev PARAMS((char *s));
 
 /** itoa: convert a number to an atom (i.e. string) **/
 void itoa PARAMS((char *dst, int src));
-
-# include "../module/itoa.h"
-# include "../module/rev.h"
 
 enum pwrsuply {
      PWR_OK = 0,

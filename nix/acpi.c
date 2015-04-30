@@ -15,7 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#if defined(__linux__) || defined(__gnu_linux__)
+#if defined(__linux__)		\
+     || defined(__gnu_linux__)
 # include <stdlib.h>
 # include <stdio.h>
 # include <stdbool.h>
@@ -132,14 +133,14 @@ void get_pwr_files(glob_t globuf, char *ac, char *batt, int limit)
 	       bzero(batt, ZB_ACPI_PATH_SIZE);
 	       ZB_XONDBG(bytes = )catl(batt, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_BATCAP_PATH);
 
-	       ZB_DBG("bytes: `%lu`\n", bytes);
+	       ZB_DBG("bytes: `%lu`\n", bytes - 0);
 	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
 	       ZB_DBG("batt: `%s`\n", batt);
 	       /* else, find AC adapter */
 	  } else if (strncmp(tmp, ZB_ACPI_ACTYPE, 4) == 0) {
 	       bzero(ac, ZB_ACPI_PATH_SIZE);
 	       ZB_XONDBG(bytes = )catl(ac, ZB_ACPI_PATH_SIZE, dirname(globuf.gl_pathv[idx]), ZB_ACPI_ACSTAT_PATH);
-	       ZB_DBG("bytes: `%lu`\n", bytes);
+	       ZB_DBG("bytes: `%lu`\n", bytes - 0);
 	       ZB_DBG("ZB_ACPI_PATH_SIZE: `%lu'\n", ZB_ACPI_PATH_SIZE);
 	       ZB_DBG("ac: `%s'\n", ac);
 	  }
@@ -214,7 +215,7 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
 	  return;
      }
 
-     ZB_DBG("globuf.gl_pathc: %d\n", globuf.gl_pathc);
+     ZB_DBG("globuf.gl_pathc: %lu\n", globuf.gl_pathc);
 # if ZB_DEBUG > 1
      for (int idx = 0; idx < globuf.gl_pathc; ++idx) {
 	  ZB_DBG("globuf.gl_pathv[%d]: `%s`\n", idx, globuf.gl_pathv[idx]);

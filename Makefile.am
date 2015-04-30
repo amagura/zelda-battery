@@ -7,6 +7,7 @@ SUBDIRS = img win
 else
 SUBDIRS = img nix
 endif
+
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz

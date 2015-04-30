@@ -1,17 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 
-_srcdir_ = $(top_srcdir)/nix
-
 bin_PROGRAMS = zbatt zbatc
 
-zbatc_SOURCES = main-color.c main.c acpi.c power.c \
-	../module/concat.c ../module/itoa.c ../module/intlen.c ../module/cpeek.c ../module/rev.c
-zbatt_SOURCES = main-text.c main.c acpi.c power.c \
-	../module/concat.c ../module/itoa.c ../module/intlen.c ../module/cpeek.c ../module/rev.c
-gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c \
-	../module/concat.c ../module/itoa.c ../module/intlen.c ../module/cpeek.c ../module/rev.c
-noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h \
-	../module/concat.h ../module/itoa.h ../module/intlen.h ../module/cpeek.h ../module/rev.h
+zbatc_SOURCES = main-color.c main.c acpi.c power.c
+zbatt_SOURCES = main-text.c main.c acpi.c power.c
+gzbatt_SOURCES = main_gui.pyx main-gui.c main.c acpi.c power.c
+noinst_HEADERS = main.h acpi.h power.h compat.h main-gui.h
 
 iconsdir = $(pkgdatadir)/icons
 scaledir = $(iconsdir)/scalable/apps
@@ -86,9 +80,17 @@ lint:
 
 valgrind: clean $(bin_PROGRAMS)
 	for f in $(bin_PROGRAMS); do \
-		$@ --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./"$$f"; \
+		test "$$f" = "gzbatt" || \
+		$@ --leak-check=full --show-leak-kinds=all --track-origins=yes ./"$$f"; \
 		echo; \
-		echo ---------; \
+		echo; \
+	done
+
+vvalgrind: clean $(bin_PROGRAMS)
+	for f in $(bin_PROGRAMS); do \
+		test "$$f" = "gzbatt" || \
+		valgrind -v --leak-check=full --show-leak-kinds=all --track-origins=yes ./"$$f"; \
+		echo; \
 		echo; \
 	done
 

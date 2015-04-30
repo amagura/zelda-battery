@@ -6,9 +6,9 @@ AC_USE_SYSTEM_EXTENSIONS
 
 AC_LANG(C)
 AC_RUN_IFELSE([AC_LANG_PROGRAM([
-#include "module/common/c/compat.h"
+#include "nix/compat.h"
 ],[
-#if COMMON__WINDOWS
+#if ZB_WINDOWS
 return 0;
 #else
 return 1;

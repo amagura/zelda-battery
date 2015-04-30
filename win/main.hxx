@@ -18,7 +18,7 @@ limitations under the License.
 #ifndef ZB_MAIN_HXX_GUARD
 # define ZB_MAIN_HXX_GUARD 1
 
-# include "../modules/compat.h"
+# include "../nix/compat.h"
 
 /* ZBatt only supports Windows XP and later, for now */
 # define _WIN32_WINNT NTDDI_WINXP
@@ -28,7 +28,7 @@ limitations under the License.
 #  define NTDDI_VERSION NTDDI_WINXP
 # endif
 **/
-# if COMMON_x86
+# if ZB_x86
 #  if defined(HAVE__USR_I686_W64_MINGW32_INCLUDE_WINDOWS_H)
 #   include "/usr/i686-w64-mingw32/include/windows.h"
 #  else
@@ -55,7 +55,7 @@ limitations under the License.
 #    include <Shellapi.h>
 #   endif
 #  endif
-# elif COMMON_amd64
+# elif ZB_amd64
 #  if defined(HAVE__USR_X86_64_w64_MINGW32_INCLUDE_WINDOWS_H)
 #   include "/usr/x86_64-w64-mingw32/include/windows.h"
 #  else
