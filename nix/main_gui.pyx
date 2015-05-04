@@ -58,7 +58,6 @@ def iconDir(mode='origin', theme='origin', ovrride=0):
             return '../img/rev/%s' % (theme[0:4])
 
 def getPixbuf(charge):
-    print charge
     if charge >= 80:
         return gtk.gdk.pixbuf_new_from_file('%s/full%s' % (iconDir(), ftype))
     elif charge >= 60:
