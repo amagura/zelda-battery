@@ -37,6 +37,14 @@ limitations under the License.
 # define GZB_PROGNAME ZB_PROGNAME
 #endif
 
+#ifndef GZB_DESTDIR
+# define GZB_DESTDIR ""
+#endif
+
+#ifndef GZB_INSTALLED
+# define GZB_INSTALLED 0
+#endif
+
 char *pngdir()
 {
      return GZB_PNGDIR;
@@ -50,4 +58,14 @@ char *progname()
 char *version()
 {
      return PACKAGE_VERSION;
+}
+
+int installed()
+{
+     return GZB_INSTALLED;
+}
+
+char *install_dir()
+{
+     return GZB_DESTDIR;
 }

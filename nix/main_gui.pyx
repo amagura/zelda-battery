@@ -19,6 +19,9 @@ import os
 import pygtk
 import gtk
 import gobject
+import argparse
+
+parser = argparse.ArgumentParser()
 
 # //// ^^ C Decls ^^ ////
 cdef extern from "power.h":
@@ -27,7 +30,6 @@ cdef extern from "power.h":
         int tr
         int raw
         int err
-
 
 cdef extern from "power.h":
     py_power py_getpwr()
@@ -42,11 +44,12 @@ imgDir = pngdir()
 ftype = '.png'
 progName = progname()
 
+if installed
 def iconDir():
     if os.path.exists(imgDir):
         return imgDir
     else:
-        return '../img'
+        return '../img/nix'
 
 def getPixbuf(charge):
     if charge is 5:

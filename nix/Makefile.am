@@ -120,7 +120,6 @@ tidy-local:
 	$(RM) *.od || true
 	$(RM) *.py || true
 	$(RM) *.pyc || true
-	$(RM) test || true
 	$(RM) main_gui.c || true
 
 anew: clean all

@@ -44,9 +44,10 @@ the end of C declarations. */
 
 BEGIN_C_DECLS
 
-char *scaledir PARAMS(());
 char *pngdir PARAMS(());
 char *progname PARAMS(());
+char *install_dir PARAMS(());
+int installed PARAMS(());
 
 END_C_DECLS
 #endif /* ZB_MAIN_GUI_H_GUARD */
