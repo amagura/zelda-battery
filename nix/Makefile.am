@@ -60,16 +60,19 @@ gzbatt_CFLAGS = $(AM_CFLAGS)
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
-if GTK2
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
+if GUI
 gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\"
+endif
+
+if GTK2
+gzbatt_CPPFLAGS += -DGZB_WITH_GTK2=1
+gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
 gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
 .PHONY: valgrind lint
 all-local:
-	echo $(DESTDIR)
 
 move-local: $(bin_PROGRAMS)
 	for file in $?; do mv "$$file" ../../; done
