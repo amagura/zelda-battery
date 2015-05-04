@@ -20,8 +20,7 @@ import pygtk
 import gtk
 import gobject
 import argparse
-
-parser = argparse.ArgumentParser()
+import ConfigParser, os
 
 # //// ^^ C Decls ^^ ////
 cdef extern from "power.h":
@@ -38,29 +37,37 @@ cdef extern from "main-gui.h":
     char *pngdir()
     char *progname()
     char *version()
+    int debug()
 # //// $$ C Decls $$ ////
 
 imgDir = pngdir()
 ftype = '.png'
 progName = progname()
+parser = argparse.ArgumentParser()
 
-if installed
-def iconDir():
-    if os.path.exists(imgDir):
-        return imgDir
+def iconDir(mode='origin', theme='origin', ovrride=0):
+    if mode is 'original' or mode is 'origin':
+        if os.path.exists(imgDir) and not ovrride:
+            return '%s/origin/%s' % (imgDir, theme[0:4])
+        else:
+            return '../img/origin/%s' % (theme[0:4])
     else:
-        return '../img/nix'
+        if os.path.exists(imgDir) and not ovrride:
+            return '%s/rev/%s' % (imgDir, theme[0:4])
+        else:
+            return '../img/rev/%s' % (theme[0:4])
 
 def getPixbuf(charge):
-    if charge is 5:
+    print charge
+    if charge >= 80:
         return gtk.gdk.pixbuf_new_from_file('%s/full%s' % (iconDir(), ftype))
-    elif charge is 4:
+    elif charge >= 60:
         return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
-    elif charge is 3:
+    elif charge >= 40:
         return gtk.gdk.pixbuf_new_from_file('%s/half%s' % (iconDir(), ftype))
-    elif charge is 2:
+    elif charge >= 20:
         return gtk.gdk.pixbuf_new_from_file('%s/qfull%s' % (iconDir(), ftype))
-    elif charge is 1 or charge is 0:
+    elif charge >= 0:
         return gtk.gdk.pixbuf_new_from_file('%s/empty%s' % (iconDir(), ftype))
     elif charge is -2:
         return gtk.gdk.pixbuf_new_from_file('%s/nobat%s' % (iconDir(), ftype))
@@ -69,7 +76,7 @@ def getPixbuf(charge):
 
 def sync_icon(tcon):
     pwr = py_getpwr()
-    tcon.set_from_pixbuf(getPixbuf(pwr.tr if pwr.err is 0 else pwr.err))
+    tcon.set_from_pixbuf(getPixbuf(pwr.raw if pwr.err is 0 else pwr.err))
     ttip = 'A/C: %s\n' % ('online' if pwr.acline is 1 else 'offline')
     if pwr.err is 0:
         ttip += 'Battery: %s' % str(pwr.raw)

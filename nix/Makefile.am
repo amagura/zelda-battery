@@ -62,13 +62,14 @@ gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
 if GTK2
 gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
-gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\" -DGZB_SCALEDIR=\"$(scaledir)\"
+gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\"
 gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
 .PHONY: valgrind lint
 all-local:
+	echo $(DESTDIR)
 
 move-local: $(bin_PROGRAMS)
 	for file in $?; do mv "$$file" ../../; done
@@ -132,6 +133,9 @@ drone:
 
 akpi:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) $(AM_LDFLAGS) -o acpi acpi.c main.c
+
+test-setup:
+	cd "$(top_srcdir)"; $(MAKE) $@
 
 test-clean:
 	cd "$(top_srcdir)"; $(MAKE) $@
