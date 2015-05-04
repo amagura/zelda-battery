@@ -114,7 +114,7 @@ struct py_power py_getpwr()
      struct py_power pyp;
      memset(&pwr.charge, 0, sizeof(pwr.charge));
      pwr.charge.nof = -1;
-     pwr.charge.divsr = 20;
+     pwr.charge.divsr = 5;
      getpwr(&pwr);
      ZB_DBG("lulz, I haven't segfault'd yet, derp.");
      pyp.acline = pwr.acline;
