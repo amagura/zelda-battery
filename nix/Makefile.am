@@ -174,7 +174,7 @@ prod:
 no-debug:
 	cd "$(top_srcdir)"; \
 	autoconf && \
-	./configure --disable-debug --disable-testdir && \
+	./configure --disable-debug --enable-generic --disable-native && \
 	$(MAKE)
 
 check-configure: refresh-check
@@ -184,3 +184,9 @@ check-configure: refresh-check
 check-all: $(bin_PROGRAMS) gzbatt refresh-check
 	cd test && \
 	./configure --with-gtk2
+
+debug:
+	cd "$(top_srcdir)"; \
+	autoconf && \
+	./configure --enable-debug --enable-testdir --enable-generic --disable-native && \
+	$(MAKE)

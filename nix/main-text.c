@@ -34,8 +34,9 @@ void disp(struct txt_disp_opts opts, struct power pwr)
 {
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
      ZB_DBG("PWR_ENOBAT: %d\n", PWR_ENOBAT);
+     /** no battery ~ -2 **/
      if (pwr.charge.raw == PWR_ENOBAT) {
-	  for (int idx = 0; idx < 10; ++idx) {
+	  for (int idx = 0; idx < 9; ++idx) {
 	       if (idx % 2 == 0) {
 		    printf("%s", opts.empty_heart);
 	       } else {
@@ -44,11 +45,27 @@ void disp(struct txt_disp_opts opts, struct power pwr)
 	  }
 	  return;
      }
+
+     /** no power supply ~ -5 **/
+     if (pwr.charge.raw == PWR_ENOSUPLY) {
+	  for (int idx = 0; idx < 9; ++idx) {
+	       if (idx < 4)
+		    printf("%s", opts.empty_heart);
+	       else
+		    printf("%s", idx % 2 == 0
+			   ? opts.empty_heart
+			   : opts.full_heart);
+	       if (idx == 5)
+		    printf("%s", opts.full_heart);
+	  }
+	  return;
+     }
+
      ZB_DBG("pwr.charge.tr: %d\n", pwr.charge.tr);
 
      if (pwr.charge.raw == 0) {
 	  if (pwr.acline) {
-	       for (int hdx = 0; hdx < 10; ++hdx) {
+	       for (int hdx = 0; hdx < 9; ++hdx) {
 		    printf("%s", hdx < 9
 			   ? opts.empty_heart
 			   : opts.full_heart);
