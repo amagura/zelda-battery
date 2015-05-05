@@ -89,7 +89,6 @@ def clicked(tcon, button, time):
     menu.popup(None, None, gtk.status_icon_position_menu, button, time, tcon)
 
 def readCfg(file):
-    print file
     cfg = ConfigParser.ConfigParser()
     if os.path.isfile(file):
         cfg.read(file)
