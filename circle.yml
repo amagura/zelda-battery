@@ -13,4 +13,4 @@ test:
     - make anew
     - cd nix; (./zbatt; echo -e "\n$?")
     - cd nix; (./zbatc; echo -e "\n$?")
-    - cd nix; make no-debug anew check
+    - cd nix; make check
