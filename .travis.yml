@@ -13,8 +13,8 @@ script:
   - ./configure --without-gtk2
   - make clean
   - make
-  - (nix/zbatt; echo $?)
-  - (nix/zbatc; echo $?)
+  - (nix/zbatt; echo -e "\n$?")
+  - (nix/zbatc; echo -e "\n$?")
   - make clean
   - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
   - make
