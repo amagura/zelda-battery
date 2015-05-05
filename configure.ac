@@ -4,6 +4,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
+# Check if we are running on Windows
 AC_LANG(C)
 AC_RUN_IFELSE([AC_LANG_PROGRAM([
 #include "nix/compat.h"
@@ -36,7 +37,7 @@ AC_CANONICAL_HOST
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
 
-# build checking
+# build os checking
 AS_CASE([$build],
   [*linux*], [ZB_BUILD="linux"],
   [*cygwin], [ZB_BUILD="windows"],
@@ -52,7 +53,7 @@ AM_CONDITIONAL([BSD_BUILD], [test "x$ZB_BUILD" = "xbsd"])
 
 AC_PATH_PROGS([GPP], [gpp cpp],[no])
 
-# host checking
+# host os checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],
   [*cygwin], [ZB_HOST="windows"],

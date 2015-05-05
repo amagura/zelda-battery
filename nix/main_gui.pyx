@@ -26,10 +26,11 @@ import pyqt
 import pyqt5
 #endif
 
+DEF dataDir = DATADIR
 DEF progName = ZB_PROGNAME;
 DEF ftype = '.png'
 config = '%s/.config/%s/%s.conf' % (os.environ['HOME'], progName, progName)
-imgDir = GZB_PNGDIR
+imgDir = PNGDIR
 
 ## //// ^^ C Decls ^^ ////
 cdef extern from "power.h":
@@ -44,17 +45,11 @@ cdef extern from "power.h":
 ## //// $$ C Decls $$ ////
 
 
-def iconDir(mode='origin', theme='origin', ovrride=0):
-    if mode is 'original' or mode is 'origin':
-        if os.path.exists(imgDir) and not ovrride:
-            return '%s/origin/%s' % (imgDir, theme[0:4])
-        else:
-            return '../img/origin/%s' % (theme[0:4])
+def iconDir(theme='orig', ovrride=0):
+    if os.path.exists(imgDir) and not ovrride:
+        return '%s/%s' % (imgDir, theme)
     else:
-        if os.path.exists(imgDir) and not ovrride:
-            return '%s/rev/%s' % (imgDir, theme[0:4])
-        else:
-            return '../img/rev/%s' % (theme[0:4])
+        return '../img/%s' % (theme)
 
 def getPixbuf(charge):
     if charge >= 80:
@@ -106,7 +101,7 @@ def readCfg(file):
     if os.path.exists(file) and os.path.isfile(file):
         cfg.read(file)
     else:
-        cfg.readfp(open(
+        cfg.read(
     return cfg
 
 def main():

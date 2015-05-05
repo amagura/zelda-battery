@@ -61,7 +61,8 @@ gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
 if GUI
-gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\"
+gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" \
+-DDATADIR=\"$(pkgdatadir)\"
 endif
 
 if GTK2

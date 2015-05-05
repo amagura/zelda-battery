@@ -2,6 +2,8 @@
 
 dist_doc_DATA = LICENSE AUTHORS INSTALL
 
+dist_pkgdata_DATA = example.conf
+
 if WINDOWS_HOST
 SUBDIRS = img win
 else
