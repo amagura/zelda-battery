@@ -80,3 +80,7 @@ release: clean
 	cd inst; \
 	$(RM) $(ZB_TARBALL) ;\
 	tar czf $(ZB_TARBALL) usr
+
+refresh-check:
+	cd nix; \
+	$(MAKE) $@
