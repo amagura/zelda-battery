@@ -9,8 +9,8 @@ test:
    - sudo apt-get install automake-1.14
   override:
     - autoreconf -fi
-    - ./configure --disable-debug --enable-generic --without-gtk2
+    - ./configure --enable-debug --enable-generic --without-gtk2
     - make anew
-    - cd nix; (./zbatt; echo $?)
-    - cd nix; (./zbatc; echo $?)
-    - make check
+    - cd nix; (./zbatt; echo -e "\n$?")
+    - cd nix; (./zbatc; echo -e "\n$?")
+    - make no-debug anew check
