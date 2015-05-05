@@ -119,6 +119,8 @@ def main():
     cfg.set('gui', 'imgDir', imgDir)
     if (len(cfg.get('gui', 'theme')) < 4):
         cfg.set('gui', 'theme', 'orig')
+    elif (len(cfg.get('gui', 'theme')) > 4):
+        cfg.set('gui', 'theme', cfg.get('gui', 'theme')[0:4])
     create_icon(cfg)
     gtk.main()
 
