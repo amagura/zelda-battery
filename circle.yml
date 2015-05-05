@@ -10,6 +10,6 @@ test:
   override:
     - autoreconf -fi
     - ./configure --disable-debug --enable-generic --without-gtk2
-    - (nix/zbatt; echo $?)
-    - (nix/zbatc; echo $?)
+    - cd nix; (zbatt; echo $?)
+    - cd nix; (zbatc; echo $?)
     - make anew check
