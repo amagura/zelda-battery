@@ -10,15 +10,13 @@ clasdir = $(pngdir)/clas
 
 
 if !WINDOWS_HOST
-if GTK2
+if GUI
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
 
 dist_orig_DATA = orig/full.png orig/empty.png orig/qempty.png \
 orig/qfull.png orig/half.png orig/bork.png orig/nobat.png
 
-dist_clas_DATA = clas/full.png clas/empty.png clas/qempty.png \
-clas/qfull.png clas/half.png clas/bork.png clas/nobat.png
 else
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
@@ -26,8 +24,6 @@ ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
 dist_orig_DATA = orig/full.png orig/empty.png orig/qempty.png \
 orig/qfull.png orig/half.png orig/bork.png orig/nobat.png
 
-dist_clas_DATA = clas/full.png clas/empty.png clas/qempty.png \
-clas/qfull.png clas/half.png clas/bork.png clas/nobat.png
 endif
 endif
 

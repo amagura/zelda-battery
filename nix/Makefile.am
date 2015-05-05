@@ -110,6 +110,11 @@ check-local: $(bin_PROGRAMS)
 	cd test; \
 	./configure
 
+refresh-check:
+	cd test; \
+	autoconf; \
+	./configure
+
 asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	for f in $(zbatt_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
 	for f in $(zbatc_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
@@ -160,3 +165,19 @@ test-empty:
 
 test-nosup:
 	cd "$(top_srcdir)"; $(MAKE) $@
+
+prod:
+	cd "$(top_srcdir)"; \
+	autoconf && \
+	./configure --disable-debug --disable-testdir --enable-static --disable-native --enable-generic && \
+	$(MAKE)
+
+no-debug:
+	cd "$(top_srcdir)"; \
+	autoconf && \
+	./configure --disable-debug --disable-testdir && \
+	$(MAKE)
+
+check-configure:
+	cd test && \
+	cat configure | less
