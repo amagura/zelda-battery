@@ -13,6 +13,7 @@ zbatt.exe
 zbatc.exe
 gzbatt.exe
 main_gui.c
+main_gui.co
 
 # emacs files
 .\#*
