@@ -33,6 +33,7 @@ struct txt_disp_opts {
 void disp(struct txt_disp_opts opts, struct power pwr)
 {
      ZB_DBG("pwr.charge.raw: %d\n", pwr.charge.raw);
+     ZB_DBG("PWR_ENOBAT: %d\n", PWR_ENOBAT);
      if (pwr.charge.raw == PWR_ENOBAT) {
 	  for (int idx = 0; idx < 10; ++idx) {
 	       if (idx % 2 == 0) {
