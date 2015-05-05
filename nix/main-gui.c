@@ -69,8 +69,3 @@ char *install_dir()
 {
      return GZB_DESTDIR;
 }
-
-int debug()
-{
-     return ZB_DEBUG;
-}

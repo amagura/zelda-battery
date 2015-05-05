@@ -65,7 +65,7 @@ gzbatt_CPPFLAGS += -DGZB_PNGDIR=\"$(pngdir)\"
 endif
 
 if GTK2
-gzbatt_CPPFLAGS += -DGZB_WITH_GTK2=1
+gzbatt_CPPFLAGS += -DWITH_GTK2=1
 gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
 gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
 bin_PROGRAMS += gzbatt
@@ -117,7 +117,8 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
-	$(CYTHON) --embed -p -2 -Wextra -o $@ $<
+	@GPP@ $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $<
+	$(CYTHON) --embed -p -2 -Wextra -o $@ $(@:.c=.co)
 
 tidy-local:
 	$(RM) *.o || true

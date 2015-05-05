@@ -50,6 +50,8 @@ AM_CONDITIONAL([LINUX_BUILD], [test "x$ZB_BUILD" = "xlinux"])
 AM_CONDITIONAL([WINDOWS_BUILD], [test "x$ZB_BUILD" = "xwindows"])
 AM_CONDITIONAL([BSD_BUILD], [test "x$ZB_BUILD" = "xbsd"])
 
+AC_PATH_PROGS([GPP], [gpp cpp],[no])
+
 # host checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],

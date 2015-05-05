@@ -15,14 +15,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """""
-import os
+import os, argparse, ConfigParser
+#if WITH_GTK2
 import pygtk
 import gtk
 import gobject
-import argparse
-import ConfigParser, os
+#elif WITH_QT4
+import pyqt
+#elif WITH_QT5
+import pyqt5
+#endif
 
-# //// ^^ C Decls ^^ ////
+DEF progName = ZB_PROGNAME;
+DEF ftype = '.png'
+config = '%s/.config/%s/%s.conf' % (os.environ['HOME'], progName, progName)
+imgDir = GZB_PNGDIR
+
+## //// ^^ C Decls ^^ ////
 cdef extern from "power.h":
     struct py_power:
         int acline
@@ -32,18 +41,8 @@ cdef extern from "power.h":
 
 cdef extern from "power.h":
     py_power py_getpwr()
+## //// $$ C Decls $$ ////
 
-cdef extern from "main-gui.h":
-    char *pngdir()
-    char *progname()
-    char *version()
-    int debug()
-# //// $$ C Decls $$ ////
-
-imgDir = pngdir()
-ftype = '.png'
-progName = progname()
-parser = argparse.ArgumentParser()
 
 def iconDir(mode='origin', theme='origin', ovrride=0):
     if mode is 'original' or mode is 'origin':
@@ -102,5 +101,35 @@ def clicked(tcon, button, time):
     menu.show_all()
     menu.popup(None, None, gtk.status_icon_position_menu, button, time, tcon)
 
-create_icon()
-gtk.main()
+def readCfg(file):
+    cfg = ConfigParser.ConfigParser()
+    if os.path.exists(file) and os.path.isfile(file):
+        cfg.read(file)
+    else:
+        cfg.readfp(open(
+    return cfg
+
+def main():
+    ## Parse args
+    parser = argparse.ArgumentParser(prog=progName,
+                                     usage='%(prog)s [OPTION]...')
+    parser.add_argument('-i',
+                        metavar='<DIR>',
+                        default=GZB_PNGDIR,
+                        nargs=1,
+                        help='specify an alternate image directory')
+    parser.add_argument('-c',
+                        metavar='<FILE>',
+                        default=config,
+                        nargs=1,
+                        help='specify an alternate configuration file')
+
+    args = parser.parse_args()
+
+    cfg = readCfg(args.c)
+    imgDir = args.i
+    create_icon()
+    gtk.main()
+
+if __name__ == '__main__':
+    main()
