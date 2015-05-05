@@ -19,4 +19,4 @@ script:
   - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
   - make
 after_success:
-  - make refresh-check
+  - make check

@@ -106,14 +106,13 @@ expand:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatt_SOURCES)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatc_SOURCES)
 
-check-local: $(bin_PROGRAMS)
+check-local: $(bin_PROGRAMS) refresh-check
 	cd test; \
 	./configure
 
 refresh-check:
 	cd test; \
-	autoconf; \
-	./configure
+	autoconf
 
 asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	for f in $(zbatt_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
@@ -178,6 +177,10 @@ no-debug:
 	./configure --disable-debug --disable-testdir && \
 	$(MAKE)
 
-check-configure:
+check-configure: refresh-check
 	cd test && \
 	cat configure | less
+
+check-all: $(bin_PROGRAMS) gzbatt refresh-check
+	cd test && \
+	./configure --with-gtk2

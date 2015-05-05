@@ -84,3 +84,7 @@ release: clean
 refresh-check:
 	cd nix; \
 	$(MAKE) $@
+
+check-all:
+	cd nix; \
+	$(MAKE) $@
