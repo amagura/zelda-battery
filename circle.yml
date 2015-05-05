@@ -2,12 +2,6 @@ machine:
   environment:
     TRAVIS: "true"
 
-checkout:
-  post:
-    - git submodule sync
-    - git submodule update --init
-    - make --version
-
 test:
   pre:
    - sudo apt-get update
