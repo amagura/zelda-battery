@@ -29,8 +29,6 @@ import pyqt5
 DEF dataDir = DATADIR
 DEF progName = ZB_PROGNAME;
 DEF ftype = '.png'
-config = '%s/.config/%s/%s.conf' % (os.environ['HOME'], progName, progName)
-imgDir = PNGDIR
 
 ## //// ^^ C Decls ^^ ////
 cdef extern from "power.h":
@@ -44,32 +42,26 @@ cdef extern from "power.h":
     py_power py_getpwr()
 ## //// $$ C Decls $$ ////
 
-
-def iconDir(theme='orig', ovrride=0):
-    if os.path.exists(imgDir) and not ovrride:
-        return '%s/%s' % (imgDir, theme)
-    else:
-        return '../img/%s' % (theme)
-
-def getPixbuf(charge):
+def getPixbuf(charge, imgDir):
     if charge >= 80:
-        return gtk.gdk.pixbuf_new_from_file('%s/full%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/full%s' % (imgDir, ftype))
     elif charge >= 60:
-        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/qempty%s' % (imgDir, ftype))
     elif charge >= 40:
-        return gtk.gdk.pixbuf_new_from_file('%s/half%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/half%s' % (imgDir, ftype))
     elif charge >= 20:
-        return gtk.gdk.pixbuf_new_from_file('%s/qfull%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/qfull%s' % (imgDir, ftype))
     elif charge >= 0:
-        return gtk.gdk.pixbuf_new_from_file('%s/empty%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/empty%s' % (imgDir, ftype))
     elif charge is -2:
-        return gtk.gdk.pixbuf_new_from_file('%s/nobat%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/nobat%s' % (imgDir, ftype))
     else:
-        return gtk.gdk.pixbuf_new_from_file('%s/bork%s' % (iconDir(), ftype))
+        return gtk.gdk.pixbuf_new_from_file('%s/bork%s' % (imgDir, ftype))
 
-def sync_icon(tcon):
+def sync_icon(tcon, cfg):
     pwr = py_getpwr()
-    tcon.set_from_pixbuf(getPixbuf(pwr.raw if pwr.err is 0 else pwr.err))
+    tcon.set_from_pixbuf(getPixbuf(pwr.raw if pwr.err is 0 else pwr.err,
+                                   '%s/%s' % (cfg.get('gui', 'imgDir'), cfg.get('gui', 'theme'))))
     ttip = 'A/C: %s\n' % ('online' if pwr.acline is 1 else 'offline')
     if pwr.err is 0:
         ttip += 'Battery: %s' % str(pwr.raw)
@@ -80,13 +72,13 @@ def sync_icon(tcon):
     tcon.set_tooltip(ttip);
     return True
 
-def create_icon():
+def create_icon(cfg):
     tcon = gtk.StatusIcon()
     tcon.set_tooltip('gzbatt')
     tcon.set_visible(True)
     tcon.connect('popup-menu', clicked)
-    sync_icon(tcon)
-    src_id = gobject.timeout_add_seconds(1, sync_icon, tcon);
+    sync_icon(tcon, cfg)
+    src_id = gobject.timeout_add_seconds(1, sync_icon, tcon, cfg);
 
 def clicked(tcon, button, time):
     menu = gtk.Menu()
@@ -97,11 +89,12 @@ def clicked(tcon, button, time):
     menu.popup(None, None, gtk.status_icon_position_menu, button, time, tcon)
 
 def readCfg(file):
+    print file
     cfg = ConfigParser.ConfigParser()
-    if os.path.exists(file) and os.path.isfile(file):
+    if os.path.isfile(file):
         cfg.read(file)
-    else:
-        cfg.read(
+    elif os.path.isfile('%s/example.conf' % dataDir):
+        cfg.read('%s/example.conf' % dataDir)
     return cfg
 
 def main():
@@ -110,20 +103,23 @@ def main():
                                      usage='%(prog)s [OPTION]...')
     parser.add_argument('-i',
                         metavar='<DIR>',
-                        default=GZB_PNGDIR,
+                        default=PNGDIR,
                         nargs=1,
                         help='specify an alternate image directory')
     parser.add_argument('-c',
                         metavar='<FILE>',
-                        default=config,
+                        default='%s/.config/%s/%s.conf' % (os.environ['HOME'], progName, progName),
                         nargs=1,
                         help='specify an alternate configuration file')
 
     args = parser.parse_args()
 
-    cfg = readCfg(args.c)
-    imgDir = args.i
-    create_icon()
+    cfg = readCfg(args.c.pop())
+    imgDir = args.i if os.path.exists(args.i) else '../img'
+    cfg.set('gui', 'imgDir', imgDir)
+    if (len(cfg.get('gui', 'theme')) < 4):
+        cfg.set('gui', 'theme', 'orig')
+    create_icon(cfg)
     gtk.main()
 
 if __name__ == '__main__':
