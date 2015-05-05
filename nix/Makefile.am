@@ -4,7 +4,7 @@ bin_PROGRAMS = zbatt zbatc
 
 zbatc_SOURCES = main-color.c main.c acpi.c power.c
 zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main-gui.pyx main.c acpi.c power.c
+gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c
 noinst_HEADERS = main.h acpi.h power.h compat.h
 
 iconsdir = $(pkgdatadir)/icons
@@ -127,6 +127,7 @@ tidy-local:
 	$(RM) *.py || true
 	$(RM) *.pyc || true
 	$(RM) main_gui.c || true
+	$(RM) main_gui.co || true
 
 anew: clean all
 ready: clean all tidy-local
