@@ -1,8 +1,6 @@
 machine:
   environment:
     TRAVIS: "true"
-  timezone:
-    America/Denver
 
 checkout:
   post:
