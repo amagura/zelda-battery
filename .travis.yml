@@ -9,15 +9,14 @@ install:
   - sudo apt-get update
   - sudo apt-get install gcc-4.4 gcc-4.5 gcc-4.6 tcc
 script:
-  - cd nix
   - autoreconf -i
   - ./configure --without-gtk2
   - make clean
   - make
-  - src/zbatt | echo $? || true
-  - src/zbatc | echo $? || true
+  - (nix/zbatt; echo $?)
+  - (nix/zbatc; echo $?)
   - make clean
   - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
   - make
 after_success:
-  - make check
+  - make refresh-check
