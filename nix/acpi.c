@@ -28,6 +28,8 @@ limitations under the License.
 # include "power.h"
 # include "acpi.h"
 
+extern size_t concatl(char *dst, size_t sz, const char *s1, ...) __attribute__((sentinel));
+
 # if defined(HAVE__SYS_CLASS_POWER_SUPPLY)
 /* optionally gets information regarding the battery specified */
 int get_batt_info(int *cap, char *batt, int btnum)

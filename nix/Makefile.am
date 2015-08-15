@@ -2,9 +2,9 @@
 
 bin_PROGRAMS = zbatt zbatc
 
-zbatc_SOURCES = main-color.c main.c acpi.c power.c
-zbatt_SOURCES = main-text.c main.c acpi.c power.c
-gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c
+zbatc_SOURCES = main-color.c main.c acpi.c power.c concat.c
+zbatt_SOURCES = main-text.c main.c acpi.c power.c concat.c
+gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c
 noinst_HEADERS = main.h acpi.h power.h compat.h
 
 iconsdir = $(pkgdatadir)/icons
@@ -15,7 +15,8 @@ AM_CFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
 
-AM_CFLAGS += -Wall -Wextra
+AM_CFLAGS += -O2 -Wall -Wextra
+AM_CPPFLAGS += -DNO_COMMON_H
 
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"

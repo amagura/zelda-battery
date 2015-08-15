@@ -215,24 +215,17 @@ limitations under the License.
 # define zb_efree(ZB_EPTR)			\
      do {					\
 */
+
+# define COM_DLVL ZB_DLVL
+# define COM_DBG ZB_DBG
+# define COM_DEBUG ZB_DEBUG
+# define com_mtrace
+# define com_muntrace
+
+# if !defined(NO_COMMON_H)
+#  define NO_COMMON_H 0
+# endif
 /** $$ Macros $$ **/
-
-/** concat: catenate several strings together **/
-size_t concatl PARAMS((char *dest, size_t destsiz, const char *s1, ...));
-size_t concatm PARAMS((char *dest, size_t destsiz, const char *s1, ...));
-# undef catl
-# define catl(...) (concatl(__VA_ARGS__, (void *)NULL))
-# undef catm
-# define catm(...) (concatm(__VA_ARGS__, (void *)NULL))
-
-/** intlen: find how many digits a given integral contains. **/
-size_t intlenm PARAMS((int n));
-
-/** rev: reverse an array of characters **/
-void rev PARAMS((char *s));
-
-/** itoa: convert a number to an atom (i.e. string) **/
-void itoa PARAMS((char *dst, int src));
 
 enum pwrsuply {
      PWR_OK = 0,
