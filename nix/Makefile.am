@@ -2,8 +2,8 @@
 
 bin_PROGRAMS = no_common.h zbatt zbatc
 
-zbatc_SOURCES = main-color.c main.c acpi.c power.c concat.c
-zbatt_SOURCES = main-text.c main.c acpi.c power.c concat.c
+zbatc_SOURCES = color.c main.c acpi.c power.c concat.c
+zbatt_SOURCES = text.c main.c acpi.c power.c concat.c
 gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c
 noinst_HEADERS = main.h acpi.h power.h compat.h
 
