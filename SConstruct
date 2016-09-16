@@ -14,11 +14,11 @@ env = Environment()
 for t in [['zbatc', 'color.c'], ['zbatt', 'text.c']]:
     env.Program(t[0],
                 (
-                    'nix/%s' % t[1],
-                    'nix/main.c',
-                    'nix/acpi.c',
-                    'nix/power.c',
-                    'nix/concat.c'
+                    'src/%s' % t[1],
+                    'src/main.c',
+                    'src/acpi.c',
+                    'src/power.c',
+                    'src/concat.c'
                 ))
     t.reverse()
     t.pop()
