@@ -4,10 +4,13 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 
 dist_pkgdata_DATA = example.conf
 
+UNIX_DIR = src
+MSDOS_DIR = win
+
 if WINDOWS_HOST
 SUBDIRS = img win
 else
-SUBDIRS = img nix
+SUBDIRS = img $(UNIX_DIR)
 endif
 
 DIST_SUBDIRS = $(SUBDIRS)
@@ -82,9 +85,9 @@ release: clean
 	tar czf $(ZB_TARBALL) usr
 
 refresh-check:
-	cd nix; \
+	cd $(UNIX_DIR); \
 	$(MAKE) $@
 
 check-all:
-	cd nix; \
+	cd $(UNIX_DIR); \
 	$(MAKE) $@

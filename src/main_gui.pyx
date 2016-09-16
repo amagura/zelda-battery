@@ -96,6 +96,9 @@ def readCfg(file):
         cfg.read(file)
     elif os.path.isfile('%s/example.conf' % dataDir):
         cfg.read('%s/example.conf' % dataDir)
+    else:
+        cfg.add_section('gui')
+        cfg.set('gui', 'theme', 'original')
     return cfg
 
 def main():
@@ -109,7 +112,7 @@ def main():
                         help='specify an alternate image directory')
     parser.add_argument('-c',
                         metavar='<FILE>',
-                        default='%s/.config/%s/%s.conf' % (os.environ['HOME'], progName, progName),
+                        default='%s/.config/%s/%s.conf' % (os.environ['HOME'], progName[1:], progName[1:]),
                         nargs=1,
                         help='specify an alternate configuration file')
 
