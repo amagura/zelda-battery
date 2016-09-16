@@ -1,3 +1,4 @@
+/*
 """""
 Copyright 2014, 2015 Alexej Magura
 
@@ -15,6 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """""
+*/
 import os, argparse, ConfigParser
 #if WITH_GTK2
 import pygtk
@@ -112,8 +114,7 @@ def main():
                         help='specify an alternate configuration file')
 
     args = parser.parse_args()
-
-    cfg = readCfg(args.c.pop())
+    cfg = readCfg(args.c[0])
     imgDir = args.i if os.path.exists(args.i) else '../img'
     cfg.set('gui', 'imgDir', imgDir)
     if (len(cfg.get('gui', 'theme')) < 4):
