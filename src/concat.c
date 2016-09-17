@@ -25,7 +25,7 @@ limitations under the License.
 # if !defined(NO_COMMON_H)
 #  include "common.h"
 # else
-#  include "no_common.h"
+#  include "main.h"
 # endif
 
 # if COM_DEBUG

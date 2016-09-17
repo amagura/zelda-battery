@@ -1,7 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatt zbatc
-noinst_PROGRAMS = no_common.h
 
 zbatc_SOURCES = color.c main.c acpi.c power.c concat.c
 zbatt_SOURCES = text.c main.c acpi.c power.c concat.c
@@ -76,9 +75,6 @@ endif
 
 .PHONY: valgrind lint
 all-local:
-
-no_common.h:
-	ln -sf "main.h" "no_common.h"
 
 move-local: $(bin_PROGRAMS)
 	for file in $?; do mv "$$file" ../../; done

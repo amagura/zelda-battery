@@ -25,6 +25,7 @@ dnl C
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CXX
+AM_PROG_CC_C_O
 
 # Check for sed and grep
 AC_PROG_SED
