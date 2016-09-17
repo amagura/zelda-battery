@@ -27,8 +27,8 @@ limitations under the License.
 #if ZB_LINUX
 # include "acpi.h"
 #elif ZB_BSD
-# include <sys/sysctl.h>
 # define u_int unsigned int
+# include <sys/sysctl.h>
 #endif
 
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
