@@ -36,6 +36,7 @@ nohup.out
 test.sh
 /test
 LICENSE.images
+src/no_common.h
 
 # submodules
 modules/*.c

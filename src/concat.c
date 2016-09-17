@@ -94,7 +94,7 @@ char *concat(const char *s1, ...)
  * many bytes.  Similarlly, if a positive value is returned:
  * `y' many bytes is how much of `buf', which was _NOT_ used.
  *
- * XXX A failure is indicated by a return value _equal to
+ * XXX A failure is indicated by a return value _equal_ to
  * the destination buffers size_, which may make errors somewhat
  * harder to spot! */
 

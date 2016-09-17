@@ -2,10 +2,10 @@
 
 bin_PROGRAMS = zbatt zbatc
 
-zbatc_SOURCES = color.c main.c acpi.c power.c concat.c
-zbatt_SOURCES = text.c main.c acpi.c power.c concat.c
-gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c
-noinst_HEADERS = main.h acpi.h power.h compat.h
+zbatc_SOURCES = color.c main.c acpi.c power.c concat.c no_common.h
+zbatt_SOURCES = text.c main.c acpi.c power.c concat.c no_common.h
+gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c no_common.h
+noinst_HEADERS = main.h acpi.h power.h compat.h no_common.h
 
 iconsdir = $(pkgdatadir)/icons
 scaledir = $(iconsdir)/scalable/apps
@@ -74,7 +74,7 @@ bin_PROGRAMS += gzbatt
 endif
 
 .PHONY: valgrind lint
-all-local: no_common.h
+all-local:
 
 no_common.h:
 	ln -sf "main.h" "no_common.h"
