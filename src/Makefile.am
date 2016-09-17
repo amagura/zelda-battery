@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = no_common.h zbatt zbatc
+bin_PROGRAMS = zbatt zbatc
 
 zbatc_SOURCES = color.c main.c acpi.c power.c concat.c
 zbatt_SOURCES = text.c main.c acpi.c power.c concat.c
@@ -74,7 +74,7 @@ bin_PROGRAMS += gzbatt
 endif
 
 .PHONY: valgrind lint
-all-local:
+all-local: no_common.h
 
 no_common.h:
 	ln -sf "main.h" "no_common.h"
@@ -136,6 +136,7 @@ tidy-local:
 	$(RM) *.pyc || true
 	$(RM) main_gui.c || true
 	$(RM) main_gui.co || true
+	$(RM) no_common.h || true
 
 anew: clean all
 ready: clean all tidy-local
