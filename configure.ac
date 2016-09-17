@@ -66,6 +66,7 @@ AM_CONDITIONAL([LINUX_HOST], [test "x$ZB_HOST" = "xlinux"])
 AM_CONDITIONAL([WINDOWS_HOST], [test "x$ZB_HOST" = "xwindows"])
 AM_CONDITIONAL([BSD_HOST], [test "x$ZB_HOST" = "xbsd"])
 
+# If OS is `Windows' check for the following headers
 
 AS_IF([test "x$ZB_HOST" = "xwindows"],
 [AC_CHECK_HEADER([Windows.h],[AC_DEFINE([HAVE_WINDOWS_H], [1])],
@@ -103,6 +104,10 @@ AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
 AM_CONDITIONAL([GTK3], [test "x$with_gtk3" = "xyes"])
 AM_CONDITIONAL([GUI], [test "x$with_gtk2" = "xyes" || test "x$with_gtk3" = "xyes"])
 
+# Check if we have iniparser.h
+
+AC_CHECK_HEADER([iniparser.h],[AC_DEFINE([HAVE__INIPARSER_H], [1])])
+AC_SEARCH_LIBS([iniparser_load], [iniparser],,[AC_MSG_ERROR([`iniparser' is required])]) # TODO write a better error message
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
