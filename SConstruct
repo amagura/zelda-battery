@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#  Copyright 2015 Alexej Magura
+#  Copyright 2015, 2016 Alexej Magura
 #
 #  Copying and distribution of this file, with or without modification,
 #  are permitted in any medium without royalty provided the copyright

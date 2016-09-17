@@ -1,5 +1,5 @@
 /****
-Copyright 2015 Alexej Magura
+Copyright 2015, 2016 Alexej Magura
 
 This file is a part of ZBatt
 
