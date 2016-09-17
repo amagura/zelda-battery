@@ -1,11 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = zbatt zbatc
+noinst_PROGRAMS = no_common.h
 
-zbatc_SOURCES = color.c main.c acpi.c power.c concat.c no_common.h
-zbatt_SOURCES = text.c main.c acpi.c power.c concat.c no_common.h
-gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c no_common.h
-noinst_HEADERS = main.h acpi.h power.h compat.h no_common.h
+zbatc_SOURCES = color.c main.c acpi.c power.c concat.c
+zbatt_SOURCES = text.c main.c acpi.c power.c concat.c
+gzbatt_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c
+noinst_HEADERS = main.h acpi.h power.h compat.h
 
 iconsdir = $(pkgdatadir)/icons
 scaledir = $(iconsdir)/scalable/apps
