@@ -1,3 +1,4 @@
+#if 0
 /*
 """""
 Copyright 2014, 2015 Alexej Magura
@@ -17,6 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """""
 */
+#endif
 import os, argparse, ConfigParser
 #if WITH_GTK2
 import pygtk
