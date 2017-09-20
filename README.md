@@ -33,11 +33,12 @@ BSD systems known to work:
 BSD systems that _should_ work:
 * NetBSD
 * Midnight BSD
-* (Anything based on FreeBSD, lulz)
+* (Anything based on FreeBSD)
 
 BSD systems that _don't_ work:
-<ul><li>OpenBSD (soz, peeps)</li></ul>
+<ul><li>OpenBSD</li></ul>
 ### Windows
+
 Windows XP and later.
 
 # Dependencies
