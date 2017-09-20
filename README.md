@@ -37,8 +37,8 @@ BSD systems that _should_ work:
 
 BSD systems that _don't_ work:
 <ul><li>OpenBSD</li></ul>
-### Windows
 
+### Windows
 Windows XP and later.
 
 # Dependencies
