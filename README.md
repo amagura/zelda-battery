@@ -96,7 +96,8 @@ PROMPT="%{$(./zbatc)%}$(./zbatt)%{[0;0m%} %m%# "
 ## run TRAPALRM every $TMOUT seconds
 TMOUT=60 # refresh the terminal prompt every 60 seconds
 
-TRAPALRM () {
+TRAPALRM ()
+{
     zle reset-prompt # refreshs the terminal prompt
 }
 ```
