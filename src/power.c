@@ -30,6 +30,8 @@ limitations under the License.
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
 typedef unsigned int u_int;
 # include <sys/sysctl.h>
+#elif ZB_OBSD
+# include <machine/apmvar.h>
 #endif
 
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
@@ -102,6 +104,18 @@ void getpwr(struct power *pwr)
      pwr->charge.rnd = (limit != 0)
 	  ? nearbyint((double)(pwr->charge.raw / (pwr->charge.divsr)))
 	  : PWR_ENOWANT;
+#elif ZB_OBSD
+     size_t size;
+     int ac_line;
+     int limit = pwr->charge.nof;
+
+     size = sizeof(int);
+
+     struct apm_power_info pwrinfo;
+
+     ZB_DBG("%s\n", "getting power information from APM");
+
+     APM_IOC_GETPOWER(pwrinfo);
 #endif
 # if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
@@ -130,3 +144,4 @@ struct py_power py_getpwr()
      zb_pong;
      return pyp;
 }
+/* vim: ts=5:sts=5:expandtab: */
