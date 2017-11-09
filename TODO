@@ -1,0 +1,13 @@
+# TODO (duh)
+
+<!-- Last Updated: 2017-11-09 -->
+
+## Support for New Systems
+
+* I'd like to add support for OpenBSD (mostly for the challenge of figuring it out.)
+
+## Support for CSS (Currently Supported Systems)
+
+* I'd like to merge Windows support with *Nix support, in the sense that they should both be in the same
+  sub-directory; maybe they shouldn't, but why not.  They'll all live together, but only the ones needed will be pulled into
+  the binary when you actually build zbatt.
