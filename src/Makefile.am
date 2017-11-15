@@ -127,13 +127,13 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CYTHON) --embed -p -2 -Wextra -o $@ $(@:.c=.co)
 
 tidy-local:
-	$(RM) *.o || true
-	$(RM) *.od || true
-	$(RM) *.py || true
-	$(RM) *.pyc || true
-	$(RM) main_gui.c || true
-	$(RM) main_gui.co || true
-	$(RM) no_common.h || true
+	$(RM) *.o
+	$(RM) *.od
+	$(RM) *.py
+	$(RM) *.pyc
+	$(RM) main_gui.c
+	$(RM) main_gui.co
+	$(RM) no_common.h
 
 anew: clean all
 ready: clean all tidy-local
