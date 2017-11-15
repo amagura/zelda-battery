@@ -4,8 +4,9 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
-# Check if we are running on Windows
 AC_LANG(C)
+
+# Check if we are running on Windows
 AC_RUN_IFELSE([AC_LANG_PROGRAM([
 #include "nix/compat.h"
 ],[
