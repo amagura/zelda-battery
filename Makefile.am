@@ -5,10 +5,10 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 dist_pkgdata_DATA = example.conf
 
 UNIX_DIR = src
-MSDOS_DIR = win
+MSDOS_DIR = src/mswin
 
 if WINDOWS_HOST
-SUBDIRS = img win
+SUBDIRS = img $(MSDOS_DIR)
 else
 SUBDIRS = img $(UNIX_DIR)
 endif
