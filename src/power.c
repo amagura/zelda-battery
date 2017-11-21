@@ -30,7 +30,7 @@ limitations under the License.
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
 typedef unsigned int u_int;
 # include <sys/sysctl.h>
-#elif ZB_OBSD
+#elif HAVE__USR_INCLUDE_MACHINE_APMVAR_H
 # include <machine/apmvar.h>
 #endif
 
