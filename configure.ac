@@ -8,7 +8,7 @@ AC_LANG(C)
 
 # Check if we are running on Windows
 AC_RUN_IFELSE([AC_LANG_PROGRAM([
-#include "nix/compat.h"
+#include "src/compat.h"
 ],[
 #if ZB_WINDOWS
 return 0;
