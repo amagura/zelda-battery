@@ -115,7 +115,8 @@ void getpwr(struct power *pwr)
 
      ZB_DBG("%s\n", "getting power information from APM");
 
-     APM_IOC_GETPOWER(pwrinfo);
+#include <sys/ioctl.h>
+     ioctl(0, APM_IOC_GETPOWER);
 #endif
 # if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
