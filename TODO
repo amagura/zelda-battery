@@ -6,6 +6,8 @@
 
 * I'd like to add support for OpenBSD (mostly for the challenge of figuring it out.)
 
+* OpenBSD has sysctl hw.sensors.acpi*
+
 ## Support for CSS (Currently Supported Systems)
 
 * I'd like to merge Windows support with *Nix support, in the sense that they should both be in the same
