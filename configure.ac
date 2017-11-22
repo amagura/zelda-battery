@@ -118,7 +118,7 @@ AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_
 	     [AC_CHECK_FILES([/sys/class/power_supply],,
 	        AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],))])
 
-AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])])],)
+AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_CHECK_DECLS([apm_power_info],,AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `apmvar.h` are unsupported])])])
 
 # Check for progs
 IF_WINDOWS(,[AM_COND_IF([GUI],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
