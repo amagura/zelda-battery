@@ -80,8 +80,17 @@ AC_CHECK_HEADER([Shellapi.h],[AC_DEFINE([HAVE_SHELLAPI_H], [1])],
 AC_SUBST([CPUARCH])
 
 # Precious variables
-AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk' is present)])
-# Should we use gtk2
+AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk` is present)])
+
+AC_ARG_WITH([X],
+            AS_HELP_STRING([--without-x], [disable X server support (default: enabled for gtk2)])
+            AS_HELP_STRING([], [supported options:
+                                  gtk2
+                                  gtk3], [15], [30]),
+            [],
+            [with_x=gtk2])
+
+
 AC_ARG_WITH([gtk2],
 	AS_HELP_STRING([--without-gtk2], [disable building the gui using gtk2 (default: enabled)]),
 	[],
@@ -117,17 +126,13 @@ AS_IF([! test x"$ZB_HOST" = "xwindows"], AC_SEARCH_LIBS([nearbyint], [m],,[AC_MS
 AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]),
 	    AS_IF([test x"$ZB_HOST" = x"linux"],
 	     [AC_CHECK_FILES([/sys/class/power_supply],,
-	        AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],))])
+	        AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are not supported]))],))])
 
 AS_IF([test x"$ZB_HOST" = "xbsd"],
       AC_SEARCH_LIBS([sysctlbyname],
                      [c],
                      ,
-                     AC_CHECK_FILES([/usr/include/machine/apmvar.h],
-                                    ,
-                                    [AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `apmvar.h` are unsupported])])))
-
-dnl '
+                     [AC_MSG_ERROR([*BSD systems without `sysctlbyname' are not supported])]))
 
 AC_CHECK_TYPES([INT_MAX],, [AC_MSG_WARN([INT_MAX is not defined])], [#include <limits.h>])
 
