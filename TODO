@@ -1,17 +1,20 @@
 # TODO (duh)
 
-<!-- Last Updated: 2017-11-09 -->
+<!-- Last Updated: 2017-11-22 -->
 
 ## Support for New Systems
 
-* I'd like to add support for OpenBSD (mostly for the challenge of figuring it out.)
+* UNIX:
+  - Solaris (OpenIndiana)
+  - MINIX
 
-* OpenBSD has sysctl hw.sensors.acpi*
+* BeOS:
+  - Haiku
 
-## Support for CSS (Currently Supported Systems)
+## Support for Current Systems
 
 * I'd like to merge Windows support with *Nix support, in the sense that they should both be in the same
   sub-directory; maybe they shouldn't, but why not.  They'll all live together, but only the ones needed will be pulled into
   the binary when you actually build zbatt.
 
-* Cross compiling for windows should be triggerable from configure and should not require additional helper scripts.  
+* Cross compiling for windows should be triggerable from configure and should not require additional helper scripts.
