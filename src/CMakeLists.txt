@@ -3,5 +3,3 @@ project (ZBatt)
 
 add_executable(zbatt text.c main.c acpi.c power.c concat.c)
 add_executable(zbatc color.c main.c acpi.c power.c concat.c)
-
-CHECK_INCLUDE_FILES
