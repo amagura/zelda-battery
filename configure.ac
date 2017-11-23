@@ -17,8 +17,15 @@ AC_CANONICAL_TARGET
 
 # M4 Code
 m4_define([pi_natsolaris], [AS_CASE([$zb_build_type], [native::x*solaris*], [$1], [])])
-m4_define([__pi_natbsd__start], [if test "xzb_build_type" = "xnative::x"*bsd*; then])
+m4_define([__pi_natbsd__start],dnl
+          [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
 m4_define([__pi_natbsd__stop], [fi])
+
+m4_define([__pi_natunix__start], [\
+           if test "x$zb_build_type" = "xnative::x"*bsd* \
+             || test "x$zb_build_type" = "xnative::x"*linux* \
+             || test "x$zb_build_type" = "xnative::x"*solaris*; then])
+m4_define([__pi_natunix__stop], [fi])
 
 # Check if we are cross compiling
 if test "x$build" = "x$host" = "x$target"; then
@@ -40,13 +47,17 @@ AS_CASE([$zb_build_type],
            AC_PROG_CC
            PKG_PROG_PKG_CONFIG()
            [break]
-          ])
+          ],
+          [native::*cygwin*|native::*mingw*],[
+           AC_PROG_CXX
+           [break]
+          ],)
+
+dnl I only really need to support cross-building for windows
 
 # Checks for programs.
-AC_PROG_CXX
-AC_PROG_CC
 AC_PROG_INSTALL
-PKG_PROG_PKG_CONFIG()
+AC_PATH_PROGS_FEATURE_CHECK([GREP], [grep ggrep], [[echo 'a' | ac_cv_path_GREP -q -- 'a']])
 
 # Checks for libraries.
 AC_ARG_WITH([x],
@@ -85,6 +96,12 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
+
+__pi_natunix__start
+  AC_SEARCH_LIBS([nearbyint], [m],
+                 ,
+                 [AC_MSG_ERROR([nearbyint is not defined by libm: use a C99 compliant compiler])])
+__pi_natunix__stop
 
 __pi_natbsd__start
   AC_CHECK_FUNC([sysctlbyname],
