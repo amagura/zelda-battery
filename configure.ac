@@ -25,7 +25,7 @@ m4_define([__pi_natsolaris_klb], [fi])
 m4_define([__pi_natbsd_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
 m4_define([__pi_natbsd_klb], [fi])
 
-m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
+m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
 m4_define([__pi_natunix_klb], [fi])
 
 m4_define([__pi_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
@@ -68,6 +68,7 @@ dnl I only really need to support cross-building for windows
 # Checks for programs.
 AC_PROG_INSTALL
 AC_PATH_PROGS_FEATURE_CHECK([GREP], [grep ggrep], [[echo 'a' | ac_cv_path_GREP -q -- 'a']])
+AC_PATH_PROGS_FEATURE_CHECK([EGREP], [egrep gegrep], [[echo 'a' | ac_cv_path_EGREP -q -- 'a']])
 
 # Checks for libraries.
 AC_ARG_WITH([x],
@@ -111,6 +112,9 @@ __pi_natunix_blk
   AC_SEARCH_LIBS([nearbyint], [m],
                  ,
                  [AC_MSG_ERROR([nearbyint is not defined by libm: use a C99 compliant compiler])])
+
+  # add support for libcommoner
+  AC_SEARCH_LIBS([concatm], [commoner])
 __pi_natunix_klb
 
 __pi_natbsd_blk
