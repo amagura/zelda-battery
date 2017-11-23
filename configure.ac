@@ -114,11 +114,11 @@ __pi_natunix_blk
 __pi_natunix_klb
 
 __pi_natbsd_blk
-  AC_CHECK_FUNC([sysctlbyname],
+  AC_CHECK_FUNCS([sysctlbyname],
                 ,
                 AC_SEARCH_LIBS([sysctlbyname],
                                [c],
-                               ,
+                               [AC_DEFINE([HAVE_SYSCTLBYNAME], [1])],
                                [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
 __pi_natbsd_klb
 

@@ -1,3 +1,4 @@
+/* vim: ts=5:sts=5:set expandtab: */
 /****
 Copyright 2014, 2015, 2016 Alexej Magura
 
@@ -24,9 +25,9 @@ limitations under the License.
 #include "power.h"
 #include "compat.h"
 
-# if HAVE__SYS_CLASS_POWER__SUPPLY
+# if HAVE__SYS_CLASS_POWER_SUPPLY
 # include "acpi.h"
-#elif HAVE__SYSCTLBYNAME
+#elif HAVE_SYSCTLBYNAME
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
 typedef unsigned int u_int;
 # include <sys/sysctl.h>
@@ -47,7 +48,7 @@ void getpwr(struct power *pwr)
 
      ZB_DBG("err: %d\n", *pwr->err.vp);
 
-#if HAVE__SYS_CLASS_POWER__SUPPLY
+#if HAVE_SYS_CLASS_POWER_SUPPLY
      struct pwr_sup info;
      info.cap = -1;
 
@@ -145,4 +146,3 @@ struct py_power py_getpwr()
      zb_pong;
      return pyp;
 }
-/* vim: ts=5:sts=5:expandtab: */
