@@ -1,84 +1,70 @@
 AC_PREREQ([2.65])
-AC_INIT([ZBatt], [3.0.4], [agm2819@gmail.com],,[https://github.com/amagura/zelda-battery])
+AC_INIT([ZBatt], [3.1.0], [agm2819@gmail.com],,[https://github.com/amagura/zelda-battery])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-mac])
 AC_CONFIG_HEADERS([config.h])
 
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
 AM_INIT_AUTOMAKE([foreign -Wall])
-AC_USE_SYSTEM_EXTENSIONS
 
-# Check if we are running on Windows
-AC_LANG(C)
-AC_RUN_IFELSE([AC_LANG_PROGRAM([
-#include "nix/compat.h"
-],[
-#if ZB_WINDOWS
-return 0;
-#else
-return 1;
-#endif
-return 2;
-])], [m4_define([IS_WINDOWS], [1])][:], [m4_define([IS_WINDOWS], [0])][:])
-
-
-#AS_ECHO([[WINDOWS:]][IS_WINDOWS])
-m4_define([IF_WINDOWS], [m4_if([IS_WINDOWS], [1], [$1], [$2])])
-# Check for compilers
-dnl C
-AC_PROG_CC
+AC_PROG_CC([cc gcc])
 AC_PROG_CC_STDC
-AC_PROG_CXX
-AM_PROG_CC_C_O
+AC_PROG_CPP
+AC_LANG([C])
 
+
+
+AC_USE_SYSTEM_EXTENSIONS
 # Check for sed and grep
 AC_PROG_SED
 AC_PROG_GREP
 
-# Get System Type
-AC_CANONICAL_BUILD
-AC_CANONICAL_HOST
+AS_CASE([$host],
+        [*linux*|*bsd*|*solaris*], [
+         AC_MSG_NOTICE([Linux/BSD/Solaris])
+         AC_LANG_ASSERT([C])
+        ],
+        [*cygwin*|mingw32*], [
+         AC_MSG_NOTICE([Windows])
+         AC_PROG_CXX
+         AC_PROG_CXXCPP
+         AC_LANG_PUSH([C++])
+        ],
+        [AC_MSG_ERROR([System is not supported])])
 
 
 # Check for pkg-config
 
 # Check build_os and set ZB_BOS accordingly
-AS_CASE([$build_os],
+AS_CASE([$host],
         [*linux*], [#
          AC_CHECK_FILES([/sys/class/power_supply],
                         ,
-                        AC_MSG_ERROR([Linux kernels older than 2.6.24 are not supported.]))],
+                        AC_MSG_ERROR([Linux kernels older than 2.6.24 are not supported.]))
+         ],
         [*bsd*], [#
          AC_CHECK_FUNC([sysctlbyname],
                        ,
                        AC_SEARCH_LIBS([sysctlbyname],
                                       [c],
-                                      AC_DEFINE([HAVE_SYSCTLBYNAME
-                                                 [AC_MSG_ERROR([*BSD systems without 'sysctlbyname' are not supported.])])))],
+                                      ,
+                                      [AC_MSG_ERROR([*BSD systems without 'sysctlbyname' are not supported.])]))
+         ],
         [*cygwin*|*mingw32*], [#
          AC_CHECK_HEADERS([Windows.h windows.h \
                            Winapifamily.h winapifamily.h \
                            _mingw_unicode.h specstrings.h \
                            Shellapi.h shellapi.h],,,)
-         AC_LANG(C++)
-         [with_x="no";]],
+         AM_CONDITIONAL([MSWIN], [test xalways_true = xalways_true])
+         ],
          [*solaris*], [#
-          AC_CHECK_HEADERS([sys/pm.h])])
-
-AM_CONDITIONAL([LINUX_BUILD], [test "x$ZB_BUILD" = "xlinux"])
-AM_CONDITIONAL([WINDOWS_BUILD], [test "x$ZB_BUILD" = "xwindows"])
-AM_CONDITIONAL([BSD_BUILD], [test "x$ZB_BUILD" = "xbsd"])
-
-# host os checking
-AS_CASE([$host],
-  [*linux*], [ZB_HOST="linux"],
-  [*cygwin], [ZB_HOST="windows"],
-  [*mingw32], [ZB_HOST="windows"],
-  [*bsd*], [ZB_HOST="bsd"],
-  [ZB_HOST=""])
-AC_SUBST([ZB_HOST])
-AM_CONDITIONAL([LINUX_HOST], [test "x$ZB_HOST" = "xlinux"])
-AM_CONDITIONAL([WINDOWS_HOST], [test "x$ZB_HOST" = "xwindows"])
-AM_CONDITIONAL([BSD_HOST], [test "x$ZB_HOST" = "xbsd"])
+          AC_CHECK_HEADERS([sys/pm.h])
+          ],
+          [] # default
+         )
 
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])
@@ -111,21 +97,21 @@ AM_CONDITIONAL([TRAVIS], [test "x$TRAVIS" = "xtrue"])
 AM_COND_IF([TRAVIS], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
 
 # Check for libs
-AS_IF([! test x"$ZB_HOST" = "xwindows"], AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])]), )
+#AS_IF([! test x"$ZB_HOST" = "xwindows"], AC_SEARCH_LIBS([nearbyint], [m],,[AC_MSG_ERROR([Please use a C99 compliant compiler])]), )
 
-# Check for OS specifics
-AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]),
-	    AS_IF([test x"$ZB_HOST" = x"linux"],
-	     [AC_CHECK_FILES([/sys/class/power_supply],,
-	        AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are not supported]))],))])
+## Check for OS specifics
+#AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_CLASS_POWER_SUPPLY], [1]),
+	    #AS_IF([test x"$ZB_HOST" = x"linux"],
+	     #[AC_CHECK_FILES([/sys/class/power_supply],,
+		#AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are not supported]))],))])
 
-AS_IF([test x"$ZB_HOST" = "xbsd"],
-      AC_SEARCH_LIBS([sysctlbyname],
-                     [c],
-                     ,
-                     [AC_MSG_ERROR([*BSD systems without `sysctlbyname' are not supported])]))
+#AS_IF([test x"$ZB_HOST" = "xbsd"],
+      #AC_SEARCH_LIBS([sysctlbyname],
+                     #[c],
+                     #,
+                     #[AC_MSG_ERROR([*BSD systems without `sysctlbyname' are not supported])]))
 
-AC_CHECK_TYPES([INT_MAX],, [AC_MSG_WARN([INT_MAX is not defined])], [#include <limits.h>])
+#AC_CHECK_TYPES([INT_MAX],, [AC_MSG_WARN([INT_MAX is not defined])], [#include <limits.h>])
 
 
 
@@ -200,5 +186,5 @@ EOF
 )`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
-AC_CONFIG_FILES([Makefile src/Makefile img/Makefile win/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile img/Makefile src/mswin/Makefile])
 AC_OUTPUT

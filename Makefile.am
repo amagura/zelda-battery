@@ -4,14 +4,16 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 
 dist_pkgdata_DATA = example.conf
 
-UNIX_DIR = src
-MSDOS_DIR = win
-
-if WINDOWS_HOST
-SUBDIRS = img win
+if MSWIN
+  MAYBE_MSWIN = src/mswin
 else
-SUBDIRS = img $(UNIX_DIR)
+  MAYBE_UNIX = src
+  if X
+    MAYBE_X = img
+  endif
 endif
+
+SUBDIRS = $(MAYBE_MSWIN) $(MAYBE_UNIX) $(MAYBE_X)
 
 DIST_SUBDIRS = $(SUBDIRS)
 
