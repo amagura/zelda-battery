@@ -53,8 +53,6 @@ AM_CONDITIONAL([LINUX_BUILD], [test "x$ZB_BUILD" = "xlinux"])
 AM_CONDITIONAL([WINDOWS_BUILD], [test "x$ZB_BUILD" = "xwindows"])
 AM_CONDITIONAL([BSD_BUILD], [test "x$ZB_BUILD" = "xbsd"])
 
-AC_PATH_PROGS([GPP], [gpp cpp],[no])
-
 # host os checking
 AS_CASE([$host],
   [*linux*], [ZB_HOST="linux"],
@@ -88,31 +86,19 @@ AC_ARG_WITH([X],
                                   gtk2
                                   gtk3], [15], [30]),
             [],
-            [with_x=gtk2])
+            [with_x=gtk2;])
 
+IF_WINDOWS([with_x=no])
 
-AC_ARG_WITH([gtk2],
-	AS_HELP_STRING([--without-gtk2], [disable building the gui using gtk2 (default: enabled)]),
-	[],
-	[with_gtk2=yes])
-
-AC_ARG_WITH([gtk3],
-	AS_HELP_STRING([--with-gtk3], [enable building the gui using gtk3 (default: disabled)]),
-	[with_gtk3=yes;with_gtk2=no],
-	[])
-IF_WINDOWS([with_gtk2=no;with_gtk3=no])
-
-IF_WINDOWS(,[AS_IF([test "x$with_gtk3" = "xyes"],
-[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0],
-	[AC_DEFINE([HAVE_GTK3], [1])])],
-	[test "x$with_gtk2" = "xyes"],
-[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0],
-	[AC_DEFINE([HAVE_GTK2], [1])])])])
+#IF_WINDOWS(,[AS_IF([test "x$with_gtk3" = "xyes"],
+#[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0],
+        #[AC_DEFINE([HAVE_GTK3], [1])])],
+        #[test "x$with_gtk2" = "xyes"],
+#[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0],
+        #[AC_DEFINE([HAVE_GTK2], [1])])])])
 
 # Check if we have GTK+2
-AM_CONDITIONAL([GTK2], [test "x$with_gtk2" = "xyes"])
-AM_CONDITIONAL([GTK3], [test "x$with_gtk3" = "xyes"])
-AM_CONDITIONAL([GUI], [test "x$with_gtk2" = "xyes" || test "x$with_gtk3" = "xyes"])
+AM_CONDITIONAL([X], [test "x$with_x" = "xyes" || test "x$with_x" = "xgtk2" || "x$with_x" = "xgtk3" ])
 
 # Travis
 AC_MSG_CHECKING([whether build is automated])
@@ -138,8 +124,8 @@ AC_CHECK_TYPES([INT_MAX],, [AC_MSG_WARN([INT_MAX is not defined])], [#include <l
 
 
 
-IF_WINDOWS(,[AM_COND_IF([GUI],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
-AM_COND_IF([GUI],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([python2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([python2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])])
+#IF_WINDOWS(,[AM_COND_IF([X],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
+#AM_COND_IF([X],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([python2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([python2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for X server support])])])])
 
 # Check if peeps want to try to compile to native (compiler may or may not support it)
 AC_ARG_ENABLE([native],
