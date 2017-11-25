@@ -198,6 +198,8 @@ int main(int argc, char **argv)
 	  }
      }
 
+     /* FIXME: aren't we supposed to check if getpwr set pwr.error? */
+     /* FIXME: please add error handling for getpwr */
      getpwr(&pwr);
      ZB_XONDBG(perror(ZB_PROGNAME));
      disp(txt, pwr);

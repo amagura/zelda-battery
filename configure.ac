@@ -199,6 +199,20 @@ AC_CONFIG_FILES([Makefile
                  img/Makefile
                  src/Makefile
                  src/mswin/Makefile])
+#########
+# Options
+#########
+AC_ARG_ENABLE([debug],
+              [  --enable-debug		turn on debugging (default: disabled)],
+              [case "${enableval}" in
+               yes) debug=true ;;
+               no) debug=false ;;
+               *) AC_MSG_WARN([bad value '${enableval}' for --enable-debug]) ;;
+             esac],[debug=no])
+
+test "x$debug" = "xno" && no_debug=false
+test "x$debug" = "xfalse" && no_debug=true
+
 #AC_CONFIG_SUBDIRS([old
                    #src/test])
 # Automake directives
