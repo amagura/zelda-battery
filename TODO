@@ -2,6 +2,10 @@
 
 <!-- Last Updated: 2017-11-22 -->
 
+## Build System
+
+* ZBatt should fail when being compiled on an unsupported system; however, it currently doesn't.  
+
 ## Support for New Systems
 
 * UNIX:
@@ -18,3 +22,4 @@
   the binary when you actually build zbatt.
 
 * Cross compiling for windows should be triggerable from configure and should not require additional helper scripts.
+
