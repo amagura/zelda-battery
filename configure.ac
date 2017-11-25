@@ -40,12 +40,12 @@ AS_CASE([$host],
 
 # Check build_os and set ZB_BOS accordingly
 AS_CASE([$host],
-        [*linux*], [#
+        [*linux*], [
          AC_CHECK_FILES([/sys/class/power_supply],
                         ,
                         AC_MSG_ERROR([Linux kernels older than 2.6.24 are not supported.]))
          ],
-        [*bsd*], [#
+        [*bsd*], [
          AC_CHECK_FUNC([sysctlbyname],
                        ,
                        AC_SEARCH_LIBS([sysctlbyname],
@@ -53,15 +53,15 @@ AS_CASE([$host],
                                       ,
                                       [AC_MSG_ERROR([*BSD systems without 'sysctlbyname' are not supported.])]))
          ],
-        [*cygwin*|*mingw32*], [#
+        [*cygwin*|*mingw32*], [
          AC_CHECK_HEADERS([Windows.h windows.h \
                            Winapifamily.h winapifamily.h \
                            _mingw_unicode.h specstrings.h \
                            Shellapi.h shellapi.h],,,)
-         AM_CONDITIONAL([MSWIN], [test xalways_true = xalways_true])
+         AM_CONDITIONAL([MSWIN], [test "xalways_true" = "xalways_true"])
          ],
-         [*solaris*], [#
-          AC_CHECK_HEADERS([sys/pm.h])
+         [*solaris*], [
+          AC_CHECK_HEADERS([sys/pm.h],,,)
           ],
           [] # default
          )
@@ -70,16 +70,15 @@ AS_CASE([$host],
 AC_SUBST([CPUARCH])
 
 # Precious variables
-AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when `--with-gtk` is present)])
+AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-X' is present)])
 
 AC_ARG_WITH([X],
             AS_HELP_STRING([--without-x], [disable X server support (default: enabled for gtk2)])
             AS_HELP_STRING([], [supported options:
                                   gtk2
                                   gtk3], [15], [30]),
-            [with_x=gtk2],)
-
-IF_WINDOWS([with_x=no])
+            [with_X=gtk2],)
+AM_CONDITIONAL([X], [test "x$with_X" = "xyes" || test "x$with_X" = "xgtk2" || "x$with_X" = "xgtk3"])
 
 #IF_WINDOWS(,[AS_IF([test "x$with_gtk3" = "xyes"],
 #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0],
@@ -89,8 +88,6 @@ IF_WINDOWS([with_x=no])
         #[AC_DEFINE([HAVE_GTK2], [1])])])])
 
 # Check if we have GTK+2
-AM_CONDITIONAL([X], [test "x$with_x" = "xyes" || test "x$with_x" = "xgtk2" || "x$with_x" = "xgtk3" ])
-
 # Travis
 AC_MSG_CHECKING([whether build is automated])
 AM_CONDITIONAL([TRAVIS], [test "x$TRAVIS" = "xtrue"])
