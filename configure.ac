@@ -40,6 +40,9 @@ m4_define([__pi_natmswin_klb], [fi])
 m4_define([__pi_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xcross-native::x.*(cygwin|mingw32).*'; then])
 m4_define([__pi_crnat_mswin_klb], [fi])
 
+#m4_define([__pi_ncc_nix_blk], [m4_define([__argc__], [$#])
+  #m4_if([__argc__], [0], [if echo "x$zb_build_type" | $ac_cv_path_EGREP
+
 
 m4_define([__pi_grep], [echo "$1" | $ac_cv_path_EGREP -q -- m4_shift($@)])
 
