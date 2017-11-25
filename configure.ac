@@ -14,29 +14,28 @@ AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
+PKG_PROG_PKG_CONFIG()
 
 # Checks for libraries.
-AC_ARG_WITH([X],
+AC_ARG_WITH([x],
             AS_HELP_STRING([--without-x],
-                           [disable X server support (default: enabled for gtk2)])
+                           [disable x server support (default: enabled for gtk2)])
             AS_HELP_STRING([],
                            [supported options:
                                                 gtk2
                                                 gtk3], [15], [30]),
-            [with_X=gtk2],
-            [with_X=no])
+            [with_x=gtk2],
+            [with_x=no])
 
-AS_IF([test "x$with_X" != "xno"],
-      [AS_IF([test "x$with_X" = "xgtk3"],
-             [PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0],
-                                AC_DEFINE([HAVE_GTK3],
-                                          [1],
-                                          [Define if gtk3 is present]))],
-             [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0],
-                                AC_DEFINE([HAVE_GTK2],
-                                          [1],
-                                          [Define if gtk2 is present]))]
-             )])
+if test "x$with_x" != "xno" && test "x$with_x" = "xgtk3"; then
+  PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Defined when gtk3 is present.]))
+elif test "x$with_x" != "xno" && test "x$with_x" = "xgtk2"; then
+    PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([HAVE_GTK2], [1], [Defined when gtk2 is present.]))
+fi
+#AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk3"],
+      #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Define if gtk3 is present.]))])
+#AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk2"],
+      #[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], AC_DEFINE([HAVE_GTK2], [1], [Define if gtk2 is present.]))])
 
 
 # Checks for header files.
@@ -57,6 +56,10 @@ AC_CHECK_FUNC([sysctlbyname],
                              ,
                              [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
 
+# Check for files.
+AC_CHECK_FILES([/sys/class/power_supply],
+               ,
+               [AC_MSG_WARN([Linux kernels older than 2.6.24 are not supported.])])
 
 AC_CONFIG_FILES([Makefile
                  img/Makefile
@@ -67,7 +70,8 @@ AC_CONFIG_FILES([Makefile
 # Automake directives
 dnl `foreign' prevents autotools from installing a copy of the GPL
 AM_INIT_AUTOMAKE([foreign])
-AM_CONDITIONAL([X], [test "x$with_X" != "xno"])
+
+AM_CONDITIONAL([X], [test "x$with_x" != "xno"])
 AM_CONDITIONAL([NATIVE], [test "x$native" = "xtrue"])
 AM_CONDITIONAL([GENERIC], [test "x$generic" = "xtrue"])
 AM_CONDITIONAL([STATIC], [test "x$static" = "xtrue"])
@@ -84,6 +88,5 @@ __TINYC__
 EOF
 )`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUARCH" = "x" && test ! "x$CPUARCH" = "xunknown" && (]CLANG[ || ]TINYC[)])
-
 
 AC_OUTPUT
