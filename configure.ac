@@ -16,16 +16,17 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # M4 Code
-m4_define([pi_natsolaris], [AS_CASE([$zb_build_type], [native::x*solaris*], [$1], [])])
-m4_define([__pi_natbsd__start],dnl
-          [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
-m4_define([__pi_natbsd__stop], [fi])
+m4_define([__pi_natsolaris], [AS_CASE([$zb_build_type], [native::x*solaris*], [$1], [])])
+m4_define([__pi_natbsd], [AS_CASE([$zb_build_type], [native::x*bsd*], [$1], [])])
 
-m4_define([__pi_natunix__start], [\
-           if test "x$zb_build_type" = "xnative::x"*bsd* \
-             || test "x$zb_build_type" = "xnative::x"*linux* \
-             || test "x$zb_build_type" = "xnative::x"*solaris*; then])
-m4_define([__pi_natunix__stop], [fi])
+m4_define([__pi_natsolaris_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*solaris.*'; then])
+m4_define([__pi_natsolaris_klb], [fi])
+
+m4_define([__pi_natbsd_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
+m4_define([__pi_natbsd_klb], [fi])
+
+m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
+m4_define([__pi_natunix_klb], [fi])
 
 # Check if we are cross compiling
 if test "x$build" = "x$host" = "x$target"; then
@@ -87,7 +88,7 @@ fi
 
 # Checks for header files.
 AC_CHECK_HEADERS([limits.h stdlib.h string.h sys/ioctl.h])
-pi_natsolaris([AC_CHECK_HEADERS([sys/pm.h])])
+__pi_natsolaris([AC_CHECK_HEADERS([sys/pm.h])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -97,20 +98,20 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
 
-__pi_natunix__start
+__pi_natunix_blk
   AC_SEARCH_LIBS([nearbyint], [m],
                  ,
                  [AC_MSG_ERROR([nearbyint is not defined by libm: use a C99 compliant compiler])])
-__pi_natunix__stop
+__pi_natunix_klb
 
-__pi_natbsd__start
+__pi_natbsd_blk
   AC_CHECK_FUNC([sysctlbyname],
                 ,
                 AC_SEARCH_LIBS([sysctlbyname],
                                [c],
                                ,
                                [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
-__pi_natbsd__stop
+__pi_natbsd_klb
 
 # Check for files.
 if test "x$zb_build_type" = "xnative::xlinux;;"; then
