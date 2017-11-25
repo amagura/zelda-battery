@@ -1,4 +1,4 @@
-/* vim: set ft=c: */
+/* vim:ft=c:ts=5:sts=5:sw=5:set expandtab: */
 /****
 Copyright 2014, 2015, 2016, 2017 Alexej Magura
 
@@ -137,4 +137,3 @@ BEGIN_C_DECLS
 END_C_DECLS
 
 #endif /* ZB_COMPAT_H_GUARD */
-/* vim: ts=5:sts=5:sw=5:expandtab:ft=c: */

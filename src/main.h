@@ -1,3 +1,4 @@
+/* vim: ts=5:sts=5:sw=5:set expandtab:ft=c: */
 /****
 Copyright 2014, 2015, 2016 Alexej Magura
 
@@ -119,12 +120,13 @@ limitations under the License.
      } while (0)
 
 
-# undef bzero
-# define bzero(COM_B, COM_LEN)			\
-     (memset((void *)(COM_B),			\
-	     '\0',				\
-	     (size_t)(COM_LEN)),		\
-      (void)0)
+# ifndef HAVE_BZERO
+#  undef bzero
+#  define bzero(COM_B, COM_LEN)			\
+      (memset((void *)(COM_B),			\
+ 	     '\0',				\
+ 	     (size_t)(COM_LEN)),		\
+       (void)0)
 
 # undef mempcpy
 # define mempcpy(COM_D, COM_S, COM_L)		\
