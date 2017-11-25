@@ -25,11 +25,17 @@ m4_define([__pi_natsolaris_klb], [fi])
 m4_define([__pi_natbsd_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
 m4_define([__pi_natbsd_klb], [fi])
 
-m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
+m4_define([__pi_natnix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
+m4_define([__pi_natnix_klb], [fi])
+
+m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|solaris).*'; then])
 m4_define([__pi_natunix_klb], [fi])
 
 m4_define([__pi_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
 m4_define([__pi_natlinux_klb], [fi])
+
+m4_define([__pi_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'])
+m4_define([__pi_natmswin_klb], [fi])
 
 # Check if we are cross compiling
 #AS_IF([test "x$build" = "x$host" = "x$target"],
@@ -79,8 +85,8 @@ AC_ARG_WITH([x],
                            [supported options:
                                                 gtk2
                                                 gtk3], [15], [30]),
-            [with_x=gtk2],
-            [with_x=no])
+            [with_x=no],
+            [with_x=gtk2])
 
 if test "x$with_x" != "xno" && test "x$with_x" = "xgtk3"; then
   PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Defined when gtk3 is present.]))
@@ -98,8 +104,13 @@ fi
         #[native::x*solaris*],[AC_CHECK_HEADERS(
 
 # Checks for header files.
-AC_CHECK_HEADERS([limits.h stdlib.h string.h sys/ioctl.h])
+AC_CHECK_HEADERS([limits.h stdlib.h string.h])
 __pi_natsolaris([AC_CHECK_HEADERS([sys/pm.h])])
+
+__pi_natunix_blk
+  # FIXME, only solaris and openbsd actually need ioctl
+  AC_CHECK_HEADERS([sys/ioctl.h])
+__pi_natunix_klb
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -109,14 +120,14 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
 
-__pi_natunix_blk
+__pi_natnix_blk
   AC_SEARCH_LIBS([nearbyint], [m],
                  ,
                  [AC_MSG_ERROR([nearbyint is not defined by libm: use a C99 compliant compiler])])
 
   # add support for libcommoner
   AC_SEARCH_LIBS([concatm], [commoner])
-__pi_natunix_klb
+__pi_natnix_klb
 
 __pi_natbsd_blk
   AC_CHECK_FUNCS([sysctlbyname],

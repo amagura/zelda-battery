@@ -16,6 +16,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -35,6 +38,10 @@ typedef unsigned int u_int;
 # include <machine/apmvar.h>
 #elif HAVE_SYS_PM_H
 # include <sys/pm.h>
+#endif
+
+#if HAVE_SYS_IOCTL_H
+# include <sys/ioctl.h>
 #endif
 
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
@@ -118,10 +125,19 @@ void getpwr(struct power *pwr)
 
      ZB_DBG("%s\n", "getting power information from APM");
 
-#include <sys/ioctl.h>
      ioctl(0, APM_IOC_GETPOWER);
 #elif HAVE_SYS_PM_H
      ZB_DBG("%s\n", "Solaris Support");
+     size_t sz;
+     int ac_line;
+     int limit = pwr->charge.nof;
+
+     sz = sizeof(int);
+
+     struct pm_req pwrinfo;
+
+     ioctl(0, PM_GET_CURRENT_POWER, pwrinfo);
+
 #endif
 #if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
@@ -130,6 +146,7 @@ void getpwr(struct power *pwr)
 #endif
 }
 
+# if HAVE_GTK2 || HAVE_GTK3
 struct py_power py_getpwr()
 {
      struct power pwr;
@@ -150,3 +167,4 @@ struct py_power py_getpwr()
      zb_pong;
      return pyp;
 }
+#endif

@@ -25,7 +25,7 @@ limitations under the License.
 # include <stdarg.h>
 # include <stdbool.h>
 
-# if defined(HAVE_MEMPCPY)
+# if defined(HAVE_MEMPCPY) || defined(HAVE_BZERO)
 #  ifndef _GNU_SOURCE
 #   define _GNU_SOURCE 1
 #  endif
