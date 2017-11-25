@@ -38,23 +38,24 @@ m4_define([__pi_natlinux_klb], [fi])
             #[test "x$host" != "x$target"]
 if test "x$build" = "x$host" \
   && test "x$host" = "x$target"; then
-  zb_build_type="native::x$host..."
+  zb_build_type="native::x$host"
 elif test "x$build" = "x$host" \
   && test "x$host" != "x$target"; then
-  zb_build_type="cross::x$target..."
+  zb_build_type="cross::x$target"
 elif test "x$build" != "x$host" \
   && test "x$build" != "x$target" \
   && test "x$host" != "x$target"; then
-  zb_build_type="canadian::x$build::x$host::x$target..."
+  zb_build_type="canadian::x$build::x$host::x$target"
 elif test "x$build" != "$host" \
   && test "x$host" = "x$target" \
   && test "x$build" != "$target"; then
-  zb_build_type="cross-native::x$build::x$host::x$target..."
+  zb_build_type="cross-native::x$build::x$host::x$target"
 fi
 
 AS_CASE([$zb_build_type],
           [native::*linux*|native::*bsd*|native::*solaris*],[
            AC_PROG_CC
+           AC_PROG_CC_STDC
            PKG_PROG_PKG_CONFIG()
            [break]
           ],

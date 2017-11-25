@@ -4,16 +4,17 @@
 
 ## Build System
 
-* ZBatt should fail when being compiled on an unsupported system; however, it currently doesn't.  
+* ZBatt should fail when being compiled on an unsupported system; however, it currently doesn't.
 
 ## Support for New Systems
 
 * UNIX:
   - Solaris (OpenIndiana)
-  - MINIX
+  - MINIX (probably not worth the effort)
+  - OpenBSD (hell, why not: it's a piece of shit, but might as well)
 
 * BeOS:
-  - Haiku
+  - Haiku (will probably require more C++ coding)
 
 ## Support for Current Systems
 
