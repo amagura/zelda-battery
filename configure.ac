@@ -98,7 +98,7 @@ AC_ARG_WITH([x],
             [with_x=gtk2])
 
 __pi_natnix_blk
-if test "x$with_x" != "no"; then
+if test "x$with_x" != "xno"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
   AC_CHECK_PROGS([CYTHON], [cython cython2], [no])
   if test "x$CYTHON" = "xno"; then
