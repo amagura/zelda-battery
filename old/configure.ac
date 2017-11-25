@@ -3,6 +3,7 @@ AC_INIT([ZBatt], [3.1.0], [agm2819@gmail.com],,[https://github.com/amagura/zelda
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-mac])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile])
 
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
@@ -26,12 +27,12 @@ AS_CASE([$host],
         [*linux*|*bsd*|*solaris*], [
          AC_MSG_NOTICE([Linux/BSD/Solaris])
          AC_LANG_ASSERT([C])
+         AC_CONFIG_FILES([src/Makefile img/Makefile])
+         PKG_PROG_PKGCONFIG()
         ],
         [*cygwin*|mingw32*], [
          AC_MSG_NOTICE([Windows])
-         AC_PROG_CXX
-         AC_PROG_CXXCPP
-         AC_LANG_PUSH([C++])
+         AC_CONFIG_FILES([src/mswin/Makefile])
         ],
         [AC_MSG_ERROR([System is not supported])])
 
@@ -73,12 +74,28 @@ AC_SUBST([CPUARCH])
 AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-X' is present)])
 
 AC_ARG_WITH([X],
-            AS_HELP_STRING([--without-x], [disable X server support (default: enabled for gtk2)])
-            AS_HELP_STRING([], [supported options:
-                                  gtk2
-                                  gtk3], [15], [30]),
-            [with_X=gtk2],)
-AM_CONDITIONAL([X], [test "x$with_X" = "xyes" || test "x$with_X" = "xgtk2" || "x$with_X" = "xgtk3"])
+            AS_HELP_STRING([--without-x],
+                           [disable X server support (default: enabled for gtk2)])
+            AS_HELP_STRING([],
+                           [supported options:
+                                                gtk2
+                                                gtk3], [15], [30]),
+            [with_X=gtk2],
+            [with_X=no])
+
+AS_IF([test "x$with_X" != "xno"],
+      [AS_IF([test "x$with_X" = "xgtk3"],
+             [PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0],
+                                AC_DEFINE([HAVE_GTK3],
+                                          [1],
+                                          [Define if gtk3 is present]))],
+             [PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0],
+                                AC_DEFINE([HAVE_GTK2],
+                                          [1],
+                                          [Define if gtk2 is present]))]
+             )])
+
+AM_CONDITIONAL([X], [test "x$with_X" != "xno"])
 
 #IF_WINDOWS(,[AS_IF([test "x$with_gtk3" = "xyes"],
 #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0],
@@ -183,5 +200,4 @@ EOF
 )`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
-AC_CONFIG_FILES([Makefile src/Makefile img/Makefile src/mswin/Makefile])
 AC_OUTPUT

@@ -24,7 +24,7 @@ limitations under the License.
 #include "power.h"
 #include "compat.h"
 
-#if ZB_LINUX
+# if HAVE__SYS_CLASS_POWER__SUPPLY
 # include "acpi.h"
 #elif HAVE__SYSCTLBYNAME
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
@@ -47,7 +47,7 @@ void getpwr(struct power *pwr)
 
      ZB_DBG("err: %d\n", *pwr->err.vp);
 
-#if ZB_LINUX
+#if HAVE__SYS_CLASS_POWER__SUPPLY
      struct pwr_sup info;
      info.cap = -1;
 
