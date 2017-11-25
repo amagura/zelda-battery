@@ -6,6 +6,10 @@
 
 * ZBatt should fail when being compiled on an unsupported system; however, it currently doesn't.
 
+## Run Time
+
+* ZBatt should not fail silently when it encounters a fatal error: or it should at least be an option: fail silently if passed option `-q'.  
+
 ## Support for New Systems
 
 * UNIX:
