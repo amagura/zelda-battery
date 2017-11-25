@@ -10,7 +10,7 @@ clasdir = $(pngdir)/clas
 
 
 if !WINDOWS_HOST
-if GUI
+if X
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
 

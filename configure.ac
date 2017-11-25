@@ -1,6 +1,9 @@
 AC_PREREQ([2.65])
 AC_INIT([ZBatt], [3.0.4], [agm2819@gmail.com],,[https://github.com/amagura/zelda-battery])
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-mac])
+AC_CONFIG_HEADERS([config.h])
+
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
@@ -37,17 +40,29 @@ AC_CANONICAL_HOST
 
 
 # Check for pkg-config
-PKG_PROG_PKG_CONFIG()
 
-# build os checking
-AS_CASE([$build],
-  [*linux*], [ZB_BUILD="linux"],
-  [*cygwin], [ZB_BUILD="windows"],
-  [*mingw32], [ZB_BUILD="windows"],
-  [*bsd*], [ZB_BUILD="bsd"],
-  [ZB_BUILD=""])
-
-AC_SUBST([ZB_BUILD])
+# Check build_os and set ZB_BOS accordingly
+AS_CASE([$build_os],
+        [*linux*], [#
+         AC_CHECK_FILES([/sys/class/power_supply],
+                        ,
+                        AC_MSG_ERROR([Linux kernels older than 2.6.24 are not supported.]))],
+        [*bsd*], [#
+         AC_CHECK_FUNC([sysctlbyname],
+                       ,
+                       AC_SEARCH_LIBS([sysctlbyname],
+                                      [c],
+                                      AC_DEFINE([HAVE_SYSCTLBYNAME
+                                                 [AC_MSG_ERROR([*BSD systems without 'sysctlbyname' are not supported.])])))],
+        [*cygwin*|*mingw32*], [#
+         AC_CHECK_HEADERS([Windows.h windows.h \
+                           Winapifamily.h winapifamily.h \
+                           _mingw_unicode.h specstrings.h \
+                           Shellapi.h shellapi.h],,,)
+         AC_LANG(C++)
+         [with_x="no";]],
+         [*solaris*], [#
+          AC_CHECK_HEADERS([sys/pm.h])])
 
 AM_CONDITIONAL([LINUX_BUILD], [test "x$ZB_BUILD" = "xlinux"])
 AM_CONDITIONAL([WINDOWS_BUILD], [test "x$ZB_BUILD" = "xwindows"])
@@ -65,15 +80,6 @@ AM_CONDITIONAL([LINUX_HOST], [test "x$ZB_HOST" = "xlinux"])
 AM_CONDITIONAL([WINDOWS_HOST], [test "x$ZB_HOST" = "xwindows"])
 AM_CONDITIONAL([BSD_HOST], [test "x$ZB_HOST" = "xbsd"])
 
-# If OS is `Windows' check for the following headers
-
-AS_IF([test "x$ZB_HOST" = "xwindows"],
-[AC_CHECK_HEADER([Windows.h],[AC_DEFINE([HAVE_WINDOWS_H], [1])],
-	[AC_CHECK_HEADER([windows.h],[AC_DEFINE([HAVE__WINDOWS_H], [1])])])
-AC_CHECK_HEADERS([Winapifamily.h winapifamily.h _mingw_unicode.h specstrings.h])
-AC_CHECK_HEADER([Shellapi.h],[AC_DEFINE([HAVE_SHELLAPI_H], [1])],
-	[AC_CHECK_HEADER([shellapi.h],[AC_DEFINE([HAVE__SHELLAPI_H], [1])])])])
-
 [CPUARCH="`echo $host | $ac_cv_path_SED 's/^\([a-z|0-9|_]\+\)-.\+$/\1/g'`"]
 AC_SUBST([CPUARCH])
 
@@ -85,8 +91,7 @@ AC_ARG_WITH([X],
             AS_HELP_STRING([], [supported options:
                                   gtk2
                                   gtk3], [15], [30]),
-            [],
-            [with_x=gtk2;])
+            [with_x=gtk2],)
 
 IF_WINDOWS([with_x=no])
 

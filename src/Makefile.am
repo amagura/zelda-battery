@@ -61,13 +61,13 @@ gzbatt_CFLAGS = $(AM_CFLAGS)
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
-if GUI
+if X
 gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" \
 -DDATADIR=\"$(pkgdatadir)\"
 endif
 
-if GTK2
-gzbatt_CPPFLAGS += -DWITH_GTK2=1
+if X
+gzbatt_CPPFLAGS += -DWITH_X=1
 gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
 gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
 bin_PROGRAMS += gzbatt
@@ -123,7 +123,7 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
-	@GPP@ $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $<
+	$(CC) -E $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $<
 	$(CYTHON) --embed -p -2 -Wextra -o $@ $(@:.c=.co)
 
 tidy-local:

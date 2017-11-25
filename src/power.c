@@ -26,7 +26,7 @@ limitations under the License.
 
 #if ZB_LINUX
 # include "acpi.h"
-#elif ZB_BSD
+#elif HAVE__SYSCTLBYNAME
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
 typedef unsigned int u_int;
 # include <sys/sysctl.h>
