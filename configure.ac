@@ -10,6 +10,38 @@ AC_CONFIG_AUX_DIR([build-aux])
 # Check for system extensions
 AC_USE_SYSTEM_EXTENSIONS
 
+# Check for targets
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
+# M4 Code
+m4_define([pi_natsolaris], [AS_CASE([$zb_build_type], [native::x*solaris*], [$1], [])])
+m4_define([__pi_natbsd__start], [if test "xzb_build_type" = "xnative::x"*bsd*; then])
+m4_define([__pi_natbsd__stop], [fi])
+
+# Check if we are cross compiling
+if test "x$build" = "x$host" = "x$target"; then
+  zb_build_type="native::x$host..."
+elif test "x$build" = "x$host" \
+  && test "x$host" != "x$target"; then
+  zb_build_type="cross::x$target..."
+elif test "x$build" != "x$host" \
+  && test "x$build" != "x$target" \
+  && test "x$host" != "x$target"; then
+  zb_build_type="canadian::x$build::x$host::x$target..."
+elif test "x$build" != "$host" && test "x$host" = "x$target" \
+  && test "x$build" != "$target"; then
+  zb_build_type="cross-native::x$build::x$host::x$target..."
+fi
+
+AS_CASE([$zb_build_type],
+          [native::*linux*|native::*bsd*|native::*solaris*],[
+           AC_PROG_CC
+           PKG_PROG_PKG_CONFIG()
+           [break]
+          ])
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
@@ -38,9 +70,13 @@ fi
       #[PKG_CHECK_MODULES([gtk2], [gtk+-2.0 >= 2.0], AC_DEFINE([HAVE_GTK2], [1], [Define if gtk2 is present.]))])
 
 
+# Check for needed items.
+#AS_CASE([$zb_build_type],
+        #[native::x*solaris*],[AC_CHECK_HEADERS(
+
 # Checks for header files.
 AC_CHECK_HEADERS([limits.h stdlib.h string.h sys/ioctl.h])
-AC_CHECK_HEADERS([sys/pm.h],,,)
+pi_natsolaris([AC_CHECK_HEADERS([sys/pm.h])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -49,17 +85,22 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
-AC_CHECK_FUNC([sysctlbyname],
-              ,
-              AC_SEARCH_LIBS([sysctlbyname],
-                             [c],
-                             ,
-                             [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
+
+__pi_natbsd__start
+  AC_CHECK_FUNC([sysctlbyname],
+                ,
+                AC_SEARCH_LIBS([sysctlbyname],
+                               [c],
+                               ,
+                               [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
+__pi_natbsd__stop
 
 # Check for files.
-AC_CHECK_FILES([/sys/class/power_supply],
-               ,
-               [AC_MSG_WARN([Linux kernels older than 2.6.24 are not supported.])])
+if test "x$zb_build_type" = "xnative::xlinux;;"; then
+  AC_CHECK_FILES([/sys/class/power_supply],
+                 ,
+                 [AC_MSG_WARN([Linux kernels older than 2.6.24 are not supported.])])
+fi
 
 AC_CONFIG_FILES([Makefile
                  img/Makefile
@@ -69,7 +110,8 @@ AC_CONFIG_FILES([Makefile
                    #src/test])
 # Automake directives
 dnl `foreign' prevents autotools from installing a copy of the GPL
-AM_INIT_AUTOMAKE([foreign])
+dnl `-Wall' gets rid of unnecessary warnings
+AM_INIT_AUTOMAKE([foreign -Wall])
 
 AM_CONDITIONAL([X], [test "x$with_x" != "xno"])
 AM_CONDITIONAL([NATIVE], [test "x$native" = "xtrue"])

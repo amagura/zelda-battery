@@ -8,9 +8,9 @@ if MSWIN
   MAYBE_MSWIN = src/mswin
 else
   MAYBE_UNIX = src
-  if X
+if X
     MAYBE_X = img
-  endif
+endif
 endif
 
 SUBDIRS = $(MAYBE_MSWIN) $(MAYBE_UNIX) $(MAYBE_X)
