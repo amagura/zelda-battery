@@ -15,10 +15,21 @@ limitations under the License.
 ****/
 #ifndef COMMON_CONCAT_C_GUARD
 # define COMMON_CONCAT_C_GUARD 1
+
+# if defined(HAVE_CONFIG_H)
+#  include <config.h>
+# endif
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdarg.h>
 # include <stdbool.h>
+
+# if defined(HAVE_MEMPCPY)
+#  ifndef _GNU_SOURCE
+#   define _GNU_SOURCE 1
+#  endif
+# endif
 # include <string.h>
 # include <limits.h>
 
@@ -127,7 +138,7 @@ size_t concatl(char *dst, size_t sz, const char *s1, ...)
      bzero(dst, mdx + 1);
 
      p = tmp;
-     p = mempcpy(p, (char *)s1, ndx);
+     p = mempcpy(p, s1, ndx);
 
      used += ndx;
      COM_DBG("p: `%s`\n", p);
@@ -137,7 +148,7 @@ size_t concatl(char *dst, size_t sz, const char *s1, ...)
      while ((s = va_arg(args, char *))) {
 	  ldx = strlen(s);
 	  if ((ndx += ldx) < ldx || ndx > mdx) break;
-	  p = mempcpy(p, (char *)s, ldx);
+	  p = mempcpy(p, s, ldx);
 	  used += ldx;
      }
      va_end(args);
@@ -194,7 +205,7 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
      bzero(tmp, mdx + 1);
 
      p = tmp;
-     p = mempcpy(p, (char *)s1, ndx);
+     p = mempcpy(p, s1, ndx);
 
      used += ndx;
      COM_DBG("p: `%s`\n", p);
@@ -204,7 +215,7 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
      while ((s = va_arg(args, char *))) {
 	  ldx = strlen(s);
 	  if ((ndx += ldx) < ldx || ndx > mdx) break;
-	  p = mempcpy(p, (char *)s, ldx);
+	  p = mempcpy(p, s, ldx);
 	  used += ldx;
      }
      va_end(args);

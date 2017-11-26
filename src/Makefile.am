@@ -16,7 +16,8 @@ AM_LDFLAGS =
 AM_CPPFLAGS =
 
 AM_CFLAGS += -O2 -Wall -Wextra
-AM_CPPFLAGS += -DNO_COMMON_H
+# I probably don't need to define HAVE_CONFIG_H, but I'm not sure what else to do.
+AM_CPPFLAGS += -DNO_COMMON_H -DHAVE_CONFIG_H=1
 
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
@@ -67,7 +68,6 @@ gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" \
 endif
 
 if X
-gzbatt_CPPFLAGS += -DWITH_X=1
 gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
 gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
 bin_PROGRAMS += gzbatt

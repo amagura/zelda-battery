@@ -15,8 +15,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#include "compat.h"
-#if ZB_LINUX
+#if defined(HAVE_CONFIG_H)
+# include <config.h>
+#endif
+#include "compat.h" // FIXME this should be phased out of use.
+/* HAVE__SYS_CLASS_POWER_SUPPLY (for our purposes)
+ * will be assumed to be the tell-tale signs of a Linux
+ * system.
+ */
+#if HAVE__SYS_CLASS_POWER_SUPPLY
 # include <stdlib.h>
 # include <stdio.h>
 # include <stdbool.h>
@@ -257,5 +264,8 @@ void pwr_info(struct pwr_sup *info, struct error *err, int btnum)
 #  endif
 }
 # elif defined(HAVE__PROC_ACPI)
+/* void pwr_info(struct pwr_sup *info, struct error *err, int btnum) */
+/* { */
+/*      fprintf("%s: kernels older than 2.6.24  */
 # endif
 #endif

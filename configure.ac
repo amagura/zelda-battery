@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([ZBatt], [3.1.0], [agm2819@gmail.com],, [https://github.com/amagura/zelda-battery])
+AC_INIT([ZBatt], [3.1.0], [agm2819@gmail.com],, [https://github.com/amagura/zelda-battery/issues])
 #AC_CONFIG_SRCDIR([test.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -28,8 +28,16 @@ m4_define([__pi_natbsd_klb], [fi])
 m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
 m4_define([__pi_natunix_klb], [fi])
 
+m4_define([__pi_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
+m4_define([__pi_natlinux_klb], [fi])
+
 # Check if we are cross compiling
-if test "x$build" = "x$host" = "x$target"; then
+#AS_IF([test "x$build" = "x$host" = "x$target"],
+      #[zb_build_type="native::x$host"],
+      #AS_IF([test "x$build" = "x$host"],
+            #[test "x$host" != "x$target"]
+if test "x$build" = "x$host" \
+  && test "x$host" = "x$target"; then
   zb_build_type="native::x$host..."
 elif test "x$build" = "x$host" \
   && test "x$host" != "x$target"; then
@@ -38,7 +46,8 @@ elif test "x$build" != "x$host" \
   && test "x$build" != "x$target" \
   && test "x$host" != "x$target"; then
   zb_build_type="canadian::x$build::x$host::x$target..."
-elif test "x$build" != "$host" && test "x$host" = "x$target" \
+elif test "x$build" != "$host" \
+  && test "x$host" = "x$target" \
   && test "x$build" != "$target"; then
   zb_build_type="cross-native::x$build::x$host::x$target..."
 fi
@@ -114,11 +123,11 @@ __pi_natbsd_blk
 __pi_natbsd_klb
 
 # Check for files.
-if test "x$zb_build_type" = "xnative::xlinux;;"; then
+__pi_natlinux_blk
   AC_CHECK_FILES([/sys/class/power_supply],
                  ,
                  [AC_MSG_WARN([Linux kernels older than 2.6.24 are not supported.])])
-fi
+__pi_natlinux_klb
 
 AC_CONFIG_FILES([Makefile
                  img/Makefile

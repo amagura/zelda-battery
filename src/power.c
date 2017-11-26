@@ -74,7 +74,7 @@ void getpwr(struct power *pwr)
      pwr->charge.tr = (int)pwr->charge.raw / (pwr->charge.divsr);
      pwr->charge.rnd = nearbyint((double)pwr->charge.raw / (pwr->charge.divsr));
      pwr->acline = info.acline;
-#elif ZB_BSD
+#elif HAVE__SYSCTLBYNAME
      size_t size;
      int ac_line;
      int limit = pwr->charge.nof;

@@ -1,4 +1,4 @@
-/* vim:ft=c:ts=5:sts=5:sw=5:set expandtab: */
+/* vim: ts=5:sts=5:sw=5:set expandtab:ft=c: */
 /****
 Copyright 2014, 2015, 2016, 2017 Alexej Magura
 
