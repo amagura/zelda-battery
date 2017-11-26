@@ -4,10 +4,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_USE_SYSTEM_EXTENSIONS
 
-# Check if we are running on Windows
 AC_LANG(C)
+
+# Check if we are running on Windows
 AC_RUN_IFELSE([AC_LANG_PROGRAM([
-#include "nix/compat.h"
+#include "src/compat.h"
 ],[
 #if ZB_WINDOWS
 return 0;
@@ -192,5 +193,5 @@ EOF
 )`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! x"$CPUARCH" = "x" && test ! x"$CPUARCH" =		x"unknown" && (]CLANG[ || ]TINYC[)])
 
-AC_CONFIG_FILES([Makefile src/Makefile img/Makefile win/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile img/Makefile])
 AC_OUTPUT
