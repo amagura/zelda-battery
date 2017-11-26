@@ -25,7 +25,7 @@ m4_define([__pi_natsolaris_klb], [fi])
 m4_define([__pi_natbsd_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
 m4_define([__pi_natbsd_klb], [fi])
 
-m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
+m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
 m4_define([__pi_natunix_klb], [fi])
 
 m4_define([__pi_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
@@ -38,23 +38,24 @@ m4_define([__pi_natlinux_klb], [fi])
             #[test "x$host" != "x$target"]
 if test "x$build" = "x$host" \
   && test "x$host" = "x$target"; then
-  zb_build_type="native::x$host..."
+  zb_build_type="native::x$host"
 elif test "x$build" = "x$host" \
   && test "x$host" != "x$target"; then
-  zb_build_type="cross::x$target..."
+  zb_build_type="cross::x$target"
 elif test "x$build" != "x$host" \
   && test "x$build" != "x$target" \
   && test "x$host" != "x$target"; then
-  zb_build_type="canadian::x$build::x$host::x$target..."
+  zb_build_type="canadian::x$build::x$host::x$target"
 elif test "x$build" != "$host" \
   && test "x$host" = "x$target" \
   && test "x$build" != "$target"; then
-  zb_build_type="cross-native::x$build::x$host::x$target..."
+  zb_build_type="cross-native::x$build::x$host::x$target"
 fi
 
 AS_CASE([$zb_build_type],
           [native::*linux*|native::*bsd*|native::*solaris*],[
            AC_PROG_CC
+           AC_PROG_CC_STDC
            PKG_PROG_PKG_CONFIG()
            [break]
           ],
@@ -68,6 +69,7 @@ dnl I only really need to support cross-building for windows
 # Checks for programs.
 AC_PROG_INSTALL
 AC_PATH_PROGS_FEATURE_CHECK([GREP], [grep ggrep], [[echo 'a' | ac_cv_path_GREP -q -- 'a']])
+AC_PATH_PROGS_FEATURE_CHECK([EGREP], [egrep gegrep], [[echo 'a' | ac_cv_path_EGREP -q -- 'a']])
 
 # Checks for libraries.
 AC_ARG_WITH([x],
@@ -111,15 +113,18 @@ __pi_natunix_blk
   AC_SEARCH_LIBS([nearbyint], [m],
                  ,
                  [AC_MSG_ERROR([nearbyint is not defined by libm: use a C99 compliant compiler])])
+
+  # add support for libcommoner
+  AC_SEARCH_LIBS([concatm], [commoner])
 __pi_natunix_klb
 
 __pi_natbsd_blk
-  AC_CHECK_FUNC([sysctlbyname],
+  AC_CHECK_FUNCS([sysctlbyname],
                 ,
                 AC_SEARCH_LIBS([sysctlbyname],
                                [c],
-                               ,
-                               [AC_MSG_ERROR([*BSD systems without 'sysctlbyname' are not supported.])]))
+                               [AC_DEFINE([HAVE_SYSCTLBYNAME], [1])],
+                               [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
 __pi_natbsd_klb
 
 # Check for files.
