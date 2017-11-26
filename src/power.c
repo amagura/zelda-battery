@@ -25,7 +25,7 @@ limitations under the License.
 #include "power.h"
 #include "compat.h"
 
-# if HAVE__SYS_CLASS_POWER_SUPPLY
+#if HAVE__SYS_CLASS_POWER_SUPPLY
 # include "acpi.h"
 #elif HAVE_SYSCTLBYNAME
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
@@ -33,6 +33,8 @@ typedef unsigned int u_int;
 # include <sys/sysctl.h>
 #elif HAVE__USR_INCLUDE_MACHINE_APMVAR_H
 # include <machine/apmvar.h>
+#elif HAVE_SYS_PM_H
+# include <sys/pm.h>
 #endif
 
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
@@ -105,7 +107,7 @@ void getpwr(struct power *pwr)
      pwr->charge.rnd = (limit != 0)
 	  ? nearbyint((double)(pwr->charge.raw / (pwr->charge.divsr)))
 	  : PWR_ENOWANT;
-#elif ZB_OBSD
+#elif HAVE_SYS_APMVAR_H
      size_t size;
      int ac_line;
      int limit = pwr->charge.nof;
@@ -118,8 +120,10 @@ void getpwr(struct power *pwr)
 
 #include <sys/ioctl.h>
      ioctl(0, APM_IOC_GETPOWER);
+#elif HAVE_SYS_PM_H
+     ZB_DBG("%s\n", "Solaris Support");
 #endif
-# if 0
+#if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
 	  pwr->err.sum += pwr->err.vec[jdx];
      }
