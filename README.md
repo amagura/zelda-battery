@@ -37,6 +37,17 @@ BSD systems that _should_ work:
 
 BSD systems that _don't_ work:
 <ul><li>OpenBSD</li></ul>
+### Solaris
+Solaris support is still fairly new and experimental, but as long as you have `sys/apmvar.h` you should be good.
+
+Solaris systems known to work:
+* OpenIndiana
+
+Solaris systems that _should_ work:
+* OpenSolaris
+
+Solaris systems that _may_ work:
+* SmartOS
 
 ### Windows
 Windows XP and later.
