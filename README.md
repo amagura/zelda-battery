@@ -42,7 +42,7 @@ Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.d
 * OpenBSD
 <!-- <ul><li>OpenBSD</li></ul> -->
 ### Solaris
-Solaris support is still fairly new and experimental, but as long as you have `sys/apmvar.h` you should be good.
+Solaris support is still fairly new and experimental, but as long as you have `sys/pm.h` you should be good.
 
 
 #### Solaris systems known to work:
