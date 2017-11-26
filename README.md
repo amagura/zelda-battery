@@ -23,6 +23,8 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 # Supported Platforms
 ### Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
+
+
 ### BSD
 Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
 
@@ -36,8 +38,9 @@ BSD systems that _should_ work:
 * (Anything based on FreeBSD)
 
 BSD systems that _don't_ work:
-<ul><li>OpenBSD</li></ul>
-### Solaris<br />
+* OpenBSD
+<!-- <ul><li>OpenBSD</li></ul> -->
+### Solaris
 Solaris support is still fairly new and experimental, but as long as you have `sys/apmvar.h` you should be good.
 
 Solaris systems known to work:
@@ -48,7 +51,6 @@ Solaris systems that _should_ work:
 
 Solaris systems that _may_ work:
 * SmartOS
-
 ### Windows
 Windows XP and later.
 
