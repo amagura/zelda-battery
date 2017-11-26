@@ -119,14 +119,16 @@ __pi_natbsd_blk
                 AC_SEARCH_LIBS([sysctlbyname],
                                [c],
                                ,
-                               [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
+                               [AC_MSG_ERROR([*BSD systems without 'sysctlbyname' are not supported.])]))
 __pi_natbsd_klb
 
 # Check for files.
 __pi_natlinux_blk
   AC_CHECK_FILES([/sys/class/power_supply],
                  ,
-                 [AC_MSG_WARN([Linux kernels older than 2.6.24 are not supported.])])
+                 AC_CHECK_FILES([/proc/acpi/ac_adapter],
+                                [AC_MSG_WARN([Support for kernels older than 2.6.24 is experimental])],
+                                [AC_MSG_ERROR([Linux kernels without '/proc/acpi' or '/sys/class/power_supply' are not supported.])]))
 __pi_natlinux_klb
 
 AC_CONFIG_FILES([Makefile

@@ -79,6 +79,7 @@ test-breadth: test-clean test-setup
 
 clean-local:
 	$(RM) -r inst/usr
+	$(RM) *.tar.gz
 
 release: clean
 	$(MAKE) DESTDIR="$$PWD/inst" install
@@ -93,3 +94,8 @@ refresh-check:
 check-all:
 	cd $(UNIX_DIR); \
 	$(MAKE) $@
+
+iso:
+	$(MAKE) dist
+	genisoimage -o zb.iso *.tar.gz
+	mv zb.iso ..
