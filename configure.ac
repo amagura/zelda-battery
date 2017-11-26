@@ -35,6 +35,7 @@ AC_PROG_GREP
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
+
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG()
 
@@ -118,9 +119,20 @@ AS_IF([test x"$ZB_HOST" = x"linux"], [AM_COND_IF([TRAVIS], AC_DEFINE([HAVE__SYS_
 	     [AC_CHECK_FILES([/sys/class/power_supply],,
 	        AC_MSG_ERROR([Linux systems  without `/sys/class/power_supply' are unsupported]))],))])
 
-AS_IF([test x"$ZB_HOST" = x"bsd"], [AC_SEARCH_LIBS([sysctlbyname], [c],,[AC_MSG_ERROR([*BSD systems without `sysctlbyname` are unsupported])])],)
+AS_IF([test x"$ZB_HOST" = "xbsd"],
+      AC_SEARCH_LIBS([sysctlbyname],
+                     [c],
+                     ,
+                     AC_CHECK_FILES([/usr/include/machine/apmvar.h],
+                                    ,
+                                    [AC_MSG_ERROR([*BSD systems without `sysctlbyname` or `apmvar.h` are unsupported])])))
 
-# Check for progs
+dnl '
+
+AC_CHECK_TYPES([INT_MAX],, [AC_MSG_WARN([INT_MAX is not defined])], [#include <limits.h>])
+
+
+
 IF_WINDOWS(,[AM_COND_IF([GUI],[AC_CHECK_PROGS([CYTHON], [cython cython2],[no])])
 AM_COND_IF([GUI],[AS_IF([test "x$ac_cv_prog_CYTHON" = "xcython2"],[PKG_CHECK_MODULES([python2],[python2],,)],[test "x$ac_cv_prog_CYTHON" = "xcython"],[PKG_CHECK_MODULES([python2],[python2],,)],[AC_MSG_ERROR([Cython is a make dependency for the GUI])])])])
 

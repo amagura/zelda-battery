@@ -60,16 +60,23 @@ BEGIN_C_DECLS
 # endif
 
 # if !defined(ZB_BSD)
-#  if defined(__NetBSD__)	   \
-     || defined(__FreeBSD__)	   \
-     || defined(__FreeBSD__kernel) \
-     || defined(__DragonFly__)	   \
-     || defined(__bsdi__)	   \
-     || defined(__OpenBSD__)	   \
+#  if defined(__NetBSD__)	          \
+     || defined(__FreeBSD__)	          \
+     || defined(__FreeBSD__kernel)      \
+     || defined(__DragonFly__)	     \
+     || defined(__bsdi__)	          \
      || defined(_SYSTYPE_BSD)
 #   define ZB_BSD 1
 #  else
 #   define ZB_BSD 0
+#  endif
+# endif
+
+# if !defined(ZB_OBSD)
+#  if defined(__OpenBSD__)
+#   define ZB_OBSD 1
+#  else
+#   define ZB_OBSD 0
 #  endif
 # endif
 
@@ -130,3 +137,4 @@ BEGIN_C_DECLS
 END_C_DECLS
 
 #endif /* ZB_COMPAT_H_GUARD */
+/* vim: ts=5:sts=5:sw=5:expandtab:ft=c: */
