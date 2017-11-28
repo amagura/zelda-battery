@@ -19,7 +19,6 @@ limitations under the License.
 """""
 */
 #endif
-#include <config.h>
 import os, argparse, ConfigParser
 #if WITH_GTK2
 import pygtk
