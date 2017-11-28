@@ -94,6 +94,7 @@ AC_ARG_WITH([x],
             [with_x=no],
             [with_x=gtk2])
 
+__pi_natnix_blk
 if test "x$with_x" != "no"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
   AC_CHECK_PROGS([CYTHON], [cython cython2], [no])
@@ -107,6 +108,7 @@ if test "x$with_x" != "no"; then
       PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
   fi
 fi
+__pi_natnix_klb
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk3"],
       #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Define if gtk3 is present.]))])
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk2"],

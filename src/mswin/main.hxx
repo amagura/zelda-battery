@@ -22,6 +22,8 @@ limitations under the License.
 #  include <config.h>
 # endif
 
+# include "../compat.h"
+
 /* ZBatt only supports Windows XP and later, for now */
 # define _WIN32_WINNT NTDDI_WINXP
 
