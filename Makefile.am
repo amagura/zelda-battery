@@ -18,6 +18,7 @@ SUBDIRS = $(MAYBE_MSWIN) $(MAYBE_UNIX) $(MAYBE_X)
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz
+D2U = dos2unix
 
 all-local:
 
@@ -99,3 +100,7 @@ iso:
 	$(MAKE) dist
 	genisoimage -o zb.iso *.tar.gz
 	mv zb.iso ..
+
+dos2unix:
+	$(D2U) $(wildcard src/*)
+	$(D2U) $(wildcard src/mswin/*)
