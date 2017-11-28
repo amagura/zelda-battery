@@ -41,7 +41,7 @@ m4_define([__pi_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP
 m4_define([__pi_crnat_mswin_klb], [fi])
 
 
-m4_define([__pi_grep], [$ac_cv_path_EGREP -q --])
+m4_define([__pi_grep], [echo "$1" | $ac_cv_path_EGREP -q -- m4_shift($@)])
 
 # Check if we are cross compiling
 #AS_IF([test "x$build" = "x$host" = "x$target"],
@@ -94,10 +94,18 @@ AC_ARG_WITH([x],
             [with_x=no],
             [with_x=gtk2])
 
-if test "x$with_x" != "xno" && test "x$with_x" = "xgtk3"; then
-  PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Defined when gtk3 is present.]))
-elif test "x$with_x" != "xno" && test "x$with_x" = "xgtk2"; then
-    PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([HAVE_GTK2], [1], [Defined when gtk2 is present.]))
+if test "x$with_x" != "no"; then
+  AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
+  AC_CHECK_PROGS([CYTHON], [cython cython2], [no])
+  if __pi_grep([$ac_cv_prog_CYTHON], ['.*(cython2|cython)$']); then
+    PKG_CHECK_MODULES([python2], [python2],,AC_MSG_ERROR([Cython is a make dependency for X server support.]))
+  fi
+
+  if test "x$with_x" = "xgtk3"; then
+    PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.0], AC_DEFINE([WITH_GTK3], [1], [Defined when gtk3 is present.]))
+  elif test "x$with_x" = "xgtk2"; then
+      PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
+  fi
 fi
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk3"],
       #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Define if gtk3 is present.]))])

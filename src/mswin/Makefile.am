@@ -48,11 +48,6 @@ endif
 zbatt_CXXFLAGS = $(AM_CXXFLAGS)
 zbatc_CXXFLAGS = $(AM_CXXFLAGS)
 
-if STATIC
-zbatt_CXXFLAGS += --static
-zbatc_CXXFLAGS += --static
-endif
-
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
 

@@ -1,7 +1,7 @@
 #if 0
 /*
 """""
-Copyright 2014, 2015, 2016 Alexej Magura
+Copyright 2014, 2015, 2016, 2017 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -19,6 +19,7 @@ limitations under the License.
 """""
 */
 #endif
+#include <config.h>
 import os, argparse, ConfigParser
 #if WITH_GTK2
 import pygtk

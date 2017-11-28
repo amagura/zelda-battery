@@ -1,6 +1,6 @@
 /* vim: ts=5:sts=5:set expandtab: */
 /****
-Copyright 2014, 2015, 2016 Alexej Magura
+Copyright 2014, 2015, 2016, 2017 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -146,7 +146,7 @@ void getpwr(struct power *pwr)
 #endif
 }
 
-# if HAVE_GTK2 || HAVE_GTK3
+#if WITH_GTK2 || WITH_GTK3
 struct py_power py_getpwr()
 {
      struct power pwr;

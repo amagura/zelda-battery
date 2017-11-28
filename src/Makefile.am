@@ -17,7 +17,7 @@ AM_CPPFLAGS =
 
 AM_CFLAGS += -O2 -Wall -Wextra
 # I probably don't need to define HAVE_CONFIG_H, but I'm not sure what else to do.
-AM_CPPFLAGS += -DNO_COMMON_H -DHAVE_CONFIG_H=1
+AM_CPPFLAGS += -DNO_COMMON_H -DHAVE_CONFIG_H=1 -I$(top_srcdir)
 
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
@@ -50,11 +50,6 @@ endif
 
 zbatt_CFLAGS = $(AM_CFLAGS)
 zbatc_CFLAGS = $(AM_CFLAGS)
-
-if STATIC
-zbatt_CFLAGS += --static
-zbatc_CFLAGS += --static
-endif
 
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
