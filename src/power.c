@@ -146,7 +146,7 @@ void getpwr(struct power *pwr)
 #endif
 }
 
-#if WITH_GTK2 || WITH_GTK3
+#if (WITH_GTK2 && USE_PYTHON) || (WITH_GTK3 && USE_PYTHON)
 struct py_power py_getpwr()
 {
      struct power pwr;

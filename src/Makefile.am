@@ -58,8 +58,8 @@ gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
 if X
-gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" \
--DDATADIR=\"$(pkgdatadir)\"
+gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" -DDATADIR=\"$(pkgdatadir)\" \
+		   -DUSE_PYTHON=1
 gzbatt_CFLAGS += @GTK2_CFLAGS@ @PYTHON2_CFLAGS@
 gzbatt_LDFLAGS += @GTK2_LIBS@ @PYTHON2_LIBS@
 bin_PROGRAMS += gzbatt

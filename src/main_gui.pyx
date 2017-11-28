@@ -24,6 +24,7 @@ import os, argparse, ConfigParser
 import pygtk
 import gtk
 import gobject
+#elif WITH_GTK3
 #elif WITH_QT4
 import pyqt
 #elif WITH_QT5
