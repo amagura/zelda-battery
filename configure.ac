@@ -34,8 +34,14 @@ m4_define([__pi_natunix_klb], [fi])
 m4_define([__pi_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
 m4_define([__pi_natlinux_klb], [fi])
 
-m4_define([__pi_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'])
+m4_define([__pi_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'; then])
 m4_define([__pi_natmswin_klb], [fi])
+
+m4_define([__pi_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xcross-native::x.*(cygwin|mingw32).*'; then])
+m4_define([__pi_crnat_mswin_klb], [fi])
+
+
+m4_define([__pi_grep], [$ac_cv_path_EGREP -q --])
 
 # Check if we are cross compiling
 #AS_IF([test "x$build" = "x$host" = "x$target"],
@@ -111,6 +117,31 @@ __pi_natunix_blk
   # FIXME, only solaris and openbsd actually need ioctl
   AC_CHECK_HEADERS([sys/ioctl.h])
 __pi_natunix_klb
+
+__pi_crnat_mswin_blk
+[mswin=false]
+  AC_CHECK_HEADERS([{W,w}indows.h {W,w}inapifamily.h \
+                    _mingw_unicode.h specstrings.h \
+                    {s,S}hellapi.h],
+                      [mswin=true],
+                      ,
+                      [[#ifdef HAVE_WINDOWS_H
+                        # include <windows.h>
+                        #endif
+                        #ifdef HAVE_WINAPIFAMILY_H
+                        # include <winapifamily.h>
+                        #endif
+                        #ifdef HAVE__MINGW_UNICODE_H
+                        # include <_mingw_unicode.h>
+                        #endif
+                        #ifdef HAVE_SPECSTRINGS_H
+                        # include <specstrings.h>
+                        #endif
+                        #ifdef HAVE_SHELLAPI_H
+                        # include <shellapi.h>
+                        #endif
+                      ]])
+__pi_crnat_mswin_klb
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
