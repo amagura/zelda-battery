@@ -98,7 +98,7 @@ if test "x$with_x" != "no"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
   AC_CHECK_PROGS([CYTHON], [cython cython2], [no])
   if __pi_grep([$ac_cv_prog_CYTHON], ['.*(cython2|cython)$']); then
-    PKG_CHECK_MODULES([python2], [python2],,AC_MSG_ERROR([Cython is a make dependency for X server support.]))
+    PKG_CHECK_MODULES([PYTHON2], [python2],,AC_MSG_ERROR([Cython is a make dependency for X server support.]))
   fi
 
   if test "x$with_x" = "xgtk3"; then

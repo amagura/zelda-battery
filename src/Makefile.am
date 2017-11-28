@@ -60,11 +60,8 @@ gzbatt_LDFLAGS = $(AM_LDFLAGS)
 if X
 gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" \
 -DDATADIR=\"$(pkgdatadir)\"
-endif
-
-if X
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
-gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
+gzbatt_CFLAGS += @GTK2_CFLAGS@ @PYTHON2_CFLAGS@
+gzbatt_LDFLAGS += @GTK2_LIBS@ @PYTHON2_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
@@ -118,7 +115,7 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
-	$(CC) -E $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $<
+	$(CC) -E $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $< $(top_srcdir)/config.h
 	$(CYTHON) --embed -p -2 -Wextra -o $@ $(@:.c=.co)
 
 tidy-local:
