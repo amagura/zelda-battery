@@ -126,6 +126,7 @@ __pi_crnat_mswin_blk
                       [mswin=true],
                       ,
                       [[#ifdef HAVE_WINDOWS_H
+                        # include <Windows.h>
                         # include <windows.h>
                         #endif
                         #ifdef HAVE_WINAPIFAMILY_H

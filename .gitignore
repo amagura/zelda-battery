@@ -22,12 +22,14 @@ main_gui.co
 autom4te.cache
 config.log
 config.status
+config.h*
 aclocal.m4
 Makefile
 Makefile.in
 .deps
 configure
 build-aux
+stamp-h1
 
 # misc
 /tmp

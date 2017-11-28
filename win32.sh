@@ -5,8 +5,8 @@ export HOST=i686-w64-mingw32
 export CC=$HOST-cc
 export CXX=$HOST-c++
 
-(autoconf -i || autoreconf -fi) && \
-    ./configure \
+{ autoconf -i || autoreconf -fi; } \
+  && ./configure \
     --prefix=/usr/$HOST \
     --host=$HOST \
     --includedir=/usr/$HOST/include \
