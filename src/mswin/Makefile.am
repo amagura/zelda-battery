@@ -2,8 +2,8 @@
 
 bin_PROGRAMS = zbatt zbatc
 
-zbatc_SOURCES = zbatc.cxx
-zbatt_SOURCES = zbatt.cxx
+zbatc_SOURCES = color.cxx main.cxx
+zbatt_SOURCES = text.cxx main.cxx
 noinst_HEADERS = main.hxx
 
 iconsdir = $(pkgdatadir)/icons
