@@ -56,6 +56,7 @@ void getpwr(struct power *pwr)
      pwr->err.last = pwr->err.vec;
 
      ZB_DBG("err: %d\n", *pwr->err.vp);
+     ZB_DBG("HAVE_SYS_CLASS_POWER_SUPPLY: '%d'\n", HAVE_SYS_CLASS_POWER_SUPPLY);
 
 #if HAVE_SYS_CLASS_POWER_SUPPLY
      struct pwr_sup info;
