@@ -117,19 +117,6 @@ if test "x$with_x" != "xno"; then
       PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
   fi
 fi
-
-# Check for Linux specific headers
-AC_CHECK_HEADERS([glob.h])
-
-# Check for Linux specific functions
-AC_CHECK_FUNCS([globfree],
-                ,
-                [AC_SEARCH_LIBS([globfree],
-                               [c android-glob],
-                               [AC_DEFINE([HAVE_GLOBFREE], [1])],
-                               [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
-
-
 __pi_natnix_klb
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk3"],
       #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Define if gtk3 is present.]))])
@@ -209,6 +196,17 @@ __pi_natlinux_blk
                  AC_CHECK_FILES([/proc/acpi/ac_adapter],
                                 [AC_MSG_WARN([Support for kernels older than 2.6.24 is experimental])],
                                 [AC_MSG_ERROR([Linux kernels without '/proc/acpi' or '/sys/class/power_supply' are not supported.])]))
+  ## Check for Linux specific headers
+  AC_CHECK_HEADERS([glob.h])
+
+  ## Check for Linux specific functions
+  AC_CHECK_FUNCS([globfree],
+                  ,
+                  [AC_SEARCH_LIBS([globfree],
+                                [c android-glob],
+                                [AC_DEFINE([HAVE_GLOBFREE], [1])],
+                                [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
+  AC_CHECK_HEADERS([mcheck.h])
 __pi_natlinux_klb
 
 AC_CONFIG_FILES([Makefile
@@ -228,6 +226,8 @@ AC_ARG_ENABLE([debug],
 
 test "x$debug" = "xno" && no_debug=false
 test "x$debug" = "xfalse" && no_debug=true
+
+__pi_natnix_blk
 
 #AC_CONFIG_SUBDIRS([old
                    #src/test])
