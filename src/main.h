@@ -134,11 +134,7 @@ limitations under the License.
 # endif
 
 # if !defined(HAVE_MEMPCPY)
-#  define mempcpy(COM_D, COM_S, COM_L)		\
-     (memcpy((void *)(COM_D),			\
-	     (const void *)(COM_S),		\
-	     (size_t)(COM_L))			\
-      + (size_t)(COM_L))
+void *mempcpy PARAMS((void *dest, const void *src, size_t n));
 # endif
 
 # define mempmove(COM_D, COM_S, COM_L)		\

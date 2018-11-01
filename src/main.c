@@ -21,3 +21,11 @@ limitations under the License.
 #include <string.h>
 #include <limits.h>
 #include "main.h"
+
+#if !defined(HAVE_MEMPCPY)
+void *mempcpy(void *dest, const void *src, size_t n)
+{
+     void *tmp = memcpy((void *)dest, (const void *)src, (size_t) n);
+     return tmp + n;
+}
+#endif
