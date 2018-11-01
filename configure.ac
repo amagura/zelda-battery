@@ -114,6 +114,19 @@ if test "x$with_x" != "xno"; then
       PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
   fi
 fi
+
+# Check for Linux specific headers
+AC_CHECK_HEADERS([glob.h])
+
+# Check for Linux specific functions
+AC_SEARCH_FUNCS([globfree],
+                ,
+                AC_SEARCH_LIBS([globfree],
+                               [c],
+                               [AC_DEFINE([HAVE_GLOBFREE], [1])],
+                               [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])]))
+
+
 __pi_natnix_klb
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk3"],
       #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Define if gtk3 is present.]))])
