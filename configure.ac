@@ -121,10 +121,10 @@ AC_CHECK_HEADERS([glob.h])
 # Check for Linux specific functions
 AC_CHECK_FUNCS([globfree],
                 ,
-                AC_SEARCH_LIBS([globfree],
+                [AC_SEARCH_LIBS([globfree],
                                [c],
                                [AC_DEFINE([HAVE_GLOBFREE], [1])],
-                               [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])]))
+                               [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
 
 
 __pi_natnix_klb
@@ -241,14 +241,12 @@ AM_CONDITIONAL([DEBUG], [test "x$debug" = "xtrue"])
 AM_CONDITIONAL([NO_DEBUG], [test "x$debug" != "xtrue"])
 AM_CONDITIONAL([MSWIN], [test "x$mswin" = "xtrue"])
 AM_CONDITIONAL([TEST], [test "x$testdir" = "xtrue"])
-m4_define([CLANG], [test "x`($CC -E -w -P -nostdinc - <<EOF
-__clang__
-EOF
-)`" = "x1"])
-m4_define([TINYC], [test ! "x`($CC -E -w -P -nostdinc - <<EOF
-__TINYC__
-EOF
-)`" = "x__TINYC__"])
+m4_define([CLANG], [test "x`echo __clang__ | $CC -E -w -P -nostdinc -`" = "x"])
+# XXX I'm guessing that tinyc doesn't expand __TINYC__ to a predictable value
+# so instead of checking for a value, we're checking to see if the compiler doesn't expand
+# __TINYC__ to anything; if it doesn't, then we know we're not using TINYC, so if it does, we know
+# that we're using TINYC
+m4_define([TINYC], [test ! "x`echo __TINYC__ | $CC -E -w -P -nostdinc -`" = "x__TINYC__"])
 AM_CONDITIONAL([CPU_KNOWN], [test ! "x$CPUARCH" = "x" && test ! "x$CPUARCH" = "xunknown" && (]CLANG[ || ]TINYC[)])
 
 AC_OUTPUT
