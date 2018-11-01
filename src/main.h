@@ -125,7 +125,7 @@ limitations under the License.
      } while (0)
 
 
-# if !defined(HAVE_BZERO)
+# if !defined(HAVE_BZERO) && !defined(bzero)
 #  define bzero(COM_B, COM_LEN)			\
      (memset((void *)(COM_B),			\
  	     '\0',				\

@@ -172,12 +172,20 @@ AC_FUNC_MALLOC
 AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
 
 __pi_natnix_blk
+  AC_ARG_WITH([commoner],
+              AS_HELP_STRING([--without-commoner],
+                             [disable support for libcommoner (default: enabled)]),
+              [with_commoner=no],
+              [with_commoner=yes])
+
   AC_SEARCH_LIBS([nearbyint], [m],
                  ,
                  [AC_MSG_ERROR([nearbyint is not defined by libm: use a C99 compliant compiler])])
 
   # add support for libcommoner
-  AC_SEARCH_LIBS([concatm], [commoner])
+  if test "x$with_commoner" == "xyes"; then
+    AC_SEARCH_LIBS([concatm], [commoner])
+  fi
 __pi_natnix_klb
 
 __pi_natbsd_blk
