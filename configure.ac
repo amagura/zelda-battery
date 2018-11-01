@@ -206,7 +206,6 @@ __pi_natlinux_blk
                                 [c android-glob],
                                 [AC_DEFINE([HAVE_GLOBFREE], [1])],
                                 [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
-  AC_CHECK_HEADERS([mcheck.h])
 __pi_natlinux_klb
 
 AC_CONFIG_FILES([Makefile
@@ -227,7 +226,12 @@ AC_ARG_ENABLE([debug],
 test "x$debug" = "xno" && no_debug=false
 test "x$debug" = "xfalse" && no_debug=true
 
-__pi_natnix_blk
+__pi_natlinux_blk
+  [if test "x$debug" = "xtrue"; then]
+    ## On Android, we have to find mcheck.h
+    AC_CHECK_HEADERS([mcheck.h])
+  [fi]
+__pi_natlinux_klb
 
 #AC_CONFIG_SUBDIRS([old
                    #src/test])
