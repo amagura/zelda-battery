@@ -125,7 +125,7 @@ AC_CHECK_HEADERS([glob.h])
 AC_CHECK_FUNCS([globfree],
                 ,
                 [AC_SEARCH_LIBS([globfree],
-                               [c libandroid-glob],
+                               [c android-glob],
                                [AC_DEFINE([HAVE_GLOBFREE], [1])],
                                [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
 
