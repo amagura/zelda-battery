@@ -119,7 +119,7 @@ fi
 AC_CHECK_HEADERS([glob.h])
 
 # Check for Linux specific functions
-AC_SEARCH_FUNCS([globfree],
+AC_CHECK_FUNCS([globfree],
                 ,
                 AC_SEARCH_LIBS([globfree],
                                [c],
