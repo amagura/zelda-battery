@@ -1,6 +1,6 @@
 /* vim: ts=5:sts=5:sw=5:set expandtab:ft=c: */
 /****
-Copyright 2014, 2015, 2016 Alexej Magura
+Copyright 2014, 2015, 2016, 2017, 2018 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -63,7 +63,9 @@ limitations under the License.
 
 # if ZB_DEBUG
 #  if ZB_LINUX
+#  if defined(HAVE_MCHECK_H)
 #   include <mcheck.h>
+#  endif
 #  endif
 #  define ZB_DBG(format, ...)						\
      do {								\
