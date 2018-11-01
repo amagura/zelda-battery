@@ -37,6 +37,9 @@ m4_define([__pi_natlinux_klb], [fi])
 m4_define([__pi_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'; then])
 m4_define([__pi_natmswin_klb], [fi])
 
+
+#m4_define([__pi_natandroid_blk], [if echo "x$zb_target
+
 m4_define([__pi_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xcross-native::x.*(cygwin|mingw32).*'; then])
 m4_define([__pi_crnat_mswin_klb], [fi])
 
@@ -122,7 +125,7 @@ AC_CHECK_HEADERS([glob.h])
 AC_CHECK_FUNCS([globfree],
                 ,
                 [AC_SEARCH_LIBS([globfree],
-                               [c],
+                               [c libandroid-glob],
                                [AC_DEFINE([HAVE_GLOBFREE], [1])],
                                [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
 
