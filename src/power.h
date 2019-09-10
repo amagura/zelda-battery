@@ -31,7 +31,7 @@ limitations under the License.
 
 # include "main.h"
 
-# ifndef _Bool
+# if !defined(Bool) && !defined(__cplusplus)
 #  include <stdbool.h>
 # endif
 
@@ -53,11 +53,13 @@ struct error {
 struct power {
      struct pwr_lvl charge;
      bool acline;
+     bool charging;
      struct error err;
 };
 
 struct py_power {
      bool acline;
+     bool charging;
      int tr;
      int raw;
      int err;

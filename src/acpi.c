@@ -31,6 +31,7 @@ limitations under the License.
 # include <libgen.h>
 # include <glob.h>
 # include <limits.h>
+# include <pthread.h>
 # include "main.h"
 # include "power.h"
 # include "acpi.h"
