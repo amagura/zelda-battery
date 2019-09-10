@@ -27,7 +27,7 @@ if DEBUG
 AM_CFLAGS += -g -ggdb -O0
 AM_CPPFLAGS += -DZB_DEBUG=1
 else
-AM_CFLAGS += -02
+AM_CFLAGS += -O2
 endif
 
 if !DEBUG
