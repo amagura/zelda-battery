@@ -109,8 +109,12 @@ if test "x$with_x" != "xno"; then
     PKG_CHECK_MODULES([PYTHON], [python-3.7],,[python_found=no])
     if test "x$python_found" = "xno"; then
       PKG_CHECK_MODULES([PYTHON], [python-3.6],[python_found=yes],)
-      test "x$python_found" = "xno" && PKG_CHECK_MODULES([PYTHON], [python-3.5],[python_found=yes],)
-      test "x$python_found" = "xno" && PKG_CHECK_MODULES([PYTHON], [python >= 3.5],,AC_MSG_ERROR([Python is a make dependency for X server support.]))
+    fi
+    if test "x$python_found" = "xno"; then
+      PKG_CHECK_MODULES([PYTHON], [python-3.5],[python_found=yes],)
+    fi
+    if test "x$python_found" = "xno"; then
+      PKG_CHECK_MODULES([PYTHON], [python >= 3.5],,AC_MSG_ERROR([Python is a make dependency for X server support.]))
     fi
   fi
 
