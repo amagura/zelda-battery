@@ -105,7 +105,7 @@ if test "x$with_x" != "xno"; then
     AC_MSG_ERROR([Cython is a make dependency for X server support.])
   fi
   if zb_grep([$ac_cv_prog_CYTHON], ['.*cython.*$']); then
-    PKG_CHECK_MODULES([PYTHON], [python python3 python37 python-3.7 python36 python-3.6 python35 python-3.5],,AC_MSG_ERROR([Python is a make dependency for X server support.]))
+    PKG_CHECK_MODULES([PYTHON], [python-3.7],,[PKG_CHECK_MODULES([PYTHON], [python >= 3.5],,AC_MSG_ERROR([Python is a make dependency for X server support.]))])
   fi
 
   if test "x$with_x" = "xgtk3"; then
