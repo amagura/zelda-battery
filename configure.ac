@@ -16,38 +16,45 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # M4 Code
-m4_define([__pi_natsolaris], [AS_CASE([$zb_build_type], [native::x*solaris*], [$1], [])])
-m4_define([__pi_natbsd], [AS_CASE([$zb_build_type], [native::x*bsd*], [$1], [])])
+### Abbreviations:
+#### nat -> native
+#### cr -> cross (build)
+#### blk -> start block
+#### klb -> end block
 
-m4_define([__pi_natsolaris_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*solaris.*'; then])
-m4_define([__pi_natsolaris_klb], [fi])
+dnl ++ Solaris ++
+m4_define([hl_natsolaris], [AS_CASE([$zb_build_type], [native::x*solaris*], [$1], [])])
 
-m4_define([__pi_natbsd_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
-m4_define([__pi_natbsd_klb], [fi])
+m4_define([hl_natsolaris_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*solaris.*'; then])
+m4_define([hl_natsolaris_klb], [fi])
 
-m4_define([__pi_natnix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
-m4_define([__pi_natnix_klb], [fi])
+dnl ++ BSD ++
+m4_define([hl_natbsd], [AS_CASE([$zb_build_type], [native::x*bsd*], [$1], [])])
 
-m4_define([__pi_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|solaris).*'; then])
-m4_define([__pi_natunix_klb], [fi])
+m4_define([hl_natbsd_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*bsd.*'; then])
+m4_define([hl_natbsd_klb], [fi])
 
-m4_define([__pi_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
-m4_define([__pi_natlinux_klb], [fi])
+dnl ++ *NIX ++
+m4_define([hl_natnix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|linux|solaris).*'; then])
+m4_define([hl_natnix_klb], [fi])
 
-m4_define([__pi_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'; then])
-m4_define([__pi_natmswin_klb], [fi])
+dnl ++ UNIX ++
+m4_define([hl_natunix_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(bsd|solaris).*'; then])
+m4_define([hl_natunix_klb], [fi])
 
+dnl ++ LINUX ++
+m4_define([hl_natlinux_blk], [if echo "x$zb_build_type" | $ac_cv_path_GREP -q -- 'xnative::x.*linux.*'; then])
+m4_define([hl_natlinux_klb], [fi])
 
-#m4_define([__pi_natandroid_blk], [if echo "x$zb_target
+dnl ++ Microsoft Windows ++
+m4_define([hl_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'; then])
+m4_define([hl_natmswin_klb], [fi])
 
-m4_define([__pi_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xcross-native::x.*(cygwin|mingw32).*'; then])
-m4_define([__pi_crnat_mswin_klb], [fi])
+m4_define([hl_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xcross-native::x.*(cygwin|mingw32).*'; then])
+m4_define([hl_crnat_mswin_klb], [fi])
 
-#m4_define([__pi_ncc_nix_blk], [m4_define([__argc__], [$#])
-  #m4_if([__argc__], [0], [if echo "x$zb_build_type" | $ac_cv_path_EGREP
-
-
-m4_define([__pi_grep], [echo "$1" | $ac_cv_path_EGREP -q -- m4_shift($@)])
+dnl ++ Commands ++
+m4_define([hl_grep], [echo "$1" | $ac_cv_path_EGREP -q -- m4_shift($@)])
 
 # Check if we are cross compiling
 #AS_IF([test "x$build" = "x$host" = "x$target"],
@@ -100,14 +107,14 @@ AC_ARG_WITH([x],
             [with_x=no],
             [with_x=gtk2])
 
-__pi_natnix_blk
+hl_natnix_blk
 if test "x$with_x" != "xno"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
   AC_CHECK_PROGS([CYTHON], [cython cython2], [no])
   if test "x$CYTHON" = "xno"; then
     AC_MSG_ERROR([Cython is a make dependency for X server support.])
   fi
-  if __pi_grep([$ac_cv_prog_CYTHON], ['.*(cython2|cython)$']); then
+  if hl_grep([$ac_cv_prog_CYTHON], ['.*(cython2|cython)$']); then
     PKG_CHECK_MODULES([PYTHON2], [python2],,AC_MSG_ERROR([Python2 is a make dependency for X server support.]))
   fi
 
@@ -117,7 +124,7 @@ if test "x$with_x" != "xno"; then
       PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
   fi
 fi
-__pi_natnix_klb
+hl_natnix_klb
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk3"],
       #[PKG_CHECK_MODULES([gtk3], [gtk+-3.0 >= 3.0], AC_DEFINE([HAVE_GTK3], [1], [Define if gtk3 is present.]))])
 #AS_IF([test "x$with_X" != "xno" && test "x$with_X" = "xgtk2"],
@@ -130,14 +137,14 @@ __pi_natnix_klb
 
 # Checks for header files.
 AC_CHECK_HEADERS([limits.h stdlib.h string.h])
-__pi_natsolaris([AC_CHECK_HEADERS([sys/pm.h])])
+hl_natsolaris([AC_CHECK_HEADERS([sys/pm.h])])
 
-__pi_natunix_blk
+hl_natunix_blk
   # FIXME, only solaris and openbsd actually need ioctl
   AC_CHECK_HEADERS([sys/ioctl.h])
-__pi_natunix_klb
+hl_natunix_klb
 
-__pi_crnat_mswin_blk
+hl_crnat_mswin_blk
 [mswin=false]
   AC_CHECK_HEADERS([{W,w}indows.h {W,w}inapifamily.h \
                     _mingw_unicode.h specstrings.h \
@@ -161,7 +168,7 @@ __pi_crnat_mswin_blk
                         # include <shellapi.h>
                         #endif
                       ]])
-__pi_crnat_mswin_klb
+hl_crnat_mswin_klb
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -171,7 +178,7 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
 
-__pi_natnix_blk
+hl_natnix_blk
   AC_ARG_WITH([commoner],
               AS_HELP_STRING([--without-commoner],
                              [disable support for libcommoner (default: enabled)]),
@@ -206,19 +213,19 @@ __pi_natnix_blk
                    #[commoner],
                    #AC_DEFINE([HAVE_CONCATM], [1]),)
   #fi
-__pi_natnix_klb
+hl_natnix_klb
 
-__pi_natbsd_blk
+hl_natbsd_blk
   AC_CHECK_FUNCS([sysctlbyname],
                 ,
                 AC_SEARCH_LIBS([sysctlbyname],
                                [c],
                                [AC_DEFINE([HAVE_SYSCTLBYNAME], [1])],
                                [AC_MSG_WARN([*BSD systems without 'sysctlbyname' are not supported.])]))
-__pi_natbsd_klb
+hl_natbsd_klb
 
 # Check for files.
-__pi_natlinux_blk
+hl_natlinux_blk
   AC_CHECK_FILES([/sys/class/power_supply],
                  ,
                  AC_CHECK_FILES([/proc/acpi/ac_adapter],
@@ -231,10 +238,10 @@ __pi_natlinux_blk
   AC_CHECK_FUNCS([globfree],
                   ,
                   [AC_SEARCH_LIBS([globfree],
-                                [c android-glob],
+                                [c],
                                 [AC_DEFINE([HAVE_GLOBFREE], [1])],
                                 [AC_MSG_ERROR([Linux systems without 'globfree' are not supported.])])])
-__pi_natlinux_klb
+hl_natlinux_klb
 
 AC_CONFIG_FILES([Makefile
                  img/Makefile
@@ -254,12 +261,8 @@ AC_ARG_ENABLE([debug],
 test "x$debug" = "xno" && no_debug=false
 test "x$debug" = "xfalse" && no_debug=true
 
-__pi_natlinux_blk
-  [if test "x$debug" = "xtrue"; then]
-    ## On Android, we have to find mcheck.h
-    AC_CHECK_HEADERS([mcheck.h])
-  [fi]
-__pi_natlinux_klb
+hl_natlinux_blk
+hl_natlinux_klb
 
 #AC_CONFIG_SUBDIRS([old
                    #src/test])
