@@ -37,9 +37,6 @@ m4_define([zb_natlinux_klb], [fi])
 m4_define([zb_natmswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xnative::x.*(cygwin|mingw32).*'; then])
 m4_define([zb_natmswin_klb], [fi])
 
-
-#m4_define([zb_natandroid_blk], [if echo "x$zb_target
-
 m4_define([zb_crnat_mswin_blk], [if echo "x$zb_build_type" | $ac_cv_path_EGREP -q -- 'xcross-native::x.*(cygwin|mingw32).*'; then])
 m4_define([zb_crnat_mswin_klb], [fi])
 
