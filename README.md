@@ -1,4 +1,4 @@
-ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/amagura/zelda-battery) [![Circle CI](https://circleci.com/gh/amagura/zelda-battery/tree/master.svg?style=svg)](https://circleci.com/gh/amagura/zelda-battery/tree/master)
+ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=better-builds)](https://travis-ci.org/amagura/zelda-battery) [![Circle CI](https://circleci.com/gh/amagura/zelda-battery/tree/better-builds.svg?style=svg)](https://circleci.com/gh/amagura/zelda-battery/tree/better-builds)
 =============
 
 A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskbars
@@ -54,7 +54,7 @@ Windows XP and later.
 * GTK+3 (GUI)<sup>‡</sup>
 * PyGObject (GUI)
 
-<sup>† Python v2.x.xx is no longer supported</sup>  
+<sup>† Python v2.x.xx is no longer supported</sup>
 <sup>‡ Support for GTk+2 might be added back in future releases</sup>
 
 ### Windows
