@@ -30,18 +30,18 @@ BSD is well supported; as long as you have [`sysctlbyname`](http://www.daemon-sy
 
 Solaris support is still fairly new and experimental, but as long as you have `sys/pm.h` you should be good.
 
-##### UNIX systems supported:
+#### UNIX systems supported:
 * DragonFlyBSD
 * FreeBSD
 * OpenIndiana (Solaris)
 
-##### UNIX systems probably supported:
+#### UNIX systems probably supported:
 * NetBSD
 * Midnight BSD
 * OpenSolaris
 * (Anything based on FreeBSD)
 
-##### UNIX systems unsupported:
+#### UNIX systems unsupported:
 * OpenBSD
 * SmartOS
 
