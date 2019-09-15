@@ -14,13 +14,13 @@ install:
   - sudo apt-get install gcc-4.7 gcc-4.8 gcc-4.9 tcc
 script:
   - autoreconf -i
-  - ./configure --without-gtk2
+  - ./configure --without-x
   - make clean
   - make
   - (nix/zbatt; echo -e "\n$?")
   - (nix/zbatc; echo -e "\n$?")
   - make clean
-  - ./configure --without-gtk2 CFLAGS=-DZB_DEBUG=0
+  - ./configure --without-x CFLAGS=-DZB_DEBUG=0
   - make
 after_success:
   - make check
