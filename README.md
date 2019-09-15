@@ -51,10 +51,10 @@ Windows XP and later.
 # Runtime Dependencies
 ### Linux and UNIX
 * Python (GUI)
-* GTK+3 (GUI)<sup>a</sup>
+* GTK+3 (GUI)<sup>†</sup>
 * PyGObject (GUI)
 
-<sup>a. Support for GTk+2 might be added back in future releases</sup>
+<sup>† Support for GTk+2 might be added back in future releases</sup>
 
 ### Windows
 Windows provides everything you'll need.
