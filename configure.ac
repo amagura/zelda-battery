@@ -87,6 +87,7 @@ AC_PATH_PROGS_FEATURE_CHECK([GREP], [grep ggrep], [[echo 'a' | ac_cv_path_GREP -
 AC_PATH_PROGS_FEATURE_CHECK([EGREP], [egrep gegrep], [[echo 'a' | ac_cv_path_EGREP -q -- 'a']])
 
 # Checks for libraries.
+dnl FIXME passing --with-x to configure.ac actually disables X Server support
 AC_ARG_WITH([x],
             AS_HELP_STRING([--without-x],
                            [disable x server support (default: enabled)])
