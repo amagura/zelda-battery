@@ -17,8 +17,8 @@ script:
   - ./configure --without-x
   - make clean
   - make
-  - (nix/zbatt; echo -e "\n$?")
-  - (nix/zbatc; echo -e "\n$?")
+  - (src/zbatt; echo -e "\n$?")
+  - (src/zbatc; echo -e "\n$?")
   - make clean
   - ./configure --without-x CFLAGS=-DZB_DEBUG=0
   - make
