@@ -35,7 +35,7 @@ Solaris support is still fairly new and experimental, but as long as you have `s
 * FreeBSD
 * OpenIndiana (Solaris)
 
-#### UNIX systems _probably_ supported:
+#### UNIX systems *probably* supported:
 * NetBSD
 * Midnight BSD
 * OpenSolaris
