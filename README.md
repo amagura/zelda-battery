@@ -54,7 +54,7 @@ Windows XP and later.
 * GTK+3 (GUI)<sup>‡</sup>
 * PyGObject (GUI)
 
-<sup>† Python v2.x.xx is no longer supported</sup>
+<sup>† Python v2.x.xx is no longer supported</sup>  
 <sup>‡ Support for GTk+2 might be added back in future releases</sup>
 
 ### Windows
