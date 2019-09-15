@@ -43,7 +43,7 @@ Solaris support is still fairly new and experimental, but as long as you have `s
 
 #### UNIX systems unsupported:
 * OpenBSD
-* SmartOS
+* SmartOS (Solaris)
 
 ### Windows
 Windows XP and later.
