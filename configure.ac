@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([ZBatt], [3.1.0], [agm2819@gmail.com],, [https://github.com/amagura/zelda-battery/issues])
+AC_INIT([ZBatt], [4.0.0], [amagura28@gmail.com],, [https://github.com/amagura/zelda-battery/issues])
 #AC_CONFIG_SRCDIR([test.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -89,29 +89,28 @@ AC_PATH_PROGS_FEATURE_CHECK([EGREP], [egrep gegrep], [[echo 'a' | ac_cv_path_EGR
 # Checks for libraries.
 AC_ARG_WITH([x],
             AS_HELP_STRING([--without-x],
-                           [disable x server support (default: enabled for gtk2)])
+                           [disable x server support (default: enabled)])
             AS_HELP_STRING([],
                            [supported options:
-                                                gtk2
                                                 gtk3], [15], [30]),
             [with_x=no],
-            [with_x=gtk2])
+            [with_x=gtk3])
 
 zb_natnix_blk
 if test "x$with_x" != "xno"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
-  AC_CHECK_PROGS([CYTHON], [cython cython2], [no])
+  AC_CHECK_PROGS([CYTHON], [cython], [no])
   if test "x$CYTHON" = "xno"; then
     AC_MSG_ERROR([Cython is a make dependency for X server support.])
   fi
-  if zb_grep([$ac_cv_prog_CYTHON], ['.*(cython2|cython)$']); then
-    PKG_CHECK_MODULES([PYTHON2], [python2],,AC_MSG_ERROR([Python2 is a make dependency for X server support.]))
+  if zb_grep([$ac_cv_prog_CYTHON], ['.*cython$']); then
+    PKG_CHECK_MODULES([PYTHON], [python3],,AC_MSG_ERROR([Python is a make dependency for X server support.]))
   fi
 
   if test "x$with_x" = "xgtk3"; then
     PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.0], AC_DEFINE([WITH_GTK3], [1], [Defined when gtk3 is present.]))
-  elif test "x$with_x" = "xgtk2"; then
-      PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
+  # elif test "x$with_x" = "xgtk2"; then
+  #     PKG_CHECK_MODULES([GTK2], [gtk+-2.0 >= 2.0], AC_DEFINE([WITH_GTK2], [1], [Defined when gtk2 is present.]))
   fi
 fi
 zb_natnix_klb

@@ -58,17 +58,22 @@ zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
 gzbatt_CFLAGS = $(AM_CFLAGS)
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
+gzbatt_PYFLAGS =
 
 if X
-gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" -DDATADIR=\"$(pkgdatadir)\" \
-		   -DUSE_PYTHON=1
-gzbatt_CFLAGS += @GTK2_CFLAGS@ @PYTHON2_CFLAGS@
-gzbatt_LDFLAGS += @GTK2_LIBS@ @PYTHON2_LIBS@
+gzbatt_PYFLAGS += -EPNGDIR=\"$(pngdir)\" -EDATADIR=\"$(pkgdatadir)\" -EZB_PROGNAME=\"gzbatt\"
+gzbatt_CPPFLAGS += -DUSE_PYTHON=1
+gzbatt_CFLAGS += @GTK3_CFLAGS@ @PYTHON_CFLAGS@
+gzbatt_LDFLAGS += @GTK3_LIBS@ @PYTHON_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
 .PHONY: valgrind lint
 all-local:
+
+tui: zbatt zbatc
+
+gui: gzbatt
 
 move-local: $(bin_PROGRAMS)
 	for file in $?; do mv "$$file" ../../; done
@@ -117,8 +122,8 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
-	$(CC) -E $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $< $(top_srcdir)/config.h
-	$(CYTHON) --embed -p -2 -Wextra -o $@ $(@:.c=.co)
+	ln -sf $(top_srcdir)/config.h
+	$(CYTHON) $(gzbatt_PYFLAGS) --embed -p -3 -Wextra -o $@ $< --gdb
 
 tidy-local:
 	$(RM) *.o || true
@@ -128,6 +133,7 @@ tidy-local:
 	$(RM) main_gui.c || true
 	$(RM) main_gui.co || true
 	$(RM) no_common.h || true
+	$(RM) config.h
 
 anew: clean all
 ready: clean all tidy-local
