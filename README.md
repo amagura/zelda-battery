@@ -1,4 +1,4 @@
-ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=better-builds)](https://travis-ci.org/amagura/zelda-battery) [![Circle CI](https://circleci.com/gh/amagura/zelda-battery/tree/better-builds.svg?style=svg)](https://circleci.com/gh/amagura/zelda-battery/tree/better-builds)
+ZBatt [![Build Status](https://travis-ci.org/amagura/zelda-battery.svg?branch=master)](https://travis-ci.org/amagura/zelda-battery) [![Circle CI](https://circleci.com/gh/amagura/zelda-battery/tree/master.svg?style=svg)](https://circleci.com/gh/amagura/zelda-battery/tree/master)
 =============
 
 A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskbars
