@@ -104,3 +104,10 @@ iso:
 dos2unix:
 	$(D2U) $(wildcard src/*)
 	$(D2U) $(wildcard src/mswin/*)
+  
+install-blank:
+	printf '#include <stdlib.h>\nint main(int argc, char **argv) { return EXIT_SUCCESS; }' > blank.c
+	$(CC) -o src/zbatt blank.c
+	$(CC) -o src/zbatc blank.c
+	cd $(UNIX_DIR); \
+	  $(MAKE) install
