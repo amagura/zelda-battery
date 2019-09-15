@@ -26,11 +26,6 @@ Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
 
 
 ### UNIX
-BSD is well supported; as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
-
-Solaris support is still fairly new and experimental, but as long as you have `sys/pm.h` you should be good.
-
----
 
 UNIX systems supported:
 * DragonFlyBSD
@@ -46,6 +41,10 @@ UNIX systems _probably_ supported:
 UNIX systems unsupported:
 * OpenBSD
 * SmartOS
+
+BSD is well supported; as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
+
+Solaris support is still fairly new and experimental, but as long as you have `sys/pm.h` you should be good.
 
 ### Windows
 Windows XP and later.
