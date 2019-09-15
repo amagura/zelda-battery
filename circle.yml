@@ -5,7 +5,8 @@ machine:
 test:
   pre:
    - sudo apt-get update
-   - sudo apt-cache search automake gcc
+   - sudo apt-cache search automake
+   - sudo apt-cache search gcc
    - sudo apt-get install automake-1.14
   override:
     - autoreconf -fi
