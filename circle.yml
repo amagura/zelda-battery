@@ -5,12 +5,12 @@ machine:
 test:
   pre:
    - sudo apt-get update
-   - sudo apt-cache search automake
+   - sudo apt-cache search automake gcc
    - sudo apt-get install automake-1.14
   override:
     - autoreconf -fi
-    - ./configure --enable-debug --enable-generic --without-gtk2
+    - ./configure --enable-debug --enable-generic --without-x
     - make anew
-    - cd nix; (./zbatt; echo -e "\n$?")
-    - cd nix; (./zbatc; echo -e "\n$?")
-    - cd nix; make check
+    - cd src; (./zbatt; echo -e "\n$?")
+    - cd src; (./zbatc; echo -e "\n$?")
+    - cd src; make check
