@@ -5,12 +5,13 @@ compiler:
   # - gcc-4.6
   - gcc-4.7
   - gcc-4.8
+  - gcc-4.9
   - gcc
   - tcc
 install:
   - sudo apt-get update
 #  - sudo apt-cache search gcc
-  - sudo apt-get install gcc-4.4 gcc-4.7 gcc-4.8 gcc-4.6 tcc
+  - sudo apt-get install gcc-4.7 gcc-4.8 gcc-4.9 tcc
 script:
   - autoreconf -i
   - ./configure --without-gtk2
