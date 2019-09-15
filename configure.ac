@@ -100,7 +100,7 @@ AC_ARG_WITH([x],
 zb_natnix_blk
 if test "x$with_x" != "xno"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
-  AC_CHECK_PROGS([CYTHON], [cython], [no])
+  AC_CHECK_PROGS([CYTHON], [cython cython3 cython37 cython36 cython35 cython-3.7 cython-3.6 cython-3.5], [no])
   if test "x$CYTHON" = "xno"; then
     AC_MSG_ERROR([Cython is a make dependency for X server support.])
   fi
