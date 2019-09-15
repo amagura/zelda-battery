@@ -1,5 +1,6 @@
+/* vim: ts=5:sts=5:sw=5:set expandtab:ft=c: */
 /****
-Copyright 2014, 2015, 2016 Alexej Magura
+Copyright 2014, 2015, 2016, 2017, 2018 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -21,14 +22,17 @@ limitations under the License.
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
 # undef PARAMS
-# if defined (__STDC__) || defined (_AIX) \
-       || (defined (__mips) && defined (_SYSTYPE_SVR4)) \
-       || defined(WIN32) || defined(__cplusplus)
+# if defined (__STDC__) || defined (_AIX)		\
+     || (defined (__mips) && defined (_SYSTYPE_SVR4))	\
+     || defined(WIN32) || defined(__cplusplus)
 #  define PARAMS(protos) protos
 # else
 #  define PARAMS(protos) ()
 # endif
 
+# if defined(HAVE_CONFIG_H)
+#  include <config.h>
+# endif
 # include <errno.h>
 # include "compat.h"
 # include <stdlib.h>
@@ -59,7 +63,9 @@ limitations under the License.
 
 # if ZB_DEBUG
 #  if ZB_LINUX
+#  if defined(HAVE_MCHECK_H)
 #   include <mcheck.h>
+#  endif
 #  endif
 #  define ZB_DBG(format, ...)						\
      do {								\
@@ -119,21 +125,19 @@ limitations under the License.
      } while (0)
 
 
-# undef bzero
-# define bzero(COM_B, COM_LEN)			\
+# if !defined(HAVE_BZERO) && !defined(bzero)
+#  define bzero(COM_B, COM_LEN)			\
      (memset((void *)(COM_B),			\
-	     '\0',				\
-	     (size_t)(COM_LEN)),		\
+ 	     '\0',				\
+ 	     (size_t)(COM_LEN)),		\
       (void)0)
+# endif
 
-# undef mempcpy
-# define mempcpy(COM_D, COM_S, COM_L)		\
-     (memcpy((void *)(COM_D),			\
-	     (const void *)(COM_S),		\
-	     (size_t)(COM_L))			\
-      + (size_t)(COM_L))
+# if !defined(HAVE_MEMPCPY)
+void *mempcpy PARAMS((void *dest, const void *src, size_t n));
+# endif
 
-#  define mempmove(COM_D, COM_S, COM_L)		\
+# define mempmove(COM_D, COM_S, COM_L)		\
      (memmove((void *)(COM_D),			\
 	      (const void *)(COM_S),		\
 	      (size_t)(COM_L))			\

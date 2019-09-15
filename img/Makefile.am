@@ -9,22 +9,18 @@ origdir = $(pngdir)/orig
 clasdir = $(pngdir)/clas
 
 
-if !WINDOWS_HOST
-if GUI
+if X
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
 
 dist_orig_DATA = orig/full.png orig/empty.png orig/qempty.png \
 orig/qfull.png orig/half.png orig/bork.png orig/nobat.png
-
 else
 dist_ball_DATA = ball/full.png ball/empty.png ball/qempty.png \
 ball/qfull.png ball/half.png ball/bork.png ball/nobat.png
 
 dist_orig_DATA = orig/full.png orig/empty.png orig/qempty.png \
 orig/qfull.png orig/half.png orig/bork.png orig/nobat.png
-
-endif
 endif
 
 all-local:

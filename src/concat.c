@@ -15,14 +15,25 @@ limitations under the License.
 ****/
 #ifndef COMMON_CONCAT_C_GUARD
 # define COMMON_CONCAT_C_GUARD 1
+
+# if defined(HAVE_CONFIG_H)
+#  include <config.h>
+# endif
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdarg.h>
 # include <stdbool.h>
+
+# if defined(HAVE_MEMPCPY) || defined(HAVE_BZERO)
+#  ifndef _GNU_SOURCE
+#   define _GNU_SOURCE 1
+#  endif
+# endif
 # include <string.h>
 # include <limits.h>
 
-# if !defined(NO_COMMON_H)
+# if !defined(NO_COMMON_H) && defined(HAVE_LIBCOMMONER)
 #  include "common.h"
 # else
 #  include "main.h"
@@ -32,8 +43,10 @@ limitations under the License.
 #  include "cpeek.c"
 # endif
 
+# if !defined(HAVE_LIBCOMMONER)
+
 // XXX OBSOLETE
-# if 0
+#  if 0
 char *concat(const char *s1, ...) __attribute__((sentinel))
      __attribute__((warn_unused_result));
 
@@ -54,11 +67,11 @@ char *concat(const char *s1, ...)
 	if (s || m >= INT_MAX) return NULL;
 	com_mtrace;
 
-# if defined(__cplusplus)
+#  if defined(__cplusplus)
 	result = (char *)malloc(m + 1);
-# else
+#  else
 	result = malloc(m + 1);
-# endif
+#  endif
 	if (!result) return NULL;
 
 	memcpy(p = result, s1, n);
@@ -79,7 +92,7 @@ char *concat(const char *s1, ...)
 	com_muntrace;
 	return result;
 }
-# endif
+#  endif
 
 /* unlike `concat', which returns a
  * new pointer that must then be copied
@@ -117,17 +130,17 @@ size_t concatl(char *dst, size_t sz, const char *s1, ...)
      va_end(args);
      if (s || mdx >= INT_MAX) return sz;
      com_mtrace;
-# if defined(__cplusplus)
+#  if defined(__cplusplus)
      tmp = (char *)malloc(mdx + 1);
-# else
+#  else
      tmp = malloc(mdx + 1);
-# endif
+#  endif
      if (!tmp) return sz;
      bzero(tmp, mdx + 1);
      bzero(dst, mdx + 1);
 
      p = tmp;
-     p = mempcpy(p, (char *)s1, ndx);
+     p = mempcpy(p, s1, ndx);
 
      used += ndx;
      COM_DBG("p: `%s`\n", p);
@@ -137,7 +150,7 @@ size_t concatl(char *dst, size_t sz, const char *s1, ...)
      while ((s = va_arg(args, char *))) {
 	  ldx = strlen(s);
 	  if ((ndx += ldx) < ldx || ndx > mdx) break;
-	  p = mempcpy(p, (char *)s, ldx);
+	  p = mempcpy(p, s, ldx);
 	  used += ldx;
      }
      va_end(args);
@@ -185,16 +198,16 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
 
      com_mtrace;
 
-# if defined(__cplusplus)
+#  if defined(__cplusplus)
      tmp = (char *)malloc(mdx + 1);
-# else
+#  else
      tmp = malloc(mdx + 1);
-# endif
+#  endif
      if (!tmp) return sz;
      bzero(tmp, mdx + 1);
 
      p = tmp;
-     p = mempcpy(p, (char *)s1, ndx);
+     p = mempcpy(p, s1, ndx);
 
      used += ndx;
      COM_DBG("p: `%s`\n", p);
@@ -204,7 +217,7 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
      while ((s = va_arg(args, char *))) {
 	  ldx = strlen(s);
 	  if ((ndx += ldx) < ldx || ndx > mdx) break;
-	  p = mempcpy(p, (char *)s, ldx);
+	  p = mempcpy(p, s, ldx);
 	  used += ldx;
      }
      va_end(args);
@@ -213,12 +226,12 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
 	  return sz;
      }
      COM_DBG("tmp: `%s'\n", tmp);
-# if defined(mempmove) && COM_USE_MEMPMOVE
+#  if defined(mempmove) && COM_USE_MEMPMOVE
      p = mempmove(dst, tmp, (used > sz ? sz : used));
-# else
+#  else
      memmove(dst, tmp, (used > sz ? sz : used));
      p = &dst[(used > sz ? sz : used)];
-# endif
+#  endif
      free(tmp);
      *p = '\0';
      ++used;
@@ -233,10 +246,12 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
      return (used > sz ? 0 : sz - used);
 }
 
-# undef catl
-# define catl(...) (concatl(__VA_ARGS__, (void *)NULL))
+#  undef catl
+#  define catl(...) (concatl(__VA_ARGS__, (void *)NULL))
 
-# undef catm
-# define catm(...) (concatm(__VA_ARGS__, (void *)NULL))
+#  undef catm
+#  define catm(...) (concatm(__VA_ARGS__, (void *)NULL))
+
+# endif
 
 #endif

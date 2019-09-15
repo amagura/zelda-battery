@@ -1,10 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = zbatt zbatc gzbatt
+bin_PROGRAMS = zbatt zbatc
 
-zbatc_SOURCES = zbatc.cxx
-zbatt_SOURCES = zbatt.cxx
-gzbatt_SOURCES = gzbatt.cxx
+zbatc_SOURCES = color.cxx main.cxx
+zbatt_SOURCES = text.cxx main.cxx
 noinst_HEADERS = main.hxx
 
 iconsdir = $(pkgdatadir)/icons
@@ -49,16 +48,8 @@ endif
 zbatt_CXXFLAGS = $(AM_CXXFLAGS)
 zbatc_CXXFLAGS = $(AM_CXXFLAGS)
 
-if STATIC
-zbatt_CXXFLAGS += --static
-zbatc_CXXFLAGS += --static
-endif
-
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
-gzbatt_CXXFLAGS = $(AM_CXXFLAGS)
-gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
-gzbatt_LDFLAGS = $(AM_LDFLAGS)
 
 .PHONY: valgrind lint
 all-local:

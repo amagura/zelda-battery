@@ -1,5 +1,6 @@
+/* vim: ts=5:sts=5:set expandtab: */
 /****
-Copyright 2014, 2015, 2016 Alexej Magura
+Copyright 2014, 2015, 2016, 2017 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -15,6 +16,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -24,12 +28,20 @@ limitations under the License.
 #include "power.h"
 #include "compat.h"
 
-#if ZB_LINUX
+#if HAVE__SYS_CLASS_POWER_SUPPLY
 # include "acpi.h"
-#elif ZB_BSD
+#elif HAVE_SYSCTLBYNAME
 // XXX this fixes a compiler error on FreeBSD 10.1-RELEASE-p6
 typedef unsigned int u_int;
 # include <sys/sysctl.h>
+#elif HAVE__USR_INCLUDE_MACHINE_APMVAR_H
+# include <machine/apmvar.h>
+#elif HAVE_SYS_PM_H
+# include <sys/pm.h>
+#endif
+
+#if HAVE_SYS_IOCTL_H
+# include <sys/ioctl.h>
 #endif
 
 // fprintf(stderr, "%s: %s\n", ZB_PROGNAME, "virtual or nonstandard machine: no power supply or batteries");
@@ -44,8 +56,9 @@ void getpwr(struct power *pwr)
      pwr->err.last = pwr->err.vec;
 
      ZB_DBG("err: %d\n", *pwr->err.vp);
+     ZB_DBG("HAVE__SYS_CLASS_POWER_SUPPLY: '%d'\n", HAVE__SYS_CLASS_POWER_SUPPLY);
 
-#if ZB_LINUX
+#if HAVE__SYS_CLASS_POWER_SUPPLY
      struct pwr_sup info;
      info.cap = -1;
 
@@ -72,7 +85,7 @@ void getpwr(struct power *pwr)
      pwr->charge.tr = (int)pwr->charge.raw / (pwr->charge.divsr);
      pwr->charge.rnd = nearbyint((double)pwr->charge.raw / (pwr->charge.divsr));
      pwr->acline = info.acline;
-#elif ZB_BSD
+#elif HAVE__SYSCTLBYNAME
      size_t size;
      int ac_line;
      int limit = pwr->charge.nof;
@@ -102,14 +115,39 @@ void getpwr(struct power *pwr)
      pwr->charge.rnd = (limit != 0)
 	  ? nearbyint((double)(pwr->charge.raw / (pwr->charge.divsr)))
 	  : PWR_ENOWANT;
+#elif HAVE_SYS_APMVAR_H
+     size_t size;
+     int ac_line;
+     int limit = pwr->charge.nof;
+
+     size = sizeof(int);
+
+     struct apm_power_info pwrinfo;
+
+     ZB_DBG("%s\n", "getting power information from APM");
+
+     ioctl(0, APM_IOC_GETPOWER);
+#elif HAVE_SYS_PM_H
+     ZB_DBG("%s\n", "Solaris Support");
+     size_t sz;
+     int ac_line;
+     int limit = pwr->charge.nof;
+
+     sz = sizeof(int);
+
+     struct pm_req pwrinfo;
+
+     ioctl(0, PM_GET_CURRENT_POWER, pwrinfo);
+
 #endif
-# if 0
+#if 0
      for (int jdx = 0; jdx < pwr->err.last; ++jdx) {
 	  pwr->err.sum += pwr->err.vec[jdx];
      }
 #endif
 }
 
+#if (WITH_GTK2 && USE_PYTHON) || (WITH_GTK3 && USE_PYTHON)
 struct py_power py_getpwr()
 {
      struct power pwr;
@@ -130,3 +168,4 @@ struct py_power py_getpwr()
      zb_pong;
      return pyp;
 }
+#endif

@@ -1,5 +1,5 @@
 /****
-Copyright 2014, 2015, 2016, 2017 Alexej Magura
+Copyright 2015, 2016 Alexej Magura
 
 This file is a part of ZBatt
 
@@ -15,17 +15,32 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <limits.h>
-#include "main.h"
-
-#if !defined(HAVE_MEMPCPY)
-void *mempcpy(void *dest, const void *src, size_t n)
-{
-     void *tmp = memcpy((void *)dest, (const void *)src, (size_t) n);
-     return tmp + n;
-}
+#ifdef HAVE_CONFIG_H
+# include <config.h>
 #endif
+#include "main.hxx"
+#include <iostream>
+
+void disp(LPSYSTEM_POWER_STATUS pwr)
+{
+     char *norm = "31";
+     int thold = 30;
+     char *blnk = "5";
+     std::cout << "\033[" << norm << "m";
+     if (pwr->BatteryLifePercent > thold)
+	  return;
+     std::cout << "\033[" << blnk << "m";
+     return;
+}
+
+int main(int argc, char **argv)
+{
+     SYSTEM_POWER_STATUS pwr;
+     if (!GetSystemPowerStatus(&pwr))
+	  goto fail;
+     disp(&pwr);
+win:
+     return 0;
+fail:
+     return 1;
+}

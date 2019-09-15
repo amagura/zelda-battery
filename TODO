@@ -1,17 +1,30 @@
 # TODO (duh)
 
-<!-- Last Updated: 2017-11-09 -->
+<!-- Last Updated: 2017-11-22 -->
+
+## Build System
+
+* ZBatt should fail when being compiled on an unsupported system; however, it currently doesn't.
+
+## Run Time
+
+* ZBatt should not fail silently when it encounters a fatal error: or it should at least be an option: fail silently if passed option `-q'.  
 
 ## Support for New Systems
 
-* I'd like to add support for OpenBSD (mostly for the challenge of figuring it out.)
+* UNIX:
+  - Solaris (OpenIndiana)
+  - MINIX (probably not worth the effort)
+  - OpenBSD (hell, why not: it's a piece of shit, but might as well)
 
-* OpenBSD has sysctl hw.sensors.acpi*
+* BeOS:
+  - Haiku (will probably require more C++ coding)
 
-## Support for CSS (Currently Supported Systems)
+## Support for Current Systems
 
 * I'd like to merge Windows support with *Nix support, in the sense that they should both be in the same
   sub-directory; maybe they shouldn't, but why not.  They'll all live together, but only the ones needed will be pulled into
   the binary when you actually build zbatt.
 
-* Cross compiling for windows should be triggerable from configure and should not require additional helper scripts.  
+* Cross compiling for windows should be triggerable from configure and should not require additional helper scripts.
+

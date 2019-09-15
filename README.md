@@ -23,43 +23,50 @@ A Legend of Zelda inspired health-bar battery meter for Shell prompts and Taskba
 # Supported Platforms
 ### Linux
 Kernels >= 2.6.24 are supported; support for older kernels is not a priority.
-### BSD
-Most BSDs should be supported: as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine; OpenBSD **is not** supported.  
 
-BSD systems known to work:
+### UNIX
+BSD is well supported; as long as you have [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) you should be fine.
+
+Solaris support is still fairly new and experimental, but as long as you have `sys/pm.h` you should be good.
+
+#### UNIX systems supported:
 * DragonFlyBSD
 * FreeBSD
+* OpenIndiana (Solaris)
 
-BSD systems that _should_ work:
+#### UNIX systems probably supported:
 * NetBSD
 * Midnight BSD
+* OpenSolaris
 * (Anything based on FreeBSD)
 
-BSD systems that _don't_ work:
-<ul><li>OpenBSD</li></ul>
+#### UNIX systems unsupported:
+* OpenBSD
+* SmartOS (Solaris)
 
 ### Windows
 Windows XP and later.
 
-# Dependencies
-### Linux and BSD
-* Python 2 (GUI)
-* GTK+2 (GUI)
-* PyGTK (GUI)
+# Runtime Dependencies
+### Linux and UNIX
+* Python (GUI)<sup>†</sup>
+* GTK+3 (GUI)<sup>‡</sup>
+* PyGObject (GUI)
+
+<sup>† Python v2.x.xx is no longer supported</sup>
+<sup>‡ Support for GTk+2 might be added back in future releases</sup>
 
 ### Windows
-The Windows version of ZBatt just depends on the stuff that Windows provides, such as the Windows API, lulz.<br />
-So you shouldn't need to install anything for ZBatt to work.
+Windows provides everything you'll need.
 
 ## Make Dependencies
 * GNU Autotools (i.e. automake, autoconf)
 * Make
 
-### Linux and BSD
+### Linux and UNIX
 * C99 compliant C compiler
 * Cython (GUI)
-* pkg-config (GUI)
-* [`sysctlbyname`](http://www.daemon-systems.org/man/sysctlbyname.3.html) (__BSD only__)
+* pkgconf (GUI)
 
 ### Windows
 * C++11 compliant C++ compiler

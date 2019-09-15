@@ -4,18 +4,21 @@ dist_doc_DATA = LICENSE AUTHORS INSTALL
 
 dist_pkgdata_DATA = example.conf
 
-UNIX_DIR = src
-MSDOS_DIR = win
-
-if WINDOWS_HOST
-SUBDIRS = img win
+if MSWIN
+  MAYBE_MSWIN = src/mswin
 else
-SUBDIRS = img $(UNIX_DIR)
+  MAYBE_UNIX = src
+if X
+    MAYBE_X = img
 endif
+endif
+
+SUBDIRS = $(MAYBE_MSWIN) $(MAYBE_UNIX) $(MAYBE_X)
 
 DIST_SUBDIRS = $(SUBDIRS)
 
 ZB_TARBALL = $$(uname)-$$(uname -m).tar.gz
+D2U = dos2unix
 
 all-local:
 
@@ -77,6 +80,7 @@ test-breadth: test-clean test-setup
 
 clean-local:
 	$(RM) -r inst/usr
+	$(RM) *.tar.gz
 
 release: clean
 	$(MAKE) DESTDIR="$$PWD/inst" install
@@ -92,6 +96,15 @@ check-all:
 	cd $(UNIX_DIR); \
 	$(MAKE) $@
 
+iso:
+	$(MAKE) dist
+	genisoimage -o zb.iso *.tar.gz
+	mv zb.iso ..
+
+dos2unix:
+	$(D2U) $(wildcard src/*)
+	$(D2U) $(wildcard src/mswin/*)
+  
 install-blank:
 	printf '#include <stdlib.h>\nint main(int argc, char **argv) { return EXIT_SUCCESS; }' > blank.c
 	$(CC) -o src/zbatt blank.c

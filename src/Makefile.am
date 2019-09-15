@@ -15,16 +15,19 @@ AM_CFLAGS =
 AM_LDFLAGS =
 AM_CPPFLAGS =
 
-AM_CFLAGS += -O2 -Wall -Wextra
-AM_CPPFLAGS += -DNO_COMMON_H
+AM_CFLAGS += -Wall -Wextra
+# I probably don't need to define HAVE_CONFIG_H, but I'm not sure what else to do.
+AM_CPPFLAGS += -DNO_COMMON_H -DHAVE_CONFIG_H=1 -I$(top_srcdir)
 
 if TEST
 AM_CPPFLAGS += -DZB_ACPI_ROOT=\"$(top_srcdir)/test\"
 endif
 
 if DEBUG
-AM_CFLAGS += -g -ggdb
+AM_CFLAGS += -g -ggdb -O0
 AM_CPPFLAGS += -DZB_DEBUG=1
+else
+AM_CFLAGS += -O2
 endif
 
 if !DEBUG
@@ -50,31 +53,27 @@ endif
 zbatt_CFLAGS = $(AM_CFLAGS)
 zbatc_CFLAGS = $(AM_CFLAGS)
 
-if STATIC
-zbatt_CFLAGS += --static
-zbatc_CFLAGS += --static
-endif
-
 zbatc_CPPFLAGS = -DZB_PROGNAME=\"zbatc\" $(AM_CPPFLAGS)
 zbatt_CPPFLAGS = -DZB_PROGNAME=\"zbatt\" $(AM_CPPFLAGS)
 gzbatt_CFLAGS = $(AM_CFLAGS)
 gzbatt_CPPFLAGS = -DZB_PROGNAME=\"gzbatt\" $(AM_CPPFLAGS)
 gzbatt_LDFLAGS = $(AM_LDFLAGS)
+gzbatt_PYFLAGS =
 
-if GUI
-gzbatt_CPPFLAGS += -DPNGDIR=\"$(pngdir)\" \
--DDATADIR=\"$(pkgdatadir)\"
-endif
-
-if GTK2
-gzbatt_CPPFLAGS += -DWITH_GTK2=1
-gzbatt_CFLAGS += @gtk2_CFLAGS@ @python2_CFLAGS@
-gzbatt_LDFLAGS += @gtk2_LIBS@ @python2_LIBS@
+if X
+gzbatt_PYFLAGS += -EPNGDIR=\"$(pngdir)\" -EDATADIR=\"$(pkgdatadir)\" -EZB_PROGNAME=\"gzbatt\"
+gzbatt_CPPFLAGS += -DUSE_PYTHON=1
+gzbatt_CFLAGS += @GTK3_CFLAGS@ @PYTHON_CFLAGS@
+gzbatt_LDFLAGS += @GTK3_LIBS@ @PYTHON_LIBS@
 bin_PROGRAMS += gzbatt
 endif
 
 .PHONY: valgrind lint
 all-local:
+
+tui: zbatt zbatc
+
+gui: gzbatt
 
 move-local: $(bin_PROGRAMS)
 	for file in $?; do mv "$$file" ../../; done
@@ -123,8 +122,8 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
 
 .pyx.c:
-	@GPP@ $(gzbatt_CPPFLAGS) -o $(@:.c=.co) $<
-	$(CYTHON) --embed -p -2 -Wextra -o $@ $(@:.c=.co)
+	ln -sf $(top_srcdir)/config.h
+	$(CYTHON) $(gzbatt_PYFLAGS) --embed -p -3 -Wextra -o $@ $< --gdb
 
 tidy-local:
 	$(RM) *.o || true
@@ -134,6 +133,7 @@ tidy-local:
 	$(RM) main_gui.c || true
 	$(RM) main_gui.co || true
 	$(RM) no_common.h || true
+	$(RM) config.h
 
 anew: clean all
 ready: clean all tidy-local

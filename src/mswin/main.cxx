@@ -15,17 +15,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <limits.h>
-#include "main.h"
-
-#if !defined(HAVE_MEMPCPY)
-void *mempcpy(void *dest, const void *src, size_t n)
-{
-     void *tmp = memcpy((void *)dest, (const void *)src, (size_t) n);
-     return tmp + n;
-}
+#ifdef HAVE_CONFIG_H
+# include <config.h>
 #endif
+#include "main.hxx"
+#include <cstlib>
+#include <iostream>
