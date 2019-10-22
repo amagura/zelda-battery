@@ -137,4 +137,4 @@ As long as you use the `TMOUT` and `TRAPALRM`/`zle reset-prompt` stuff, your Zsh
 AFAIK there is _no_ way to periodically refresh a bash prompt without either running `clear`/`Ctrl-L` or pressing enter, which causes the prompt to be redrawn.
 
 ## Submissions
-Screenshot, command-line prompt examples, and all other submissions are appreciated as always; thank you.
+Screenshot, command-line prompt examples, and all other submissions are appreciated as always.  Thank you.
