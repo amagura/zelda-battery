@@ -126,13 +126,13 @@ asm: $(zbatt_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
 	$(CYTHON) $(gzbatt_PYFLAGS) --embed -p -3 -Wextra -o $@ $< --gdb
 
 tidy-local:
-	$(RM) *.o || true
-	$(RM) *.od || true
-	$(RM) *.py || true
-	$(RM) *.pyc || true
-	$(RM) main_gui.c || true
-	$(RM) main_gui.co || true
-	$(RM) no_common.h || true
+	$(RM) *.o
+	$(RM) *.od
+	$(RM) *.py
+	$(RM) *.pyc
+	$(RM) main_gui.c
+	$(RM) main_gui.co
+	$(RM) no_common.h
 	$(RM) config.h
 
 anew: clean all
