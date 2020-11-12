@@ -171,7 +171,7 @@ size_t concatl(char *dst, size_t sz, const char *s1, ...)
      COM_DBG("strlen(dst): %lu\n", strlen(dst));
      COM_DBG("used#2: %lu\n", used - 0);
      com_muntrace;
-     return (used > sz ? 0 : sz - used);
+     return sz - used;
 }
 
 /* concatm is a little different:
@@ -243,7 +243,7 @@ size_t concatm(char *dst, size_t sz, const char *s1, ...)
      COM_DBG("used#2: %lu\n", used - 0);
      com_muntrace;
 
-     return (used > sz ? 0 : sz - used);
+     return sz - used;
 }
 
 #  undef catl
