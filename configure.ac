@@ -85,6 +85,7 @@ dnl I only really need to support cross-building for windows
 AC_PROG_INSTALL
 AC_PATH_PROGS_FEATURE_CHECK([GREP], [grep ggrep], [[echo 'a' | ac_cv_path_GREP -q -- 'a']])
 AC_PATH_PROGS_FEATURE_CHECK([EGREP], [egrep gegrep], [[echo 'a' | ac_cv_path_EGREP -q -- 'a']])
+AM_PATH_PYTHON([3.2])
 
 # Checks for libraries.
 dnl FIXME passing --with-x to configure.ac actually disables X Server support
@@ -100,23 +101,23 @@ AC_ARG_WITH([x],
 zb_natnix_blk
 if test "x$with_x" != "xno"; then
   AC_ARG_VAR([CYTHON], [Cython to C compiler (only used when '--with-x' is present)])
-  AC_CHECK_PROGS([CYTHON], [cython cython3 cython37 cython-3.7 cython36 cython-3.6 cython35 cython-3.5], [no])
-  if test "x$CYTHON" = "xno"; then
-    AC_MSG_ERROR([Cython is a make dependency for X server support.])
-  fi
-  if zb_grep([$ac_cv_prog_CYTHON], ['.*cython.*$']); then
-    [python_found=yes]
-    PKG_CHECK_MODULES([PYTHON], [python-3.7],,[python_found=no])
-    if test "x$python_found" = "xno"; then
-      PKG_CHECK_MODULES([PYTHON], [python-3.6],[python_found=yes],)
-    fi
-    if test "x$python_found" = "xno"; then
-      PKG_CHECK_MODULES([PYTHON], [python-3.5],[python_found=yes],)
-    fi
-    if test "x$python_found" = "xno"; then
-      PKG_CHECK_MODULES([PYTHON], [python >= 3.5],,AC_MSG_ERROR([Python is a make dependency for X server support.]))
-    fi
-  fi
+  AC_CHECK_PROGS([CYTHON], [cython cython3], [no])
+
+    # AS_IF([test -z "$PYTHON_INCLUDE"], [
+    #       AS_IF([test -z "$PYTHON_CONFIG"], [
+    #               AS_IF([test "x$python_found" = "xno"],
+    #
+  AS_IF([test "x$CYTHON" = "xno"], [AC_MSG_ERROR([CYTHON is a make dependency for X server support.])])
+  AC_PATH_PROGS([PYTHON_CONFIG],
+                [python$PYTHON_VERSION-config python-config],
+                [no])
+  AS_IF([test "x$PYTHON_CONFIG" = "xno"], [AC_MSG_ERROR([python-config is a make dependency for X server support.])])
+  AC_MSG_CHECKING([python include flags])
+  AC_SUBST([PYTHON_CFLAGS], [`$PYTHON_CONFIG --includes`])
+  AC_MSG_RESULT([$PYTHON_CFLAGS])
+  AC_MSG_CHECKING([python ld flags])
+  AC_SUBST([PYTHON_LIBS], [`$PYTHON_CONFIG --libs --embed`])
+  AC_MSG_RESULT([$PYTHON_LIBS])
 
   if test "x$with_x" = "xgtk3"; then
     PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.0], AC_DEFINE([WITH_GTK3], [1], [Defined when gtk3 is present.]))
@@ -180,10 +181,10 @@ AC_CHECK_FUNCS([bzero memmove mempcpy memset strchr strerror strtol])
 
 zb_natnix_blk
   AC_ARG_WITH([commoner],
-              AS_HELP_STRING([--without-commoner],
-                             [disable support for libcommoner (default: enabled)]),
-              [with_commoner=no],
-              [with_commoner=check])
+              AS_HELP_STRING([--with-commoner],
+                             [enable libcommoner use (default: disabled)]),
+              [with_commoner=check],
+              [with_commoner=no])
 
   AC_SEARCH_LIBS([nearbyint], [m],
                  ,
